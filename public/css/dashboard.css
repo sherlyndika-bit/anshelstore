@@ -124,3 +124,24 @@ table.data tr:hover td { background: var(--bg-soft); }
   .stats-grid { grid-template-columns: 1fr; }
   .content { padding: 16px; }
 }
+
+
+/* ---- Auth UI ---- */
+.auth-tabs { display: flex; gap: 6px; background: var(--bg-muted); padding: 5px; border-radius: 12px; margin-bottom: 20px; }
+.auth-tabs button { flex: 1; padding: 10px; border: 0; background: transparent; border-radius: 9px; font-weight: 600; font-size: .9rem; cursor: pointer; color: var(--text-soft); font-family: inherit; transition: .15s; }
+.auth-tabs button.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow-sm); }
+.auth-pane { display: none; }
+.auth-pane.active { display: block; }
+.divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--text-muted); font-size: .82rem; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.btn-google { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-weight: 600; cursor: pointer; font-family: inherit; font-size: .95rem; color: var(--text); transition: .15s; }
+.btn-google:hover { background: var(--bg-soft); border-color: var(--text-muted); }
+.btn-google img, .btn-google svg { width: 20px; height: 20px; }
+.auth-link { background: none; border: 0; color: var(--primary); font-weight: 600; cursor: pointer; font-family: inherit; font-size: .9rem; padding: 0; }
+.auth-msg { font-size: .85rem; margin-top: 10px; min-height: 18px; }
+.auth-msg.err { color: var(--red); }
+.auth-msg.ok { color: var(--green); }
+.dev-otp { background: var(--amber-bg); color: #92400e; border-radius: 10px; padding: 10px 12px; font-size: .85rem; margin-top: 12px; }
+.dev-otp b { font-size: 1.1rem; letter-spacing: .1em; }
+.user-card { display: flex; align-items: center; gap: 8px; }
+.user-card .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }

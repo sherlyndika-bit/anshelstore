@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — anshelstore</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/styles.css" />
@@ -11,32 +12,70 @@
 </head>
 <body class="dash">
 
-  <!-- LOGIN -->
+  <!-- ============ AUTH ============ -->
   <div class="login-screen" id="loginScreen">
-    <form class="login-card" id="loginForm">
+    <div class="login-card">
       <a class="brand"><span class="brand-logo">a</span> anshelstore</a>
-      <h1>Dashboard Admin</h1>
-      <p>Masuk untuk mengelola pesanan & percakapan</p>
-      <div class="field"><label>Password</label><input class="input" id="pw" type="password" placeholder="Masukkan password admin" autocomplete="current-password" /></div>
-      <button class="btn btn-primary btn-block btn-lg" type="submit">Masuk</button>
-      <div class="login-err" id="loginErr"></div>
-      <p style="margin-top:14px;font-size:.8rem">Default password: <b>admin123</b> (ubah lewat env <code>ADMIN_PASSWORD</code>)</p>
-    </form>
+      <h1>Dashboard</h1>
+      <p>Masuk atau daftar untuk mengelola toko</p>
+
+      <div class="auth-tabs">
+        <button data-tab="login" class="active">Masuk</button>
+        <button data-tab="register">Daftar</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form class="auth-pane active" id="paneLogin">
+        <div class="field"><label>Email</label><input class="input" id="loginEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
+        <div class="field"><label>Password</label><input class="input" id="loginPass" type="password" placeholder="••••••" autocomplete="current-password" /></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Masuk</button>
+        <div style="text-align:center;margin-top:10px"><button type="button" class="auth-link" id="toOtp">Masuk dengan kode OTP email →</button></div>
+      </form>
+
+      <!-- REGISTER -->
+      <form class="auth-pane" id="paneRegister">
+        <div class="field"><label>Nama</label><input class="input" id="regName" type="text" placeholder="Nama kamu" autocomplete="name" /></div>
+        <div class="field"><label>Email</label><input class="input" id="regEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
+        <div class="field"><label>Password</label><input class="input" id="regPass" type="password" placeholder="Minimal 6 karakter" autocomplete="new-password" /></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Daftar</button>
+      </form>
+
+      <!-- OTP -->
+      <form class="auth-pane" id="paneOtp">
+        <div class="field"><label>Email</label><input class="input" id="otpEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
+        <button class="btn btn-primary btn-block btn-lg" type="button" id="sendOtp">Kirim Kode OTP</button>
+        <div id="otpStep" style="display:none">
+          <div class="field" style="margin-top:14px"><label>Masukkan Kode (6 digit)</label><input class="input" id="otpCode" type="text" inputmode="numeric" maxlength="6" placeholder="______" style="letter-spacing:.3em;text-align:center;font-size:1.2rem" /></div>
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Verifikasi & Masuk</button>
+        </div>
+        <div class="dev-otp" id="devOtp" style="display:none"></div>
+        <div style="text-align:center;margin-top:10px"><button type="button" class="auth-link" id="backLogin">← Kembali ke login biasa</button></div>
+      </form>
+
+      <div class="auth-msg" id="authMsg"></div>
+
+      <!-- Google -->
+      <div id="googleWrap" style="display:none">
+        <div class="divider">atau</div>
+        <button class="btn-google" id="googleBtn">
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Lanjut dengan Google
+        </button>
+      </div>
+    </div>
   </div>
 
-  <!-- APP SHELL -->
+  <!-- ============ APP SHELL ============ -->
   <div class="shell" id="shell" style="display:none">
     <div class="sidebar-backdrop" id="backdrop"></div>
     <aside class="sidebar" id="sidebar">
       <a href="/" class="brand"><span class="brand-logo">a</span> anshelstore</a>
       <nav class="side-nav">
-        <button data-page="overview" class="active">📊 Overview</button>
+        <button data-page="overview">📊 Overview</button>
         <button data-page="orders">🎮 Pesanan <span class="count" id="ordersCount" style="display:none"></span></button>
         <button data-page="inbox">💬 Inbox Chat <span class="count" id="inboxCount" style="display:none"></span></button>
       </nav>
-      <div class="side-foot">
-        <button id="logoutBtn">↩︎ Keluar</button>
-      </div>
+      <div class="side-foot"><button id="logoutBtn">↩︎ Keluar</button></div>
     </aside>
 
     <div class="main">
@@ -45,30 +84,19 @@
           <button class="menu-btn" id="menuBtn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg></button>
           <h1 id="pageTitle">Overview</h1>
         </div>
-        <div class="user"><span class="avatar">A</span><span style="font-weight:600;font-size:.92rem">Admin</span></div>
+        <div class="user-card"><span class="avatar" id="userAvatar">A</span><span style="font-weight:600;font-size:.92rem" id="userName">Admin</span></div>
       </header>
 
       <div class="content">
-        <!-- OVERVIEW -->
-        <section class="page active" id="page-overview">
+        <section class="page" id="page-overview">
           <div class="stats-grid" id="statsGrid"></div>
           <div class="two-col">
-            <div class="panel-card">
-              <h3>Pesanan 7 Hari Terakhir</h3>
-              <div class="bars" id="barsChart"></div>
-            </div>
-            <div class="panel-card">
-              <h3>Game Terlaris</h3>
-              <div class="toplist" id="topGames"></div>
-            </div>
+            <div class="panel-card"><h3>Pesanan 7 Hari Terakhir</h3><div class="bars" id="barsChart"></div></div>
+            <div class="panel-card"><h3>Game Terlaris</h3><div class="toplist" id="topGames"></div></div>
           </div>
-          <div class="panel-card" style="margin-top:16px">
-            <h3>Pesanan Terbaru</h3>
-            <div class="table-wrap"><table class="data" id="recentOrders"></table></div>
-          </div>
+          <div class="panel-card" style="margin-top:16px"><h3>Pesanan Terbaru</h3><div class="table-wrap"><table class="data" id="recentOrders"></table></div></div>
         </section>
 
-        <!-- ORDERS -->
         <section class="page" id="page-orders">
           <div class="filters" id="orderFilters">
             <button class="filter-chip active" data-f="all">Semua</button>
@@ -78,18 +106,13 @@
             <button class="filter-chip" data-f="done">Done</button>
             <button class="filter-chip" data-f="cancelled">Cancelled</button>
           </div>
-          <div class="panel-card">
-            <div class="table-wrap"><table class="data" id="ordersTable"></table></div>
-          </div>
+          <div class="panel-card"><div class="table-wrap"><table class="data" id="ordersTable"></table></div></div>
         </section>
 
-        <!-- INBOX -->
         <section class="page" id="page-inbox">
           <div class="inbox">
             <div class="conv-list" id="convList"></div>
-            <div class="chat-pane" id="chatPane">
-              <div class="chat-empty" id="chatEmpty">Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</div>
-            </div>
+            <div class="chat-pane" id="chatPane"><div class="chat-empty" id="chatEmpty">Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</div></div>
           </div>
         </section>
       </div>
