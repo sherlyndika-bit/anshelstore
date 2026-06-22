@@ -1,0 +1,14 @@
+{
+  "name": "anshelstore",
+  "version": "1.0.0",
+  "description": "anshelstore - storefront jasa (AI Chat Automation), top up game, dan dashboard dengan human takeover. Backend Node.js tanpa dependency eksternal.",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

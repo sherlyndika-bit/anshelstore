@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — anshelstore</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+    .tab { padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; font-weight: 600; font-size: .9rem; }
+    .tab.active { color: #07101f; background: var(--grad); border-color: transparent; }
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    /* Orders table */
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: .9rem; }
+    th { color: var(--muted); font-weight: 600; }
+    td select { width: auto; padding: 6px 10px; font-size: .82rem; }
+    .muted { color: var(--muted); }
+
+    /* Inbox layout */
+    .inbox { display: grid; grid-template-columns: 300px 1fr; gap: 18px; height: 560px; }
+    .conv-list { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow-y: auto; }
+    .conv-item { padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .conv-item:hover, .conv-item.sel { background: var(--bg-alt); }
+    .conv-item .top { display: flex; justify-content: space-between; align-items: center; }
+    .conv-item .name { font-weight: 700; font-size: .92rem; }
+    .conv-item .last { color: var(--muted); font-size: .82rem; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .unread-dot { background: #f43f5e; color: #fff; border-radius: 999px; font-size: .7rem; padding: 1px 7px; font-weight: 700; }
+
+    .chat-pane { background: var(--card); border: 1px solid var(--border); border-radius: 14px; display: flex; flex-direction: column; overflow: hidden; }
+    .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .msg { max-width: 72%; padding: 9px 13px; border-radius: 14px; font-size: .9rem; line-height: 1.45; }
+    .msg .who { display: block; font-size: .68rem; opacity: .7; font-weight: 700; margin-bottom: 2px; }
+    .m-customer { align-self: flex-start; background: var(--bg-alt); border-bottom-left-radius: 4px; }
+    .m-ai { align-self: flex-end; background: rgba(109,139,255,.18); border-bottom-right-radius: 4px; }
+    .m-agent { align-self: flex-end; background: linear-gradient(120deg,#25d366,#128c7e); color: #04130a; border-bottom-right-radius: 4px; font-weight: 500; }
+    .chat-foot { padding: 12px; border-top: 1px solid var(--border); }
+    .chat-foot form { display: flex; gap: 8px; }
+    .empty { display: grid; place-items: center; height: 100%; color: var(--muted); text-align: center; padding: 20px; }
+    .escalate { color: #eab308; font-size: .78rem; font-weight: 700; }
+    @media (max-width: 860px){ .inbox{grid-template-columns:1fr;height:auto;} .conv-list{height:240px;} .chat-pane{height:420px;} }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="brand"><span class="brand-dot"></span> anshelstore</a>
+      <nav class="nav-links">
+        <a href="/#layanan">Layanan</a>
+        <a href="/topup.html">Top Up Game</a>
+        <a href="/dashboard.html" class="active">Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head" style="text-align:left;margin-bottom:24px;">
+        <span class="eyebrow">Dashboard Admin</span>
+        <h2 style="margin:6px 0;">Kelola order & percakapan</h2>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-pane="orders">🎮 Order Top Up</button>
+        <button class="tab" data-pane="inbox">💬 Inbox Chat</button>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="pane active" id="pane-orders">
+        <div style="overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:6px 16px;">
+          <table>
+            <thead>
+              <tr><th>Invoice</th><th>Game</th><th>Item</th><th>Akun</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+            </thead>
+            <tbody id="ordersBody">
+              <tr><td colspan="7" class="muted" style="padding:24px;text-align:center;">Memuat…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INBOX -->
+      <div class="pane" id="pane-inbox">
+        <div class="inbox">
+          <div class="conv-list" id="convList"></div>
+          <div class="chat-pane" id="chatPane">
+            <div class="empty" id="chatEmpty">Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
