@@ -65,9 +65,10 @@ function saveDB() {
     });
   }, 150);
 }
-db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= [];
+db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= [];
+db.settings.integrations ||= {};
 db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-db._seq ||= {}; ["order", "conversation", "message", "user", "article"].forEach((k) => (db._seq[k] ||= 0));
+db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance"].forEach((k) => (db._seq[k] ||= 0));
 
 function nextId(kind) { db._seq[kind] = (db._seq[kind] || 0) + 1; return db._seq[kind]; }
 
@@ -196,6 +197,32 @@ function shouldEscalate(text) { const t = (text || "").toLowerCase(); return ["m
 // ---------------------------------------------------------------------------
 function sendJSON(res, status, data) { res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }); res.end(JSON.stringify(data)); }
 function redirect(res, location) { res.writeHead(302, { Location: location }); res.end(); }
+
+// Header keamanan untuk semua respons
+function setSecurityHeaders(res) {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+}
+// Rate limit sederhana per-IP (in-memory)
+const rateMap = new Map();
+function rateLimit(req, key, max, windowMs) {
+  const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || (req.socket && req.socket.remoteAddress) || "ip";
+  const k = key + ":" + ip, now = Date.now();
+  let rec = rateMap.get(k);
+  if (!rec || rec.reset < now) { rec = { count: 0, reset: now + windowMs }; rateMap.set(k, rec); }
+  rec.count++;
+  return rec.count <= max;
+}
+// Settings publik tanpa data sensitif (API keys disembunyikan)
+function publicSettings() { const { integrations, ...safe } = db.settings || {}; return safe; }
+// Status integrasi (boolean saja, tanpa membocorkan key)
+function integrationStatus() {
+  const i = db.settings.integrations || {};
+  return { payment: !!i.paymentKey, ai: !!i.aiKey, idCheck: !!i.gameCheckUrl };
+}
 function readBody(req) { return new Promise((resolve) => { let raw = ""; req.on("data", (c) => (raw += c)); req.on("end", () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch { resolve({}); } }); }); }
 const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon", ".webp": "image/webp" };
 function serveFile(res, filePath) {
@@ -205,8 +232,17 @@ function serveFile(res, filePath) {
     res.end(content);
   });
 }
+// Peta URL bersih -> file
+const CLEAN_ROUTES = {
+  "/dashboard": "dashboard.html", "/topup": "topup.html", "/game": "topup.html", "/games": "topup.html",
+  "/cek-transaksi": "cek-transaksi.html", "/lacak": "cek-transaksi.html",
+  "/faq": "faq.html", "/tentang": "tentang.html", "/chat": "chat.html",
+  "/masuk": "masuk.html", "/login": "masuk.html", "/daftar": "masuk.html",
+  "/akun": "akun.html", "/profil": "akun.html",
+};
 function serveStatic(req, res, pathname) {
-  if (pathname === "/dashboard" || pathname === "/dashboard/") return serveFile(res, path.join(PUBLIC_DIR, "dashboard.html"));
+  const clean = pathname.replace(/\/$/, "") || "/";
+  if (CLEAN_ROUTES[clean]) return serveFile(res, path.join(PUBLIC_DIR, CLEAN_ROUTES[clean]));
   const rel = pathname === "/" ? "/index.html" : pathname;
   const filePath = path.join(PUBLIC_DIR, path.normalize(rel));
   if (!filePath.startsWith(PUBLIC_DIR)) { res.writeHead(403); return res.end("Forbidden"); }
@@ -306,6 +342,19 @@ function renderBlogList() {
 
 function renderArticle(a) {
   const u = siteUrl() + "/blog/" + a.slug;
+  const words = String(a.content || "").split(/\s+/).filter(Boolean).length;
+  const readMin = Math.max(1, Math.round(words / 180));
+  const dateStr = new Date(a.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+  const related = db.articles.filter((x) => x.published && x.id !== a.id).sort((x, y) => y.createdAt - x.createdAt).slice(0, 3);
+  const relHtml = related.length ? `
+    <section class="max-w-5xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-md text-center">Artikel Lainnya</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        ${related.map((r) => `<a href="/blog/${r.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-1 hover:shadow-lg transition-all flex flex-col">
+          <div class="aspect-[16/9] overflow-hidden bg-surface-container">${r.cover ? `<img src="${escHtml(r.cover)}" alt="${escHtml(r.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
+          <div class="p-md"><h3 class="font-label-md text-label-md text-on-surface font-bold text-[16px] leading-tight">${escHtml(r.title)}</h3></div></a>`).join("")}
+      </div>
+    </section>` : "";
   const jsonld = {
     "@context": "https://schema.org", "@type": "BlogPosting", "headline": a.title, "description": a.excerpt,
     "image": a.cover || undefined, "datePublished": new Date(a.createdAt).toISOString(), "dateModified": new Date(a.updatedAt || a.createdAt).toISOString(),
@@ -326,28 +375,41 @@ function renderArticle(a) {
     ${THEME_HEAD}</head>
     <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
-    <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl">
-      <a href="/blog" class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary font-label-md text-label-md mb-md"><span class="material-symbols-outlined text-[20px]">arrow_back</span> Semua artikel</a>
-      <div class="flex flex-wrap gap-xs mb-sm">${(a.tags || []).map((t) => `<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-sm py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">${escHtml(a.title)}</h1>
-      <div class="flex items-center gap-xs text-on-surface-variant font-label-md text-label-md mb-md">
-        <span>${escHtml(a.author || "anshelstore")}</span><span>•</span>
-        <span>${new Date(a.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</span>
+    <!-- Hero artikel -->
+    <header class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-fixed/40 via-surface to-secondary-fixed/30"></div>
+      <div class="relative max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pt-lg pb-md text-center">
+        <a href="/blog" class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary font-label-md text-label-md mb-md"><span class="material-symbols-outlined text-[20px]">arrow_back</span> Semua artikel</a>
+        <div class="flex flex-wrap gap-xs justify-center mb-sm">${(a.tags || []).map((t) => `<span class="bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm px-sm py-[3px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">${escHtml(a.title)}</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-md">${escHtml(a.excerpt)}</p>
+        <div class="flex items-center gap-sm justify-center text-on-surface-variant font-label-md text-label-md">
+          <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">person</span>${escHtml(a.author || "anshelstore")}</span>
+          <span>•</span><span>${dateStr}</span><span>•</span>
+          <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">schedule</span>${readMin} mnt baca</span>
+        </div>
       </div>
-      ${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full rounded-lg shadow-md mb-lg object-cover"/>` : ""}
-      <article class="max-w-none">${mdToHtml(a.content)}</article>
+    </header>
+    <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pb-xl">
+      ${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full rounded-lg shadow-lg -mt-2 mb-lg object-cover aspect-[16/9]"/>` : ""}
+      <article class="article-body max-w-none">${mdToHtml(a.content)}</article>
+      <div class="flex items-center gap-sm mt-lg pt-md border-t border-outline-variant/30">
+        <span class="font-label-md text-label-md text-on-surface-variant">Bagikan:</span>
+        <a href="https://wa.me/?text=${encodeURIComponent(a.title + " " + u)}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[20px]">share</span></a>
+        <a href="https://t.me/share/url?url=${encodeURIComponent(u)}&text=${encodeURIComponent(a.title)}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></a>
+      </div>
       <div class="mt-xl p-lg rounded-lg bg-gradient-to-r from-primary to-secondary text-on-primary text-center">
         <h3 class="font-headline-md text-headline-md mb-sm">Butuh bantuan AI automation atau top up?</h3>
-        <a href="/topup.html" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full mt-xs hover:scale-105 transition-transform">Mulai Sekarang</a>
+        <a href="/topup" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full mt-xs hover:scale-105 transition-transform">Mulai Sekarang</a>
       </div>
-    </main>${pageFooter()}<script src="/js/site.js"></script></body></html>`;
+    </main>${relHtml}${pageFooter()}<script src="/js/site.js"></script></body></html>`;
 }
 
 function renderSitemap() {
   const base = siteUrl();
   const urls = [
-    { loc: base + "/", pri: "1.0" }, { loc: base + "/topup.html", pri: "0.9" }, { loc: base + "/blog", pri: "0.8" },
-    { loc: base + "/tentang.html", pri: "0.6" }, { loc: base + "/faq.html", pri: "0.6" },
+    { loc: base + "/", pri: "1.0" }, { loc: base + "/topup", pri: "0.9" }, { loc: base + "/blog", pri: "0.8" },
+    { loc: base + "/tentang", pri: "0.6" }, { loc: base + "/faq", pri: "0.6" },
     ...db.articles.filter((a) => a.published).map((a) => ({ loc: base + "/blog/" + a.slug, pri: "0.7", mod: new Date(a.updatedAt || a.createdAt).toISOString() })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
@@ -361,6 +423,8 @@ async function handleApi(req, res, pathname, query) {
   const method = req.method;
   if (pathname === "/api/health" || pathname === "/healthz") return sendJSON(res, 200, { ok: true });
   if (pathname === "/api/auth/config" && method === "GET") return sendJSON(res, 200, { google: GOOGLE_READY, smtp: SMTP_READY });
+  if (pathname.startsWith("/api/auth/") && method === "POST" && !rateLimit(req, "auth", 30, 60000))
+    return sendJSON(res, 429, { error: "Terlalu banyak percobaan. Coba lagi sebentar." });
 
   // ---- AUTH ----
   if (pathname === "/api/auth/register" && method === "POST") {
@@ -419,29 +483,31 @@ async function handleApi(req, res, pathname, query) {
     const authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" + new URLSearchParams({
       client_id: GOOGLE.id, redirect_uri: redirectUri, response_type: "code",
       scope: "openid email profile", access_type: "online", prompt: "select_account",
+      state: query.from === "masuk" ? "masuk" : "dashboard",
     }).toString();
     return redirect(res, authUrl);
   }
   if (pathname === "/api/auth/google/callback" && method === "GET") {
+    const dest = query.state === "masuk" ? "/masuk" : "/dashboard";
     try {
       const redirectUri = baseUrl(req) + "/api/auth/google/callback";
       const tokenResp = await httpsRequest("POST", "https://oauth2.googleapis.com/token", {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ code: query.code, client_id: GOOGLE.id, client_secret: GOOGLE.secret, redirect_uri: redirectUri, grant_type: "authorization_code" }).toString(),
       });
-      if (!tokenResp.access_token) return redirect(res, "/dashboard#error=google");
+      if (!tokenResp.access_token) return redirect(res, dest + "#error=google");
       const info = await httpsRequest("GET", "https://www.googleapis.com/oauth2/v2/userinfo", { headers: { Authorization: "Bearer " + tokenResp.access_token } });
-      if (!info.email) return redirect(res, "/dashboard#error=google");
+      if (!info.email) return redirect(res, dest + "#error=google");
       const u = upsertUser({ email: info.email, name: info.name, provider: "google", picture: info.picture });
-      return redirect(res, "/dashboard#token=" + createSession(u.id));
-    } catch (e) { console.error("Google callback:", e.message); return redirect(res, "/dashboard#error=google"); }
+      return redirect(res, dest + "#token=" + createSession(u.id));
+    } catch (e) { console.error("Google callback:", e.message); return redirect(res, dest + "#error=google"); }
   }
 
   // ---- Public catalog ----
   if (pathname === "/api/store" && method === "GET") return sendJSON(res, 200, db.store);
   if (pathname === "/api/services" && method === "GET") return sendJSON(res, 200, db.services);
   if (pathname === "/api/games" && method === "GET") return sendJSON(res, 200, db.games);
-  if (pathname === "/api/settings" && method === "GET") return sendJSON(res, 200, { store: db.store, settings: db.settings });
+  if (pathname === "/api/settings" && method === "GET") return sendJSON(res, 200, { store: db.store, settings: publicSettings() });
   if (pathname === "/api/track" && method === "GET") {
     const code = String(query.code || "").trim().toUpperCase();
     const o = db.orders.find((x) => x.code.toUpperCase() === code);
@@ -458,9 +524,34 @@ async function handleApi(req, res, pathname, query) {
     const game = db.games.find((g) => g.id === b.gameId);
     const item = game && game.items.find((i) => i.id === b.itemId);
     if (!game || !item) return sendJSON(res, 400, { error: "Game atau item tidak valid" });
-    const order = { id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, itemId: item.id, itemLabel: item.label, price: item.price, account: b.account || {}, customerName: b.customerName || "Guest", customerContact: b.customerContact || "", paymentMethod: b.paymentMethod || "-", status: "pending", createdAt: Date.now() };
+    if (typeof item.stock === "number" && item.stock <= 0) return sendJSON(res, 409, { error: "Stok item ini sedang habis" });
+    const u = userFromReq(req);
+    const order = { id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, itemId: item.id, itemLabel: item.label, price: item.price, account: b.account || {}, customerName: b.customerName || (u && u.name) || "Guest", customerContact: b.customerContact || "", paymentMethod: b.paymentMethod || "-", status: "pending", userId: u ? u.id : null, createdAt: Date.now() };
+    if (typeof item.stock === "number") item.stock = Math.max(0, item.stock - 1);
     db.orders.push(order); saveDB();
     return sendJSON(res, 201, order);
+  }
+  // Status integrasi publik (boolean saja)
+  if (pathname === "/api/integrations" && method === "GET") return sendJSON(res, 200, integrationStatus());
+  // Verifikasi ID game otomatis (jika provider dikonfigurasi)
+  if (pathname === "/api/game/check" && method === "GET") {
+    const game = db.games.find((g) => g.id === query.gameId);
+    if (!game) return sendJSON(res, 400, { error: "Game tidak valid" });
+    const integ = db.settings.integrations || {};
+    if (!integ.gameCheckUrl) return sendJSON(res, 200, { supported: false });
+    try {
+      const sep = integ.gameCheckUrl.includes("?") ? "&" : "?";
+      const apiUrl = integ.gameCheckUrl + sep + new URLSearchParams({ game: game.id, user_id: query.userId || "", zone_id: query.zoneId || "", key: integ.gameCheckKey || "" }).toString();
+      const r = await httpsRequest("GET", apiUrl);
+      const username = (r && (r.username || r.nickname || (r.data && (r.data.username || r.data.nickname)))) || null;
+      return sendJSON(res, 200, { supported: true, username, ok: !!username });
+    } catch (e) { return sendJSON(res, 200, { supported: true, ok: false, username: null }); }
+  }
+  // Pesanan milik user yang login (customer)
+  if (pathname === "/api/my/orders" && method === "GET") {
+    const u = userFromReq(req);
+    if (!u) return sendJSON(res, 401, { error: "Unauthorized" });
+    return sendJSON(res, 200, db.orders.filter((o) => o.userId === u.id).sort((a, b) => b.createdAt - a.createdAt));
   }
 
   // ---- Protected (butuh login + akses admin) ----
@@ -478,6 +569,36 @@ async function handleApi(req, res, pathname, query) {
     saveDB(); return sendJSON(res, 200, order);
   }
   if (pathname === "/api/stats" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, buildStats()); }
+
+  // Settings penuh untuk admin (termasuk integrasi/API keys)
+  if (pathname === "/api/admin/settings" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, { store: db.store, settings: db.settings }); }
+
+  // ---- Finansial (admin) ----
+  if (pathname === "/api/admin/finance" && method === "GET") {
+    if (!authed) return needAuth();
+    const paid = ["paid", "processing", "done"];
+    const orderIncome = db.orders.filter((o) => paid.includes(o.status)).reduce((s, o) => s + (o.price || 0), 0);
+    const manualIn = db.finances.filter((f) => f.type === "in").reduce((s, f) => s + f.amount, 0);
+    const manualOut = db.finances.filter((f) => f.type === "out").reduce((s, f) => s + f.amount, 0);
+    return sendJSON(res, 200, {
+      summary: { orderIncome, manualIn, manualOut, totalIn: orderIncome + manualIn, totalOut: manualOut, balance: orderIncome + manualIn - manualOut },
+      entries: [...db.finances].sort((a, b) => b.createdAt - a.createdAt),
+    });
+  }
+  if (pathname === "/api/admin/finance" && method === "POST") {
+    if (!authed) return needAuth(); const b = await readBody(req);
+    const amount = Number(b.amount);
+    if (!["in", "out"].includes(b.type) || !(amount > 0)) return sendJSON(res, 400, { error: "Tipe/nominal tidak valid" });
+    const f = { id: nextId("finance"), type: b.type, amount, note: (b.note || "").slice(0, 200), category: (b.category || "Lainnya").slice(0, 50), createdAt: Date.now() };
+    db.finances.push(f); saveDB(); return sendJSON(res, 201, f);
+  }
+  let mf = pathname.match(/^\/api\/admin\/finance\/(\d+)$/);
+  if (mf && method === "DELETE") {
+    if (!authed) return needAuth();
+    const i = db.finances.findIndex((f) => f.id === Number(mf[1]));
+    if (i === -1) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    db.finances.splice(i, 1); saveDB(); return sendJSON(res, 200, { ok: true });
+  }
 
   // ---- ADMIN: kelola konten (butuh login) ----
   if (pathname === "/api/admin/settings" && method === "PUT") {
@@ -567,13 +688,14 @@ async function handleApi(req, res, pathname, query) {
 const server = http.createServer(async (req, res) => {
   const parsed = url.parse(req.url, true);
   const pathname = parsed.pathname;
+  setSecurityHeaders(res);
   try {
     if (pathname.startsWith("/api/") || pathname === "/healthz") return await handleApi(req, res, pathname, parsed.query);
     // SEO routes (server-rendered)
     if (pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /dashboard\nSitemap: ${siteUrl()}/sitemap.xml\n`); }
     if (pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" }); return res.end(renderSitemap()); }
-    if (pathname === "/blog" || pathname === "/blog/") { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList()); }
-    const bm = pathname.match(/^\/blog\/([a-z0-9-]+)\/?$/);
+    if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList()); }
+    const bm = pathname.match(/^\/(?:blog|artikel)\/([a-z0-9-]+)\/?$/);
     if (bm) {
       const a = db.articles.find((x) => x.slug === bm[1] && x.published);
       if (a) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderArticle(a)); }

@@ -1,4 +1,8 @@
 // Homepage anshelstore — wire kontak + render game bento dari backend
+// Pastikan halaman selalu mulai dari atas (hindari lompat ke #anchor lama)
+if (location.hash) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
+window.scrollTo(0, 0);
+
 const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
 const GRADIENT = {
   ml: "linear-gradient(135deg,#00658d,#00baff)",
@@ -57,7 +61,7 @@ function bigCard(g) {
         <span class="inline-block bg-primary-container text-on-primary-container font-label-sm text-label-sm px-xs py-[2px] rounded-full mb-xs">${g.publisher || "Game"}</span>
         <h3 class="font-headline-lg text-headline-lg text-on-primary">${g.name}</h3>
       </div>
-      <a href="/topup.html" class="bg-surface glass-panel text-primary font-label-md text-label-md px-md py-sm rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all">Top Up</a>
+      <a href="/topup" class="bg-surface glass-panel text-primary font-label-md text-label-md px-md py-sm rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all">Top Up</a>
     </div>
   </div>`;
 }
@@ -68,7 +72,7 @@ function smallCard(g) {
     <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/70 via-transparent to-transparent"></div>
     <div class="absolute bottom-0 left-0 p-md w-full flex justify-between items-end">
       <h3 class="font-headline-md text-headline-md text-on-primary">${g.name}</h3>
-      <a href="/topup.html" class="bg-surface glass-panel text-primary font-label-md text-label-md px-sm py-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all flex items-center"><span class="material-symbols-outlined text-[16px]">add</span></a>
+      <a href="/topup" class="bg-surface glass-panel text-primary font-label-md text-label-md px-sm py-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all flex items-center"><span class="material-symbols-outlined text-[16px]">add</span></a>
     </div>
   </div>`;
 }

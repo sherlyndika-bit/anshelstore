@@ -76,6 +76,7 @@
         <button data-page="inbox">💬 Inbox Chat <span class="count" id="inboxCount" style="display:none"></span></button>
         <button data-page="articles">📝 Artikel</button>
         <button data-page="settings">⚙️ Konten & Harga</button>
+        <button data-page="finance">💰 Finansial</button>
       </nav>
       <div class="side-foot"><button id="logoutBtn">↩︎ Keluar</button></div>
     </aside>
@@ -172,11 +173,42 @@
           </div>
 
           <div class="panel-card">
-            <h3>Harga & Foto Game</h3>
+            <h3>Harga, Foto & Stok Game</h3>
             <div id="gamesEditor"></div>
             <button class="btn btn-primary" id="saveGames" style="margin-top:12px">Simpan Game</button>
             <span class="auth-msg" id="gameMsg" style="margin-left:10px"></span>
           </div>
+
+          <div class="panel-card" style="margin-top:18px">
+            <h3>🔌 Integrasi & API Keys</h3>
+            <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Isi untuk mengaktifkan fitur otomatis. Disimpan aman & tidak pernah tampil di sisi pengunjung.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
+              <div class="field"><label>Payment Gateway (provider)</label><input class="input" id="intPayProvider" placeholder="midtrans / xendit" /></div>
+              <div class="field"><label>Payment API Key</label><input class="input" id="intPayKey" type="password" placeholder="••••••" /></div>
+              <div class="field"><label>AI Provider (chatbot)</label><input class="input" id="intAiProvider" placeholder="openai / gemini" /></div>
+              <div class="field"><label>AI API Key</label><input class="input" id="intAiKey" type="password" placeholder="••••••" /></div>
+              <div class="field"><label>Cek-ID Game: URL API</label><input class="input" id="intGcUrl" placeholder="https://provider/check" /></div>
+              <div class="field"><label>Cek-ID Game: API Key</label><input class="input" id="intGcKey" type="password" placeholder="••••••" /></div>
+            </div>
+            <button class="btn btn-primary" id="saveIntegrations" style="margin-top:8px">Simpan Integrasi</button>
+            <span class="auth-msg" id="intMsg" style="margin-left:10px"></span>
+          </div>
+        </section>
+
+        <!-- FINANSIAL -->
+        <section class="page" id="page-finance">
+          <div class="stats-grid" id="financeStats"></div>
+          <div class="panel-card" style="margin-bottom:18px">
+            <h3>Catat Transaksi Manual</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end" class="fin-grid">
+              <div class="field" style="margin:0"><label>Tipe</label><select class="input" id="finType"><option value="in">Pemasukan</option><option value="out">Pengeluaran</option></select></div>
+              <div class="field" style="margin:0"><label>Nominal (Rp)</label><input class="input" id="finAmount" type="number" placeholder="0" /></div>
+              <div class="field" style="margin:0"><label>Kategori</label><input class="input" id="finCategory" placeholder="Modal, Iklan, dll" /></div>
+              <div class="field" style="margin:0"><label>Catatan</label><input class="input" id="finNote" placeholder="opsional" /></div>
+              <button class="btn btn-primary" id="addFinance">Tambah</button>
+            </div>
+          </div>
+          <div class="panel-card"><h3>Riwayat Keuangan</h3><div class="table-wrap"><table class="data" id="financeTable"></table></div></div>
         </section>
       </div>
     </div>

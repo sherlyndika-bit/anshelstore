@@ -58,7 +58,7 @@ function selectGame(id, el) {
   $("accountFields").innerHTML = selGame.needs.map((n) => `
     <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">${n}</span>
       <input class="acc-field mt-xs w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary" data-key="${n}" type="text" placeholder="Masukkan ${n}"/></label>`).join("");
-  $("accountFields").querySelectorAll(".acc-field").forEach((f) => f.addEventListener("input", update));
+  $("accountFields").querySelectorAll(".acc-field").forEach((f) => f.addEventListener("input", () => { update(); checkId(); }));
 
   $("stepNominal").classList.remove("hidden");
   $("stepAccount").classList.remove("hidden");
@@ -69,6 +69,28 @@ function selectGame(id, el) {
 
 function getAccount() { const a = {}; document.querySelectorAll(".acc-field").forEach((f) => (a[f.dataset.key] = f.value.trim())); return a; }
 function getPay() { const r = document.querySelector('input[name="pay"]:checked'); return r ? r.value : "E-Wallet"; }
+
+// Auto-detect ID game (jika provider dikonfigurasi admin)
+let idTimer = null;
+function checkId() {
+  clearTimeout(idTimer);
+  const prev = $("idPreview");
+  const acc = getAccount();
+  const idKey = selGame.needs[0];
+  const userId = acc[idKey];
+  if (!userId) { prev.classList.add("hidden"); return; }
+  idTimer = setTimeout(async () => {
+    try {
+      const q = new URLSearchParams({ gameId: selGame.id, userId: userId || "", zoneId: acc[selGame.needs[1]] || "" });
+      const r = await fetch("/api/game/check?" + q.toString()).then((x) => x.json());
+      if (r.supported && r.username) {
+        prev.className = "mt-sm rounded-DEFAULT px-md py-sm font-label-md text-label-md bg-primary-fixed/60 text-on-primary-fixed-variant";
+        prev.innerHTML = `<span class="material-symbols-outlined text-[18px] align-middle">verified</span> Username: <b>${r.username}</b>`;
+        prev.classList.remove("hidden");
+      } else { prev.classList.add("hidden"); }
+    } catch (e) { prev.classList.add("hidden"); }
+  }, 600);
+}
 
 function update() {
   if (!selGame) return;
@@ -86,7 +108,7 @@ $("submitOrder").addEventListener("click", async () => {
   btn.disabled = true; btn.innerHTML = 'Memproses… <span class="material-symbols-outlined animate-spin">progress_activity</span>';
   try {
     const order = await fetch("/api/orders", {
-      method: "POST", headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json", "x-auth-token": localStorage.getItem("anshel_token") || "" },
       body: JSON.stringify({ gameId: selGame.id, itemId: selItem.id, account: getAccount(), customerName: $("custName").value.trim() || "Guest", customerContact: $("custContact").value.trim(), paymentMethod: getPay() }),
     }).then((r) => r.json());
     showInvoice(order);
@@ -109,7 +131,7 @@ function showInvoice(order) {
       <div class="flex justify-between"><span>Bayar via</span><b class="text-on-surface">${order.paymentMethod}</b></div>
       <div class="flex justify-between"><span>Total</span><b class="text-secondary">${rupiah(order.price)}</b></div>
       ${waBtn}
-      <a href="/cek-transaksi.html?code=${order.code}" class="text-center font-label-md text-label-md text-primary mt-xs">Lacak status pesanan →</a>
+      <a href="/cek-transaksi?code=${order.code}" class="text-center font-label-md text-label-md text-primary mt-xs">Lacak status pesanan →</a>
     </div>`;
   $("invoice").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
