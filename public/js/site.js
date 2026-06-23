@@ -23,14 +23,14 @@
             <span class="w-9 h-9 rounded-full bg-gradient-to-br from-pink via-secondary to-primary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(232,74,138,0.4)] group-hover:scale-110 transition-transform">a</span>
             <span class="font-display-lg-mobile text-headline-md text-on-surface tracking-tight font-extrabold">anshel<span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">store</span></span>
           </a>
-          <div class="hidden lg:flex items-center gap-xs">
+          <div class="hidden md:flex items-center gap-xs">
             ${NAV.map((n) => `<a class="px-md py-sm rounded-full font-label-md text-label-md transition-all ${n.key === active ? "bg-pink-50 text-pink font-bold" : "text-on-surface-variant hover:bg-surface-container hover:text-primary"}" href="${n.href}">${n.label}</a>`).join("")}
           </div>
-          <div class="hidden lg:flex items-center gap-xs pl-xs" id="siteAuth">
+          <div class="hidden md:flex items-center gap-xs pl-xs" id="siteAuth">
             <a href="/masuk" class="px-md py-sm rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Masuk</a>
             <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(232,74,138,0.35)] hover:scale-105 active:scale-95 transition-all">Top Up ✨</a>
           </div>
-          <a href="/akun" id="siteAuthMobile" class="lg:hidden w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
+          <a href="/akun" id="siteAuthMobile" class="md:hidden w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
         </div>
       </nav>
     </div>`;
