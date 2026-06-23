@@ -87,6 +87,7 @@ $("paneOtp").addEventListener("submit", async (e) => {
 $("googleBtn").addEventListener("click", () => { window.location.href = "/api/auth/google"; });
 
 function authSuccess(d) {
+  if (d.user && d.user.admin === false) { showMsg("Akun ini belum punya akses admin. Hubungi pemilik toko untuk didaftarkan.", "err"); return; }
   TOKEN = d.token; localStorage.setItem("anshel_token", TOKEN);
   ME = d.user; boot();
 }
@@ -272,7 +273,7 @@ function boot() {
   try { const cfg = await fetch("/api/auth/config").then((r) => r.json()); if (cfg.google) $("googleWrap").style.display = "block"; } catch {}
   // auto-login bila token valid
   if (TOKEN) {
-    try { const r = await fetch("/api/auth/me", { headers: { "x-auth-token": TOKEN } }); if (r.ok) { ME = (await r.json()).user; boot(); return; } } catch {}
+    try { const r = await fetch("/api/auth/me", { headers: { "x-auth-token": TOKEN } }); if (r.ok) { const u = (await r.json()).user; if (u && u.admin !== false) { ME = u; boot(); return; } } } catch {}
     TOKEN = null; localStorage.removeItem("anshel_token");
   }
 })();

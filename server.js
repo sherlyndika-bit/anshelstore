@@ -27,7 +27,11 @@ const crypto = require("crypto");
 const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
 const PUBLIC_DIR = path.join(__dirname, "public");
-const DB_PATH = path.join(__dirname, "data", "db.json");
+// DATA_DIR bisa diarahkan ke Railway Volume (mis. /data) agar data persisten lintas deploy.
+const SEED_PATH = path.join(__dirname, "data", "db.json");
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
+const DB_PATH = path.join(DATA_DIR, "db.json");
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 
 const SMTP = {
   host: process.env.SMTP_HOST, port: process.env.SMTP_PORT || 465,
@@ -42,17 +46,29 @@ const GOOGLE_READY = !!(GOOGLE.id && GOOGLE.secret);
 // DB
 // ---------------------------------------------------------------------------
 let db;
-try { db = JSON.parse(fs.readFileSync(DB_PATH, "utf8")); }
-catch (e) { db = {}; }
+try {
+  // Bootstrap: jika DB belum ada di DATA_DIR (mis. volume baru), salin dari seed bawaan.
+  if (!fs.existsSync(DB_PATH)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    if (fs.existsSync(SEED_PATH) && SEED_PATH !== DB_PATH) fs.copyFileSync(SEED_PATH, DB_PATH);
+  }
+  db = JSON.parse(fs.readFileSync(DB_PATH, "utf8"));
+} catch (e) { console.error("DB load:", e.message); db = {}; }
+let saveTimer = null;
+function saveDB() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const tmp = DB_PATH + ".tmp";
+    fs.writeFile(tmp, JSON.stringify(db, null, 2), (e) => {
+      if (e) return console.error("save:", e.message);
+      fs.rename(tmp, DB_PATH, (er) => er && console.error("rename:", er.message)); // atomic
+    });
+  }, 150);
+}
 db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= [];
 db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
 db._seq ||= {}; ["order", "conversation", "message", "user", "article"].forEach((k) => (db._seq[k] ||= 0));
 
-let saveTimer = null;
-function saveDB() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => fs.writeFile(DB_PATH, JSON.stringify(db, null, 2), (e) => e && console.error("save:", e.message)), 150);
-}
 function nextId(kind) { db._seq[kind] = (db._seq[kind] || 0) + 1; return db._seq[kind]; }
 
 // ---------------------------------------------------------------------------
@@ -84,7 +100,8 @@ function userFromReq(req) {
   if (!s || s.expires < Date.now()) { sessions.delete(token); return null; }
   return db.users.find((u) => u.id === s.userId) || null;
 }
-function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, provider: u.provider }; }
+function isAdmin(u) { return !!u && (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(String(u.email).toLowerCase())); }
+function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, provider: u.provider, admin: isAdmin(u) }; }
 function findUser(email) { return db.users.find((u) => u.email.toLowerCase() === String(email).toLowerCase()); }
 function upsertUser({ email, name, provider, picture, passwordHash }) {
   let u = findUser(email);
@@ -446,9 +463,10 @@ async function handleApi(req, res, pathname, query) {
     return sendJSON(res, 201, order);
   }
 
-  // ---- Protected (butuh login) ----
-  const authed = !!userFromReq(req);
-  const needAuth = () => sendJSON(res, 401, { error: "Unauthorized" });
+  // ---- Protected (butuh login + akses admin) ----
+  const meUser = userFromReq(req);
+  const authed = !!meUser && isAdmin(meUser);
+  const needAuth = () => sendJSON(res, meUser ? 403 : 401, { error: meUser ? "Akun ini tidak memiliki akses admin" : "Unauthorized" });
 
   if (pathname === "/api/orders" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, [...db.orders].sort((a, b) => b.createdAt - a.createdAt)); }
   let m = pathname.match(/^\/api\/orders\/(\d+)$/);
