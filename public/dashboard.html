@@ -17,30 +17,12 @@
     <div class="login-card">
       <a class="brand"><span class="brand-logo">a</span> anshelstore</a>
       <h1>Dashboard</h1>
-      <p>Khusus pemilik &amp; tim. Akun dibuat oleh owner.</p>
+      <p>Masuk dengan email &amp; password. Akun dibuat oleh owner.</p>
 
-      <div class="auth-tabs">
-        <button data-tab="login" class="active">Password</button>
-        <button data-tab="otp">Kode OTP</button>
-      </div>
-
-      <!-- LOGIN -->
       <form class="auth-pane active" id="paneLogin">
         <div class="field"><label>Email</label><input class="input" id="loginEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
         <div class="field"><label>Password</label><input class="input" id="loginPass" type="password" placeholder="••••••" autocomplete="current-password" /></div>
         <button class="btn btn-primary btn-block btn-lg" type="submit">Masuk</button>
-      </form>
-
-      <!-- OTP -->
-      <form class="auth-pane" id="paneOtp">
-        <div class="field"><label>Email</label><input class="input" id="otpEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
-        <button class="btn btn-primary btn-block btn-lg" type="button" id="sendOtp">Kirim Kode OTP</button>
-        <div id="otpStep" style="display:none">
-          <div class="field" style="margin-top:14px"><label>Masukkan Kode (6 digit)</label><input class="input" id="otpCode" type="text" inputmode="numeric" maxlength="6" placeholder="______" style="letter-spacing:.3em;text-align:center;font-size:1.2rem" /></div>
-          <button class="btn btn-primary btn-block btn-lg" type="submit">Verifikasi & Masuk</button>
-        </div>
-        <div class="dev-otp" id="devOtp" style="display:none"></div>
-        <div style="text-align:center;margin-top:10px"><button type="button" class="auth-link" id="backLogin">← Kembali ke login biasa</button></div>
       </form>
 
       <div class="auth-msg" id="authMsg"></div>
@@ -70,13 +52,17 @@
     <aside class="sidebar" id="sidebar">
       <a href="/" class="brand"><span class="brand-logo">a</span> anshelstore</a>
       <nav class="side-nav">
+        <div class="nav-section">Utama</div>
         <button data-page="overview">📊 Overview</button>
         <button data-page="orders">🎮 Pesanan <span class="count" id="ordersCount" style="display:none"></span></button>
         <button data-page="inbox">💬 Inbox Chat <span class="count" id="inboxCount" style="display:none"></span></button>
-        <button data-page="articles">📝 Artikel</button>
-        <button data-page="settings">⚙️ Konten & Harga</button>
+        <div class="nav-section">Toko</div>
+        <button data-page="produk">🎯 Produk &amp; Game</button>
+        <button data-page="settings">⚙️ Konten &amp; Harga</button>
         <button data-page="finance">💰 Finansial</button>
-        <button data-page="team">👥 Tim & Akses</button>
+        <div class="nav-section">Konten &amp; Sistem</div>
+        <button data-page="articles">📝 Artikel</button>
+        <button data-page="team">👥 Tim &amp; Akses</button>
       </nav>
       <div class="side-foot"><button id="logoutBtn">↩︎ Keluar</button></div>
     </aside>
@@ -182,13 +168,6 @@
           </div>
 
           <div class="panel-card">
-            <h3>Harga, Foto & Stok Game</h3>
-            <div id="gamesEditor"></div>
-            <button class="btn btn-primary" id="saveGames" style="margin-top:12px">Simpan Game</button>
-            <span class="auth-msg" id="gameMsg" style="margin-left:10px"></span>
-          </div>
-
-          <div class="panel-card" style="margin-top:18px">
             <h3>🔌 Integrasi & API Keys</h3>
             <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Isi untuk mengaktifkan fitur otomatis. Disimpan aman & tidak pernah tampil di sisi pengunjung.</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
@@ -202,6 +181,23 @@
             <button class="btn btn-primary" id="saveIntegrations" style="margin-top:8px">Simpan Integrasi</button>
             <span class="auth-msg" id="intMsg" style="margin-left:10px"></span>
           </div>
+        </section>
+
+        <!-- PRODUK & GAME -->
+        <section class="page" id="page-produk">
+          <div class="panel-card" style="margin-bottom:18px">
+            <h3>➕ Tambah Game Baru</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px" class="set-grid">
+              <div class="field" style="margin:0"><label>ID unik (huruf kecil)</label><input class="input" id="ngId" placeholder="mis. mlbb" /></div>
+              <div class="field" style="margin:0"><label>Nama Game</label><input class="input" id="ngName" placeholder="Mobile Legends" /></div>
+              <div class="field" style="margin:0"><label>Publisher</label><input class="input" id="ngPub" placeholder="Moonton" /></div>
+            </div>
+            <div class="field"><label>Field diminta (pisah koma)</label><input class="input" id="ngNeeds" placeholder="User ID, Zone ID" /></div>
+            <button class="btn btn-primary" id="addGameBtn">Tambah Game</button>
+            <span class="auth-msg" id="produkMsg" style="margin-left:10px"></span>
+          </div>
+          <div id="produkList" class="grid" style="gap:16px"></div>
+          <div style="position:sticky;bottom:90px;margin-top:16px;z-index:5"><button class="btn btn-primary btn-lg btn-block" id="saveProduk">💾 Simpan Semua Perubahan</button></div>
         </section>
 
         <!-- FINANSIAL -->

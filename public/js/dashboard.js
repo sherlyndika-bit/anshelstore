@@ -25,18 +25,6 @@ function showMsg(text, type = "err") { authMsg.textContent = text; authMsg.class
 function clearMsg() { authMsg.textContent = ""; authMsg.className = "auth-msg"; }
 
 // tab switching
-document.querySelectorAll(".auth-tabs button").forEach((b) =>
-  b.addEventListener("click", () => switchPane(b.dataset.tab))
-);
-function switchPane(tab) {
-  clearMsg();
-  document.querySelectorAll(".auth-tabs button").forEach((x) => x.classList.toggle("active", x.dataset.tab === tab));
-  ["Login", "Otp"].forEach((p) => $("pane" + p).classList.remove("active"));
-  if (tab === "login") $("paneLogin").classList.add("active");
-  if (tab === "otp") $("paneOtp").classList.add("active");
-}
-$("backLogin").addEventListener("click", () => switchPane("login"));
-
 // login (password)
 $("paneLogin").addEventListener("submit", async (e) => {
   e.preventDefault(); clearMsg();
@@ -48,38 +36,13 @@ $("paneLogin").addEventListener("submit", async (e) => {
 
 // (registrasi publik dinonaktifkan di dashboard — akun dibuat oleh owner di menu Tim & Akses)
 
-// OTP request
-$("sendOtp").addEventListener("click", async () => {
-  clearMsg();
-  const email = $("otpEmail").value.trim();
-  if (!email) return showMsg("Isi email dulu");
-  $("sendOtp").disabled = true; $("sendOtp").textContent = "Mengirim…";
-  try {
-    const r = await fetch("/api/auth/otp/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
-    const d = await r.json();
-    if (!r.ok) { showMsg(d.error || "Gagal kirim OTP"); return; }
-    $("otpStep").style.display = "block";
-    if (d.devCode) { $("devOtp").style.display = "block"; $("devOtp").innerHTML = `Mode dev (email belum diset): kode kamu <b>${d.devCode}</b>`; }
-    else { showMsg("Kode OTP terkirim ke email kamu. Cek inbox/spam.", "ok"); }
-  } catch (e) { showMsg("Gagal terhubung ke server"); }
-  finally { $("sendOtp").disabled = false; $("sendOtp").textContent = "Kirim Ulang Kode"; }
-});
-
-// OTP verify
-$("paneOtp").addEventListener("submit", async (e) => {
-  e.preventDefault(); clearMsg();
-  const r = await fetch("/api/auth/otp/verify", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: $("otpEmail").value.trim(), code: $("otpCode").value.trim() }) });
-  const d = await r.json();
-  if (!r.ok) return showMsg(d.error || "Kode salah");
-  authSuccess(d);
-});
+// (OTP & registrasi dinonaktifkan di dashboard — login cukup email+password)
 
 // Google
 $("googleBtn").addEventListener("click", () => { window.location.href = "/api/auth/google"; });
 
 function showSetup() {
-  const tabs = document.querySelector(".auth-tabs"); if (tabs) tabs.style.display = "none";
-  $("paneLogin").classList.remove("active"); $("paneOtp").classList.remove("active");
+  $("paneLogin").classList.remove("active");
   $("paneSetup").classList.add("active");
   const h = document.querySelector(".login-card h1"); if (h) h.textContent = "Setup Awal 🎉";
   const p = document.querySelector(".login-card p"); if (p) p.textContent = "Buat akun Owner pertama untuk mengelola toko.";
@@ -109,8 +72,8 @@ const sidebar = $("sidebar"), backdrop = $("backdrop");
 $("menuBtn").addEventListener("click", () => { sidebar.classList.toggle("open"); backdrop.classList.toggle("show"); });
 backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
 
-const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", articles: "Artikel", settings: "Konten & Harga", finance: "Finansial", team: "Tim & Akses" };
-const PAGES = ["overview", "orders", "inbox", "articles", "settings", "finance", "team"];
+const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Game", articles: "Artikel", settings: "Konten & Harga", finance: "Finansial", team: "Tim & Akses" };
+const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "finance", "team"];
 document.querySelectorAll(".side-nav button").forEach((btn) =>
   btn.addEventListener("click", () => { location.hash = btn.dataset.page; })
 );
@@ -129,6 +92,7 @@ function routeTo(page) {
   if (page === "settings") loadSettings();
   if (page === "finance") loadFinance();
   if (page === "team") loadTeam();
+  if (page === "produk") loadProduk();
 }
 window.addEventListener("hashchange", () => { if (TOKEN) routeTo(location.hash.replace("#", "")); });
 
@@ -378,18 +342,6 @@ async function loadSettings() {
         <div class="field" style="margin:0"><label>URL Gambar</label><input class="input svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" placeholder="https://..." /></div>
       </div>
     </div>`).join("");
-
-  loadedGames = await fetch("/api/games").then((r) => r.json());
-  $("gamesEditor").innerHTML = loadedGames.map((g, gi) => `
-    <div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
-      <div style="font-weight:700;margin-bottom:8px">${escapeHtml(g.name)} <span style="color:var(--text-muted);font-weight:400">· ${escapeHtml(g.publisher || "")}</span></div>
-      <div class="field" style="margin:0 0 10px"><label>URL Gambar</label><input class="input game-img" data-g="${gi}" value="${escapeHtml(g.image || "")}" placeholder="https://..." /></div>
-      ${g.items.map((it, ii) => `<div style="display:grid;grid-template-columns:1fr 120px 110px;gap:8px;align-items:end;margin-bottom:6px" class="set-grid">
-        <div style="font-size:.85rem;color:var(--text-soft);padding-bottom:8px">${escapeHtml(it.label)}</div>
-        <div class="field" style="margin:0"><label>Harga</label><input class="input item-price" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" /></div>
-        <div class="field" style="margin:0"><label>Stok (kosong=∞)</label><input class="input item-stock" data-g="${gi}" data-i="${ii}" type="number" value="${typeof it.stock === "number" ? it.stock : ""}" placeholder="∞" /></div>
-      </div>`).join("")}
-    </div>`).join("");
 }
 $("saveIntegrations").addEventListener("click", async () => {
   const integrations = {
@@ -411,11 +363,68 @@ $("saveServices").addEventListener("click", async () => {
   document.querySelectorAll(".svc-img").forEach((el) => (loadedServices[el.dataset.i].image = el.value.trim()));
   try { await api("/api/admin/services", { method: "PUT", body: JSON.stringify({ services: loadedServices }) }); const e = $("svcMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("svcMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
 });
-$("saveGames").addEventListener("click", async () => {
-  document.querySelectorAll(".game-img").forEach((el) => (loadedGames[el.dataset.g].image = el.value.trim()));
-  document.querySelectorAll(".item-price").forEach((el) => (loadedGames[el.dataset.g].items[el.dataset.i].price = Number(el.value) || 0));
-  document.querySelectorAll(".item-stock").forEach((el) => { const it = loadedGames[el.dataset.g].items[el.dataset.i]; if (el.value === "") delete it.stock; else it.stock = Math.max(0, Number(el.value) || 0); });
-  try { await api("/api/admin/games", { method: "PUT", body: JSON.stringify({ games: loadedGames }) }); const e = $("gameMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("gameMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+// ============================================================
+// PRODUK & GAME (kelola lengkap: tambah/hapus game & item)
+// ============================================================
+async function loadProduk() {
+  loadedGames = await fetch("/api/games").then((r) => r.json());
+  renderProduk();
+}
+function renderProduk() {
+  const wrap = $("produkList");
+  wrap.innerHTML = loadedGames.map((g, gi) => `
+    <div class="game-admin-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <b style="font-size:1.05rem">${escapeHtml(g.name || "(tanpa nama)")} <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">#${escapeHtml(g.id)}</span></b>
+        <button class="btn btn-light btn-sm pg-delgame" data-g="${gi}" style="color:var(--red)">Hapus</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="set-grid">
+        <div class="field" style="margin:0"><label>Nama</label><input class="input pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
+        <div class="field" style="margin:0"><label>Publisher</label><input class="input pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
+        <div class="field" style="margin:0"><label>URL Gambar</label><input class="input pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/></div>
+        <div class="field" style="margin:0"><label>Field diminta (koma)</label><input class="input pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
+      </div>
+      <div style="margin:10px 0 4px;font-weight:600;font-size:.82rem;color:var(--text-soft)">Item / Nominal (label · harga · stok)</div>
+      ${g.items.map((it, ii) => `<div class="gitem">
+        <input class="input pg-ilabel" data-g="${gi}" data-i="${ii}" value="${escapeHtml(it.label)}" placeholder="Label"/>
+        <input class="input pg-iprice" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" placeholder="Harga"/>
+        <input class="input pg-istock" data-g="${gi}" data-i="${ii}" type="number" value="${typeof it.stock === "number" ? it.stock : ""}" placeholder="∞"/>
+        <button class="btn btn-light btn-sm pg-delitem" data-g="${gi}" data-i="${ii}" style="color:var(--red)">✕</button>
+      </div>`).join("")}
+      <button class="btn btn-light btn-sm pg-additem" data-g="${gi}" style="margin-top:6px">+ Tambah Item</button>
+    </div>`).join("") || '<p style="color:var(--text-muted)">Belum ada game. Tambah di atas, lalu Simpan.</p>';
+  bindProduk();
+}
+function syncProduk() {
+  document.querySelectorAll(".pg-name").forEach((el) => (loadedGames[el.dataset.g].name = el.value));
+  document.querySelectorAll(".pg-pub").forEach((el) => (loadedGames[el.dataset.g].publisher = el.value));
+  document.querySelectorAll(".pg-img").forEach((el) => (loadedGames[el.dataset.g].image = el.value.trim()));
+  document.querySelectorAll(".pg-needs").forEach((el) => (loadedGames[el.dataset.g].needs = el.value.split(",").map((s) => s.trim()).filter(Boolean)));
+  document.querySelectorAll(".pg-ilabel").forEach((el) => (loadedGames[el.dataset.g].items[el.dataset.i].label = el.value));
+  document.querySelectorAll(".pg-iprice").forEach((el) => (loadedGames[el.dataset.g].items[el.dataset.i].price = Number(el.value) || 0));
+  document.querySelectorAll(".pg-istock").forEach((el) => { const it = loadedGames[el.dataset.g].items[el.dataset.i]; if (el.value === "") delete it.stock; else it.stock = Math.max(0, Number(el.value) || 0); });
+}
+function bindProduk() {
+  $("produkList").querySelectorAll(".pg-delgame").forEach((b) => b.addEventListener("click", () => { syncProduk(); if (confirm("Hapus game ini?")) { loadedGames.splice(Number(b.dataset.g), 1); renderProduk(); } }));
+  $("produkList").querySelectorAll(".pg-additem").forEach((b) => b.addEventListener("click", () => { syncProduk(); loadedGames[b.dataset.g].items.push({ id: "i" + Date.now(), label: "Item baru", price: 0 }); renderProduk(); }));
+  $("produkList").querySelectorAll(".pg-delitem").forEach((b) => b.addEventListener("click", () => { syncProduk(); loadedGames[b.dataset.g].items.splice(Number(b.dataset.i), 1); renderProduk(); }));
+}
+$("addGameBtn").addEventListener("click", () => {
+  syncProduk();
+  const id = $("ngId").value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+  const m = $("produkMsg");
+  if (!id || !$("ngName").value.trim()) { m.textContent = "ID & nama wajib"; m.className = "auth-msg err"; return; }
+  if (loadedGames.some((g) => g.id === id)) { m.textContent = "ID sudah dipakai"; m.className = "auth-msg err"; return; }
+  loadedGames.push({ id, name: $("ngName").value.trim(), publisher: $("ngPub").value.trim(), image: "", needs: $("ngNeeds").value.split(",").map((s) => s.trim()).filter(Boolean), items: [{ id: "i" + Date.now(), label: "Item baru", price: 0 }] });
+  $("ngId").value = ""; $("ngName").value = ""; $("ngPub").value = ""; $("ngNeeds").value = "";
+  m.textContent = "Game ditambah — jangan lupa Simpan."; m.className = "auth-msg ok";
+  renderProduk();
+});
+$("saveProduk").addEventListener("click", async () => {
+  syncProduk();
+  loadedGames.forEach((g) => g.items.forEach((it) => { if (!it.id) it.id = "i" + Math.random().toString(36).slice(2, 7); }));
+  const m = $("produkMsg");
+  try { await api("/api/admin/games", { method: "PUT", body: JSON.stringify({ games: loadedGames }) }); m.textContent = "Semua tersimpan! ✅"; m.className = "auth-msg ok"; } catch (e) { m.textContent = "Gagal menyimpan"; m.className = "auth-msg err"; }
 });
 
 // ============================================================

@@ -184,3 +184,13 @@ table.data tr:hover td { background: var(--bg-soft); }
   .bottom-nav button.active { color: #fff; background: linear-gradient(135deg, #e84a8a, #8127cf); box-shadow: 0 6px 16px -4px rgba(232,74,138,.5); }
   .bottom-nav button.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
 }
+
+
+
+/* Label seksi di sidebar */
+.nav-section { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #64748b; padding: 14px 14px 4px; }
+.side-nav button[data-page] { margin: 1px 0; }
+/* Produk: kartu game di dashboard */
+.game-admin-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+.game-admin-card .gitem { display: grid; grid-template-columns: 1fr 110px 90px 36px; gap: 8px; align-items: center; margin-bottom: 6px; }
+@media (max-width: 640px) { .game-admin-card .gitem { grid-template-columns: 1fr 1fr; } }

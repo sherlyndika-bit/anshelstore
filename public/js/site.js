@@ -30,19 +30,22 @@
             <a href="/masuk" class="px-md py-sm rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Masuk</a>
             <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(232,74,138,0.35)] hover:scale-105 active:scale-95 transition-all">Top Up ✨</a>
           </div>
-          <button id="navToggle" class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-pink-50 transition-colors" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
-        </div>
-        <div id="navMobile" class="lg:hidden hidden px-md pb-sm">
-          <div class="flex flex-col">
-            ${NAV.map((n) => `<a class="py-sm font-label-md text-label-md ${active === n.key ? "text-pink font-bold" : "text-on-surface-variant"}" href="${n.href}">${n.label}</a>`).join("")}
-            <div id="siteAuthM" class="flex flex-col gap-xs mt-xs pt-xs border-t border-pink-soft/40"><a href="/masuk" class="py-sm font-label-md text-label-md text-on-surface-variant">Masuk / Daftar</a><a href="/topup" class="text-center bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up ✨</a></div>
-          </div>
+          <a href="/akun" id="siteAuthMobile" class="lg:hidden w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
         </div>
       </nav>
     </div>`;
-    const toggle = document.getElementById("navToggle"), mobile = document.getElementById("navMobile");
-    toggle.addEventListener("click", () => mobile.classList.toggle("hidden"));
   }
+  // Bottom tab bar (mobile) — pengganti hamburger
+  const BOTTOM = [
+    { href: "/", label: "Beranda", icon: "home", key: "home" },
+    { href: "/topup", label: "Top Up", icon: "stadia_controller", key: "topup" },
+    { href: "/blog", label: "Artikel", icon: "article", key: "blog" },
+    { href: "/akun", label: "Akun", icon: "person", key: "akun" },
+  ];
+  const bnav = document.createElement("div");
+  bnav.className = "site-bottom-nav";
+  bnav.innerHTML = BOTTOM.map((n) => `<a href="${n.href}" class="${n.key === active ? "active" : ""}"><span class="material-symbols-outlined">${n.icon}</span>${n.label}</a>`).join("");
+  document.body.appendChild(bnav);
 
   const footMount = document.getElementById("siteFooter");
   if (footMount) {
