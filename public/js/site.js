@@ -19,7 +19,7 @@
     <div class="sticky top-0 z-50 px-margin-mobile md:px-margin-desktop pt-sm">
       <nav class="max-w-7xl mx-auto rounded-full bg-surface/70 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(232,74,138,0.25)] border border-pink-soft/50">
         <div class="flex justify-between items-center pl-md pr-xs py-2">
-          <a href="/" class="flex items-center gap-xs group">
+          <a href="/" id="siteBrand" class="flex items-center gap-xs group">
             <span class="w-9 h-9 rounded-full bg-gradient-to-br from-pink via-secondary to-primary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(232,74,138,0.4)] group-hover:scale-110 transition-transform">a</span>
             <span class="font-display-lg-mobile text-headline-md text-on-surface tracking-tight font-extrabold">anshel<span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">store</span></span>
           </a>
@@ -50,7 +50,7 @@
     <footer class="bg-surface-container-low w-full mt-xl rounded-t-lg">
       <div class="px-margin-mobile md:px-margin-desktop py-lg max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
         <div class="flex flex-col gap-sm">
-          <div class="text-headline-md font-display-lg text-secondary">anshelstore</div>
+          <div class="text-headline-md font-display-lg text-secondary" id="footBrand">anshelstore</div>
           <p class="font-body-md text-body-md text-on-surface-variant max-w-xs">AI automation, chatbot pintar, dan top up game instan. Cepat, profesional, terpercaya.</p>
           <div id="footSocial" class="flex gap-sm mt-xs"></div>
         </div>
@@ -71,7 +71,13 @@
 
   // Kontak dari backend
   fetch("/api/settings").then((r) => r.json()).then((d) => {
-    const s = d.store || {}, soc = (d.settings || {}).social || {};
+    const s = d.store || {}, set = d.settings || {}, soc = set.social || {};
+    if (set.logo) {
+      const b = document.getElementById("siteBrand");
+      if (b) b.innerHTML = `<img src="${set.logo}" alt="anshelstore" class="h-9 w-auto group-hover:scale-105 transition-transform"/>`;
+      const fb = document.getElementById("footBrand");
+      if (fb) fb.innerHTML = `<img src="${set.logo}" alt="anshelstore" class="h-9 w-auto"/>`;
+    }
     if (s.whatsapp) { const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau tanya.")}`; const fw = document.getElementById("footWa"); if (fw) fw.href = wa; }
     const fm = document.getElementById("footMail"); if (fm && s.email) fm.href = "mailto:" + s.email;
     const fs = document.getElementById("footSocial");

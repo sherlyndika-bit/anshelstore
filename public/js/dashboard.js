@@ -77,6 +77,19 @@ $("paneOtp").addEventListener("submit", async (e) => {
 // Google
 $("googleBtn").addEventListener("click", () => { window.location.href = "/api/auth/google"; });
 
+function showSetup() {
+  const tabs = document.querySelector(".auth-tabs"); if (tabs) tabs.style.display = "none";
+  $("paneLogin").classList.remove("active"); $("paneOtp").classList.remove("active");
+  $("paneSetup").classList.add("active");
+  const h = document.querySelector(".login-card h1"); if (h) h.textContent = "Setup Awal 🎉";
+  const p = document.querySelector(".login-card p"); if (p) p.textContent = "Buat akun Owner pertama untuk mengelola toko.";
+}
+$("paneSetup").addEventListener("submit", async (e) => {
+  e.preventDefault(); clearMsg();
+  const r = await fetch("/api/auth/setup-owner", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: $("setupName").value.trim(), email: $("setupEmail").value.trim(), password: $("setupPass").value }) });
+  const d = await r.json(); if (!r.ok) return showMsg(d.error || "Gagal setup"); authSuccess(d);
+});
+
 function authSuccess(d) {
   if (d.user && d.user.admin === false) { showMsg("Akun ini belum punya akses admin. Hubungi pemilik toko untuk didaftarkan.", "err"); return; }
   TOKEN = d.token; localStorage.setItem("anshel_token", TOKEN);
@@ -265,6 +278,8 @@ function boot() {
     if (t) { TOKEN = t; localStorage.setItem("anshel_token", t); }
     history.replaceState(null, "", "/dashboard");
   }
+  // First-run: kalau belum ada akun dashboard, tampilkan setup owner
+  try { const ns = await fetch("/api/auth/needs-setup").then((r) => r.json()); if (ns.needsSetup) { showSetup(); return; } } catch {}
   // tampilkan tombol Google bila dikonfigurasi
   try { const cfg = await fetch("/api/auth/config").then((r) => r.json()); if (cfg.google) $("googleWrap").style.display = "block"; } catch {}
   // auto-login bila token valid
@@ -344,6 +359,10 @@ async function loadSettings() {
   $("setHeroTitle").value = s.heroTitle || ""; $("setHeroImage").value = s.heroImage || "";
   $("setHeroSub").value = s.heroSubtitle || ""; $("setMeta").value = s.metaDescription || "";
   $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
+  $("setLogo").value = s.logo || "";
+  $("setLayananTitle").value = s.layananTitle || ""; $("setLayananDesc").value = s.layananDesc || "";
+  $("setTopupTitle").value = s.topupTitle || ""; $("setTopupDesc").value = s.topupDesc || "";
+  $("setArtikelTitle").value = s.articlesTitle || "";
   // Integrasi
   $("intPayProvider").value = integ.paymentProvider || ""; $("intPayKey").value = integ.paymentKey || "";
   $("intAiProvider").value = integ.aiProvider || ""; $("intAiKey").value = integ.aiKey || "";
@@ -382,7 +401,7 @@ $("saveIntegrations").addEventListener("click", async () => {
 $("saveSettings").addEventListener("click", async () => {
   const body = {
     store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
-    settings: { heroTitle: $("setHeroTitle").value.trim(), heroImage: $("setHeroImage").value.trim(), heroSubtitle: $("setHeroSub").value.trim(), metaDescription: $("setMeta").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
+    settings: { heroTitle: $("setHeroTitle").value.trim(), heroImage: $("setHeroImage").value.trim(), heroSubtitle: $("setHeroSub").value.trim(), metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), layananTitle: $("setLayananTitle").value.trim(), layananDesc: $("setLayananDesc").value.trim(), topupTitle: $("setTopupTitle").value.trim(), topupDesc: $("setTopupDesc").value.trim(), articlesTitle: $("setArtikelTitle").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
   };
   try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); const e = $("setMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("setMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
 });

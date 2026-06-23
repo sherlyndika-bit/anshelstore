@@ -45,6 +45,14 @@
 
       <div class="auth-msg" id="authMsg"></div>
 
+      <!-- SETUP OWNER (first-run) -->
+      <form class="auth-pane" id="paneSetup">
+        <div class="field"><label>Nama</label><input class="input" id="setupName" type="text" placeholder="Nama kamu" /></div>
+        <div class="field"><label>Email</label><input class="input" id="setupEmail" type="email" placeholder="email@kamu.com" /></div>
+        <div class="field"><label>Password</label><input class="input" id="setupPass" type="password" placeholder="min 6 karakter" /></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Buat Akun Owner</button>
+      </form>
+
       <!-- Google -->
       <div id="googleWrap" style="display:none">
         <div class="divider">atau</div>
@@ -145,9 +153,18 @@
               <div class="field"><label>Email</label><input class="input" id="setEmail" /></div>
               <div class="field"><label>Judul Hero</label><input class="input" id="setHeroTitle" /></div>
               <div class="field"><label>URL Gambar Hero</label><input class="input" id="setHeroImage" /></div>
+              <div class="field"><label>URL Logo (gambar, kosong = teks)</label><input class="input" id="setLogo" placeholder="https://..." /></div>
             </div>
             <div class="field"><label>Subjudul Hero</label><textarea class="input" id="setHeroSub" rows="2"></textarea></div>
             <div class="field"><label>Meta Description (SEO)</label><textarea class="input" id="setMeta" rows="2"></textarea></div>
+            <h4 style="margin:14px 0 6px;font-size:.9rem;color:var(--text-soft);font-weight:700">✏️ Teks Halaman Depan (bisa diubah)</h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
+              <div class="field"><label>Judul "Layanan"</label><input class="input" id="setLayananTitle" /></div>
+              <div class="field"><label>Judul "Top Up"</label><input class="input" id="setTopupTitle" /></div>
+            </div>
+            <div class="field"><label>Deskripsi "Layanan"</label><input class="input" id="setLayananDesc" /></div>
+            <div class="field"><label>Deskripsi "Top Up"</label><input class="input" id="setTopupDesc" /></div>
+            <div class="field"><label>Judul "Artikel"</label><input class="input" id="setArtikelTitle" /></div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="set-grid">
               <div class="field"><label>Instagram URL</label><input class="input" id="setIg" /></div>
               <div class="field"><label>TikTok URL</label><input class="input" id="setTt" /></div>

@@ -65,10 +65,10 @@ function saveDB() {
     });
   }, 150);
 }
-db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= [];
+db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= [];
 db.settings.integrations ||= {};
 db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance"].forEach((k) => (db._seq[k] ||= 0));
+db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment"].forEach((k) => (db._seq[k] ||= 0));
 
 function nextId(kind) { db._seq[kind] = (db._seq[kind] || 0) + 1; return db._seq[kind]; }
 
@@ -322,33 +322,41 @@ const THEME_HEAD = `
 function pageNav() { return `<div id="siteNav"></div>`; }
 function pageFooter() { return `<div id="siteFooter"></div>`; }
 
-function renderBlogList() {
-  const arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
+function allTags() {
+  const set = new Map();
+  db.articles.filter((a) => a.published).forEach((a) => (a.tags || []).forEach((t) => set.set(t, (set.get(t) || 0) + 1)));
+  return [...set.entries()].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+}
+function renderBlogList(tag) {
+  let arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
+  if (tag) arts = arts.filter((a) => (a.tags || []).map((t) => t.toLowerCase()).includes(String(tag).toLowerCase()));
+  const chips = `<a href="/blog" class="px-md py-xs rounded-full font-label-md text-label-md ${!tag ? "bg-pink text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-pink"} transition-colors">Semua</a>` +
+    allTags().map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="px-md py-xs rounded-full font-label-md text-label-md ${tag && tag.toLowerCase() === t.name.toLowerCase() ? "bg-pink text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-pink"} transition-colors">${escHtml(t.name)} <span class="opacity-60">${t.count}</span></a>`).join("");
   const cards = arts.map((a) => `
-    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm shadow-primary/5 border border-outline-variant/20 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col">
+    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col reveal in">
       <div class="aspect-[16/9] overflow-hidden bg-surface-container">${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
       <div class="p-md flex flex-col gap-xs flex-grow">
-        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
+        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-pink-50 text-pink font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
         <h2 class="font-headline-md text-headline-md text-on-surface leading-tight">${escHtml(a.title)}</h2>
         <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${escHtml(a.excerpt)}</p>
-        <span class="font-label-md text-label-md text-primary inline-flex items-center gap-xs mt-xs">Baca selengkapnya <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
+        <span class="font-label-md text-label-md text-pink inline-flex items-center gap-xs mt-xs">Baca selengkapnya <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
       </div>
     </a>`).join("");
   return `<!DOCTYPE html><html class="light" lang="id"><head>
     <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Artikel & Tips — anshelstore</title>
+    <title>${tag ? escHtml(tag) + " — " : ""}Artikel & Tips — anshelstore</title>
     <meta name="description" content="Artikel, tips top up game, dan panduan AI automation dari anshelstore."/>
     <link rel="canonical" href="${siteUrl()}/blog"/>
-    <meta property="og:title" content="Artikel & Tips — anshelstore"/><meta property="og:type" content="website"/>
     ${THEME_HEAD}</head>
     <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
     <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-      <div class="text-center mb-xl">
-        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Artikel & <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Tips</span></h1>
+      <div class="text-center mb-lg">
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Artikel & <span class="bg-gradient-to-r from-pink to-secondary text-gradient">Tips</span></h1>
         <p class="font-body-lg text-body-lg text-on-surface-variant">Panduan top up, tips gaming, dan insight AI automation.</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">${cards || '<p class="text-on-surface-variant">Belum ada artikel.</p>'}</div>
+      <div class="flex flex-wrap gap-xs justify-center mb-lg">${chips}</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">${cards || '<p class="text-on-surface-variant text-center col-span-full py-lg">Belum ada artikel di kategori ini.</p>'}</div>
     </main>${pageFooter()}<script src="/js/site.js"></script></body></html>`;
 }
 
@@ -357,16 +365,31 @@ function renderArticle(a) {
   const words = String(a.content || "").split(/\s+/).filter(Boolean).length;
   const readMin = Math.max(1, Math.round(words / 180));
   const dateStr = new Date(a.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
-  const related = db.articles.filter((x) => x.published && x.id !== a.id).sort((x, y) => y.createdAt - x.createdAt).slice(0, 3);
-  const relHtml = related.length ? `
-    <section class="max-w-5xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-md text-center">Artikel Lainnya</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-        ${related.map((r) => `<a href="/blog/${r.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-1 hover:shadow-lg transition-all flex flex-col">
-          <div class="aspect-[16/9] overflow-hidden bg-surface-container">${r.cover ? `<img src="${escHtml(r.cover)}" alt="${escHtml(r.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
-          <div class="p-md"><h3 class="font-label-md text-label-md text-on-surface font-bold text-[16px] leading-tight">${escHtml(r.title)}</h3></div></a>`).join("")}
+  const related = db.articles.filter((x) => x.published && x.id !== a.id).sort((x, y) => y.createdAt - x.createdAt).slice(0, 4);
+  const cats = allTags().slice(0, 12);
+  const sidebar = `
+    <aside class="lg:col-span-1 flex flex-col gap-md lg:sticky lg:top-[96px] self-start">
+      <div class="bg-surface-container-lowest rounded-lg p-md shadow-sm border border-outline-variant/20">
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Kategori</h3>
+        <div class="flex flex-wrap gap-xs">${cats.length ? cats.map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="bg-pink-50 text-pink font-label-sm text-label-sm px-sm py-[3px] rounded-full hover:bg-pink hover:text-on-primary transition-colors">${escHtml(t.name)}</a>`).join("") : '<span class="text-on-surface-variant font-label-md text-label-md">—</span>'}</div>
       </div>
-    </section>` : "";
+      <div class="bg-surface-container-lowest rounded-lg p-md shadow-sm border border-outline-variant/20">
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Artikel Lainnya</h3>
+        <div class="flex flex-col gap-sm">${related.length ? related.map((r) => `<a href="/blog/${r.slug}" class="flex gap-sm group">
+          <div class="w-16 h-16 rounded-DEFAULT overflow-hidden bg-surface-container flex-shrink-0">${r.cover ? `<img src="${escHtml(r.cover)}" alt="${escHtml(r.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"/>` : ""}</div>
+          <span class="font-label-md text-label-md text-on-surface group-hover:text-pink transition-colors leading-snug">${escHtml(r.title)}</span></a>`).join("") : '<span class="text-on-surface-variant font-label-md text-label-md">Belum ada.</span>'}</div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-lg p-md shadow-sm border border-outline-variant/20">
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-xs flex items-center gap-xs"><span class="material-symbols-outlined text-pink">forum</span> Komunitas</h3>
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-sm">Diskusi & komentar pembaca.</p>
+        <div id="commentList" class="flex flex-col gap-sm mb-sm max-h-80 overflow-y-auto"></div>
+        <form id="commentForm" class="flex flex-col gap-xs">
+          <input id="cName" type="text" placeholder="Nama (opsional)" class="w-full rounded-DEFAULT border-outline-variant bg-surface text-[14px] focus:border-pink focus:ring-pink"/>
+          <textarea id="cText" rows="2" placeholder="Tulis komentar..." class="w-full rounded-DEFAULT border-outline-variant bg-surface text-[14px] focus:border-pink focus:ring-pink"></textarea>
+          <button class="bg-gradient-to-r from-pink to-secondary text-on-primary rounded-full py-2 font-label-md text-label-md font-bold hover:scale-[1.02] transition-transform">Kirim</button>
+        </form>
+      </div>
+    </aside>`;
   const jsonld = {
     "@context": "https://schema.org", "@type": "BlogPosting", "headline": a.title, "description": a.excerpt,
     "image": a.cover || undefined, "datePublished": new Date(a.createdAt).toISOString(), "dateModified": new Date(a.updatedAt || a.createdAt).toISOString(),
@@ -379,42 +402,61 @@ function renderArticle(a) {
     <link rel="canonical" href="${u}"/>
     <meta property="og:title" content="${escHtml(a.title)}"/>
     <meta property="og:description" content="${escHtml(a.excerpt)}"/>
-    <meta property="og:type" content="article"/>
-    <meta property="og:url" content="${u}"/>
+    <meta property="og:type" content="article"/><meta property="og:url" content="${u}"/>
     ${a.cover ? `<meta property="og:image" content="${escHtml(a.cover)}"/>` : ""}
     <meta name="twitter:card" content="summary_large_image"/>
     <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
     ${THEME_HEAD}</head>
     <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
-    <!-- Hero artikel -->
     <header class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-fixed/40 via-surface to-secondary-fixed/30"></div>
-      <div class="relative max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pt-lg pb-md text-center">
-        <a href="/blog" class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary font-label-md text-label-md mb-md"><span class="material-symbols-outlined text-[20px]">arrow_back</span> Semua artikel</a>
-        <div class="flex flex-wrap gap-xs justify-center mb-sm">${(a.tags || []).map((t) => `<span class="bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm px-sm py-[3px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
-        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">${escHtml(a.title)}</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-md">${escHtml(a.excerpt)}</p>
-        <div class="flex items-center gap-sm justify-center text-on-surface-variant font-label-md text-label-md">
+      <div class="absolute inset-0 bg-gradient-to-br from-pink-100/60 via-surface to-secondary-fixed/30"></div>
+      <div class="relative max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-lg pb-md">
+        <a href="/blog" class="inline-flex items-center gap-xs text-on-surface-variant hover:text-pink font-label-md text-label-md mb-md"><span class="material-symbols-outlined text-[20px]">arrow_back</span> Semua artikel</a>
+        <div class="flex flex-wrap gap-xs mb-sm">${(a.tags || []).map((t) => `<a href="/blog?tag=${encodeURIComponent(t)}" class="bg-pink-50 text-pink font-label-sm text-label-sm px-sm py-[3px] rounded-full">${escHtml(t)}</a>`).join("")}</div>
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm max-w-3xl">${escHtml(a.title)}</h1>
+        <div class="flex items-center gap-sm text-on-surface-variant font-label-md text-label-md">
           <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">person</span>${escHtml(a.author || "anshelstore")}</span>
           <span>•</span><span>${dateStr}</span><span>•</span>
           <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">schedule</span>${readMin} mnt baca</span>
         </div>
       </div>
     </header>
-    <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pb-xl">
-      ${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full rounded-lg shadow-lg -mt-2 mb-lg object-cover aspect-[16/9]"/>` : ""}
-      <article class="article-body max-w-none">${mdToHtml(a.content)}</article>
-      <div class="flex items-center gap-sm mt-lg pt-md border-t border-outline-variant/30">
-        <span class="font-label-md text-label-md text-on-surface-variant">Bagikan:</span>
-        <a href="https://wa.me/?text=${encodeURIComponent(a.title + " " + u)}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[20px]">share</span></a>
-        <a href="https://t.me/share/url?url=${encodeURIComponent(u)}&text=${encodeURIComponent(a.title)}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></a>
+    <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pb-xl grid grid-cols-1 lg:grid-cols-3 gap-xl mt-md">
+      <div class="lg:col-span-2">
+        ${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full rounded-lg shadow-lg mb-lg object-cover aspect-[16/9]"/>` : ""}
+        <article class="article-body max-w-none">${mdToHtml(a.content)}</article>
+        <div class="flex items-center gap-sm mt-lg pt-md border-t border-outline-variant/30">
+          <span class="font-label-md text-label-md text-on-surface-variant">Bagikan:</span>
+          <a href="https://wa.me/?text=${encodeURIComponent(a.title + " " + u)}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[20px]">share</span></a>
+          <a href="https://t.me/share/url?url=${encodeURIComponent(u)}&text=${encodeURIComponent(a.title)}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></a>
+        </div>
+        <div class="mt-lg p-lg rounded-lg bg-gradient-to-r from-pink to-secondary text-on-primary text-center">
+          <h3 class="font-headline-md text-headline-md mb-sm">Butuh bantuan AI automation atau top up?</h3>
+          <a href="/topup" class="inline-block bg-surface text-pink font-label-md text-label-md px-gutter py-sm rounded-full mt-xs hover:scale-105 transition-transform">Mulai Sekarang</a>
+        </div>
       </div>
-      <div class="mt-xl p-lg rounded-lg bg-gradient-to-r from-primary to-secondary text-on-primary text-center">
-        <h3 class="font-headline-md text-headline-md mb-sm">Butuh bantuan AI automation atau top up?</h3>
-        <a href="/topup" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full mt-xs hover:scale-105 transition-transform">Mulai Sekarang</a>
-      </div>
-    </main>${relHtml}${pageFooter()}<script src="/js/site.js"></script></body></html>`;
+      ${sidebar}
+    </main>${pageFooter()}
+    <script src="/js/site.js"></script>
+    <script>
+      (function(){
+        var slug=${JSON.stringify(a.slug)}; var list=document.getElementById("commentList");
+        var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+        function load(){ fetch("/api/articles/"+slug+"/comments").then(function(r){return r.json();}).then(function(cs){
+          if(!cs.length){ list.innerHTML='<p class="font-label-sm text-label-sm text-on-surface-variant">Jadilah yang pertama berkomentar! 💬</p>'; return; }
+          list.innerHTML=cs.map(function(c){return '<div class="bg-surface-container rounded-DEFAULT p-sm"><div class="flex items-center gap-xs mb-[2px]"><span class="w-6 h-6 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center text-[11px] font-bold">'+esc((c.name||"A").charAt(0).toUpperCase())+'</span><b class="font-label-sm text-label-sm text-on-surface">'+esc(c.name)+'</b></div><p class="font-label-md text-label-md text-on-surface-variant">'+esc(c.text)+'</p></div>';}).join("");
+        }).catch(function(){}); }
+        var tok=localStorage.getItem("anshel_token");
+        document.getElementById("commentForm").addEventListener("submit",function(e){ e.preventDefault();
+          var text=document.getElementById("cText").value.trim(); if(!text)return;
+          var h={"Content-Type":"application/json"}; if(tok)h["x-auth-token"]=tok;
+          fetch("/api/articles/"+slug+"/comments",{method:"POST",headers:h,body:JSON.stringify({name:document.getElementById("cName").value.trim(),text:text})}).then(function(r){return r.json();}).then(function(){ document.getElementById("cText").value=""; load(); });
+        });
+        load();
+      })();
+    </script>
+    </body></html>`;
 }
 
 function renderSitemap() {
@@ -437,6 +479,18 @@ async function handleApi(req, res, pathname, query) {
   if (pathname === "/api/auth/config" && method === "GET") return sendJSON(res, 200, { google: GOOGLE_READY, smtp: SMTP_READY });
   if (pathname.startsWith("/api/auth/") && method === "POST" && !rateLimit(req, "auth", 30, 60000))
     return sendJSON(res, 429, { error: "Terlalu banyak percobaan. Coba lagi sebentar." });
+  // First-run: buat akun owner pertama bila belum ada akun dashboard
+  if (pathname === "/api/auth/needs-setup" && method === "GET") return sendJSON(res, 200, { needsSetup: dashRoleCount() === 0 });
+  if (pathname === "/api/auth/setup-owner" && method === "POST") {
+    if (dashRoleCount() > 0) return sendJSON(res, 403, { error: "Owner sudah ada. Silakan login." });
+    const b = await readBody(req);
+    const email = (b.email || "").trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return sendJSON(res, 400, { error: "Email tidak valid" });
+    if (!b.password || b.password.length < 6) return sendJSON(res, 400, { error: "Password minimal 6 karakter" });
+    const u = upsertUser({ email, name: b.name, provider: "email", passwordHash: hashPassword(b.password), role: "owner" });
+    u.role = "owner"; saveDB();
+    return sendJSON(res, 201, { token: createSession(u.id), user: publicUser(u) });
+  }
 
   // ---- AUTH ----
   if (pathname === "/api/auth/register" && method === "POST") {
@@ -537,6 +591,21 @@ async function handleApi(req, res, pathname, query) {
   if (pathname === "/api/articles" && method === "GET") return sendJSON(res, 200, db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt).map(({ content, ...rest }) => rest));
   let am = pathname.match(/^\/api\/articles\/([a-z0-9-]+)$/);
   if (am && method === "GET") { const a = db.articles.find((x) => x.slug === am[1] && x.published); return a ? sendJSON(res, 200, a) : sendJSON(res, 404, { error: "Artikel tidak ditemukan" }); }
+  // Komentar / komunitas per artikel
+  let mc = pathname.match(/^\/api\/articles\/([a-z0-9-]+)\/comments$/);
+  if (mc && method === "GET") { const slug = mc[1]; return sendJSON(res, 200, db.comments.filter((c) => c.slug === slug).sort((a, b) => a.createdAt - b.createdAt)); }
+  if (mc && method === "POST") {
+    if (!rateLimit(req, "comment", 15, 60000)) return sendJSON(res, 429, { error: "Terlalu cepat. Coba lagi sebentar." });
+    const slug = mc[1]; const art = db.articles.find((a) => a.slug === slug && a.published);
+    if (!art) return sendJSON(res, 404, { error: "Artikel tidak ditemukan" });
+    const b = await readBody(req);
+    const text = String(b.text || "").trim().slice(0, 500);
+    if (!text) return sendJSON(res, 400, { error: "Komentar kosong" });
+    const u = userFromReq(req);
+    const name = (u && u.name) || String(b.name || "Anonim").trim().slice(0, 40) || "Anonim";
+    const c = { id: nextId("comment"), slug, name, text, createdAt: Date.now() };
+    db.comments.push(c); saveDB(); return sendJSON(res, 201, c);
+  }
 
   // ---- Orders ----
   if (pathname === "/api/orders" && method === "POST") {
@@ -757,7 +826,7 @@ const server = http.createServer(async (req, res) => {
     // SEO routes (server-rendered)
     if (pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /dashboard\nSitemap: ${siteUrl()}/sitemap.xml\n`); }
     if (pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" }); return res.end(renderSitemap()); }
-    if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList()); }
+    if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList(parsed.query.tag)); }
     const bm = pathname.match(/^\/(?:blog|artikel)\/([a-z0-9-]+)\/?$/);
     if (bm) {
       const a = db.articles.find((x) => x.slug === bm[1] && x.published);

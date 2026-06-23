@@ -27,6 +27,11 @@ async function loadStore() {
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
     setText("heroBadge", set.heroBadge);
     setText("heroSub", set.heroSubtitle);
+    setText("txtLayananTitle", set.layananTitle);
+    setText("txtLayananDesc", set.layananDesc);
+    setText("txtTopupTitle", set.topupTitle);
+    setText("txtTopupDesc", set.topupDesc);
+    setText("txtArtikelTitle", set.articlesTitle);
     const img = document.getElementById("heroImg");
     if (img && set.heroImage) img.src = set.heroImage;
   } catch (e) { /* abaikan */ }
