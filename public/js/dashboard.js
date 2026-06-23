@@ -117,6 +117,7 @@ document.querySelectorAll(".side-nav button").forEach((btn) =>
 function routeTo(page) {
   if (!PAGES.includes(page)) page = "overview";
   document.querySelectorAll(".side-nav button").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
+  document.querySelectorAll(".bottom-nav button[data-page]").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
   document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
   $("page-" + page).classList.add("active");
   $("pageTitle").textContent = TITLES[page];
@@ -498,3 +499,20 @@ $("changePassBtn").addEventListener("click", async () => {
   m.textContent = "Password diganti ✅"; m.className = "auth-msg ok";
   $("oldPass").value = ""; $("newPass").value = "";
 });
+
+
+
+// ============================================================
+// Bottom tab bar (mobile) — rasa aplikasi
+// ============================================================
+(function () {
+  const items = [["overview", "Home", "space_dashboard"], ["orders", "Pesanan", "receipt_long"], ["inbox", "Chat", "forum"], ["finance", "Uang", "payments"], ["__more", "Menu", "menu"]];
+  const bn = document.createElement("div");
+  bn.className = "bottom-nav";
+  bn.innerHTML = items.map(([p, l, ic]) => `<button data-page="${p}"><span class="material-symbols-outlined">${ic}</span>${l}</button>`).join("");
+  document.body.appendChild(bn);
+  bn.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.page === "__more") { sidebar.classList.add("open"); backdrop.classList.add("show"); return; }
+    location.hash = b.dataset.page;
+  }));
+})();

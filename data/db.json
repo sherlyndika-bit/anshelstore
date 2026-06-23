@@ -83,6 +83,8 @@
   "orders": [],
   "conversations": [],
   "messages": [],
-  "users": [],
-  "_seq": { "order": 0, "conversation": 0, "message": 0, "user": 0, "article": 2 }
+  "users": [
+    { "id": 1, "email": "sherlynda@anshelstore.com", "name": "Sherlynda", "provider": "email", "picture": null, "passwordHash": "a13b3a8946765d3640369affa9cab868:31d20a569c089c5a60404beefc1d62efa9151c7ee52242d2cdf72b833cc9b06d797ea773f8b72b53b2eeee3205ae5c89bf71c22b55adff3d69d7df782fdd1148", "role": "owner", "createdAt": 1782000000000 }
+  ],
+  "_seq": { "order": 0, "conversation": 0, "message": 0, "user": 1, "article": 2, "finance": 0, "comment": 0 }
 }
