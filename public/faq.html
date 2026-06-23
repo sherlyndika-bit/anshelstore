@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FAQ — Pertanyaan Umum | anshelstore</title>
+<meta name="description" content="Pertanyaan yang sering diajukan seputar top up game, jasa AI automation, pembayaran, dan keamanan di anshelstore." />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="/js/theme.js"></script>
+<link href="/css/theme.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Apakah top up di anshelstore aman?","acceptedAnswer":{"@type":"Answer","text":"Sangat aman. Kami hanya meminta User ID dan Server/Zone ID, tidak pernah meminta password akunmu."}},
+{"@type":"Question","name":"Berapa lama proses top up?","acceptedAnswer":{"@type":"Answer","text":"Mayoritas pesanan diproses instan dalam hitungan menit setelah pembayaran dikonfirmasi."}},
+{"@type":"Question","name":"Metode pembayaran apa saja yang tersedia?","acceptedAnswer":{"@type":"Answer","text":"E-Wallet (DANA, OVO, GoPay, ShopeePay), QRIS, dan Transfer Bank (BCA, Mandiri, BRI, BNI)."}},
+{"@type":"Question","name":"Apa itu jasa AI Chatbot anshelstore?","acceptedAnswer":{"@type":"Answer","text":"Layanan pembuatan chatbot AI 24/7 lengkap dengan dashboard dan fitur human takeover agar agent bisa mengambil alih percakapan kapan saja."}}
+]}
+</script>
+</head>
+<body data-page="faq" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+
+<div id="siteNav"></div>
+
+<main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+  <div class="text-center mb-lg">
+    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Pertanyaan <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Umum</span></h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">Semua yang perlu kamu tahu tentang anshelstore.</p>
+  </div>
+
+  <div class="flex flex-col gap-sm" id="faqList"></div>
+
+  <div class="mt-lg p-lg rounded-lg bg-gradient-to-r from-primary to-secondary text-on-primary text-center">
+    <h3 class="font-headline-md text-headline-md mb-sm">Masih ada pertanyaan?</h3>
+    <p class="opacity-90 mb-sm">Tim kami siap membantu kamu.</p>
+    <a id="faqWa" href="#" target="_blank" rel="noopener" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full hover:scale-105 transition-transform">💬 Chat WhatsApp</a>
+  </div>
+</main>
+
+<div id="siteFooter"></div>
+<div id="chatWidget"></div>
+<script src="/js/widget.js"></script>
+<script src="/js/site.js"></script>
+<script>
+  const FAQ = [
+    { q: "Apakah top up di anshelstore aman?", a: "Sangat aman. Kami <b>tidak pernah meminta password</b> akunmu — cukup User ID dan Server/Zone ID. Data kamu dijaga kerahasiaannya." },
+    { q: "Berapa lama proses top up?", a: "Mayoritas pesanan diproses <b>instan</b> dalam hitungan menit setelah pembayaran dikonfirmasi. Jika ramai, maksimal beberapa puluh menit." },
+    { q: "Metode pembayaran apa saja yang tersedia?", a: "E-Wallet (DANA, OVO, GoPay, ShopeePay), <b>QRIS</b>, dan Transfer Bank (BCA, Mandiri, BRI, BNI)." },
+    { q: "Bagaimana cara melacak pesanan saya?", a: "Gunakan halaman <a href='/cek-transaksi.html' class='text-primary font-bold'>Cek Transaksi</a> dan masukkan kode invoice yang kamu terima saat memesan." },
+    { q: "Apa itu jasa AI Chatbot anshelstore?", a: "Layanan pembuatan <b>chatbot AI 24/7</b> lengkap dengan dashboard inbox dan fitur <b>human takeover</b> agar agent bisa mengambil alih percakapan kapan saja." },
+    { q: "Apakah harga bisa berubah?", a: "Harga dapat menyesuaikan kebijakan publisher game. Harga yang berlaku adalah yang tampil saat kamu melakukan pemesanan." },
+  ];
+  const list = document.getElementById("faqList");
+  list.innerHTML = FAQ.map((f, i) => `
+    <div class="bg-surface-container-lowest rounded-DEFAULT border border-outline-variant/30 overflow-hidden">
+      <button class="faq-q w-full flex items-center justify-between gap-sm p-md text-left" data-i="${i}">
+        <span class="font-label-md text-label-md text-on-surface font-bold text-[16px]">${f.q}</span>
+        <span class="material-symbols-outlined text-primary transition-transform faq-icon">expand_more</span>
+      </button>
+      <div class="faq-a hidden px-md pb-md font-body-md text-body-md text-on-surface-variant">${f.a}</div>
+    </div>`).join("");
+  list.querySelectorAll(".faq-q").forEach((btn) => btn.addEventListener("click", () => {
+    const a = btn.nextElementSibling, ic = btn.querySelector(".faq-icon");
+    const open = !a.classList.contains("hidden");
+    a.classList.toggle("hidden", open); ic.style.transform = open ? "" : "rotate(180deg)";
+  }));
+  fetch("/api/settings").then((r) => r.json()).then((d) => { if (d.store && d.store.whatsapp) document.getElementById("faqWa").href = `https://wa.me/${d.store.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau bertanya.")}`; }).catch(() => {});
+  if (typeof initChatWidget === "function") initChatWidget();
+</script>
+</body>
+</html>

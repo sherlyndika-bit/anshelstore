@@ -254,30 +254,8 @@ const THEME_HEAD = `
 <script src="/js/theme.js"></script>
 <link href="/css/theme.css" rel="stylesheet"/>`;
 
-function pageNav() {
-  return `<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm shadow-primary/10">
-    <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
-      <a href="/" class="text-headline-md md:text-headline-lg font-display-lg-mobile md:font-display-lg text-primary tracking-tight font-extrabold">anshelstore</a>
-      <div class="hidden md:flex items-center gap-gutter">
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/#layanan">Layanan AI</a>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/topup.html">Top Up Game</a>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/blog">Artikel</a>
-      </div>
-      <a href="/topup.html" class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full shadow-[0_4px_12px_rgba(129,39,207,0.2)] hover:scale-105 active:scale-95 transition-all">Top Up</a>
-    </div></nav>`;
-}
-function pageFooter() {
-  return `<footer class="bg-surface-container-low w-full mt-xl rounded-t-lg">
-    <div class="px-margin-mobile md:px-margin-desktop py-lg max-w-7xl mx-auto flex flex-col md:flex-row gap-sm justify-between items-center">
-      <div class="text-headline-md font-display-lg text-secondary">anshelstore</div>
-      <div class="flex flex-wrap gap-gutter items-center">
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary" href="/#layanan">Layanan</a>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary" href="/topup.html">Top Up</a>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary" href="/blog">Artikel</a>
-      </div>
-      <p class="font-body-md text-body-md text-on-surface-variant">© ${new Date().getFullYear()} anshelstore</p>
-    </div></footer>`;
-}
+function pageNav() { return `<div id="siteNav"></div>`; }
+function pageFooter() { return `<div id="siteFooter"></div>`; }
 
 function renderBlogList() {
   const arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
@@ -298,7 +276,7 @@ function renderBlogList() {
     <link rel="canonical" href="${siteUrl()}/blog"/>
     <meta property="og:title" content="Artikel & Tips — anshelstore"/><meta property="og:type" content="website"/>
     ${THEME_HEAD}</head>
-    <body class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
+    <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
     <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
       <div class="text-center mb-xl">
@@ -306,7 +284,7 @@ function renderBlogList() {
         <p class="font-body-lg text-body-lg text-on-surface-variant">Panduan top up, tips gaming, dan insight AI automation.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">${cards || '<p class="text-on-surface-variant">Belum ada artikel.</p>'}</div>
-    </main>${pageFooter()}</body></html>`;
+    </main>${pageFooter()}<script src="/js/site.js"></script></body></html>`;
 }
 
 function renderArticle(a) {
@@ -329,7 +307,7 @@ function renderArticle(a) {
     <meta name="twitter:card" content="summary_large_image"/>
     <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
     ${THEME_HEAD}</head>
-    <body class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
+    <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
     <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl">
       <a href="/blog" class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary font-label-md text-label-md mb-md"><span class="material-symbols-outlined text-[20px]">arrow_back</span> Semua artikel</a>
@@ -345,13 +323,14 @@ function renderArticle(a) {
         <h3 class="font-headline-md text-headline-md mb-sm">Butuh bantuan AI automation atau top up?</h3>
         <a href="/topup.html" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full mt-xs hover:scale-105 transition-transform">Mulai Sekarang</a>
       </div>
-    </main>${pageFooter()}</body></html>`;
+    </main>${pageFooter()}<script src="/js/site.js"></script></body></html>`;
 }
 
 function renderSitemap() {
   const base = siteUrl();
   const urls = [
     { loc: base + "/", pri: "1.0" }, { loc: base + "/topup.html", pri: "0.9" }, { loc: base + "/blog", pri: "0.8" },
+    { loc: base + "/tentang.html", pri: "0.6" }, { loc: base + "/faq.html", pri: "0.6" },
     ...db.articles.filter((a) => a.published).map((a) => ({ loc: base + "/blog/" + a.slug, pri: "0.7", mod: new Date(a.updatedAt || a.createdAt).toISOString() })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
@@ -446,6 +425,12 @@ async function handleApi(req, res, pathname, query) {
   if (pathname === "/api/services" && method === "GET") return sendJSON(res, 200, db.services);
   if (pathname === "/api/games" && method === "GET") return sendJSON(res, 200, db.games);
   if (pathname === "/api/settings" && method === "GET") return sendJSON(res, 200, { store: db.store, settings: db.settings });
+  if (pathname === "/api/track" && method === "GET") {
+    const code = String(query.code || "").trim().toUpperCase();
+    const o = db.orders.find((x) => x.code.toUpperCase() === code);
+    if (!o) return sendJSON(res, 404, { error: "Pesanan tidak ditemukan" });
+    return sendJSON(res, 200, { code: o.code, gameName: o.gameName, itemLabel: o.itemLabel, price: o.price, status: o.status, paymentMethod: o.paymentMethod, account: o.account, createdAt: o.createdAt });
+  }
   if (pathname === "/api/articles" && method === "GET") return sendJSON(res, 200, db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt).map(({ content, ...rest }) => rest));
   let am = pathname.match(/^\/api\/articles\/([a-z0-9-]+)$/);
   if (am && method === "GET") { const a = db.articles.find((x) => x.slug === am[1] && x.published); return a ? sendJSON(res, 200, a) : sendJSON(res, 404, { error: "Artikel tidak ditemukan" }); }

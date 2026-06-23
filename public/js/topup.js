@@ -1,31 +1,47 @@
-// Top Up (tema baru): pilih game -> nominal -> data akun -> bayar -> buat order
+// Top Up (pro): cari game -> pilih -> nominal -> data akun -> bayar -> order
 const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
 const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
 const GRAD = { ml: "from-primary to-primary-container", ff: "from-tertiary to-tertiary-container", genshin: "from-secondary to-primary-container", valorant: "from-error to-secondary", pubgm: "from-primary-fixed-variant to-primary" };
 
-let games = [], selGame = null, selItem = null, WA = null;
+let games = [], filtered = [], selGame = null, selItem = null, WA = null;
 const $ = (id) => document.getElementById(id);
-$("year").textContent = new Date().getFullYear();
 
-fetch("/api/store").then((r) => r.json()).then((s) => {
-  if (s && s.whatsapp) { WA = s.whatsapp; const n = $("ctaNav"); if (n) n.href = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau tanya layanan.")}`; }
-}).catch(() => {});
+fetch("/api/settings").then((r) => r.json()).then((d) => { if (d.store && d.store.whatsapp) WA = d.store.whatsapp; }).catch(() => {});
+
+function gameTileHtml(g) {
+  const visual = g.image
+    ? `<img src="${g.image}" alt="${g.name}" class="w-12 h-12 rounded-xl object-cover"/>`
+    : `<div class="w-12 h-12 rounded-xl bg-gradient-to-br ${GRAD[g.id] || "from-primary to-secondary"} flex items-center justify-center text-[24px]">${EMOJI[g.id] || "🎮"}</div>`;
+  return `<button type="button" data-id="${g.id}" class="game-tile text-left rounded-DEFAULT border-2 border-outline-variant/40 bg-surface p-sm hover:-translate-y-1 hover:shadow-md transition-all">
+    ${visual}
+    <div class="font-label-md text-label-md text-on-surface font-bold leading-tight mt-xs">${g.name}</div>
+    <div class="font-label-sm text-label-sm text-on-surface-variant">${g.publisher || ""}</div>
+  </button>`;
+}
+
+function renderGames() {
+  const wrap = $("games");
+  wrap.innerHTML = filtered.map(gameTileHtml).join("");
+  $("noGame").classList.toggle("hidden", filtered.length > 0);
+  wrap.querySelectorAll(".game-tile").forEach((b) => b.addEventListener("click", () => selectGame(b.dataset.id, b)));
+}
 
 async function loadGames() {
   games = await fetch("/api/games").then((r) => r.json());
-  $("games").innerHTML = games.map((g) => `
-    <button type="button" data-id="${g.id}" class="game-tile text-left rounded-DEFAULT border-2 border-outline-variant/40 bg-surface p-sm hover:-translate-y-1 hover:shadow-md transition-all">
-      <div class="w-12 h-12 rounded-full bg-gradient-to-br ${GRAD[g.id] || "from-primary to-secondary"} flex items-center justify-center text-[24px] mb-xs">${EMOJI[g.id] || "🎮"}</div>
-      <div class="font-label-md text-label-md text-on-surface font-bold leading-tight">${g.name}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant">${g.publisher || ""}</div>
-    </button>`).join("");
-  $("games").querySelectorAll(".game-tile").forEach((b) => b.addEventListener("click", () => selectGame(b.dataset.id, b)));
+  filtered = games;
+  renderGames();
 }
+
+$("gameSearch").addEventListener("input", (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  filtered = games.filter((g) => g.name.toLowerCase().includes(q) || (g.publisher || "").toLowerCase().includes(q));
+  renderGames();
+});
 
 function selectGame(id, el) {
   selGame = games.find((g) => g.id === id); selItem = null;
   document.querySelectorAll(".game-tile").forEach((b) => b.classList.remove("sel"));
-  el.classList.add("sel");
+  if (el) el.classList.add("sel");
   $("invoice").classList.add("hidden");
 
   $("items").innerHTML = selGame.items.map((i) => `
@@ -62,8 +78,7 @@ function update() {
   selGame.needs.forEach((n) => { if (acc[n]) rows.push(`<div class="flex justify-between"><span>${n}</span><b class="text-on-surface">${acc[n]}</b></div>`); });
   $("summaryItems").innerHTML = rows.join("");
   $("grandTotal").textContent = selItem ? rupiah(selItem.price) : "Rp0";
-  const ok = selItem && selGame.needs.every((n) => acc[n]);
-  $("submitOrder").disabled = !ok;
+  $("submitOrder").disabled = !(selItem && selGame.needs.every((n) => acc[n]));
 }
 
 $("submitOrder").addEventListener("click", async () => {
@@ -81,7 +96,7 @@ $("submitOrder").addEventListener("click", async () => {
 
 function showInvoice(order) {
   const accRows = Object.entries(order.account).map(([k, v]) => `<div class="flex justify-between"><span>${k}</span><b class="text-on-surface">${v}</b></div>`).join("");
-  const waText = encodeURIComponent(`Halo anshelstore, saya mau konfirmasi pesanan top up:\nInvoice: ${order.code}\nGame: ${order.gameName}\nItem: ${order.itemLabel}\nTotal: ${rupiah(order.price)}\nBayar via: ${order.paymentMethod}`);
+  const waText = encodeURIComponent(`Halo anshelstore, konfirmasi pesanan:\nInvoice: ${order.code}\nGame: ${order.gameName}\nItem: ${order.itemLabel}\nTotal: ${rupiah(order.price)}\nBayar: ${order.paymentMethod}`);
   const waBtn = WA ? `<a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener" class="mt-sm w-full block text-center bg-gradient-to-r from-primary to-secondary text-on-primary rounded-full py-3 font-label-md text-label-md font-bold hover:scale-[1.02] transition-transform">💬 Konfirmasi via WhatsApp</a>` : "";
   $("invoice").classList.remove("hidden");
   $("invoice").innerHTML = `
@@ -94,6 +109,7 @@ function showInvoice(order) {
       <div class="flex justify-between"><span>Bayar via</span><b class="text-on-surface">${order.paymentMethod}</b></div>
       <div class="flex justify-between"><span>Total</span><b class="text-secondary">${rupiah(order.price)}</b></div>
       ${waBtn}
+      <a href="/cek-transaksi.html?code=${order.code}" class="text-center font-label-md text-label-md text-primary mt-xs">Lacak status pesanan →</a>
     </div>`;
   $("invoice").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }

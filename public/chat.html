@@ -10,17 +10,9 @@
 <script src="/js/theme.js"></script>
 <link href="/css/theme.css" rel="stylesheet"/>
 </head>
-<body class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="chat" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
 
-<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm shadow-primary/10">
-  <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
-    <a href="/" class="text-headline-md md:text-headline-lg font-display-lg-mobile md:font-display-lg text-primary tracking-tight font-extrabold hover:scale-105 transition-transform duration-200">anshelstore</a>
-    <div class="hidden md:flex items-center gap-gutter">
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/#layanan">Layanan AI</a>
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/topup.html">Top Up Game</a>
-    </div>
-  </div>
-</nav>
+<div id="siteNav"></div>
 
 <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-xl text-center">
   <div class="inline-flex items-center gap-xs bg-surface-container/50 glass-panel rounded-full px-sm py-xs mb-md shadow-sm border border-outline-variant/30 mx-auto">
@@ -37,8 +29,10 @@
   </div>
 </main>
 
+<div id="siteFooter"></div>
 <div id="chatWidget"></div>
 <script src="/js/widget.js"></script>
+<script src="/js/site.js"></script>
 <script>initChatWidget({ openByDefault: true, name: "Pengunjung Web" });</script>
 </body>
 </html>

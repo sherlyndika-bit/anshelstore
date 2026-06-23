@@ -54,20 +54,9 @@
   @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
 </style>
 </head>
-<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="home" class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
 
-<!-- TopNavBar -->
-<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm shadow-primary/10">
-  <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
-    <a href="/" class="text-headline-md md:text-headline-lg font-display-lg-mobile md:font-display-lg text-primary tracking-tight font-extrabold hover:scale-105 transition-transform duration-200 cursor-pointer">anshelstore</a>
-    <div class="hidden md:flex items-center gap-gutter">
-      <a class="font-label-md text-label-md text-secondary font-bold border-b-2 border-secondary pb-1 hover:scale-105 transition-transform duration-200" href="#layanan">Layanan AI</a>
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors hover:scale-105 duration-200" href="/topup.html">Top Up Game</a>
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors hover:scale-105 duration-200" href="/blog">Artikel</a>
-    </div>
-    <a id="ctaNav" href="#" target="_blank" rel="noopener" class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full shadow-[0_4px_12px_rgba(129,39,207,0.2)] hover:scale-105 active:scale-95 transition-all duration-200">Hubungi Kami</a>
-  </div>
-</nav>
+<div id="siteNav"></div>
 
 <main>
   <!-- Hero -->
@@ -160,24 +149,11 @@
   </section>
 </main>
 
-<!-- Footer -->
-<footer class="bg-surface-container-low w-full mt-xl rounded-t-lg">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter px-margin-mobile md:px-margin-desktop py-lg max-w-7xl mx-auto">
-    <div class="flex flex-col gap-sm">
-      <div class="text-headline-md font-display-lg text-secondary">anshelstore</div>
-      <p class="font-body-md text-body-md text-on-surface-variant">© <span id="year"></span> anshelstore. Tetap produktif & seru.</p>
-    </div>
-    <div class="md:col-span-2 flex flex-wrap gap-gutter md:justify-end items-center">
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="#layanan">Layanan AI</a>
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="/topup.html">Top Up Game</a>
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="/blog">Artikel</a>
-      <a id="ctaFooter" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="#" target="_blank" rel="noopener">Hubungi Kami</a>
-    </div>
-  </div>
-</footer>
+<div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
 <script src="/js/widget.js"></script>
+<script src="/js/site.js"></script>
 <script src="/js/landing.js"></script>
 </body>
 </html>
