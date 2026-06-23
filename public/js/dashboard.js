@@ -104,8 +104,8 @@ const sidebar = $("sidebar"), backdrop = $("backdrop");
 $("menuBtn").addEventListener("click", () => { sidebar.classList.toggle("open"); backdrop.classList.toggle("show"); });
 backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
 
-const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat" };
-const PAGES = ["overview", "orders", "inbox"];
+const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", articles: "Artikel", settings: "Konten & Harga" };
+const PAGES = ["overview", "orders", "inbox", "articles", "settings"];
 document.querySelectorAll(".side-nav button").forEach((btn) =>
   btn.addEventListener("click", () => { location.hash = btn.dataset.page; })
 );
@@ -119,6 +119,8 @@ function routeTo(page) {
   if (page === "overview") loadStats();
   if (page === "orders") loadOrders();
   if (page === "inbox") loadConversations();
+  if (page === "articles") loadArticles();
+  if (page === "settings") loadSettings();
 }
 window.addEventListener("hashchange", () => { if (TOKEN) routeTo(location.hash.replace("#", "")); });
 
@@ -274,3 +276,112 @@ function boot() {
     TOKEN = null; localStorage.removeItem("anshel_token");
   }
 })();
+
+
+
+// ============================================================
+// ARTIKEL (CMS)
+// ============================================================
+const artMsg = (t, type = "ok") => { const e = $("artMsg"); if (e) { e.textContent = t; e.className = "auth-msg " + type; } };
+
+async function loadArticles() {
+  const list = await api("/api/admin/articles");
+  const table = $("articlesTable");
+  if (!list.length) { table.innerHTML = `<tr><td style="text-align:center;color:var(--text-muted);padding:30px">Belum ada artikel. Klik "Tulis Artikel".</td></tr>`; return; }
+  table.innerHTML = `<thead><tr><th>Judul</th><th>Status</th><th>Tags</th><th>Aksi</th></tr></thead><tbody>` +
+    list.map((a) => `<tr>
+      <td><b>${escapeHtml(a.title)}</b><br><span style="color:var(--text-muted);font-size:.8rem">/blog/${a.slug}</span></td>
+      <td>${a.published ? '<span class="badge badge-done">publish</span>' : '<span class="badge badge-pending">draft</span>'}</td>
+      <td style="color:var(--text-muted)">${(a.tags || []).join(", ")}</td>
+      <td style="white-space:nowrap"><button class="btn btn-light btn-sm art-edit" data-id="${a.id}">Edit</button> <button class="btn btn-light btn-sm art-del" data-id="${a.id}" style="color:var(--red)">Hapus</button></td>
+    </tr>`).join("") + "</tbody>";
+  table.querySelectorAll(".art-edit").forEach((b) => b.addEventListener("click", () => openEditor(list.find((a) => a.id === Number(b.dataset.id)))));
+  table.querySelectorAll(".art-del").forEach((b) => b.addEventListener("click", async () => {
+    if (!confirm("Hapus artikel ini?")) return;
+    await api(`/api/admin/articles/${b.dataset.id}`, { method: "DELETE" }); loadArticles();
+  }));
+}
+function openEditor(a) {
+  $("articleEditor").style.display = "block";
+  $("editorTitle").textContent = a ? "Edit Artikel" : "Tulis Artikel";
+  $("artId").value = a ? a.id : "";
+  $("artTitle").value = a ? a.title : "";
+  $("artSlug").value = a ? a.slug : "";
+  $("artExcerpt").value = a ? a.excerpt : "";
+  $("artCover").value = a ? a.cover : "";
+  $("artTags").value = a ? (a.tags || []).join(", ") : "";
+  $("artAuthor").value = a ? (a.author || "") : "Tim anshelstore";
+  $("artContent").value = a ? a.content : "";
+  $("artPublished").checked = a ? a.published : true;
+  artMsg("");
+  $("articleEditor").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+$("newArticleBtn").addEventListener("click", () => openEditor(null));
+$("cancelArticle").addEventListener("click", () => { $("articleEditor").style.display = "none"; });
+$("saveArticle").addEventListener("click", async () => {
+  const id = $("artId").value;
+  const payload = {
+    title: $("artTitle").value.trim(), slug: $("artSlug").value.trim(), excerpt: $("artExcerpt").value.trim(),
+    cover: $("artCover").value.trim(), tags: $("artTags").value, author: $("artAuthor").value.trim(),
+    content: $("artContent").value, published: $("artPublished").checked,
+  };
+  if (!payload.title) { artMsg("Judul wajib diisi", "err"); return; }
+  try {
+    if (id) await api(`/api/admin/articles/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+    else await api("/api/admin/articles", { method: "POST", body: JSON.stringify(payload) });
+    artMsg("Tersimpan! ✅", "ok");
+    $("articleEditor").style.display = "none";
+    loadArticles();
+  } catch (e) { artMsg("Gagal menyimpan", "err"); }
+});
+
+// ============================================================
+// KONTEN & HARGA
+// ============================================================
+let loadedServices = [], loadedGames = [];
+async function loadSettings() {
+  const d = await fetch("/api/settings").then((r) => r.json());
+  const st = d.store || {}, s = d.settings || {};
+  $("setName").value = st.name || ""; $("setTagline").value = st.tagline || "";
+  $("setWa").value = st.whatsapp || ""; $("setEmail").value = st.email || "";
+  $("setHeroTitle").value = s.heroTitle || ""; $("setHeroImage").value = s.heroImage || "";
+  $("setHeroSub").value = s.heroSubtitle || ""; $("setMeta").value = s.metaDescription || "";
+  $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
+
+  loadedServices = await fetch("/api/services").then((r) => r.json());
+  $("servicesEditor").innerHTML = loadedServices.map((sv, i) => `
+    <div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
+      <div style="font-weight:700;margin-bottom:8px">${escapeHtml(sv.title)}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="set-grid">
+        <div class="field" style="margin:0"><label>Harga Mulai (Rp)</label><input class="input svc-price" data-i="${i}" type="number" value="${sv.priceFrom || 0}" /></div>
+        <div class="field" style="margin:0"><label>URL Gambar</label><input class="input svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" placeholder="https://..." /></div>
+      </div>
+    </div>`).join("");
+
+  loadedGames = await fetch("/api/games").then((r) => r.json());
+  $("gamesEditor").innerHTML = loadedGames.map((g, gi) => `
+    <div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
+      <div style="font-weight:700;margin-bottom:8px">${escapeHtml(g.name)} <span style="color:var(--text-muted);font-weight:400">· ${escapeHtml(g.publisher || "")}</span></div>
+      <div class="field" style="margin:0 0 10px"><label>URL Gambar</label><input class="input game-img" data-g="${gi}" value="${escapeHtml(g.image || "")}" placeholder="https://..." /></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="set-grid">
+        ${g.items.map((it, ii) => `<div class="field" style="margin:0"><label>${escapeHtml(it.label)}</label><input class="input item-price" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" /></div>`).join("")}
+      </div>
+    </div>`).join("");
+}
+$("saveSettings").addEventListener("click", async () => {
+  const body = {
+    store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
+    settings: { heroTitle: $("setHeroTitle").value.trim(), heroImage: $("setHeroImage").value.trim(), heroSubtitle: $("setHeroSub").value.trim(), metaDescription: $("setMeta").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
+  };
+  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); const e = $("setMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("setMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+});
+$("saveServices").addEventListener("click", async () => {
+  document.querySelectorAll(".svc-price").forEach((el) => (loadedServices[el.dataset.i].priceFrom = Number(el.value) || 0));
+  document.querySelectorAll(".svc-img").forEach((el) => (loadedServices[el.dataset.i].image = el.value.trim()));
+  try { await api("/api/admin/services", { method: "PUT", body: JSON.stringify({ services: loadedServices }) }); const e = $("svcMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("svcMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+});
+$("saveGames").addEventListener("click", async () => {
+  document.querySelectorAll(".game-img").forEach((el) => (loadedGames[el.dataset.g].image = el.value.trim()));
+  document.querySelectorAll(".item-price").forEach((el) => (loadedGames[el.dataset.g].items[el.dataset.i].price = Number(el.value) || 0));
+  try { await api("/api/admin/games", { method: "PUT", body: JSON.stringify({ games: loadedGames }) }); const e = $("gameMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("gameMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+});

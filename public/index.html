@@ -63,6 +63,7 @@
     <div class="hidden md:flex items-center gap-gutter">
       <a class="font-label-md text-label-md text-secondary font-bold border-b-2 border-secondary pb-1 hover:scale-105 transition-transform duration-200" href="#layanan">Layanan AI</a>
       <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors hover:scale-105 duration-200" href="/topup.html">Top Up Game</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors hover:scale-105 duration-200" href="/blog">Artikel</a>
     </div>
     <a id="ctaNav" href="#" target="_blank" rel="noopener" class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full shadow-[0_4px_12px_rgba(129,39,207,0.2)] hover:scale-105 active:scale-95 transition-all duration-200">Hubungi Kami</a>
   </div>
@@ -77,13 +78,13 @@
       <div class="flex flex-col gap-md text-center md:text-left z-10">
         <div class="inline-flex items-center gap-xs bg-surface-container/50 glass-panel rounded-full px-sm py-xs w-fit mx-auto md:mx-0 shadow-sm border border-outline-variant/30">
           <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings:'FILL' 1;">stars</span>
-          <span class="font-label-md text-label-md text-primary">Otomatis & Menyenangkan</span>
+          <span class="font-label-md text-label-md text-primary" id="heroBadge">Otomatis & Menyenangkan</span>
         </div>
         <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background leading-tight">
           Otomatiskan Bisnismu,<br/>
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Naikkan Level Mainmu</span>
         </h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-[480px] mx-auto md:mx-0">
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-[480px] mx-auto md:mx-0" id="heroSub">
           anshelstore memadukan AI automation & chatbot pintar untuk bisnismu dengan layanan top up game instan. Produktivitas bertemu keseruan dalam satu ekosistem.
         </p>
         <div class="flex flex-col sm:flex-row gap-sm justify-center md:justify-start mt-sm">
@@ -98,7 +99,7 @@
         </div>
       </div>
       <div class="relative w-full aspect-square md:aspect-auto md:h-[600px] flex items-center justify-center float-animation">
-        <img class="w-full h-full object-contain filter drop-shadow-[0_20px_40px_rgba(129,39,207,0.15)]" alt="Ilustrasi robot ramah memegang controller game dan laptop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUL34OTSMYqEtUJX9jDWkuNT0z0V_oq_osBhfARdBv7T4O-EXLs2rEaUM3YtGeCqS1bUEpEeV0UJvExwaBHbogCQaUzuKhE720JrC-khF_lMvDhqWya7Vkwp0b95pGqYgEsMoZSKlc7Nl8iviC7bme7a7xX01TUWhwHZjxmeAdQ3kCt9sTw34AthNnCUpjPP0tg0VUe04NA3Vb8nM2kdVg0FVnyqEXzbj7QMF-8zMn1RTT7nrD5QIM5hj3GoUZalEsK-hlPGyRXPE"/>
+        <img class="w-full h-full object-contain filter drop-shadow-[0_20px_40px_rgba(129,39,207,0.15)]" id="heroImg" alt="Ilustrasi robot ramah memegang controller game dan laptop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUL34OTSMYqEtUJX9jDWkuNT0z0V_oq_osBhfARdBv7T4O-EXLs2rEaUM3YtGeCqS1bUEpEeV0UJvExwaBHbogCQaUzuKhE720JrC-khF_lMvDhqWya7Vkwp0b95pGqYgEsMoZSKlc7Nl8iviC7bme7a7xX01TUWhwHZjxmeAdQ3kCt9sTw34AthNnCUpjPP0tg0VUe04NA3Vb8nM2kdVg0FVnyqEXzbj7QMF-8zMn1RTT7nrD5QIM5hj3GoUZalEsK-hlPGyRXPE"/>
       </div>
     </div>
     <div class="wavy-divider">
@@ -145,6 +146,18 @@
       <a href="/topup.html" class="inline-flex items-center gap-xs font-label-md text-label-md text-primary hover:scale-105 transition-transform">Lihat semua game <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
     </div>
   </section>
+
+  <!-- Section 3: Artikel Terbaru -->
+  <section id="articlesSection" class="py-xl px-margin-mobile md:px-margin-desktop bg-surface relative hidden">
+    <div class="max-w-7xl mx-auto text-center mb-lg">
+      <h2 class="font-headline-lg text-headline-lg text-on-background mb-sm">Artikel & Tips Terbaru</h2>
+      <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">Panduan top up, tips gaming, dan insight AI automation.</p>
+    </div>
+    <div id="articlesGrid" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter"></div>
+    <div class="max-w-7xl mx-auto text-center mt-lg">
+      <a href="/blog" class="inline-flex items-center gap-xs font-label-md text-label-md text-primary hover:scale-105 transition-transform">Lihat semua artikel <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+    </div>
+  </section>
 </main>
 
 <!-- Footer -->
@@ -157,6 +170,7 @@
     <div class="md:col-span-2 flex flex-wrap gap-gutter md:justify-end items-center">
       <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="#layanan">Layanan AI</a>
       <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="/topup.html">Top Up Game</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="/blog">Artikel</a>
       <a id="ctaFooter" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-transform duration-300" href="#" target="_blank" rel="noopener">Hubungi Kami</a>
     </div>
   </div>

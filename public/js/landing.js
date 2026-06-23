@@ -14,11 +14,36 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 async function loadStore() {
   try {
-    const s = await fetch("/api/store").then((r) => r.json());
-    if (s && s.whatsapp) {
+    const d = await fetch("/api/settings").then((r) => r.json());
+    const s = d.store || {}, set = d.settings || {};
+    if (s.whatsapp) {
       const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau tanya layanan.")}`;
       ["ctaNav", "ctaBuild", "ctaFooter"].forEach((id) => { const el = document.getElementById(id); if (el) el.href = wa; });
     }
+    const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
+    setText("heroBadge", set.heroBadge);
+    setText("heroSub", set.heroSubtitle);
+    const img = document.getElementById("heroImg");
+    if (img && set.heroImage) img.src = set.heroImage;
+  } catch (e) { /* abaikan */ }
+}
+
+async function loadArticles() {
+  try {
+    const arts = await fetch("/api/articles").then((r) => r.json());
+    if (!arts.length) return;
+    const grid = document.getElementById("articlesGrid");
+    grid.innerHTML = arts.slice(0, 3).map((a) => `
+      <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm shadow-primary/5 border border-outline-variant/20 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col">
+        <div class="aspect-[16/9] overflow-hidden bg-surface-container">${a.cover ? `<img src="${a.cover}" alt="${a.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
+        <div class="p-md flex flex-col gap-xs flex-grow">
+          <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-xs py-[2px] rounded-full">${t}</span>`).join("")}</div>
+          <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${a.title}</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${a.excerpt}</p>
+          <span class="font-label-md text-label-md text-primary inline-flex items-center gap-xs mt-xs">Baca <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
+        </div>
+      </a>`).join("");
+    document.getElementById("articlesSection").classList.remove("hidden");
   } catch (e) { /* abaikan */ }
 }
 
@@ -63,4 +88,5 @@ async function loadGames() {
 
 loadStore();
 loadGames();
+loadArticles();
 if (typeof initChatWidget === "function") initChatWidget();

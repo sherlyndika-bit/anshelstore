@@ -74,6 +74,8 @@
         <button data-page="overview">📊 Overview</button>
         <button data-page="orders">🎮 Pesanan <span class="count" id="ordersCount" style="display:none"></span></button>
         <button data-page="inbox">💬 Inbox Chat <span class="count" id="inboxCount" style="display:none"></span></button>
+        <button data-page="articles">📝 Artikel</button>
+        <button data-page="settings">⚙️ Konten & Harga</button>
       </nav>
       <div class="side-foot"><button id="logoutBtn">↩︎ Keluar</button></div>
     </aside>
@@ -113,6 +115,67 @@
           <div class="inbox">
             <div class="conv-list" id="convList"></div>
             <div class="chat-pane" id="chatPane"><div class="chat-empty" id="chatEmpty">Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</div></div>
+          </div>
+        </section>
+
+        <!-- ARTIKEL -->
+        <section class="page" id="page-articles">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px">
+            <p class="muted" style="color:var(--text-soft)">Kelola artikel blog (SEO). Tulis tips & panduan untuk menarik pengunjung dari Google.</p>
+            <button class="btn btn-primary btn-sm" id="newArticleBtn">+ Tulis Artikel</button>
+          </div>
+          <div class="panel-card" id="articleEditor" style="display:none;margin-bottom:18px">
+            <h3 id="editorTitle">Tulis Artikel</h3>
+            <input type="hidden" id="artId" />
+            <div class="field"><label>Judul</label><input class="input" id="artTitle" placeholder="Judul artikel" /></div>
+            <div class="field"><label>Slug URL (opsional)</label><input class="input" id="artSlug" placeholder="otomatis-dari-judul" /></div>
+            <div class="field"><label>Ringkasan (excerpt)</label><input class="input" id="artExcerpt" placeholder="Deskripsi singkat untuk SEO & kartu" /></div>
+            <div class="field"><label>URL Gambar Cover</label><input class="input" id="artCover" placeholder="https://..." /></div>
+            <div class="field"><label>Tags (pisah koma)</label><input class="input" id="artTags" placeholder="Top Up, Tips" /></div>
+            <div class="field"><label>Penulis</label><input class="input" id="artAuthor" placeholder="Tim anshelstore" /></div>
+            <div class="field"><label>Konten (Markdown: ## judul, **tebal**, - list, [teks](url))</label><textarea class="input" id="artContent" rows="10" placeholder="Tulis isi artikel di sini..."></textarea></div>
+            <div class="field"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="artPublished" checked style="width:auto" /> Publikasikan</label></div>
+            <div style="display:flex;gap:8px"><button class="btn btn-primary" id="saveArticle">Simpan</button><button class="btn btn-light" id="cancelArticle">Batal</button></div>
+            <div class="auth-msg" id="artMsg"></div>
+          </div>
+          <div class="panel-card"><div class="table-wrap"><table class="data" id="articlesTable"></table></div></div>
+        </section>
+
+        <!-- KONTEN & HARGA -->
+        <section class="page" id="page-settings">
+          <div class="panel-card" style="margin-bottom:18px">
+            <h3>Info Toko & Hero</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
+              <div class="field"><label>Nama Toko</label><input class="input" id="setName" /></div>
+              <div class="field"><label>Tagline</label><input class="input" id="setTagline" /></div>
+              <div class="field"><label>WhatsApp (628...)</label><input class="input" id="setWa" /></div>
+              <div class="field"><label>Email</label><input class="input" id="setEmail" /></div>
+              <div class="field"><label>Judul Hero</label><input class="input" id="setHeroTitle" /></div>
+              <div class="field"><label>URL Gambar Hero</label><input class="input" id="setHeroImage" /></div>
+            </div>
+            <div class="field"><label>Subjudul Hero</label><textarea class="input" id="setHeroSub" rows="2"></textarea></div>
+            <div class="field"><label>Meta Description (SEO)</label><textarea class="input" id="setMeta" rows="2"></textarea></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="set-grid">
+              <div class="field"><label>Instagram URL</label><input class="input" id="setIg" /></div>
+              <div class="field"><label>TikTok URL</label><input class="input" id="setTt" /></div>
+              <div class="field"><label>YouTube URL</label><input class="input" id="setYt" /></div>
+            </div>
+            <button class="btn btn-primary" id="saveSettings">Simpan Info Toko</button>
+            <span class="auth-msg" id="setMsg" style="margin-left:10px"></span>
+          </div>
+
+          <div class="panel-card" style="margin-bottom:18px">
+            <h3>Harga & Foto Jasa</h3>
+            <div id="servicesEditor"></div>
+            <button class="btn btn-primary" id="saveServices" style="margin-top:12px">Simpan Jasa</button>
+            <span class="auth-msg" id="svcMsg" style="margin-left:10px"></span>
+          </div>
+
+          <div class="panel-card">
+            <h3>Harga & Foto Game</h3>
+            <div id="gamesEditor"></div>
+            <button class="btn btn-primary" id="saveGames" style="margin-top:12px">Simpan Game</button>
+            <span class="auth-msg" id="gameMsg" style="margin-left:10px"></span>
           </div>
         </section>
       </div>

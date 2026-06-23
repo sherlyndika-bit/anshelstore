@@ -44,9 +44,9 @@ const GOOGLE_READY = !!(GOOGLE.id && GOOGLE.secret);
 let db;
 try { db = JSON.parse(fs.readFileSync(DB_PATH, "utf8")); }
 catch (e) { db = {}; }
-db.store ||= {}; db.services ||= []; db.games ||= [];
+db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= [];
 db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-db._seq ||= {}; ["order", "conversation", "message", "user"].forEach((k) => (db._seq[k] ||= 0));
+db._seq ||= {}; ["order", "conversation", "message", "user", "article"].forEach((k) => (db._seq[k] ||= 0));
 
 let saveTimer = null;
 function saveDB() {
@@ -219,6 +219,146 @@ function buildStats() {
 }
 
 // ---------------------------------------------------------------------------
+// SEO / Blog helpers
+// ---------------------------------------------------------------------------
+function escHtml(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function slugify(s) { return String(s || "").toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").slice(0, 80); }
+function siteUrl() { return (db.settings.siteUrl || process.env.PUBLIC_URL || "https://www.anshelstore.biz.id").replace(/\/$/, ""); }
+
+// Mini markdown -> HTML (tanpa dependency): heading, bold, italic, list, link, paragraf
+function mdToHtml(md) {
+  const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const inline = (t) => esc(t)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary underline" target="_blank" rel="noopener">$1</a>');
+  const blocks = String(md || "").split(/\n{2,}/);
+  let html = "";
+  for (const b of blocks) {
+    const t = b.trim();
+    if (!t) continue;
+    if (/^###\s/.test(t)) html += `<h3 class="font-headline-md text-headline-md text-on-surface mt-lg mb-sm">${inline(t.replace(/^###\s/, ""))}</h3>`;
+    else if (/^##\s/.test(t)) html += `<h2 class="font-headline-lg text-headline-lg text-on-surface mt-xl mb-sm">${inline(t.replace(/^##\s/, ""))}</h2>`;
+    else if (/^#\s/.test(t)) html += `<h2 class="font-headline-lg text-headline-lg text-on-surface mt-xl mb-sm">${inline(t.replace(/^#\s/, ""))}</h2>`;
+    else if (/^(\-|\*)\s/m.test(t) && t.split("\n").every((l) => /^(\-|\*)\s/.test(l.trim()))) {
+      html += '<ul class="list-disc pl-6 my-md flex flex-col gap-xs">' + t.split("\n").map((l) => `<li>${inline(l.trim().replace(/^(\-|\*)\s/, ""))}</li>`).join("") + "</ul>";
+    } else html += `<p class="font-body-lg text-body-lg text-on-surface-variant my-md leading-relaxed">${inline(t)}</p>`;
+  }
+  return html;
+}
+
+const THEME_HEAD = `
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="/js/theme.js"></script>
+<link href="/css/theme.css" rel="stylesheet"/>`;
+
+function pageNav() {
+  return `<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm shadow-primary/10">
+    <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
+      <a href="/" class="text-headline-md md:text-headline-lg font-display-lg-mobile md:font-display-lg text-primary tracking-tight font-extrabold">anshelstore</a>
+      <div class="hidden md:flex items-center gap-gutter">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/#layanan">Layanan AI</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/topup.html">Top Up Game</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="/blog">Artikel</a>
+      </div>
+      <a href="/topup.html" class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full shadow-[0_4px_12px_rgba(129,39,207,0.2)] hover:scale-105 active:scale-95 transition-all">Top Up</a>
+    </div></nav>`;
+}
+function pageFooter() {
+  return `<footer class="bg-surface-container-low w-full mt-xl rounded-t-lg">
+    <div class="px-margin-mobile md:px-margin-desktop py-lg max-w-7xl mx-auto flex flex-col md:flex-row gap-sm justify-between items-center">
+      <div class="text-headline-md font-display-lg text-secondary">anshelstore</div>
+      <div class="flex flex-wrap gap-gutter items-center">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary" href="/#layanan">Layanan</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary" href="/topup.html">Top Up</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary" href="/blog">Artikel</a>
+      </div>
+      <p class="font-body-md text-body-md text-on-surface-variant">© ${new Date().getFullYear()} anshelstore</p>
+    </div></footer>`;
+}
+
+function renderBlogList() {
+  const arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
+  const cards = arts.map((a) => `
+    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm shadow-primary/5 border border-outline-variant/20 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col">
+      <div class="aspect-[16/9] overflow-hidden bg-surface-container">${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
+      <div class="p-md flex flex-col gap-xs flex-grow">
+        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
+        <h2 class="font-headline-md text-headline-md text-on-surface leading-tight">${escHtml(a.title)}</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${escHtml(a.excerpt)}</p>
+        <span class="font-label-md text-label-md text-primary inline-flex items-center gap-xs mt-xs">Baca selengkapnya <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
+      </div>
+    </a>`).join("");
+  return `<!DOCTYPE html><html class="light" lang="id"><head>
+    <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Artikel & Tips — anshelstore</title>
+    <meta name="description" content="Artikel, tips top up game, dan panduan AI automation dari anshelstore."/>
+    <link rel="canonical" href="${siteUrl()}/blog"/>
+    <meta property="og:title" content="Artikel & Tips — anshelstore"/><meta property="og:type" content="website"/>
+    ${THEME_HEAD}</head>
+    <body class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
+    ${pageNav()}
+    <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+      <div class="text-center mb-xl">
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Artikel & <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Tips</span></h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">Panduan top up, tips gaming, dan insight AI automation.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">${cards || '<p class="text-on-surface-variant">Belum ada artikel.</p>'}</div>
+    </main>${pageFooter()}</body></html>`;
+}
+
+function renderArticle(a) {
+  const u = siteUrl() + "/blog/" + a.slug;
+  const jsonld = {
+    "@context": "https://schema.org", "@type": "BlogPosting", "headline": a.title, "description": a.excerpt,
+    "image": a.cover || undefined, "datePublished": new Date(a.createdAt).toISOString(), "dateModified": new Date(a.updatedAt || a.createdAt).toISOString(),
+    "author": { "@type": "Organization", "name": a.author || "anshelstore" }, "publisher": { "@type": "Organization", "name": "anshelstore" }, "mainEntityOfPage": u,
+  };
+  return `<!DOCTYPE html><html class="light" lang="id"><head>
+    <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>${escHtml(a.title)} — anshelstore</title>
+    <meta name="description" content="${escHtml(a.excerpt)}"/>
+    <link rel="canonical" href="${u}"/>
+    <meta property="og:title" content="${escHtml(a.title)}"/>
+    <meta property="og:description" content="${escHtml(a.excerpt)}"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="${u}"/>
+    ${a.cover ? `<meta property="og:image" content="${escHtml(a.cover)}"/>` : ""}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
+    ${THEME_HEAD}</head>
+    <body class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
+    ${pageNav()}
+    <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl">
+      <a href="/blog" class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary font-label-md text-label-md mb-md"><span class="material-symbols-outlined text-[20px]">arrow_back</span> Semua artikel</a>
+      <div class="flex flex-wrap gap-xs mb-sm">${(a.tags || []).map((t) => `<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-sm py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">${escHtml(a.title)}</h1>
+      <div class="flex items-center gap-xs text-on-surface-variant font-label-md text-label-md mb-md">
+        <span>${escHtml(a.author || "anshelstore")}</span><span>•</span>
+        <span>${new Date(a.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</span>
+      </div>
+      ${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full rounded-lg shadow-md mb-lg object-cover"/>` : ""}
+      <article class="max-w-none">${mdToHtml(a.content)}</article>
+      <div class="mt-xl p-lg rounded-lg bg-gradient-to-r from-primary to-secondary text-on-primary text-center">
+        <h3 class="font-headline-md text-headline-md mb-sm">Butuh bantuan AI automation atau top up?</h3>
+        <a href="/topup.html" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full mt-xs hover:scale-105 transition-transform">Mulai Sekarang</a>
+      </div>
+    </main>${pageFooter()}</body></html>`;
+}
+
+function renderSitemap() {
+  const base = siteUrl();
+  const urls = [
+    { loc: base + "/", pri: "1.0" }, { loc: base + "/topup.html", pri: "0.9" }, { loc: base + "/blog", pri: "0.8" },
+    ...db.articles.filter((a) => a.published).map((a) => ({ loc: base + "/blog/" + a.slug, pri: "0.7", mod: new Date(a.updatedAt || a.createdAt).toISOString() })),
+  ];
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls.map((u) => `  <url><loc>${u.loc}</loc>${u.mod ? `<lastmod>${u.mod}</lastmod>` : ""}<priority>${u.pri}</priority></url>`).join("\n") + `\n</urlset>`;
+}
+
+// ---------------------------------------------------------------------------
 // API
 // ---------------------------------------------------------------------------
 async function handleApi(req, res, pathname, query) {
@@ -305,6 +445,10 @@ async function handleApi(req, res, pathname, query) {
   if (pathname === "/api/store" && method === "GET") return sendJSON(res, 200, db.store);
   if (pathname === "/api/services" && method === "GET") return sendJSON(res, 200, db.services);
   if (pathname === "/api/games" && method === "GET") return sendJSON(res, 200, db.games);
+  if (pathname === "/api/settings" && method === "GET") return sendJSON(res, 200, { store: db.store, settings: db.settings });
+  if (pathname === "/api/articles" && method === "GET") return sendJSON(res, 200, db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt).map(({ content, ...rest }) => rest));
+  let am = pathname.match(/^\/api\/articles\/([a-z0-9-]+)$/);
+  if (am && method === "GET") { const a = db.articles.find((x) => x.slug === am[1] && x.published); return a ? sendJSON(res, 200, a) : sendJSON(res, 404, { error: "Artikel tidak ditemukan" }); }
 
   // ---- Orders ----
   if (pathname === "/api/orders" && method === "POST") {
@@ -331,6 +475,56 @@ async function handleApi(req, res, pathname, query) {
     saveDB(); return sendJSON(res, 200, order);
   }
   if (pathname === "/api/stats" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, buildStats()); }
+
+  // ---- ADMIN: kelola konten (butuh login) ----
+  if (pathname === "/api/admin/settings" && method === "PUT") {
+    if (!authed) return needAuth();
+    const b = await readBody(req);
+    if (b.store && typeof b.store === "object") db.store = { ...db.store, ...b.store };
+    if (b.settings && typeof b.settings === "object") db.settings = { ...db.settings, ...b.settings };
+    saveDB(); return sendJSON(res, 200, { store: db.store, settings: db.settings });
+  }
+  if (pathname === "/api/admin/services" && method === "PUT") {
+    if (!authed) return needAuth(); const b = await readBody(req);
+    if (Array.isArray(b.services)) db.services = b.services;
+    saveDB(); return sendJSON(res, 200, db.services);
+  }
+  if (pathname === "/api/admin/games" && method === "PUT") {
+    if (!authed) return needAuth(); const b = await readBody(req);
+    if (Array.isArray(b.games)) db.games = b.games;
+    saveDB(); return sendJSON(res, 200, db.games);
+  }
+  if (pathname === "/api/admin/articles" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, [...db.articles].sort((a, b) => b.createdAt - a.createdAt)); }
+  if (pathname === "/api/admin/articles" && method === "POST") {
+    if (!authed) return needAuth(); const b = await readBody(req);
+    if (!b.title) return sendJSON(res, 400, { error: "Judul wajib diisi" });
+    let slug = b.slug ? slugify(b.slug) : slugify(b.title);
+    if (db.articles.some((a) => a.slug === slug)) slug = slug + "-" + Date.now().toString().slice(-4);
+    const now = Date.now();
+    const art = { id: nextId("article"), slug, title: b.title, excerpt: b.excerpt || "", cover: b.cover || "", tags: Array.isArray(b.tags) ? b.tags : (b.tags ? String(b.tags).split(",").map((t) => t.trim()).filter(Boolean) : []), author: b.author || "Tim anshelstore", content: b.content || "", published: b.published !== false, createdAt: now, updatedAt: now };
+    db.articles.push(art); saveDB(); return sendJSON(res, 201, art);
+  }
+  let ma = pathname.match(/^\/api\/admin\/articles\/(\d+)$/);
+  if (ma && method === "PUT") {
+    if (!authed) return needAuth(); const b = await readBody(req);
+    const art = db.articles.find((a) => a.id === Number(ma[1]));
+    if (!art) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    if (b.title != null) art.title = b.title;
+    if (b.slug != null) art.slug = slugify(b.slug) || art.slug;
+    if (b.excerpt != null) art.excerpt = b.excerpt;
+    if (b.cover != null) art.cover = b.cover;
+    if (b.author != null) art.author = b.author;
+    if (b.content != null) art.content = b.content;
+    if (b.published != null) art.published = !!b.published;
+    if (b.tags != null) art.tags = Array.isArray(b.tags) ? b.tags : String(b.tags).split(",").map((t) => t.trim()).filter(Boolean);
+    art.updatedAt = Date.now(); saveDB(); return sendJSON(res, 200, art);
+  }
+  if (ma && method === "DELETE") {
+    if (!authed) return needAuth();
+    const i = db.articles.findIndex((a) => a.id === Number(ma[1]));
+    if (i === -1) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    db.articles.splice(i, 1); saveDB(); return sendJSON(res, 200, { ok: true });
+  }
 
   // ---- Chat: customer (publik) ----
   if (pathname === "/api/chat/start" && method === "POST") {
@@ -369,9 +563,20 @@ async function handleApi(req, res, pathname, query) {
 // ---------------------------------------------------------------------------
 const server = http.createServer(async (req, res) => {
   const parsed = url.parse(req.url, true);
+  const pathname = parsed.pathname;
   try {
-    if (parsed.pathname.startsWith("/api/") || parsed.pathname === "/healthz") return await handleApi(req, res, parsed.pathname, parsed.query);
-    return serveStatic(req, res, parsed.pathname);
+    if (pathname.startsWith("/api/") || pathname === "/healthz") return await handleApi(req, res, pathname, parsed.query);
+    // SEO routes (server-rendered)
+    if (pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /dashboard\nSitemap: ${siteUrl()}/sitemap.xml\n`); }
+    if (pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" }); return res.end(renderSitemap()); }
+    if (pathname === "/blog" || pathname === "/blog/") { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList()); }
+    const bm = pathname.match(/^\/blog\/([a-z0-9-]+)\/?$/);
+    if (bm) {
+      const a = db.articles.find((x) => x.slug === bm[1] && x.published);
+      if (a) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderArticle(a)); }
+      res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" }); return res.end("<h1>404 - Artikel tidak ditemukan</h1>");
+    }
+    return serveStatic(req, res, pathname);
   } catch (err) { console.error("Server error:", err); sendJSON(res, 500, { error: "Internal server error" }); }
 });
 server.listen(PORT, HOST, () => {
