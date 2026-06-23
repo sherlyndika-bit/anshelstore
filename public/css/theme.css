@@ -60,3 +60,25 @@
   transition: transform .5s cubic-bezier(.22,1,.36,1);
 }
 .hero-pop:hover { transform: scale(1.1); }
+
+
+
+/* ============ Penyesuaian mobile semua halaman frontend ============ */
+@media (max-width: 640px) {
+  .pt-xl { padding-top: 44px !important; }
+  .pb-xl { padding-bottom: 44px !important; }
+  .py-xl { padding-top: 44px !important; padding-bottom: 44px !important; }
+  .py-lg { padding-top: 28px !important; padding-bottom: 28px !important; }
+  .mt-xl { margin-top: 40px !important; }
+  .mb-xl { margin-bottom: 32px !important; }
+  .gap-xl { gap: 26px !important; }
+  /* judul besar sedikit diturunkan biar muat & proporsional */
+  .text-display-lg-mobile { font-size: 28px !important; line-height: 34px !important; }
+  /* artikel: body sedikit lebih kecil di HP */
+  .article-body { font-size: 16.5px; }
+  .article-body > p:first-of-type::first-letter { font-size: 2.6rem; }
+}
+/* Tablet: grid game/artikel tetap rapi */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .gap-xl { gap: 36px !important; }
+}
