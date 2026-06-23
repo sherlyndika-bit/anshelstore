@@ -16,25 +16,30 @@
   const navMount = document.getElementById("siteNav");
   if (navMount) {
     navMount.innerHTML = `
-    <nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm shadow-primary/10">
-      <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
-        <a href="/" class="text-headline-md md:text-headline-lg font-display-lg-mobile md:font-display-lg text-primary tracking-tight font-extrabold hover:scale-105 transition-transform duration-200">anshelstore</a>
-        <div class="hidden lg:flex items-center gap-gutter">
-          ${NAV.map((n) => `<a class="font-label-md text-label-md ${linkCls(n.key)}" href="${n.href}">${n.label}</a>`).join("")}
+    <div class="sticky top-0 z-50 px-margin-mobile md:px-margin-desktop pt-sm">
+      <nav class="max-w-7xl mx-auto rounded-full bg-surface/70 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(232,74,138,0.25)] border border-pink-soft/50">
+        <div class="flex justify-between items-center pl-md pr-xs py-2">
+          <a href="/" class="flex items-center gap-xs group">
+            <span class="w-9 h-9 rounded-full bg-gradient-to-br from-pink via-secondary to-primary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(232,74,138,0.4)] group-hover:scale-110 transition-transform">a</span>
+            <span class="font-display-lg-mobile text-headline-md text-on-surface tracking-tight font-extrabold">anshel<span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">store</span></span>
+          </a>
+          <div class="hidden lg:flex items-center gap-xs">
+            ${NAV.map((n) => `<a class="px-md py-sm rounded-full font-label-md text-label-md transition-all ${n.key === active ? "bg-pink-50 text-pink font-bold" : "text-on-surface-variant hover:bg-surface-container hover:text-primary"}" href="${n.href}">${n.label}</a>`).join("")}
+          </div>
+          <div class="hidden lg:flex items-center gap-xs pl-xs" id="siteAuth">
+            <a href="/masuk" class="px-md py-sm rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Masuk</a>
+            <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(232,74,138,0.35)] hover:scale-105 active:scale-95 transition-all">Top Up ✨</a>
+          </div>
+          <button id="navToggle" class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-pink-50 transition-colors" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
         </div>
-        <div class="hidden lg:flex items-center gap-sm" id="siteAuth">
-          <a href="/masuk" class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Masuk</a>
-          <a href="/topup" class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full shadow-[0_4px_12px_rgba(129,39,207,0.2)] hover:scale-105 active:scale-95 transition-all">Top Up</a>
+        <div id="navMobile" class="lg:hidden hidden px-md pb-sm">
+          <div class="flex flex-col">
+            ${NAV.map((n) => `<a class="py-sm font-label-md text-label-md ${active === n.key ? "text-pink font-bold" : "text-on-surface-variant"}" href="${n.href}">${n.label}</a>`).join("")}
+            <div id="siteAuthM" class="flex flex-col gap-xs mt-xs pt-xs border-t border-pink-soft/40"><a href="/masuk" class="py-sm font-label-md text-label-md text-on-surface-variant">Masuk / Daftar</a><a href="/topup" class="text-center bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up ✨</a></div>
+          </div>
         </div>
-        <button id="navToggle" class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
-      </div>
-      <div id="navMobile" class="lg:hidden hidden border-t border-outline-variant/30 bg-surface/95 backdrop-blur-xl">
-        <div class="px-margin-mobile py-sm flex flex-col">
-          ${NAV.map((n) => `<a class="py-sm font-label-md text-label-md ${active === n.key ? "text-secondary font-bold" : "text-on-surface-variant"}" href="${n.href}">${n.label}</a>`).join("")}
-          <div id="siteAuthM" class="flex flex-col gap-xs mt-xs"><a href="/masuk" class="py-sm font-label-md text-label-md text-on-surface-variant">Masuk / Daftar</a><a href="/topup" class="text-center bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up Sekarang</a></div>
-        </div>
-      </div>
-    </nav>`;
+      </nav>
+    </div>`;
     const toggle = document.getElementById("navToggle"), mobile = document.getElementById("navMobile");
     toggle.addEventListener("click", () => mobile.classList.toggle("hidden"));
   }
@@ -79,11 +84,11 @@
     fetch("/api/auth/me", { headers: { "x-auth-token": token } }).then((r) => r.ok ? r.json() : null).then((d) => {
       if (!d || !d.user) return;
       const nm = (d.user.name || d.user.email || "Akun").split(" ")[0];
-      const av = d.user.picture ? `<img src="${d.user.picture}" class="w-8 h-8 rounded-full object-cover"/>` : `<span class="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-secondary text-on-primary flex items-center justify-center font-bold text-[14px]">${nm.charAt(0).toUpperCase()}</span>`;
+      const av = d.user.picture ? `<img src="${d.user.picture}" class="w-8 h-8 rounded-full object-cover"/>` : `<span class="w-8 h-8 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-bold text-[14px]">${nm.charAt(0).toUpperCase()}</span>`;
       const auth = document.getElementById("siteAuth");
-      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs font-label-md text-label-md text-on-surface hover:text-primary">${av} ${nm}</a><a href="/topup" class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full">Top Up</a>`;
+      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs px-sm py-xs rounded-full hover:bg-pink-50 font-label-md text-label-md text-on-surface transition-colors">${av} ${nm}</a><a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(232,74,138,0.35)]">Top Up ✨</a>`;
       const authM = document.getElementById("siteAuthM");
-      if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-label-md text-label-md text-on-surface">👤 ${nm} (Akun Saya)</a><a href="/topup" class="text-center bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up Sekarang</a>`;
+      if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-label-md text-label-md text-on-surface">👤 ${nm} (Akun Saya)</a><a href="/topup" class="text-center bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up ✨</a>`;
     }).catch(() => {});
   }
 

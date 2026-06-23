@@ -17,7 +17,8 @@ tailwind.config = {
       "secondary-container": "#9c48ea", "surface-container-low": "#f2f4f6", "tertiary-fixed-dim": "#ffb59e",
       "on-tertiary": "#ffffff", "surface-tint": "#00658d", "outline": "#6d7881", "primary-fixed-dim": "#81cfff",
       "on-surface-variant": "#3d4850", "on-error-container": "#93000a", "secondary-fixed-dim": "#ddb7ff",
-      "primary-fixed": "#c6e7ff", "secondary-fixed": "#f0dbff", "on-tertiary-fixed-variant": "#7f2a0d"
+      "primary-fixed": "#c6e7ff", "secondary-fixed": "#f0dbff", "on-tertiary-fixed-variant": "#7f2a0d",
+      "pink": "#e84a8a", "pink-soft": "#ffd9e8", "pink-50": "#fff0f6", "pink-100": "#ffe3ee", "on-pink": "#7a0f3d"
     },
     borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
     spacing: { "margin-mobile": "16px", "sm": "12px", "gutter": "24px", "md": "24px", "xs": "4px", "lg": "48px", "margin-desktop": "40px", "base": "8px", "xl": "80px" },

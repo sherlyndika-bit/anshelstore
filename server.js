@@ -101,17 +101,29 @@ function userFromReq(req) {
   if (!s || s.expires < Date.now()) { sessions.delete(token); return null; }
   return db.users.find((u) => u.id === s.userId) || null;
 }
-function isAdmin(u) { return !!u && (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(String(u.email).toLowerCase())); }
-function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, provider: u.provider, admin: isAdmin(u) }; }
+// Role: owner > admin > staff (akses dashboard) ; customer (tanpa akses dashboard)
+const DASH_ROLES = ["owner", "admin", "staff"];
+function dashRoleCount() { return db.users.filter((u) => DASH_ROLES.includes(u.role)).length; }
+function assignRole(email) {
+  const e = String(email).toLowerCase();
+  if (ADMIN_EMAILS.includes(e)) return "owner";
+  if (ADMIN_EMAILS.length === 0 && dashRoleCount() === 0) return "owner"; // bootstrap pemilik pertama
+  return "customer";
+}
+function isAdmin(u) { return !!u && DASH_ROLES.includes(u.role); }          // akses dashboard
+function canManageUsers(u) { return !!u && ["owner", "admin"].includes(u.role); }
+function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, provider: u.provider, role: u.role || "customer", admin: isAdmin(u) }; }
 function findUser(email) { return db.users.find((u) => u.email.toLowerCase() === String(email).toLowerCase()); }
-function upsertUser({ email, name, provider, picture, passwordHash }) {
+function upsertUser({ email, name, provider, picture, passwordHash, role }) {
   let u = findUser(email);
   if (u) {
     if (name && !u.name) u.name = name;
     if (picture) u.picture = picture;
     if (passwordHash) u.passwordHash = passwordHash;
+    if (!u.role) u.role = assignRole(email);
+    if (ADMIN_EMAILS.includes(String(email).toLowerCase()) && u.role === "customer") u.role = "owner";
   } else {
-    u = { id: nextId("user"), email, name: name || email.split("@")[0], provider: provider || "email", picture: picture || null, passwordHash: passwordHash || null, createdAt: Date.now() };
+    u = { id: nextId("user"), email, name: name || email.split("@")[0], provider: provider || "email", picture: picture || null, passwordHash: passwordHash || null, role: role || assignRole(email), createdAt: Date.now() };
     db.users.push(u);
   }
   saveDB();
@@ -475,6 +487,14 @@ async function handleApi(req, res, pathname, query) {
     const token = req.headers["x-auth-token"]; if (token) sessions.delete(token);
     return sendJSON(res, 200, { ok: true });
   }
+  if (pathname === "/api/auth/change-password" && method === "POST") {
+    const u = userFromReq(req); if (!u) return sendJSON(res, 401, { error: "Unauthorized" });
+    const b = await readBody(req);
+    if (!b.newPassword || b.newPassword.length < 6) return sendJSON(res, 400, { error: "Password baru minimal 6 karakter" });
+    if (u.passwordHash && !verifyPassword(b.oldPassword || "", u.passwordHash)) return sendJSON(res, 400, { error: "Password lama salah" });
+    u.passwordHash = hashPassword(b.newPassword); saveDB();
+    return sendJSON(res, 200, { ok: true });
+  }
 
   // ---- Google OAuth ----
   if (pathname === "/api/auth/google" && method === "GET") {
@@ -600,6 +620,42 @@ async function handleApi(req, res, pathname, query) {
     db.finances.splice(i, 1); saveDB(); return sendJSON(res, 200, { ok: true });
   }
 
+  // ---- Manajemen akun & role (owner/admin) ----
+  if (pathname === "/api/admin/users" && method === "GET") { if (!canManageUsers(meUser)) return needAuth(); return sendJSON(res, 200, db.users.map(publicUser)); }
+  if (pathname === "/api/admin/users" && method === "POST") {
+    if (!canManageUsers(meUser)) return needAuth();
+    const b = await readBody(req);
+    const email = (b.email || "").trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return sendJSON(res, 400, { error: "Email tidak valid" });
+    if (!b.password || b.password.length < 6) return sendJSON(res, 400, { error: "Password minimal 6 karakter" });
+    const role = ["owner", "admin", "staff", "customer"].includes(b.role) ? b.role : "staff";
+    if (role === "owner" && meUser.role !== "owner") return sendJSON(res, 403, { error: "Hanya owner yang bisa membuat owner" });
+    const exist = findUser(email);
+    if (exist && exist.passwordHash) return sendJSON(res, 409, { error: "Email sudah terdaftar" });
+    const u = upsertUser({ email, name: b.name, provider: "email", passwordHash: hashPassword(b.password), role });
+    u.role = role; saveDB();
+    return sendJSON(res, 201, publicUser(u));
+  }
+  let mu = pathname.match(/^\/api\/admin\/users\/(\d+)$/);
+  if (mu && method === "PUT") {
+    if (!canManageUsers(meUser)) return needAuth();
+    const b = await readBody(req); const u = db.users.find((x) => x.id === Number(mu[1]));
+    if (!u) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    const role = ["owner", "admin", "staff", "customer"].includes(b.role) ? b.role : null;
+    if (!role) return sendJSON(res, 400, { error: "Role tidak valid" });
+    if (role === "owner" && meUser.role !== "owner") return sendJSON(res, 403, { error: "Hanya owner yang bisa menetapkan owner" });
+    if (u.role === "owner" && role !== "owner" && db.users.filter((x) => x.role === "owner").length <= 1) return sendJSON(res, 400, { error: "Tidak bisa menurunkan owner terakhir" });
+    u.role = role; saveDB(); return sendJSON(res, 200, publicUser(u));
+  }
+  if (mu && method === "DELETE") {
+    if (!canManageUsers(meUser)) return needAuth();
+    const u = db.users.find((x) => x.id === Number(mu[1]));
+    if (!u) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    if (u.id === meUser.id) return sendJSON(res, 400, { error: "Tidak bisa menghapus akun sendiri" });
+    if (u.role === "owner" && db.users.filter((x) => x.role === "owner").length <= 1) return sendJSON(res, 400, { error: "Tidak bisa menghapus owner terakhir" });
+    db.users = db.users.filter((x) => x.id !== u.id); saveDB(); return sendJSON(res, 200, { ok: true });
+  }
+
   // ---- ADMIN: kelola konten (butuh login) ----
   if (pathname === "/api/admin/settings" && method === "PUT") {
     if (!authed) return needAuth();
@@ -691,6 +747,13 @@ const server = http.createServer(async (req, res) => {
   setSecurityHeaders(res);
   try {
     if (pathname.startsWith("/api/") || pathname === "/healthz") return await handleApi(req, res, pathname, parsed.query);
+    // Sembunyikan .html: redirect permanen ke URL bersih
+    if (pathname.endsWith(".html")) {
+      let clean = pathname.replace(/\.html$/, "");
+      if (clean === "/index") clean = "/";
+      res.writeHead(301, { Location: clean + (parsed.search || "") });
+      return res.end();
+    }
     // SEO routes (server-rendered)
     if (pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /dashboard\nSitemap: ${siteUrl()}/sitemap.xml\n`); }
     if (pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" }); return res.end(renderSitemap()); }

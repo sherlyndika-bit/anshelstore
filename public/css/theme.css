@@ -10,11 +10,12 @@
 .wavy-divider svg { position: relative; display: block; width: calc(100% + 1.3px); height: 60px; }
 .wavy-divider .shape-fill { fill: #f7f9fb; }
 
-/* Ambient bg untuk halaman transaksional */
+/* Ambient bg untuk halaman transaksional (sentuhan pink tipis) */
 .bg-ambient {
-  background: radial-gradient(circle at top left, #c6e7ff 0%, transparent 40%),
+  background: radial-gradient(circle at top left, #ffe3ee 0%, transparent 42%),
+              radial-gradient(circle at top right, #c6e7ff 0%, transparent 38%),
               radial-gradient(circle at bottom right, #f0dbff 0%, transparent 40%);
-  background-color: #f7f9fb;
+  background-color: #fdfbfc;
 }
 
 /* Pilihan metode bayar (radio tersembunyi) */

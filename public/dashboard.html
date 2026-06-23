@@ -17,11 +17,11 @@
     <div class="login-card">
       <a class="brand"><span class="brand-logo">a</span> anshelstore</a>
       <h1>Dashboard</h1>
-      <p>Masuk atau daftar untuk mengelola toko</p>
+      <p>Khusus pemilik &amp; tim. Akun dibuat oleh owner.</p>
 
       <div class="auth-tabs">
-        <button data-tab="login" class="active">Masuk</button>
-        <button data-tab="register">Daftar</button>
+        <button data-tab="login" class="active">Password</button>
+        <button data-tab="otp">Kode OTP</button>
       </div>
 
       <!-- LOGIN -->
@@ -29,15 +29,6 @@
         <div class="field"><label>Email</label><input class="input" id="loginEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
         <div class="field"><label>Password</label><input class="input" id="loginPass" type="password" placeholder="••••••" autocomplete="current-password" /></div>
         <button class="btn btn-primary btn-block btn-lg" type="submit">Masuk</button>
-        <div style="text-align:center;margin-top:10px"><button type="button" class="auth-link" id="toOtp">Masuk dengan kode OTP email →</button></div>
-      </form>
-
-      <!-- REGISTER -->
-      <form class="auth-pane" id="paneRegister">
-        <div class="field"><label>Nama</label><input class="input" id="regName" type="text" placeholder="Nama kamu" autocomplete="name" /></div>
-        <div class="field"><label>Email</label><input class="input" id="regEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
-        <div class="field"><label>Password</label><input class="input" id="regPass" type="password" placeholder="Minimal 6 karakter" autocomplete="new-password" /></div>
-        <button class="btn btn-primary btn-block btn-lg" type="submit">Daftar</button>
       </form>
 
       <!-- OTP -->
@@ -77,6 +68,7 @@
         <button data-page="articles">📝 Artikel</button>
         <button data-page="settings">⚙️ Konten & Harga</button>
         <button data-page="finance">💰 Finansial</button>
+        <button data-page="team">👥 Tim & Akses</button>
       </nav>
       <div class="side-foot"><button id="logoutBtn">↩︎ Keluar</button></div>
     </aside>
@@ -209,6 +201,35 @@
             </div>
           </div>
           <div class="panel-card"><h3>Riwayat Keuangan</h3><div class="table-wrap"><table class="data" id="financeTable"></table></div></div>
+        </section>
+
+        <!-- TIM & AKSES -->
+        <section class="page" id="page-team">
+          <div class="panel-card" style="margin-bottom:18px;max-width:520px">
+            <h3>🔑 Ganti Password Saya</h3>
+            <div class="field"><label>Password Lama</label><input class="input" id="oldPass" type="password" placeholder="kosongkan jika login via Google/OTP" /></div>
+            <div class="field"><label>Password Baru</label><input class="input" id="newPass" type="password" placeholder="min 6 karakter" /></div>
+            <button class="btn btn-primary" id="changePassBtn">Simpan Password</button>
+            <span class="auth-msg" id="passMsg" style="margin-left:10px"></span>
+          </div>
+
+          <div class="panel-card" style="margin-bottom:18px">
+            <h3>➕ Tambah Akun Tim</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 130px auto;gap:10px;align-items:end" class="fin-grid">
+              <div class="field" style="margin:0"><label>Nama</label><input class="input" id="newUserName" placeholder="Nama" /></div>
+              <div class="field" style="margin:0"><label>Email</label><input class="input" id="newUserEmail" type="email" placeholder="email@toko.com" /></div>
+              <div class="field" style="margin:0"><label>Password</label><input class="input" id="newUserPass" type="password" placeholder="min 6" /></div>
+              <div class="field" style="margin:0"><label>Role</label><select class="input" id="newUserRole"><option value="staff">Staff</option><option value="admin">Admin</option><option value="owner">Owner</option></select></div>
+              <button class="btn btn-primary" id="addUserBtn">Tambah</button>
+            </div>
+            <span class="auth-msg" id="userMsg"></span>
+          </div>
+
+          <div class="panel-card">
+            <h3>Daftar Akun</h3>
+            <p style="color:var(--text-soft);font-size:.85rem;margin-bottom:8px">Owner & Admin bisa akses dashboard. Customer hanya akun pelanggan biasa.</p>
+            <div class="table-wrap"><table class="data" id="usersTable"></table></div>
+          </div>
         </section>
       </div>
     </div>

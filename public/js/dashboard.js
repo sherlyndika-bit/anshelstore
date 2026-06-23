@@ -31,12 +31,10 @@ document.querySelectorAll(".auth-tabs button").forEach((b) =>
 function switchPane(tab) {
   clearMsg();
   document.querySelectorAll(".auth-tabs button").forEach((x) => x.classList.toggle("active", x.dataset.tab === tab));
-  ["Login", "Register", "Otp"].forEach((p) => $("pane" + p).classList.remove("active"));
+  ["Login", "Otp"].forEach((p) => $("pane" + p).classList.remove("active"));
   if (tab === "login") $("paneLogin").classList.add("active");
-  if (tab === "register") $("paneRegister").classList.add("active");
   if (tab === "otp") $("paneOtp").classList.add("active");
 }
-$("toOtp").addEventListener("click", () => switchPane("otp"));
 $("backLogin").addEventListener("click", () => switchPane("login"));
 
 // login (password)
@@ -48,14 +46,7 @@ $("paneLogin").addEventListener("submit", async (e) => {
   authSuccess(d);
 });
 
-// register
-$("paneRegister").addEventListener("submit", async (e) => {
-  e.preventDefault(); clearMsg();
-  const r = await fetch("/api/auth/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: $("regName").value.trim(), email: $("regEmail").value.trim(), password: $("regPass").value }) });
-  const d = await r.json();
-  if (!r.ok) return showMsg(d.error || "Gagal daftar");
-  authSuccess(d);
-});
+// (registrasi publik dinonaktifkan di dashboard — akun dibuat oleh owner di menu Tim & Akses)
 
 // OTP request
 $("sendOtp").addEventListener("click", async () => {
@@ -105,8 +96,8 @@ const sidebar = $("sidebar"), backdrop = $("backdrop");
 $("menuBtn").addEventListener("click", () => { sidebar.classList.toggle("open"); backdrop.classList.toggle("show"); });
 backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
 
-const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", articles: "Artikel", settings: "Konten & Harga", finance: "Finansial" };
-const PAGES = ["overview", "orders", "inbox", "articles", "settings", "finance"];
+const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", articles: "Artikel", settings: "Konten & Harga", finance: "Finansial", team: "Tim & Akses" };
+const PAGES = ["overview", "orders", "inbox", "articles", "settings", "finance", "team"];
 document.querySelectorAll(".side-nav button").forEach((btn) =>
   btn.addEventListener("click", () => { location.hash = btn.dataset.page; })
 );
@@ -123,6 +114,7 @@ function routeTo(page) {
   if (page === "articles") loadArticles();
   if (page === "settings") loadSettings();
   if (page === "finance") loadFinance();
+  if (page === "team") loadTeam();
 }
 window.addEventListener("hashchange", () => { if (TOKEN) routeTo(location.hash.replace("#", "")); });
 
@@ -247,6 +239,9 @@ function applyUser() {
   const av = $("userAvatar");
   if (ME.picture) av.innerHTML = `<img src="${ME.picture}" alt="">`;
   else av.textContent = (ME.name || ME.email || "A").charAt(0).toUpperCase();
+  // Sembunyikan menu Tim & Akses untuk yang bukan owner/admin
+  const teamBtn = document.querySelector('.side-nav button[data-page="team"]');
+  if (teamBtn) teamBtn.style.display = (ME.role === "owner" || ME.role === "admin") ? "" : "none";
 }
 function boot() {
   loginScreen.style.display = "none";
@@ -433,4 +428,54 @@ $("addFinance").addEventListener("click", async () => {
   await api("/api/admin/finance", { method: "POST", body: JSON.stringify({ type: $("finType").value, amount, category: $("finCategory").value.trim(), note: $("finNote").value.trim() }) });
   $("finAmount").value = ""; $("finCategory").value = ""; $("finNote").value = "";
   loadFinance();
+});
+
+
+
+// ============================================================
+// TIM & AKSES (manajemen akun + role) + ganti password
+// ============================================================
+async function loadTeam() {
+  const ROLES = ["owner", "admin", "staff", "customer"];
+  let users;
+  try { users = await api("/api/admin/users"); } catch (e) { return; }
+  if (users.error) { $("usersTable").innerHTML = `<tr><td style="padding:24px;text-align:center;color:var(--text-muted)">${users.error}</td></tr>`; return; }
+  const t = $("usersTable");
+  t.innerHTML = `<thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Login</th><th>Aksi</th></tr></thead><tbody>` +
+    users.map((u) => `<tr>
+      <td><b>${escapeHtml(u.name || "-")}</b></td>
+      <td>${escapeHtml(u.email)}</td>
+      <td><select class="status-select role-sel" data-id="${u.id}">${ROLES.map((r) => `<option value="${r}" ${r === u.role ? "selected" : ""}>${r}</option>`).join("")}</select></td>
+      <td style="color:var(--text-muted)">${u.provider}</td>
+      <td><button class="btn btn-light btn-sm user-del" data-id="${u.id}" style="color:var(--red)">Hapus</button></td>
+    </tr>`).join("") + "</tbody>";
+  t.querySelectorAll(".role-sel").forEach((s) => s.addEventListener("change", async () => {
+    const d = await api(`/api/admin/users/${s.dataset.id}`, { method: "PUT", body: JSON.stringify({ role: s.value }) });
+    if (d && d.error) alert(d.error);
+    loadTeam();
+  }));
+  t.querySelectorAll(".user-del").forEach((b) => b.addEventListener("click", async () => {
+    if (!confirm("Hapus akun ini?")) return;
+    const d = await api(`/api/admin/users/${b.dataset.id}`, { method: "DELETE" });
+    if (d && d.error) alert(d.error);
+    loadTeam();
+  }));
+}
+$("addUserBtn").addEventListener("click", async () => {
+  const m = $("userMsg");
+  const body = { name: $("newUserName").value.trim(), email: $("newUserEmail").value.trim(), password: $("newUserPass").value, role: $("newUserRole").value };
+  if (!body.email || !body.password) { m.textContent = "Email & password wajib"; m.className = "auth-msg err"; return; }
+  const d = await api("/api/admin/users", { method: "POST", body: JSON.stringify(body) });
+  if (d && d.error) { m.textContent = d.error; m.className = "auth-msg err"; return; }
+  m.textContent = "Akun dibuat ✅"; m.className = "auth-msg ok";
+  $("newUserName").value = ""; $("newUserEmail").value = ""; $("newUserPass").value = "";
+  loadTeam();
+});
+$("changePassBtn").addEventListener("click", async () => {
+  const m = $("passMsg"); const newPass = $("newPass").value;
+  if (!newPass || newPass.length < 6) { m.textContent = "Min 6 karakter"; m.className = "auth-msg err"; return; }
+  const d = await api("/api/auth/change-password", { method: "POST", body: JSON.stringify({ oldPassword: $("oldPass").value, newPassword: newPass }) });
+  if (d && d.error) { m.textContent = d.error; m.className = "auth-msg err"; return; }
+  m.textContent = "Password diganti ✅"; m.className = "auth-msg ok";
+  $("oldPass").value = ""; $("newPass").value = "";
 });
