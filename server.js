@@ -312,7 +312,7 @@ async function handleApi(req, res, pathname, query) {
     const game = db.games.find((g) => g.id === b.gameId);
     const item = game && game.items.find((i) => i.id === b.itemId);
     if (!game || !item) return sendJSON(res, 400, { error: "Game atau item tidak valid" });
-    const order = { id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, itemId: item.id, itemLabel: item.label, price: item.price, account: b.account || {}, customerName: b.customerName || "Guest", customerContact: b.customerContact || "", status: "pending", createdAt: Date.now() };
+    const order = { id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, itemId: item.id, itemLabel: item.label, price: item.price, account: b.account || {}, customerName: b.customerName || "Guest", customerContact: b.customerContact || "", paymentMethod: b.paymentMethod || "-", status: "pending", createdAt: Date.now() };
     db.orders.push(order); saveDB();
     return sendJSON(res, 201, order);
   }
