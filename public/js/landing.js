@@ -49,17 +49,61 @@ function renderMainBanner(banners) {
 }
 renderMainBanner();
 
-// Banner kedua (lebih kecil) — promo / diskon, geser menggantikan sebelumnya
-function renderPromoBanner(banners) {
+// Banner kedua — kartu promo bergeser ala upoint (dikelola dari dashboard)
+function renderPromos(promos) {
   const el = document.getElementById("promoBanner");
   if (!el) return;
-  if (banners && banners.length) { buildSlider(el, banners.map(imgSlide), { interval: 4200 }); return; }
-  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-md md:px-lg text-on-primary" style="background:linear-gradient(120deg,#e84a8a,#b81d68 55%,#8127cf)">
-      <div><span class="bg-white/20 rounded-full px-sm py-[2px] font-label-sm text-label-sm font-bold">PROMO</span><h3 class="font-headline-md md:font-headline-lg leading-tight mt-xs">Diskon spesial menantimu ✨</h3></div>
-      <span class="text-[40px] md:text-[64px] opacity-90">🎁</span>
+  promos = (promos || []).filter((p) => p && (p.title || p.image));
+  if (!promos.length) { el.innerHTML = ""; return; }
+  const card = (p) => {
+    const bg = p.image
+      ? `background-image:linear-gradient(180deg,rgba(18,6,18,.30),rgba(18,6,18,.88)),url('${esc(p.image)}');background-size:cover;background-position:center`
+      : `background:linear-gradient(135deg,#b81d68,#8127cf)`;
+    const dl = p.deadline ? `data-deadline="${esc(p.deadline)}"` : "";
+    const tag = (u) => `<div class="bg-black/40 rounded-md py-1 text-center"><div class="cd-${u} font-bold text-base leading-none">--</div><div class="text-[10px] opacity-70">${u}</div></div>`;
+    return `<a ${p.link ? `href="${esc(p.link)}"` : 'href="javascript:void(0)"'} class="snap-start shrink-0 w-[280px] md:w-[320px] min-h-[230px] rounded-xl overflow-hidden p-4 flex flex-col gap-2 text-white shadow-[0_16px_36px_-20px_rgba(0,0,0,.8)] hover:-translate-y-1 transition-transform" style="${bg}">
+        <span class="self-start inline-flex items-center gap-1 bg-pink text-on-primary text-[11px] font-extrabold tracking-wide px-3 py-[3px] rounded-full">🎟️ PROMO</span>
+        <div class="mt-auto">
+          ${p.category ? `<div class="text-xs font-bold uppercase tracking-wide opacity-90">${esc(p.category)}</div>` : ""}
+          <div class="text-lg font-extrabold italic leading-tight">${esc(p.title || "Promo")}</div>
+          ${p.info ? `<div class="text-sm opacity-95 mt-[2px]">${esc(p.info)}</div>` : ""}
+        </div>
+        ${p.deadline ? `<div class="border-t border-white/20 pt-2"><div class="flex items-center gap-1 text-[11px] opacity-80 mb-1">⏱ Batas Waktu</div><div class="grid grid-cols-4 gap-1" ${dl}>${["Hari", "Jam", "Menit", "Detik"].map(tag).join("")}</div></div>` : ""}
+        ${p.quota != null && p.quota !== "" ? `<div class="flex items-center justify-between bg-black/40 rounded-md px-3 py-[6px] text-[12px]"><span>📦 ${esc(p.quotaLabel || "Sisa Kuota")}</span><span class="bg-white/20 rounded-full px-2 py-[1px] font-bold">${esc(String(p.quota))}</span></div>` : ""}
+      </a>`;
+  };
+  el.innerHTML = `
+    <div class="md:hidden flex items-baseline gap-2 mb-2"><span class="text-xl font-extrabold text-on-surface">Promo</span><span class="text-on-surface-variant text-xs">jangan sampai terlewat ✨</span></div>
+    <div class="flex items-stretch gap-4">
+      <div class="hidden md:flex flex-col justify-center shrink-0 w-[220px] rounded-xl bg-surface-container-low p-6">
+        <div class="text-2xl font-extrabold text-on-surface">Promo</div>
+        <p class="text-body-md text-on-surface-variant mt-1">Jangan lewatkan promo &amp; diskon menarik dari anshelstore ✨</p>
+      </div>
+      <div class="relative flex-1 min-w-0">
+        <div id="promoScroll" class="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1">${promos.map(card).join("")}</div>
+        <button type="button" id="promoPrev" class="hidden md:grid place-items-center absolute left-1 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface shadow-md text-on-surface text-xl z-10">‹</button>
+        <button type="button" id="promoNext" class="hidden md:grid place-items-center absolute right-1 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface shadow-md text-on-surface text-xl z-10">›</button>
+      </div>
     </div>`;
+  const sc = document.getElementById("promoScroll"), nx = document.getElementById("promoNext"), pv = document.getElementById("promoPrev");
+  if (sc && nx) nx.addEventListener("click", () => sc.scrollBy({ left: 340, behavior: "smooth" }));
+  if (sc && pv) pv.addEventListener("click", () => sc.scrollBy({ left: -340, behavior: "smooth" }));
+  startCountdowns();
 }
-renderPromoBanner();
+let _cdTimer;
+function startCountdowns() {
+  if (_cdTimer) clearInterval(_cdTimer);
+  const tick = () => {
+    document.querySelectorAll("[data-deadline]").forEach((box) => {
+      const t = new Date(box.dataset.deadline).getTime() - Date.now();
+      const set = (u, v) => { const e = box.querySelector(".cd-" + u); if (e) e.textContent = String(Math.max(0, v)).padStart(2, "0"); };
+      const s = Math.max(0, Math.floor((isNaN(t) ? 0 : t) / 1000));
+      set("Hari", Math.floor(s / 86400)); set("Jam", Math.floor((s % 86400) / 3600)); set("Menit", Math.floor((s % 3600) / 60)); set("Detik", s % 60);
+    });
+  };
+  tick();
+  _cdTimer = setInterval(tick, 1000);
+}
 
 // ---------- Settings (teks, hero, banner) ----------
 async function loadStore() {
@@ -72,7 +116,7 @@ async function loadStore() {
     setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);
     if (set.heroImage) { const img = document.getElementById("heroImg"); if (img) img.src = set.heroImage; }
     renderMainBanner(Array.isArray(set.banners) ? set.banners : []);
-    renderPromoBanner(Array.isArray(set.promoBanners) ? set.promoBanners : []);
+    renderPromos(Array.isArray(set.promos) ? set.promos : []);
   } catch (e) {}
 }
 

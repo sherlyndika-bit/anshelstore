@@ -327,7 +327,8 @@ async function loadSettings() {
   $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
   $("setLogo").value = s.logo || "";
   $("setBanners").value = Array.isArray(s.banners) ? s.banners.join("\n") : "";
-  $("setPromoBanners").value = Array.isArray(s.promoBanners) ? s.promoBanners.join("\n") : "";
+  promoList = Array.isArray(s.promos) ? s.promos.map((p) => ({ ...p })) : [];
+  renderPromoEditor();
   $("setLayananTitle").value = s.layananTitle || ""; $("setLayananDesc").value = s.layananDesc || "";
   $("setTopupTitle").value = s.topupTitle || ""; $("setTopupDesc").value = s.topupDesc || "";
   $("setArtikelTitle").value = s.articlesTitle || "";
@@ -357,10 +358,47 @@ $("saveIntegrations").addEventListener("click", async () => {
   };
   try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { integrations } }) }); const e = $("intMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("intMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
 });
+let promoList = [];
+function toLocalInput(iso) { const d = new Date(iso); if (isNaN(d)) return ""; const p = (n) => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
+function collectPromos() {
+  document.querySelectorAll(".promo-row").forEach((row, i) => {
+    const g = (c) => row.querySelector("." + c);
+    promoList[i] = {
+      category: g("pr-cat").value.trim(), title: g("pr-title").value.trim(), info: g("pr-info").value.trim(),
+      image: g("pr-img").value.trim(), deadline: g("pr-deadline").value ? new Date(g("pr-deadline").value).toISOString() : "",
+      quotaLabel: g("pr-qlabel").value.trim() || "Sisa Kuota", quota: g("pr-quota").value !== "" ? Number(g("pr-quota").value) : null,
+      link: g("pr-link").value.trim(),
+    };
+  });
+}
+function renderPromoEditor() {
+  const wrap = $("promoEditor"); if (!wrap) return;
+  wrap.innerHTML = promoList.map((p, i) => `
+    <div class="promo-row" style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="set-grid">
+        <div class="field" style="margin:0"><label>Kategori (mis. Mobile Legends)</label><input class="input pr-cat" value="${escapeHtml(p.category || "")}" /></div>
+        <div class="field" style="margin:0"><label>Judul Promo</label><input class="input pr-title" value="${escapeHtml(p.title || "")}" placeholder="Bonus Spesial" /></div>
+        <div class="field" style="margin:0"><label>Info (mis. 210000 Diamond)</label><input class="input pr-info" value="${escapeHtml(p.info || "")}" /></div>
+        <div class="field" style="margin:0"><label>URL Gambar</label><input class="input pr-img" value="${escapeHtml(p.image || "")}" placeholder="https://..." /></div>
+        <div class="field" style="margin:0"><label>Batas Waktu (hitung mundur)</label><input class="input pr-deadline" type="datetime-local" value="${p.deadline ? toLocalInput(p.deadline) : ""}" /></div>
+        <div class="field" style="margin:0"><label>Label Kuota</label><input class="input pr-qlabel" value="${escapeHtml(p.quotaLabel || "Sisa Kuota")}" /></div>
+        <div class="field" style="margin:0"><label>Jumlah Kuota (kosong = sembunyi)</label><input class="input pr-quota" type="number" value="${p.quota != null ? p.quota : ""}" /></div>
+        <div class="field" style="margin:0"><label>Link saat diklik (opsional)</label><input class="input pr-link" value="${escapeHtml(p.link || "")}" placeholder="/topup?game=ml" /></div>
+      </div>
+      <button class="btn btn-light btn-sm pr-del" data-i="${i}" type="button" style="margin-top:8px;color:var(--red)">Hapus promo ini</button>
+    </div>`).join("") || '<p style="color:var(--text-soft);font-size:.85rem">Belum ada promo. Klik "Tambah Promo".</p>';
+  wrap.querySelectorAll(".pr-del").forEach((b) => b.addEventListener("click", () => { collectPromos(); promoList.splice(Number(b.dataset.i), 1); renderPromoEditor(); }));
+}
+$("addPromo").addEventListener("click", () => { collectPromos(); promoList.push({ quotaLabel: "Sisa Kuota" }); renderPromoEditor(); });
+$("savePromos").addEventListener("click", async () => {
+  collectPromos();
+  const promos = promoList.filter((p) => p.title || p.image);
+  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { promos } }) }); const e = $("promoMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("promoMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+});
 $("saveSettings").addEventListener("click", async () => {
   const body = {
     store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
-    settings: { heroTitle: $("setHeroTitle").value.trim(), heroImage: $("setHeroImage").value.trim(), heroSubtitle: $("setHeroSub").value.trim(), metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), banners: $("setBanners").value.split("\n").map((x) => x.trim()).filter(Boolean), promoBanners: $("setPromoBanners").value.split("\n").map((x) => x.trim()).filter(Boolean), layananTitle: $("setLayananTitle").value.trim(), layananDesc: $("setLayananDesc").value.trim(), topupTitle: $("setTopupTitle").value.trim(), topupDesc: $("setTopupDesc").value.trim(), articlesTitle: $("setArtikelTitle").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
+    settings: { heroTitle: $("setHeroTitle").value.trim(), heroImage: $("setHeroImage").value.trim(), heroSubtitle: $("setHeroSub").value.trim(), metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), banners: $("setBanners").value.split("\n").map((x) => x.trim()).filter(Boolean), layananTitle: $("setLayananTitle").value.trim(), layananDesc: $("setLayananDesc").value.trim(), topupTitle: $("setTopupTitle").value.trim(), topupDesc: $("setTopupDesc").value.trim(), articlesTitle: $("setArtikelTitle").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
   };
   try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); const e = $("setMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("setMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
 });
