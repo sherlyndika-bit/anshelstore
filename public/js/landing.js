@@ -77,7 +77,7 @@ function renderPromos(promos) {
     <div class="flex items-stretch gap-4">
       <div class="hidden md:flex flex-col justify-center shrink-0 w-[220px] rounded-xl bg-surface-container-low p-6">
         <div class="text-2xl font-extrabold text-on-surface">Promo</div>
-        <p class="text-body-md text-on-surface-variant mt-1">Jangan lewatkan promo &amp; diskon menarik dari anshelstore ✨</p>
+        <p class="text-body-md text-on-surface-variant mt-1">Jangan lewatkan promo &amp; diskon menarik dari Anshel Store ✨</p>
       </div>
       <div class="relative flex-1 min-w-0">
         <div id="promoScroll" class="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1">${promos.map(card).join("")}</div>
@@ -110,7 +110,7 @@ async function loadStore() {
   try {
     const d = await fetch("/api/settings").then((r) => r.json());
     const s = d.store || {}, set = d.settings || {};
-    if (s.whatsapp) { const cb = document.getElementById("ctaBuild"); if (cb) { cb.href = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau konsultasi jasa AI.")}`; cb.target = "_blank"; cb.rel = "noopener"; } }
+    if (s.whatsapp) { const cb = document.getElementById("ctaBuild"); if (cb) { cb.href = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo Anshel Store, saya mau konsultasi jasa AI.")}`; cb.target = "_blank"; cb.rel = "noopener"; } }
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
     setText("txtLayananTitle", set.layananTitle); setText("txtLayananDesc", set.layananDesc);
     setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);

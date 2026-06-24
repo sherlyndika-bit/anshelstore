@@ -172,7 +172,7 @@ $("submitOrder").addEventListener("click", async () => {
 
 function showInvoice(order) {
   const accRows = Object.entries(order.account).map(([k, v]) => `<div class="flex justify-between"><span>${esc(k)}</span><b class="text-on-surface">${esc(v)}</b></div>`).join("");
-  const waText = encodeURIComponent(`Halo anshelstore, konfirmasi pesanan:\nInvoice: ${order.code}\nGame: ${order.gameName}\nItem: ${order.itemLabel}\nTotal: ${rupiah(order.price)}\nBayar: ${order.paymentMethod}`);
+  const waText = encodeURIComponent(`Halo Anshel Store, konfirmasi pesanan:\nInvoice: ${order.code}\nGame: ${order.gameName}\nItem: ${order.itemLabel}\nTotal: ${rupiah(order.price)}\nBayar: ${order.paymentMethod}`);
   const waBtn = WA ? `<a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener" class="mt-sm w-full block text-center bg-gradient-to-r from-secondary to-pink text-on-primary rounded-full py-3 font-label-md text-label-md font-bold hover:scale-[1.02] transition-transform">💬 Konfirmasi via WhatsApp</a>` : "";
   $("invoice").classList.remove("hidden");
   $("invoice").innerHTML = `

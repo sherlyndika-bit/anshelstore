@@ -140,7 +140,7 @@ function smtpSend({ to, subject, text }) {
     const cmds = [
       "EHLO anshelstore", "AUTH LOGIN", b64(SMTP.user), b64(SMTP.pass),
       `MAIL FROM:<${SMTP.from}>`, `RCPT TO:<${to}>`, "DATA",
-      `From: anshelstore <${SMTP.from}>\r\nTo: <${to}>\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${text}\r\n.`,
+      `From: Anshel Store <${SMTP.from}>\r\nTo: <${to}>\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${text}\r\n.`,
       "QUIT",
     ];
     let step = 0, buf = "";
@@ -161,8 +161,8 @@ function smtpSend({ to, subject, text }) {
   });
 }
 async function sendOtpEmail(to, code) {
-  const subject = "Kode OTP anshelstore";
-  const text = `Kode verifikasi anshelstore kamu: ${code}\n\nKode berlaku 10 menit. Jangan bagikan ke siapa pun.`;
+  const subject = "Kode OTP Anshel Store";
+  const text = `Kode verifikasi Anshel Store kamu: ${code}\n\nKode berlaku 10 menit. Jangan bagikan ke siapa pun.`;
   if (SMTP_READY) { await smtpSend({ to, subject, text }); return { sent: true }; }
   console.log(`[OTP][DEV] Email belum dikonfigurasi. OTP untuk ${to} = ${code}`);
   return { sent: false, devCode: code };
@@ -198,7 +198,7 @@ function generateAIReply(text) {
   if (has("top up", "topup", "diamond", "uc", "vp", "voucher")) return "Untuk top up game, sebutkan: 1) nama game, 2) nominal, 3) User ID. Atau buka halaman Top Up. Game tersedia: Mobile Legends, Free Fire, Genshin, Valorant, PUBG. 🎮";
   if (has("harga", "biaya", "price", "tarif", "berapa")) return "Jasa Automation mulai Rp500.000, AI Chatbot + Dashboard mulai Rp1.500.000, Top Up Game mulai Rp5.000. Boleh ceritakan kebutuhanmu biar saya estimasikan lebih akurat?";
   if (has("chatbot", "ai", "automation", "otomasi", "bot", "dashboard")) return "Jasa AI Chat Automation kami: chatbot AI 24/7 + dashboard inbox dengan human takeover. Mau saya jadwalkan konsultasi gratis?";
-  if (has("halo", "hai", "hi", "pagi", "siang", "sore", "malam", "assalam")) return "Halo! 👋 Selamat datang di anshelstore. Ada yang bisa saya bantu? Kami melayani AI Chat Automation, Workflow Automation, dan Top Up Game.";
+  if (has("halo", "hai", "hi", "pagi", "siang", "sore", "malam", "assalam")) return "Halo! 👋 Selamat datang di Anshel Store. Ada yang bisa saya bantu? Kami melayani AI Chat Automation, Workflow Automation, dan Top Up Game.";
   if (has("terima kasih", "makasih", "thanks", "thank")) return "Sama-sama! 😊 Kalau ada yang lain, jangan ragu chat lagi ya.";
   return "Terima kasih atas pesannya! Bisa dijelaskan lebih detail kebutuhanmu? Ketik 'admin' kalau ingin terhubung dengan tim kami.";
 }
@@ -327,30 +327,14 @@ function allTags() {
   db.articles.filter((a) => a.published).forEach((a) => (a.tags || []).forEach((t) => set.set(t, (set.get(t) || 0) + 1)));
   return [...set.entries()].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
 }
-function renderBlogList(tag) {
-  let arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
-  if (tag) arts = arts.filter((a) => (a.tags || []).map((t) => t.toLowerCase()).includes(String(tag).toLowerCase()));
-  const chips = `<a href="/blog" class="px-md py-xs rounded-full font-label-md text-label-md ${!tag ? "bg-secondary text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-secondary"} transition-colors">Semua</a>` +
-    allTags().map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="px-md py-xs rounded-full font-label-md text-label-md ${tag && tag.toLowerCase() === t.name.toLowerCase() ? "bg-secondary text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-secondary"} transition-colors">${escHtml(t.name)} <span class="opacity-60">${t.count}</span></a>`).join("");
-  const cards = arts.map((a) => `
-    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex">
-      <div class="w-32 sm:w-44 shrink-0 overflow-hidden bg-surface-container">${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : '<div class="w-full h-full grid place-items-center text-3xl">📝</div>'}</div>
-      <div class="p-md flex flex-col gap-xs flex-grow min-w-0">
-        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-secondary-fixed text-secondary font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
-        <h2 class="font-headline-md text-headline-md text-on-surface leading-tight line-clamp-2">${escHtml(a.title)}</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 flex-grow">${escHtml(a.excerpt)}</p>
-        <span class="font-label-md text-label-md text-secondary inline-flex items-center gap-xs">Baca <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
-      </div>
-    </a>`).join("");
-  const chatBox = `
-    <aside class="lg:col-span-1 lg:sticky lg:top-[88px] self-start">
-      <div class="bg-surface-container-lowest rounded-2xl shadow-md border border-outline-variant/20 overflow-hidden flex flex-col" style="height:calc(100vh - 120px);min-height:480px">
+function communityChatCard(boxStyle) {
+  return `<div class="bg-surface-container-lowest rounded-2xl shadow-md border border-outline-variant/20 overflow-hidden flex flex-col" style="${boxStyle}">
         <div class="px-md py-sm bg-gradient-to-r from-secondary to-pink text-on-primary flex items-center gap-xs">
           <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span></span>
           <b class="font-label-md text-label-md">Live Chat Komunitas</b>
           <span id="chatOnline" class="ml-auto font-label-sm text-label-sm opacity-90"></span>
         </div>
-        <div id="chatList" class="flex-grow overflow-y-auto p-md flex flex-col gap-sm bg-surface"></div>
+        <div id="chatList" class="flex-grow overflow-y-auto p-md flex flex-col gap-sm bg-surface" style="min-height:0"></div>
         <form id="chatForm" class="p-sm border-t border-outline-variant/30 flex flex-col gap-xs bg-surface-container-lowest">
           <input id="chatName" type="text" placeholder="Nama kamu (opsional)" class="w-full rounded-full border-outline-variant bg-surface text-[13px] px-3 py-1.5 focus:border-secondary focus:ring-secondary"/>
           <div class="flex gap-xs">
@@ -358,37 +342,17 @@ function renderBlogList(tag) {
             <button class="shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-pink text-on-primary grid place-items-center hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></button>
           </div>
         </form>
-      </div>
-    </aside>`;
-  return `<!DOCTYPE html><html class="light" lang="id"><head>
-    <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>${tag ? escHtml(tag) + " — " : ""}Komunitas & Artikel — anshelstore</title>
-    <meta name="description" content="Komunitas anshelstore: ngobrol langsung di live chat, baca artikel & tips top up game dan AI automation."/>
-    <link rel="canonical" href="${siteUrl()}/blog"/>
-    ${THEME_HEAD}</head>
-    <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
-    ${pageNav()}
-    <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg">
-      <div class="mb-lg">
-        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Komunitas anshelstore</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant mt-xs">Baca artikel & tips di kiri, ngobrol bareng komunitas di live chat sebelah kanan. 👋</p>
-      </div>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter lg:gap-xl">
-        <div class="lg:col-span-2">
-          <div class="flex flex-wrap gap-xs mb-md">${chips}</div>
-          <div class="flex flex-col gap-md">${cards || '<p class="text-on-surface-variant text-center py-lg">Belum ada artikel di kategori ini.</p>'}</div>
-        </div>
-        ${chatBox}
-      </div>
-    </main>${pageFooter()}<script src="/js/site.js"></script>
-    <script>
+      </div>`;
+}
+function communityChatScript() {
+  return `<script>
       (function(){
-        var list=document.getElementById("chatList"), online=document.getElementById("chatOnline");
-        var last=0, atBottom=true;
+        var list=document.getElementById("chatList"); if(!list) return;
+        var last=0, atBottom=true, nameEl=document.getElementById("chatName"), textEl=document.getElementById("chatText");
         var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
-        var savedName=localStorage.getItem("anshel_chat_name"); if(savedName) document.getElementById("chatName").value=savedName;
+        var savedName=localStorage.getItem("anshel_chat_name"); if(savedName&&nameEl) nameEl.value=savedName;
         function time(ts){var d=new Date(ts);return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);}
-        function color(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return "hsl("+(h%360)+",65%,45%)";}
+        function color(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return "hsl("+(h%360)+",60%,42%)";}
         list.addEventListener("scroll",function(){atBottom=list.scrollHeight-list.scrollTop-list.clientHeight<60;});
         function add(m){
           var d=document.createElement("div"); d.className="flex gap-2 items-start";
@@ -406,15 +370,55 @@ function renderBlogList(tag) {
           }).catch(function(){});
         }
         document.getElementById("chatForm").addEventListener("submit",function(e){ e.preventDefault();
-          var t=document.getElementById("chatText"); var text=t.value.trim(); if(!text)return;
-          var name=document.getElementById("chatName").value.trim(); if(name)localStorage.setItem("anshel_chat_name",name);
+          var text=textEl.value.trim(); if(!text)return;
+          var name=nameEl.value.trim(); if(name)localStorage.setItem("anshel_chat_name",name);
           var tok=localStorage.getItem("anshel_token"); var h={"Content-Type":"application/json"}; if(tok)h["x-auth-token"]=tok;
-          t.value="";
+          textEl.value="";
           fetch("/api/community",{method:"POST",headers:h,body:JSON.stringify({name:name,text:text})}).then(function(r){return r.json();}).then(function(){ atBottom=true; poll(); }).catch(function(){});
         });
         poll(); setInterval(poll,4000);
       })();
-    </script>
+    </script>`;
+}
+
+function renderBlogList(tag) {
+  let arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
+  if (tag) arts = arts.filter((a) => (a.tags || []).map((t) => t.toLowerCase()).includes(String(tag).toLowerCase()));
+  const chips = `<a href="/blog" class="px-md py-xs rounded-full font-label-md text-label-md ${!tag ? "bg-secondary text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-secondary"} transition-colors">Semua</a>` +
+    allTags().map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="px-md py-xs rounded-full font-label-md text-label-md ${tag && tag.toLowerCase() === t.name.toLowerCase() ? "bg-secondary text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-secondary"} transition-colors">${escHtml(t.name)} <span class="opacity-60">${t.count}</span></a>`).join("");
+  const cards = arts.map((a) => `
+    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex">
+      <div class="w-32 sm:w-44 shrink-0 overflow-hidden bg-surface-container">${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : '<div class="w-full h-full grid place-items-center text-3xl">📝</div>'}</div>
+      <div class="p-md flex flex-col gap-xs flex-grow min-w-0">
+        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-secondary-fixed text-secondary font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
+        <h2 class="font-headline-md text-headline-md text-on-surface leading-tight line-clamp-2">${escHtml(a.title)}</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 flex-grow">${escHtml(a.excerpt)}</p>
+        <span class="font-label-md text-label-md text-secondary inline-flex items-center gap-xs">Baca <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
+      </div>
+    </a>`).join("");
+  const chatBox = `<aside class="lg:col-span-1 lg:sticky lg:top-[88px] self-start" style="height:calc(100vh - 120px);min-height:480px">${communityChatCard("height:100%")}</aside>`;
+  return `<!DOCTYPE html><html class="light" lang="id"><head>
+    <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>${tag ? escHtml(tag) + " — " : ""}Komunitas & Artikel — Anshel Store</title>
+    <meta name="description" content="Komunitas Anshel Store: ngobrol langsung di live chat, baca artikel & tips top up game dan AI automation."/>
+    <link rel="canonical" href="${siteUrl()}/blog"/>
+    ${THEME_HEAD}</head>
+    <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
+    ${pageNav()}
+    <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+      <div class="mb-lg">
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Komunitas Anshel Store</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mt-xs">Baca artikel & tips di kiri, ngobrol bareng komunitas di live chat sebelah kanan. 👋</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter lg:gap-xl">
+        <div class="lg:col-span-2">
+          <div class="flex flex-wrap gap-xs mb-md">${chips}</div>
+          <div class="flex flex-col gap-md">${cards || '<p class="text-on-surface-variant text-center py-lg">Belum ada artikel di kategori ini.</p>'}</div>
+        </div>
+        ${chatBox}
+      </div>
+    </main>${pageFooter()}<script src="/js/site.js"></script>
+    </main>${pageFooter()}<script src="/js/site.js"></script>${communityChatScript()}
     </body></html>`;
 }
 
@@ -427,6 +431,7 @@ function renderArticle(a) {
   const cats = allTags().slice(0, 12);
   const sidebar = `
     <aside class="lg:col-span-1 flex flex-col gap-md lg:sticky lg:top-[96px] self-start">
+      ${communityChatCard("height:440px")}
       <div class="bg-surface-container-lowest rounded-lg p-md shadow-sm border border-outline-variant/20">
         <h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Kategori</h3>
         <div class="flex flex-wrap gap-xs">${cats.length ? cats.map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="bg-pink-50 text-pink font-label-sm text-label-sm px-sm py-[3px] rounded-full hover:bg-pink hover:text-on-primary transition-colors">${escHtml(t.name)}</a>`).join("") : '<span class="text-on-surface-variant font-label-md text-label-md">—</span>'}</div>
@@ -451,11 +456,11 @@ function renderArticle(a) {
   const jsonld = {
     "@context": "https://schema.org", "@type": "BlogPosting", "headline": a.title, "description": a.excerpt,
     "image": a.cover || undefined, "datePublished": new Date(a.createdAt).toISOString(), "dateModified": new Date(a.updatedAt || a.createdAt).toISOString(),
-    "author": { "@type": "Organization", "name": a.author || "anshelstore" }, "publisher": { "@type": "Organization", "name": "anshelstore" }, "mainEntityOfPage": u,
+    "author": { "@type": "Organization", "name": a.author || "Anshel Store" }, "publisher": { "@type": "Organization", "name": "Anshel Store" }, "mainEntityOfPage": u,
   };
   return `<!DOCTYPE html><html class="light" lang="id"><head>
     <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>${escHtml(a.title)} — anshelstore</title>
+    <title>${escHtml(a.title)} — Anshel Store</title>
     <meta name="description" content="${escHtml(a.excerpt)}"/>
     <link rel="canonical" href="${u}"/>
     <meta property="og:title" content="${escHtml(a.title)}"/>
@@ -474,7 +479,7 @@ function renderArticle(a) {
         <div class="flex flex-wrap gap-xs mb-sm">${(a.tags || []).map((t) => `<a href="/blog?tag=${encodeURIComponent(t)}" class="bg-pink-50 text-pink font-label-sm text-label-sm px-sm py-[3px] rounded-full">${escHtml(t)}</a>`).join("")}</div>
         <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm max-w-3xl">${escHtml(a.title)}</h1>
         <div class="flex items-center gap-sm text-on-surface-variant font-label-md text-label-md">
-          <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">person</span>${escHtml(a.author || "anshelstore")}</span>
+          <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">person</span>${escHtml(a.author || "Anshel Store")}</span>
           <span>•</span><span>${dateStr}</span><span>•</span>
           <span class="inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">schedule</span>${readMin} mnt baca</span>
         </div>
@@ -496,7 +501,7 @@ function renderArticle(a) {
       </div>
       ${sidebar}
     </main>${pageFooter()}
-    <script src="/js/site.js"></script>
+    <script src="/js/site.js"></script>${communityChatScript()}
     <script>
       (function(){
         var slug=${JSON.stringify(a.slug)}; var list=document.getElementById("commentList");
@@ -828,7 +833,7 @@ async function handleApi(req, res, pathname, query) {
     let slug = b.slug ? slugify(b.slug) : slugify(b.title);
     if (db.articles.some((a) => a.slug === slug)) slug = slug + "-" + Date.now().toString().slice(-4);
     const now = Date.now();
-    const art = { id: nextId("article"), slug, title: b.title, excerpt: b.excerpt || "", cover: b.cover || "", tags: Array.isArray(b.tags) ? b.tags : (b.tags ? String(b.tags).split(",").map((t) => t.trim()).filter(Boolean) : []), author: b.author || "Tim anshelstore", content: b.content || "", published: b.published !== false, createdAt: now, updatedAt: now };
+    const art = { id: nextId("article"), slug, title: b.title, excerpt: b.excerpt || "", cover: b.cover || "", tags: Array.isArray(b.tags) ? b.tags : (b.tags ? String(b.tags).split(",").map((t) => t.trim()).filter(Boolean) : []), author: b.author || "Tim Anshel Store", content: b.content || "", published: b.published !== false, createdAt: now, updatedAt: now };
     db.articles.push(art); saveDB(); return sendJSON(res, 201, art);
   }
   let ma = pathname.match(/^\/api\/admin\/articles\/(\d+)$/);
@@ -858,7 +863,7 @@ async function handleApi(req, res, pathname, query) {
     const b = await readBody(req);
     const conv = { id: nextId("conversation"), name: b.name || "Pengunjung", mode: "ai", agentName: null, unread: 0, createdAt: Date.now(), lastTs: Date.now(), lastText: "" };
     db.conversations.push(conv); saveDB();
-    return sendJSON(res, 201, { conversation: conv, messages: [addMessage(conv.id, "ai", `Halo ${conv.name}! 👋 Saya asisten AI anshelstore. Ada yang bisa saya bantu?`)] });
+    return sendJSON(res, 201, { conversation: conv, messages: [addMessage(conv.id, "ai", `Halo ${conv.name}! 👋 Saya asisten AI Anshel Store. Ada yang bisa saya bantu?`)] });
   }
   if (pathname === "/api/chat/message" && method === "POST") {
     const b = await readBody(req); const conv = db.conversations.find((c) => c.id === Number(b.conversationId));

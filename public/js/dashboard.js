@@ -294,7 +294,7 @@ function openEditor(a) {
   $("artExcerpt").value = a ? a.excerpt : "";
   $("artCover").value = a ? a.cover : "";
   $("artTags").value = a ? (a.tags || []).join(", ") : "";
-  $("artAuthor").value = a ? (a.author || "") : "Tim anshelstore";
+  $("artAuthor").value = a ? (a.author || "") : "Tim Anshel Store";
   $("artContent").value = a ? a.content : "";
   $("artPublished").checked = a ? a.published : true;
   artMsg("");

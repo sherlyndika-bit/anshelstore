@@ -19,7 +19,7 @@ function initChatWidget(options = {}) {
       <div class="cw-head">
         <div style="display:flex;align-items:center;gap:10px">
           <span class="cw-ava">🤖</span>
-          <div><strong>anshelstore</strong><div class="cw-sub" id="cwStatus">Asisten AI • online</div></div>
+          <div><strong>Anshel Store</strong><div class="cw-sub" id="cwStatus">Asisten AI • online</div></div>
         </div>
         <button id="cwClose" class="cw-x" aria-label="Tutup">✕</button>
       </div>
