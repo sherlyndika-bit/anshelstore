@@ -1,31 +1,23 @@
-// Homepage anshelstore — wire kontak + render game bento dari backend
-// Pastikan halaman selalu mulai dari atas (hindari lompat ke #anchor lama)
+// Homepage anshelstore — katalog game (bintang), search, banner promo, artikel
 if (location.hash) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
 window.scrollTo(0, 0);
 
 const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
-const GRADIENT = {
-  ml: "linear-gradient(135deg,#00658d,#00baff)",
-  ff: "linear-gradient(135deg,#9f4122,#ff906d)",
-  genshin: "linear-gradient(135deg,#8127cf,#00baff)",
-  valorant: "linear-gradient(135deg,#ba1a1a,#8127cf)",
-  pubgm: "linear-gradient(135deg,#004c6b,#00658d)",
-};
-const gradOf = (id) => GRADIENT[id] || "linear-gradient(135deg,#00658d,#8127cf)";
+const GRAD = { ml: "from-primary to-primary-container", ff: "from-tertiary to-tertiary-container", genshin: "from-secondary to-primary-container", valorant: "from-error to-secondary", pubgm: "from-primary-fixed-variant to-primary" };
+const gradOf = (id) => GRAD[id] || "from-pink to-secondary";
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-const yearEl = document.getElementById("year");
-if (yearEl) yearEl.textContent = new Date().getFullYear();
+let allGames = [];
 
 async function loadStore() {
   try {
     const d = await fetch("/api/settings").then((r) => r.json());
     const s = d.store || {}, set = d.settings || {};
     if (s.whatsapp) {
-      const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau tanya layanan.")}`;
-      ["ctaNav", "ctaBuild", "ctaFooter"].forEach((id) => { const el = document.getElementById(id); if (el) el.href = wa; });
+      const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau konsultasi jasa AI.")}`;
+      const cb = document.getElementById("ctaBuild"); if (cb) cb.href = wa;
     }
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
-    setText("heroBadge", set.heroBadge);
     setText("heroSub", set.heroSubtitle);
     setText("txtLayananTitle", set.layananTitle);
     setText("txtLayananDesc", set.layananDesc);
@@ -34,65 +26,63 @@ async function loadStore() {
     setText("txtArtikelTitle", set.articlesTitle);
     const img = document.getElementById("heroImg");
     if (img && set.heroImage) img.src = set.heroImage;
+    // Banner promo
+    if (set.bannerImage) {
+      const b = document.getElementById("promoBanner");
+      document.getElementById("promoImg").src = set.bannerImage;
+      if (set.bannerLink) b.href = set.bannerLink;
+      b.classList.remove("hidden");
+    }
   } catch (e) { /* abaikan */ }
 }
+
+function gameCard(g) {
+  const visual = g.image
+    ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-full h-full object-cover"/>`
+    : `<span class="text-[2.4rem]">${EMOJI[g.id] || "🎮"}</span>`;
+  return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group bg-surface-container-lowest rounded-lg p-sm border border-pink-soft/40 shadow-sm hover:-translate-y-1 hover:shadow-[0_12px_28px_-10px_rgba(232,74,138,0.4)] transition-all text-center">
+    <div class="aspect-square rounded-xl overflow-hidden bg-gradient-to-br ${gradOf(g.id)} flex items-center justify-center mb-xs">${visual}</div>
+    <div class="font-label-md text-label-md text-on-surface font-bold leading-tight truncate">${esc(g.name)}</div>
+    <div class="font-label-sm text-label-sm text-on-surface-variant truncate">${esc(g.publisher || "")}</div>
+  </a>`;
+}
+
+function renderCatalog(filter) {
+  const wrap = document.getElementById("gameCatalog");
+  const q = (filter || "").toLowerCase().trim();
+  const list = q ? allGames.filter((g) => g.name.toLowerCase().includes(q) || (g.publisher || "").toLowerCase().includes(q)) : allGames;
+  wrap.innerHTML = list.map(gameCard).join("");
+  document.getElementById("noGameHome").classList.toggle("hidden", list.length > 0);
+}
+
+async function loadGames() {
+  try {
+    allGames = await fetch("/api/games").then((r) => r.json());
+    renderCatalog("");
+  } catch (e) { document.getElementById("gameCatalog").innerHTML = '<div class="col-span-full text-center text-error py-md">Gagal memuat game.</div>'; }
+}
+
+const searchEl = document.getElementById("catalogSearch");
+if (searchEl) searchEl.addEventListener("input", (e) => {
+  renderCatalog(e.target.value);
+  if (e.target.value) document.getElementById("katalog").scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 async function loadArticles() {
   try {
     const arts = await fetch("/api/articles").then((r) => r.json());
     if (!arts.length) return;
-    const grid = document.getElementById("articlesGrid");
-    grid.innerHTML = arts.slice(0, 3).map((a) => `
-      <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm shadow-primary/5 border border-outline-variant/20 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col">
-        <div class="aspect-[16/9] overflow-hidden bg-surface-container">${a.cover ? `<img src="${a.cover}" alt="${a.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
+    document.getElementById("articlesGrid").innerHTML = arts.slice(0, 3).map((a) => `
+      <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-pink-soft/40 hover:-translate-y-1 hover:shadow-lg transition-all flex flex-col">
+        <div class="aspect-[16/9] overflow-hidden bg-surface-container">${a.cover ? `<img src="${esc(a.cover)}" alt="${esc(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
         <div class="p-md flex flex-col gap-xs flex-grow">
-          <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-xs py-[2px] rounded-full">${t}</span>`).join("")}</div>
-          <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${a.title}</h3>
-          <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${a.excerpt}</p>
-          <span class="font-label-md text-label-md text-primary inline-flex items-center gap-xs mt-xs">Baca <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
+          <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-pink-50 text-pink font-label-sm text-label-sm px-xs py-[2px] rounded-full">${esc(t)}</span>`).join("")}</div>
+          <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${esc(a.title)}</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${esc(a.excerpt)}</p>
         </div>
       </a>`).join("");
     document.getElementById("articlesSection").classList.remove("hidden");
   } catch (e) { /* abaikan */ }
-}
-
-function bigCard(g) {
-  return `
-  <div class="md:col-span-8 group relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.05)] h-[300px] md:h-[400px]" style="background:${gradOf(g.id)}">
-    <div class="absolute inset-0 flex items-center justify-center opacity-30 select-none pointer-events-none" style="font-size:14rem;line-height:1">${EMOJI[g.id] || "🎮"}</div>
-    <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/70 via-inverse-surface/10 to-transparent"></div>
-    <div class="absolute bottom-0 left-0 p-md w-full flex justify-between items-end">
-      <div>
-        <span class="inline-block bg-primary-container text-on-primary-container font-label-sm text-label-sm px-xs py-[2px] rounded-full mb-xs">${g.publisher || "Game"}</span>
-        <h3 class="font-headline-lg text-headline-lg text-on-primary">${g.name}</h3>
-      </div>
-      <a href="/topup" class="bg-surface glass-panel text-primary font-label-md text-label-md px-md py-sm rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all">Top Up</a>
-    </div>
-  </div>`;
-}
-function smallCard(g) {
-  return `
-  <div class="flex-1 relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.05)] group h-[188px]" style="background:${gradOf(g.id)}">
-    <div class="absolute inset-0 flex items-center justify-center opacity-30 select-none pointer-events-none" style="font-size:7rem;line-height:1">${EMOJI[g.id] || "🎮"}</div>
-    <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/70 via-transparent to-transparent"></div>
-    <div class="absolute bottom-0 left-0 p-md w-full flex justify-between items-end">
-      <h3 class="font-headline-md text-headline-md text-on-primary">${g.name}</h3>
-      <a href="/topup" class="bg-surface glass-panel text-primary font-label-md text-label-md px-sm py-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all flex items-center"><span class="material-symbols-outlined text-[16px]">add</span></a>
-    </div>
-  </div>`;
-}
-
-async function loadGames() {
-  const wrap = document.getElementById("gamesBento");
-  try {
-    const games = await fetch("/api/games").then((r) => r.json());
-    if (!games.length) { wrap.innerHTML = ""; return; }
-    const big = games[0];
-    const side = games.slice(1, 3);
-    wrap.innerHTML = bigCard(big) + `<div class="md:col-span-4 flex flex-col gap-gutter">${side.map(smallCard).join("")}</div>`;
-  } catch (e) {
-    wrap.innerHTML = '<div class="md:col-span-12 text-center text-error py-md">Gagal memuat game.</div>';
-  }
 }
 
 loadStore();

@@ -30,6 +30,8 @@ async function loadGames() {
   games = await fetch("/api/games").then((r) => r.json());
   filtered = games;
   renderGames();
+  const pre = new URLSearchParams(location.search).get("game");
+  if (pre) { const g = games.find((x) => x.id === pre); if (g) { const el = document.querySelector(`.game-tile[data-id="${pre}"]`); selectGame(pre, el); } }
 }
 
 $("gameSearch").addEventListener("input", (e) => {
