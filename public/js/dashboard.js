@@ -72,8 +72,8 @@ const sidebar = $("sidebar"), backdrop = $("backdrop");
 $("menuBtn").addEventListener("click", () => { sidebar.classList.toggle("open"); backdrop.classList.toggle("show"); });
 backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
 
-const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Game", articles: "Artikel", settings: "Konten & Harga", finance: "Finansial", team: "Tim & Akses" };
-const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "finance", "team"];
+const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses" };
+const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team"];
 document.querySelectorAll(".side-nav button").forEach((btn) =>
   btn.addEventListener("click", () => { location.hash = btn.dataset.page; })
 );
@@ -93,6 +93,7 @@ function routeTo(page) {
   if (page === "finance") loadFinance();
   if (page === "team") loadTeam();
   if (page === "produk") loadProduk();
+  if (page === "integrasi") loadIntegrasi();
 }
 window.addEventListener("hashchange", () => { if (TOKEN) routeTo(location.hash.replace("#", "")); });
 
@@ -318,7 +319,7 @@ $("saveArticle").addEventListener("click", async () => {
 let loadedServices = [], loadedGames = [];
 async function loadSettings() {
   const d = await api("/api/admin/settings");
-  const st = d.store || {}, s = d.settings || {}, integ = s.integrations || {};
+  const st = d.store || {}, s = d.settings || {};
   $("setName").value = st.name || ""; $("setTagline").value = st.tagline || "";
   $("setWa").value = st.whatsapp || ""; $("setEmail").value = st.email || "";
   $("setHeroTitle").value = s.heroTitle || ""; $("setHeroImage").value = s.heroImage || "";
@@ -329,10 +330,6 @@ async function loadSettings() {
   $("setLayananTitle").value = s.layananTitle || ""; $("setLayananDesc").value = s.layananDesc || "";
   $("setTopupTitle").value = s.topupTitle || ""; $("setTopupDesc").value = s.topupDesc || "";
   $("setArtikelTitle").value = s.articlesTitle || "";
-  // Integrasi
-  $("intPayProvider").value = integ.paymentProvider || ""; $("intPayKey").value = integ.paymentKey || "";
-  $("intAiProvider").value = integ.aiProvider || ""; $("intAiKey").value = integ.aiKey || "";
-  $("intGcUrl").value = integ.gameCheckUrl || ""; $("intGcKey").value = integ.gameCheckKey || "";
 
   loadedServices = await fetch("/api/services").then((r) => r.json());
   $("servicesEditor").innerHTML = loadedServices.map((sv, i) => `
@@ -343,6 +340,13 @@ async function loadSettings() {
         <div class="field" style="margin:0"><label>URL Gambar</label><input class="input svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" placeholder="https://..." /></div>
       </div>
     </div>`).join("");
+}
+async function loadIntegrasi() {
+  const d = await api("/api/admin/settings");
+  const integ = (d.settings || {}).integrations || {};
+  $("intPayProvider").value = integ.paymentProvider || ""; $("intPayKey").value = integ.paymentKey || "";
+  $("intAiProvider").value = integ.aiProvider || ""; $("intAiKey").value = integ.aiKey || "";
+  $("intGcUrl").value = integ.gameCheckUrl || ""; $("intGcKey").value = integ.gameCheckKey || "";
 }
 $("saveIntegrations").addEventListener("click", async () => {
   const integrations = {
