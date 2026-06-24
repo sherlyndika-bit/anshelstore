@@ -3,14 +3,14 @@
    Professional, modern, mobile-first
    ============================================================ */
 :root {
-  /* Brand */
-  --primary: #6d28d9;
-  --primary-600: #7c3aed;
-  --primary-500: #8b5cf6;
-  --primary-50: #f5f3ff;
-  --accent: #06b6d4;
-  --grad: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4f46e5 100%);
-  --grad-soft: linear-gradient(135deg, #ede9fe, #e0f2fe);
+  /* Brand — pink + hijau */
+  --primary: #db2777;
+  --primary-600: #e84a8a;
+  --primary-500: #f06ba3;
+  --primary-50: #fff0f6;
+  --accent: #16a34a;
+  --grad: linear-gradient(135deg, #e84a8a 0%, #ec4899 40%, #16a34a 100%);
+  --grad-soft: linear-gradient(135deg, #ffe3ee, #dcfce7);
 
   /* Neutrals (light, professional) */
   --bg: #ffffff;
@@ -39,8 +39,8 @@
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06), 0 1px 3px rgba(15, 23, 42, .04);
   --shadow: 0 4px 6px -1px rgba(15, 23, 42, .08), 0 2px 4px -2px rgba(15, 23, 42, .05);
   --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, .1), 0 8px 10px -6px rgba(15, 23, 42, .05);
-  --shadow-primary: 0 10px 30px -8px rgba(124, 58, 237, .45);
-  --ring: 0 0 0 4px rgba(124, 58, 237, .15);
+  --shadow-primary: 0 10px 30px -8px rgba(232, 74, 138, .45);
+  --ring: 0 0 0 4px rgba(232, 74, 138, .15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,7 +68,7 @@ img, svg { max-width: 100%; display: block; }
   white-space: nowrap; font-family: inherit;
 }
 .btn-primary { background: var(--grad); color: #fff; box-shadow: var(--shadow-primary); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -8px rgba(124,58,237,.55); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -8px rgba(232,74,138,.55); }
 .btn-light { background: var(--surface); color: var(--text); border-color: var(--border); box-shadow: var(--shadow-sm); }
 .btn-light:hover { border-color: var(--primary-500); color: var(--primary); transform: translateY(-2px); }
 .btn-ghost { background: transparent; color: var(--text-soft); }
@@ -102,7 +102,7 @@ img, svg { max-width: 100%; display: block; }
 .hero { position: relative; padding: 84px 0 72px; overflow: hidden; }
 .hero::before {
   content: ""; position: absolute; inset: 0;
-  background: radial-gradient(60% 60% at 80% 0%, rgba(124,58,237,.10), transparent 60%),
+  background: radial-gradient(60% 60% at 80% 0%, rgba(232,74,138,.10), transparent 60%),
               radial-gradient(50% 50% at 10% 10%, rgba(6,182,212,.08), transparent 60%);
   z-index: -1;
 }

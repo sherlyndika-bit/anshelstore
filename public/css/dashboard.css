@@ -159,7 +159,7 @@ table.data tr:hover td { background: var(--bg-soft); }
   .stat .label { font-size: .78rem; }
   .two-col { grid-template-columns: 1fr !important; }
   .set-grid, .fin-grid { grid-template-columns: 1fr !important; }
-  .panel-card { padding: 16px; border-radius: 20px; box-shadow: 0 8px 24px -12px rgba(129,39,207,.18); }
+  .panel-card { padding: 16px; border-radius: 20px; box-shadow: 0 8px 24px -12px rgba(232,74,138,.18); }
   .topbar { border-radius: 0 0 20px 20px; }
   .topbar h1 { font-size: 1.05rem; }
   table.data { font-size: .82rem; }
@@ -182,7 +182,7 @@ table.data tr:hover td { background: var(--bg-soft); }
     color: #94a3b8; font-size: .64rem; font-weight: 700; cursor: pointer; font-family: inherit; padding: 6px 2px; border-radius: 16px; transition: .18s;
   }
   .bottom-nav button .material-symbols-outlined { font-size: 22px; }
-  .bottom-nav button.active { color: #fff; background: linear-gradient(135deg, #e84a8a, #8127cf); box-shadow: 0 6px 16px -4px rgba(232,74,138,.5); }
+  .bottom-nav button.active { color: #fff; background: linear-gradient(135deg, #e84a8a, #16a34a); box-shadow: 0 6px 16px -4px rgba(232,74,138,.5); }
   .bottom-nav button.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
 }
 

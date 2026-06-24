@@ -5,11 +5,11 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 
 const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
 const GRAD = {
-  ml: "linear-gradient(160deg,#3b4cca,#7b2ff7)", ff: "linear-gradient(160deg,#ff6a00,#ee0979)",
-  genshin: "linear-gradient(160deg,#0ea5b7,#6366f1)", valorant: "linear-gradient(160deg,#ff4655,#7b2ff7)",
+  ml: "linear-gradient(160deg,#1d4ed8,#3b82f6)", ff: "linear-gradient(160deg,#ff6a00,#ee0979)",
+  genshin: "linear-gradient(160deg,#0ea5b7,#0369a1)", valorant: "linear-gradient(160deg,#ff4655,#e11d48)",
   pubgm: "linear-gradient(160deg,#f7971e,#a85a00)",
 };
-const DEF_GRAD = "linear-gradient(160deg,#00658d,#8127cf)";
+const DEF_GRAD = "linear-gradient(160deg,#e84a8a,#16a34a)";
 const CAT = { ml: "MOBA", ff: "Battle Royale", pubgm: "Battle Royale", genshin: "RPG", valorant: "FPS" };
 const gradOf = (g) => GRAD[g.id] || DEF_GRAD;
 const catOf = (g) => CAT[g.id] || "Lainnya";
