@@ -355,14 +355,33 @@ async function loadIntegrasi() {
   $("intPayProvider").value = integ.paymentProvider || ""; $("intPayKey").value = integ.paymentKey || "";
   $("intAiProvider").value = integ.aiProvider || ""; $("intAiKey").value = integ.aiKey || "";
   $("intGcUrl").value = integ.gameCheckUrl || ""; $("intGcKey").value = integ.gameCheckKey || "";
+  $("intGpName").value = integ.gameProvider || ""; $("intGpUrl").value = integ.gameProviderUrl || ""; $("intGpKey").value = integ.gameProviderKey || "";
 }
-$("saveIntegrations").addEventListener("click", async () => {
-  const integrations = {
+function buildIntegrations() {
+  return {
     paymentProvider: $("intPayProvider").value.trim(), paymentKey: $("intPayKey").value.trim(),
     aiProvider: $("intAiProvider").value.trim(), aiKey: $("intAiKey").value.trim(),
     gameCheckUrl: $("intGcUrl").value.trim(), gameCheckKey: $("intGcKey").value.trim(),
+    gameProvider: $("intGpName").value.trim(), gameProviderUrl: $("intGpUrl").value.trim(), gameProviderKey: $("intGpKey").value.trim(),
   };
-  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { integrations } }) }); const e = $("intMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("intMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+}
+async function saveIntegAll(msgId) {
+  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { integrations: buildIntegrations() } }) }); const e = $(msgId); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; }
+  catch (e) { const x = $(msgId); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+}
+$("saveIntegrations").addEventListener("click", () => saveIntegAll("intMsg"));
+$("saveProvider").addEventListener("click", () => saveIntegAll("gpMsg"));
+$("syncGames").addEventListener("click", async () => {
+  const m = $("gpMsg"); m.textContent = "Menyinkronkan…"; m.className = "auth-msg";
+  await saveIntegAll("gpMsg");
+  try {
+    const r = await api("/api/admin/sync-games", { method: "POST", body: "{}" });
+    if (!r || r.error) throw new Error(r && r.error ? r.error : "gagal");
+    m.textContent = `Berhasil! ${r.games} game, ${r.items} item tersinkron. ✅`; m.className = "auth-msg ok";
+    if (typeof loadProduk === "function") loadProduk();
+  } catch (e) {
+    m.textContent = "Gagal sync: " + (e.message || "cek URL/format provider"); m.className = "auth-msg err";
+  }
 });
 let promoList = [];
 function toLocalInput(iso) { const d = new Date(iso); if (isNaN(d)) return ""; const p = (n) => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }

@@ -196,6 +196,21 @@
             <button class="btn btn-primary" id="saveIntegrations" style="margin-top:8px">Simpan Integrasi</button>
             <span class="auth-msg" id="intMsg" style="margin-left:10px"></span>
           </div>
+
+          <div class="panel-card">
+            <h3>🎮 Provider Game (H2H) — ambil produk otomatis</h3>
+            <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Sambungkan ke provider top-up (mis. Digiflazz, VIP Reseller, dll). Endpoint harus mengembalikan daftar produk JSON (array atau {data:[...]}). Klik <b>Sync</b> untuk menarik & memperbarui daftar game beserta harganya secara otomatis.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
+              <div class="field"><label>Nama Provider</label><input class="input" id="intGpName" placeholder="digiflazz / vip-reseller" /></div>
+              <div class="field"><label>URL API Price-list (GET)</label><input class="input" id="intGpUrl" placeholder="https://provider.com/api/price-list" /></div>
+              <div class="field" style="grid-column:1/-1"><label>API Key / Token</label><input class="input" id="intGpKey" type="password" placeholder="••••••" /></div>
+            </div>
+            <div style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <button class="btn btn-primary" id="saveProvider">Simpan Provider</button>
+              <button class="btn btn-light" id="syncGames">🔄 Sync Produk dari Provider</button>
+              <span class="auth-msg" id="gpMsg"></span>
+            </div>
+          </div>
         </section>
 
         <!-- PRODUK & GAME -->

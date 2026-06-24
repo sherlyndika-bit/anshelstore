@@ -826,6 +826,41 @@ async function handleApi(req, res, pathname, query) {
     if (Array.isArray(b.games)) db.games = b.games;
     saveDB(); return sendJSON(res, 200, db.games);
   }
+  if (pathname === "/api/admin/sync-games" && method === "POST") {
+    if (!authed) return needAuth();
+    const integ = db.settings.integrations || {};
+    if (!integ.gameProviderUrl) return sendJSON(res, 400, { error: "Isi dulu URL API provider di Integrasi & API." });
+    try {
+      const headers = integ.gameProviderKey ? { "Authorization": "Bearer " + integ.gameProviderKey, "X-API-Key": integ.gameProviderKey } : {};
+      const raw = await httpsRequest("GET", integ.gameProviderUrl, { headers });
+      const list = Array.isArray(raw) ? raw
+        : Array.isArray(raw && raw.data) ? raw.data
+        : Array.isArray(raw && raw.products) ? raw.products
+        : Array.isArray(raw && raw.pricelist) ? raw.pricelist : null;
+      if (!list) return sendJSON(res, 502, { error: "Format respons provider tidak dikenali (perlu array produk atau {data:[...]})." });
+      const byGame = {};
+      list.forEach((p, i) => {
+        const gname = String(p.brand || p.game || p.category || p.kategori || "Lainnya").trim();
+        const gid = slugify(gname) || ("g" + i);
+        const price = Number(p.price != null ? p.price : (p.harga != null ? p.harga : (p.harga_jual != null ? p.harga_jual : (p.amount || 0))));
+        const label = String(p.product_name || p.name || p.nama || p.desc || p.layanan || "Item").trim();
+        const sku = String(p.buyer_sku_code || p.sku || p.code || p.kode || (gid + "-" + i));
+        (byGame[gid] || (byGame[gid] = { id: gid, name: gname, items: [] })).items.push({ id: sku, label, price });
+      });
+      const incoming = Object.values(byGame).filter((g) => g.items.length);
+      if (!incoming.length) return sendJSON(res, 502, { error: "Tidak ada produk terbaca dari provider." });
+      const prevById = {}; db.games.forEach((g) => (prevById[g.id] = g));
+      incoming.forEach((g) => {
+        const prev = prevById[g.id];
+        if (prev) { prev.items = g.items; if (!prev.name) prev.name = g.name; }
+        else db.games.push({ id: g.id, name: g.name, publisher: "", image: "", description: "", video: "", screenshots: [], needs: ["User ID"], items: g.items });
+      });
+      saveDB();
+      return sendJSON(res, 200, { ok: true, games: db.games.length, items: incoming.reduce((s, g) => s + g.items.length, 0) });
+    } catch (e) {
+      return sendJSON(res, 502, { error: "Gagal menghubungi provider: " + (e && e.message ? e.message : String(e)) });
+    }
+  }
   if (pathname === "/api/admin/articles" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, [...db.articles].sort((a, b) => b.createdAt - a.createdAt)); }
   if (pathname === "/api/admin/articles" && method === "POST") {
     if (!authed) return needAuth(); const b = await readBody(req);
