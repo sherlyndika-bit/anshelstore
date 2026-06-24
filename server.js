@@ -65,7 +65,7 @@ function saveDB() {
     });
   }, 150);
 }
-db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= [];
+db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= [];
 db.settings.integrations ||= {};
 db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
 db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment"].forEach((k) => (db._seq[k] ||= 0));
@@ -330,34 +330,92 @@ function allTags() {
 function renderBlogList(tag) {
   let arts = db.articles.filter((a) => a.published).sort((a, b) => b.createdAt - a.createdAt);
   if (tag) arts = arts.filter((a) => (a.tags || []).map((t) => t.toLowerCase()).includes(String(tag).toLowerCase()));
-  const chips = `<a href="/blog" class="px-md py-xs rounded-full font-label-md text-label-md ${!tag ? "bg-pink text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-pink"} transition-colors">Semua</a>` +
-    allTags().map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="px-md py-xs rounded-full font-label-md text-label-md ${tag && tag.toLowerCase() === t.name.toLowerCase() ? "bg-pink text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-pink"} transition-colors">${escHtml(t.name)} <span class="opacity-60">${t.count}</span></a>`).join("");
+  const chips = `<a href="/blog" class="px-md py-xs rounded-full font-label-md text-label-md ${!tag ? "bg-secondary text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-secondary"} transition-colors">Semua</a>` +
+    allTags().map((t) => `<a href="/blog?tag=${encodeURIComponent(t.name)}" class="px-md py-xs rounded-full font-label-md text-label-md ${tag && tag.toLowerCase() === t.name.toLowerCase() ? "bg-secondary text-on-primary" : "bg-surface-container text-on-surface-variant hover:text-secondary"} transition-colors">${escHtml(t.name)} <span class="opacity-60">${t.count}</span></a>`).join("");
   const cards = arts.map((a) => `
-    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col reveal in">
-      <div class="aspect-[16/9] overflow-hidden bg-surface-container">${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : ""}</div>
-      <div class="p-md flex flex-col gap-xs flex-grow">
-        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-pink-50 text-pink font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
-        <h2 class="font-headline-md text-headline-md text-on-surface leading-tight">${escHtml(a.title)}</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${escHtml(a.excerpt)}</p>
-        <span class="font-label-md text-label-md text-pink inline-flex items-center gap-xs mt-xs">Baca selengkapnya <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
+    <a href="/blog/${a.slug}" class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm border border-outline-variant/20 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex">
+      <div class="w-32 sm:w-44 shrink-0 overflow-hidden bg-surface-container">${a.cover ? `<img src="${escHtml(a.cover)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : '<div class="w-full h-full grid place-items-center text-3xl">📝</div>'}</div>
+      <div class="p-md flex flex-col gap-xs flex-grow min-w-0">
+        <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-secondary-fixed text-secondary font-label-sm text-label-sm px-xs py-[2px] rounded-full">${escHtml(t)}</span>`).join("")}</div>
+        <h2 class="font-headline-md text-headline-md text-on-surface leading-tight line-clamp-2">${escHtml(a.title)}</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 flex-grow">${escHtml(a.excerpt)}</p>
+        <span class="font-label-md text-label-md text-secondary inline-flex items-center gap-xs">Baca <span class="material-symbols-outlined text-[18px]">arrow_forward</span></span>
       </div>
     </a>`).join("");
+  const chatBox = `
+    <aside class="lg:col-span-1 lg:sticky lg:top-[88px] self-start">
+      <div class="bg-surface-container-lowest rounded-2xl shadow-md border border-outline-variant/20 overflow-hidden flex flex-col" style="height:calc(100vh - 120px);min-height:480px">
+        <div class="px-md py-sm bg-gradient-to-r from-secondary to-pink text-on-primary flex items-center gap-xs">
+          <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span></span>
+          <b class="font-label-md text-label-md">Live Chat Komunitas</b>
+          <span id="chatOnline" class="ml-auto font-label-sm text-label-sm opacity-90"></span>
+        </div>
+        <div id="chatList" class="flex-grow overflow-y-auto p-md flex flex-col gap-sm bg-surface"></div>
+        <form id="chatForm" class="p-sm border-t border-outline-variant/30 flex flex-col gap-xs bg-surface-container-lowest">
+          <input id="chatName" type="text" placeholder="Nama kamu (opsional)" class="w-full rounded-full border-outline-variant bg-surface text-[13px] px-3 py-1.5 focus:border-secondary focus:ring-secondary"/>
+          <div class="flex gap-xs">
+            <input id="chatText" type="text" maxlength="400" placeholder="Tulis pesan ke komunitas..." class="flex-grow rounded-full border-outline-variant bg-surface text-[14px] px-3 py-2 focus:border-secondary focus:ring-secondary"/>
+            <button class="shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-pink text-on-primary grid place-items-center hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></button>
+          </div>
+        </form>
+      </div>
+    </aside>`;
   return `<!DOCTYPE html><html class="light" lang="id"><head>
     <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>${tag ? escHtml(tag) + " — " : ""}Artikel & Tips — anshelstore</title>
-    <meta name="description" content="Artikel, tips top up game, dan panduan AI automation dari anshelstore."/>
+    <title>${tag ? escHtml(tag) + " — " : ""}Komunitas & Artikel — anshelstore</title>
+    <meta name="description" content="Komunitas anshelstore: ngobrol langsung di live chat, baca artikel & tips top up game dan AI automation."/>
     <link rel="canonical" href="${siteUrl()}/blog"/>
     ${THEME_HEAD}</head>
     <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
-    <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-      <div class="text-center mb-lg">
-        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Artikel & <span class="bg-gradient-to-r from-pink to-secondary text-gradient">Tips</span></h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant">Panduan top up, tips gaming, dan insight AI automation.</p>
+    <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+      <div class="mb-lg">
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Komunitas anshelstore</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mt-xs">Baca artikel & tips di kiri, ngobrol bareng komunitas di live chat sebelah kanan. 👋</p>
       </div>
-      <div class="flex flex-wrap gap-xs justify-center mb-lg">${chips}</div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">${cards || '<p class="text-on-surface-variant text-center col-span-full py-lg">Belum ada artikel di kategori ini.</p>'}</div>
-    </main>${pageFooter()}<script src="/js/site.js"></script></body></html>`;
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter lg:gap-xl">
+        <div class="lg:col-span-2">
+          <div class="flex flex-wrap gap-xs mb-md">${chips}</div>
+          <div class="flex flex-col gap-md">${cards || '<p class="text-on-surface-variant text-center py-lg">Belum ada artikel di kategori ini.</p>'}</div>
+        </div>
+        ${chatBox}
+      </div>
+    </main>${pageFooter()}<script src="/js/site.js"></script>
+    <script>
+      (function(){
+        var list=document.getElementById("chatList"), online=document.getElementById("chatOnline");
+        var last=0, atBottom=true;
+        var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+        var savedName=localStorage.getItem("anshel_chat_name"); if(savedName) document.getElementById("chatName").value=savedName;
+        function time(ts){var d=new Date(ts);return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);}
+        function color(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return "hsl("+(h%360)+",65%,45%)";}
+        list.addEventListener("scroll",function(){atBottom=list.scrollHeight-list.scrollTop-list.clientHeight<60;});
+        function add(m){
+          var d=document.createElement("div"); d.className="flex gap-2 items-start";
+          d.innerHTML='<span class="w-7 h-7 shrink-0 rounded-full grid place-items-center text-[12px] font-bold text-white" style="background:'+color(m.name)+'">'+esc(m.name.charAt(0).toUpperCase())+'</span>'+
+            '<div class="min-w-0"><div class="flex items-baseline gap-2"><b class="font-label-sm text-label-sm text-on-surface">'+esc(m.name)+'</b><span class="text-[11px] text-on-surface-variant">'+time(m.createdAt)+'</span></div>'+
+            '<p class="font-label-md text-label-md text-on-surface-variant break-words">'+esc(m.text)+'</p></div>';
+          list.appendChild(d);
+        }
+        function poll(){
+          fetch("/api/community"+(last?"?since="+last:"")).then(function(r){return r.json();}).then(function(ms){
+            if(!ms.length && !last){ list.innerHTML='<p class="text-center text-on-surface-variant font-label-md text-label-md m-auto">Belum ada pesan. Sapa duluan yuk! 💬</p>'; }
+            if(ms.length && last===0) list.innerHTML="";
+            ms.forEach(function(m){ if(m.createdAt>last)last=m.createdAt; add(m); });
+            if(ms.length && atBottom) list.scrollTop=list.scrollHeight;
+          }).catch(function(){});
+        }
+        document.getElementById("chatForm").addEventListener("submit",function(e){ e.preventDefault();
+          var t=document.getElementById("chatText"); var text=t.value.trim(); if(!text)return;
+          var name=document.getElementById("chatName").value.trim(); if(name)localStorage.setItem("anshel_chat_name",name);
+          var tok=localStorage.getItem("anshel_token"); var h={"Content-Type":"application/json"}; if(tok)h["x-auth-token"]=tok;
+          t.value="";
+          fetch("/api/community",{method:"POST",headers:h,body:JSON.stringify({name:name,text:text})}).then(function(r){return r.json();}).then(function(){ atBottom=true; poll(); }).catch(function(){});
+        });
+        poll(); setInterval(poll,4000);
+      })();
+    </script>
+    </body></html>`;
 }
 
 function renderArticle(a) {
@@ -605,6 +663,26 @@ async function handleApi(req, res, pathname, query) {
     const name = (u && u.name) || String(b.name || "Anonim").trim().slice(0, 40) || "Anonim";
     const c = { id: nextId("comment"), slug, name, text, createdAt: Date.now() };
     db.comments.push(c); saveDB(); return sendJSON(res, 201, c);
+  }
+
+  // ---- Live chat komunitas (publik) ----
+  if (pathname === "/api/community" && method === "GET") {
+    const since = Number(query.since || 0);
+    let msgs = db.community.filter((m) => !since || m.createdAt > since);
+    return sendJSON(res, 200, msgs.slice(-80));
+  }
+  if (pathname === "/api/community" && method === "POST") {
+    if (!rateLimit(req, "community", 12, 60000)) return sendJSON(res, 429, { error: "Santai dulu, kirim lagi sebentar ya 🙏" });
+    const b = await readBody(req);
+    const text = String(b.text || "").trim().slice(0, 400);
+    if (!text) return sendJSON(res, 400, { error: "Pesan kosong" });
+    const u = userFromReq(req);
+    const name = (u && u.name) || String(b.name || "").trim().slice(0, 32) || "Anonim";
+    const m = { id: nextId("cm"), name, text, createdAt: Date.now() };
+    db.community.push(m);
+    if (db.community.length > 500) db.community = db.community.slice(-500);
+    saveDB();
+    return sendJSON(res, 201, m);
   }
 
   // ---- Orders ----
