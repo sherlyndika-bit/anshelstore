@@ -41,7 +41,15 @@
         <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">Nama</span><input id="pfName" type="text" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
         <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">No. WhatsApp</span><input id="pfPhone" type="text" placeholder="08xxxxxxxxxx" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
         <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">Bio (opsional)</span><textarea id="pfBio" rows="2" maxlength="200" placeholder="Ceritakan sedikit tentang kamu…" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"></textarea></label>
-        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">URL Foto Profil (opsional)</span><input id="pfPicture" type="text" placeholder="https://…" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
+        <div class="block">
+          <span class="font-label-md text-label-md text-on-surface-variant">Foto Profil</span>
+          <div class="flex items-center gap-3 mt-xs">
+            <span id="pfPicPreview" class="w-14 h-14 rounded-full bg-surface-container grid place-items-center overflow-hidden shrink-0 text-on-surface-variant"><span class="material-symbols-outlined">person</span></span>
+            <button type="button" id="pfUpload" class="bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md px-md py-sm rounded-full inline-flex items-center gap-1.5 transition-colors"><span class="material-symbols-outlined text-[18px]">photo_camera</span> Upload Foto</button>
+            <button type="button" id="pfPicClear" class="font-label-sm text-label-sm text-on-surface-variant hover:text-error">Hapus</button>
+          </div>
+          <input id="pfPicture" type="hidden"/>
+        </div>
         <button id="saveProfile" class="mt-xs bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md font-bold px-md py-sm rounded-full hover:scale-[1.02] transition-transform self-start inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">save</span> Simpan Profil</button>
         <span id="pfMsg" class="font-label-sm text-label-sm"></span>
       </div>
@@ -87,7 +95,7 @@
     $("pfName").value = user.name || "";
     $("pfPhone").value = user.phone || "";
     $("pfBio").value = user.bio || "";
-    $("pfPicture").value = user.picture || "";
+    setPfPic(user.picture || "");
     if (user.picture) $("avatar").innerHTML = `<img src="${user.picture}" class="w-20 h-20 rounded-full object-cover"/>`;
     else $("avatar").textContent = (user.name || user.email || "a").charAt(0).toUpperCase();
     if (user.provider === "google") { $("pwBox").innerHTML = '<p class="font-body-md text-body-md text-on-surface-variant">Kamu masuk lewat Google, jadi password dikelola oleh akun Google-mu.</p>'; }
@@ -106,6 +114,27 @@
         <span class="font-label-sm text-label-sm px-sm py-[2px] rounded-full ${BADGE[o.status] || ""}">${o.status}</span></div>
       </a>`).join("");
   }
+
+  function setPfPic(url) {
+    $("pfPicture").value = url || "";
+    const p = $("pfPicPreview");
+    p.innerHTML = url ? `<img src="${url}" class="w-14 h-14 object-cover"/>` : '<span class="material-symbols-outlined">person</span>';
+  }
+  $("pfUpload").addEventListener("click", () => {
+    const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*";
+    inp.onchange = () => {
+      const f = inp.files && inp.files[0]; if (!f) return;
+      if (f.size > 4 * 1024 * 1024) { alert("Foto terlalu besar (maks 4MB)."); return; }
+      const r = new FileReader();
+      r.onload = async () => {
+        try { const res = await fetch("/api/upload", { method: "POST", headers: H, body: JSON.stringify({ dataUrl: r.result }) }); const d = await res.json(); if (!res.ok) throw new Error(d.error || "gagal"); setPfPic(d.url); }
+        catch (e) { alert("Upload gagal: " + (e.message || "coba lagi")); }
+      };
+      r.readAsDataURL(f);
+    };
+    inp.click();
+  });
+  $("pfPicClear").addEventListener("click", () => setPfPic(""));
 
   $("saveProfile").addEventListener("click", async () => {
     const m = $("pfMsg"); m.textContent = "Menyimpan…"; m.className = "font-label-sm text-label-sm text-on-surface-variant";

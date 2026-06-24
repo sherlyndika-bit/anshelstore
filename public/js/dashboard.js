@@ -44,6 +44,23 @@ document.addEventListener("click", (e) => {
   if (el) pickAndUpload(el, b.dataset.mode || "set");
 });
 
+// Preview gambar untuk tiap field yang punya tombol upload
+function previewFor(el) {
+  const wrap = el.closest(".up-wrap, .field"); if (!wrap) return;
+  let pv = wrap.querySelector(".img-preview");
+  const urls = (el.value || "").split("\n").map((s) => s.trim()).filter(Boolean);
+  if (!urls.length) { if (pv) pv.remove(); return; }
+  if (!pv) { pv = document.createElement("div"); pv.className = "img-preview"; wrap.appendChild(pv); }
+  pv.innerHTML = urls.slice(0, 6).map((u) => `<img src="${u}" alt="" loading="lazy"/>`).join("");
+}
+function refreshAllPreviews() {
+  document.querySelectorAll(".upload-btn").forEach((b) => { const w = b.closest(".up-wrap, .field"); if (w) { const f = w.querySelector("input, textarea"); if (f) previewFor(f); } });
+}
+document.addEventListener("input", (e) => {
+  const el = e.target;
+  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") { const w = el.closest(".up-wrap, .field"); if (w && w.querySelector(".upload-btn")) previewFor(el); }
+});
+
 // ============================================================
 // AUTH
 // ============================================================
@@ -128,6 +145,7 @@ function routeTo(page) {
   $("page-" + page).classList.add("active");
   $("pageTitle").textContent = TITLES[page];
   { const pd = document.getElementById("pageDesc"); if (pd) pd.textContent = DESC[page] || ""; }
+  setTimeout(refreshAllPreviews, 80);
   sidebar.classList.remove("open"); backdrop.classList.remove("show");
   if (page === "overview") loadStats();
   if (page === "orders") loadOrders();

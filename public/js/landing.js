@@ -45,7 +45,7 @@ function renderMainBanner(banners) {
   if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
   el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#bf5d7e,#a84668 45%,#7d9b78)">
       <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
-      <span class="text-[60px] md:text-[110px] hidden sm:block opacity-90">🤖</span>
+      <span class="text-[60px] md:text-[110px] hidden sm:block opacity-90 float-animation">🤖</span>
     </div>`;
 }
 renderMainBanner();
@@ -143,7 +143,7 @@ function renderCatalog() {
   const q = searchQ.toLowerCase().trim();
   const list = q ? allGames.filter((g) => g.name.toLowerCase().includes(q) || (g.publisher || "").toLowerCase().includes(q)) : allGames;
   wrap.innerHTML = list.map(gameCard).join("");
-  note.textContent = "Game tidak ditemukan.";
+  note.textContent = "Yah, game-nya nggak ketemu 😢 Coba kata kunci lain ya~";
   note.classList.toggle("hidden", list.length > 0);
 }
 async function loadGames() {

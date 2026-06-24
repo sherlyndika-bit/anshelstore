@@ -292,6 +292,20 @@ const CLEAN_ROUTES = {
   "/masuk": "masuk.html", "/login": "masuk.html", "/daftar": "masuk.html",
   "/akun": "akun.html", "/profil": "akun.html",
 };
+async function saveImageUpload(dataUrl) {
+  const m = /^data:(image\/(png|jpe?g|gif|webp|svg\+xml));base64,(.+)$/.exec(String(dataUrl || ""));
+  if (!m) return { status: 400, body: { error: "Format gambar tidak valid (png/jpg/gif/webp/svg)." } };
+  const ext = m[2] === "jpeg" ? "jpg" : m[2] === "svg+xml" ? "svg" : m[2];
+  let buf; try { buf = Buffer.from(m[3], "base64"); } catch (e) { return { status: 400, body: { error: "Gagal membaca gambar." } }; }
+  if (buf.length > 4 * 1024 * 1024) return { status: 413, body: { error: "Gambar terlalu besar (maks 4MB)." } };
+  const name = "img-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+  try {
+    if (pgPool) await pgPool.query("INSERT INTO uploads (name, mime, data) VALUES ($1, $2, $3)", [name, m[1], buf]);
+    else { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); fs.writeFileSync(path.join(UPLOAD_DIR, name), buf); }
+    return { status: 201, body: { url: "/uploads/" + name } };
+  } catch (e) { return { status: 500, body: { error: "Gagal menyimpan gambar." } }; }
+}
+
 function serveStatic(req, res, pathname) {
   const clean = pathname.replace(/\/$/, "") || "/";
   if (CLEAN_ROUTES[clean]) return serveFile(res, path.join(PUBLIC_DIR, CLEAN_ROUTES[clean]));
@@ -885,22 +899,14 @@ async function handleApi(req, res, pathname, query) {
   }
   if (pathname === "/api/admin/upload" && method === "POST") {
     if (!authed) return needAuth();
-    const b = await readBody(req);
-    const m = /^data:(image\/(png|jpe?g|gif|webp|svg\+xml));base64,(.+)$/.exec(String(b.dataUrl || ""));
-    if (!m) return sendJSON(res, 400, { error: "Format gambar tidak valid (png/jpg/gif/webp/svg)." });
-    const ext = m[2] === "jpeg" ? "jpg" : m[2] === "svg+xml" ? "svg" : m[2];
-    let buf; try { buf = Buffer.from(m[3], "base64"); } catch (e) { return sendJSON(res, 400, { error: "Gagal membaca gambar." }); }
-    if (buf.length > 4 * 1024 * 1024) return sendJSON(res, 413, { error: "Gambar terlalu besar (maks 4MB)." });
-    const name = "img-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
-    try {
-      if (pgPool) {
-        await pgPool.query("INSERT INTO uploads (name, mime, data) VALUES ($1, $2, $3)", [name, m[1], buf]);
-      } else {
-        fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-        fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
-      }
-      return sendJSON(res, 201, { url: "/uploads/" + name });
-    } catch (e) { return sendJSON(res, 500, { error: "Gagal menyimpan gambar." }); }
+    const b = await readBody(req); const r = await saveImageUpload(b.dataUrl);
+    return sendJSON(res, r.status, r.body);
+  }
+  if (pathname === "/api/upload" && method === "POST") {
+    const u = userFromReq(req); if (!u) return sendJSON(res, 401, { error: "Login dulu untuk upload." });
+    if (!rateLimit(req, "upload", 20, 60000)) return sendJSON(res, 429, { error: "Terlalu sering upload, coba lagi sebentar." });
+    const b = await readBody(req); const r = await saveImageUpload(b.dataUrl);
+    return sendJSON(res, r.status, r.body);
   }
   if (pathname === "/api/admin/sync-games" && method === "POST") {
     if (!authed) return needAuth();

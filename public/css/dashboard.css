@@ -204,3 +204,9 @@ table.data tr:hover td { background: var(--bg-soft); }
 .qa-btn .qa-ic { font-size: 26px; margin-bottom: 4px; }
 .qa-btn b { color: var(--text); font-size: .95rem; }
 .qa-btn small { color: var(--text-soft); font-size: .76rem; }
+
+
+/* Preview gambar hasil upload */
+.img-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.img-preview img { height: 64px; width: auto; max-width: 120px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-muted); }
+.upload-btn { display: inline-flex; align-items: center; gap: 6px; }
