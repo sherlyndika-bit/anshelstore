@@ -29,7 +29,7 @@
             </nav>
             <div class="hidden md:flex items-center gap-2 shrink-0" id="siteAuth">
               <a href="/masuk" class="font-label-md text-label-md font-semibold text-on-surface-variant hover:text-secondary transition-colors px-2">Masuk</a>
-              <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-lg shadow-[0_4px_14px_rgba(191,93,126,0.35)] hover:shadow-[0_6px_20px_rgba(191,93,126,0.5)] hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">bolt</span>Top Up</a>
+              <a href="/masuk" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-lg shadow-[0_4px_14px_rgba(191,93,126,0.35)] hover:shadow-[0_6px_20px_rgba(191,93,126,0.5)] hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">person_add</span>Daftar</a>
             </div>
             <a href="/akun" id="siteAuthMobile" class="md:hidden w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
           </div>
