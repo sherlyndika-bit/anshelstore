@@ -100,8 +100,19 @@ $("menuBtn").addEventListener("click", () => { sidebar.classList.toggle("open");
 backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
 
 const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses" };
+const DESC = {
+  overview: "Ringkasan toko & jalan pintas ke semua pengaturan.",
+  orders: "Lihat pesanan masuk dan ubah statusnya (paid → diproses → selesai).",
+  inbox: "Balas chat pelanggan. Bisa ambil alih dari AI kapan saja.",
+  produk: "Atur game, item, harga, gambar, video, dan deskripsi.",
+  articles: "Tulis tips/blog biar muncul di Google (SEO).",
+  settings: "Atur logo, banner, promo, dan teks halaman depan.",
+  integrasi: "Sambungkan provider top-up & API (pembayaran, AI, dll).",
+  finance: "Catat uang masuk & keluar toko.",
+  team: "Tambah/hapus admin & staff dan atur aksesnya.",
+};
 const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team"];
-document.querySelectorAll(".side-nav button[data-page], .bottom-nav button[data-page]").forEach((btn) =>
+document.querySelectorAll(".side-nav button[data-page], .bottom-nav button[data-page], .qa-btn[data-page]").forEach((btn) =>
   btn.addEventListener("click", () => goto(btn.dataset.page))
 );
 function goto(page) {
@@ -116,6 +127,7 @@ function routeTo(page) {
   document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
   $("page-" + page).classList.add("active");
   $("pageTitle").textContent = TITLES[page];
+  { const pd = document.getElementById("pageDesc"); if (pd) pd.textContent = DESC[page] || ""; }
   sidebar.classList.remove("open"); backdrop.classList.remove("show");
   if (page === "overview") loadStats();
   if (page === "orders") loadOrders();

@@ -195,3 +195,12 @@ table.data tr:hover td { background: var(--bg-soft); }
 .game-admin-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
 .game-admin-card .gitem { display: grid; grid-template-columns: 1fr 110px 90px 36px; gap: 8px; align-items: center; margin-bottom: 6px; }
 @media (max-width: 640px) { .game-admin-card .gitem { grid-template-columns: 1fr 1fr; } }
+
+
+/* Quick actions di Overview */
+.qa-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.qa-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: .16s; font-family: inherit; }
+.qa-btn:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow-primary); }
+.qa-btn .qa-ic { font-size: 26px; margin-bottom: 4px; }
+.qa-btn b { color: var(--text); font-size: .95rem; }
+.qa-btn small { color: var(--text-soft); font-size: .76rem; }

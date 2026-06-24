@@ -73,13 +73,27 @@
       <header class="topbar">
         <div style="display:flex;align-items:center;gap:12px">
           <button class="menu-btn" id="menuBtn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg></button>
-          <h1 id="pageTitle">Overview</h1>
+          <div><h1 id="pageTitle">Overview</h1><div id="pageDesc" style="font-size:.78rem;color:var(--text-soft);margin-top:1px"></div></div>
         </div>
         <div class="user-card"><span class="avatar" id="userAvatar">A</span><span style="font-weight:600;font-size:.92rem" id="userName">Admin</span></div>
       </header>
 
       <div class="content">
         <section class="page" id="page-overview">
+          <div class="panel-card" style="margin-bottom:16px">
+            <h3 style="margin-bottom:4px">👋 Mau atur apa hari ini?</h3>
+            <p style="color:var(--text-soft);font-size:.85rem;margin-bottom:14px">Klik salah satu di bawah ini — semua pengaturan toko ada di sini.</p>
+            <div class="qa-grid">
+              <button class="qa-btn" data-page="produk"><span class="qa-ic">🎮</span><b>Produk &amp; Harga</b><small>Game, item, harga, gambar</small></button>
+              <button class="qa-btn" data-page="settings"><span class="qa-ic">🎨</span><b>Tampilan &amp; Banner</b><small>Logo, banner, promo, teks</small></button>
+              <button class="qa-btn" data-page="orders"><span class="qa-ic">🧾</span><b>Pesanan</b><small>Lihat &amp; proses order</small></button>
+              <button class="qa-btn" data-page="inbox"><span class="qa-ic">💬</span><b>Inbox Chat</b><small>Balas pelanggan</small></button>
+              <button class="qa-btn" data-page="articles"><span class="qa-ic">📝</span><b>Artikel</b><small>Tips/blog (SEO)</small></button>
+              <button class="qa-btn" data-page="finance"><span class="qa-ic">💰</span><b>Finansial</b><small>Uang masuk/keluar</small></button>
+              <button class="qa-btn" data-page="integrasi"><span class="qa-ic">🔌</span><b>Integrasi &amp; API</b><small>Provider, pembayaran</small></button>
+              <button class="qa-btn" data-page="team"><span class="qa-ic">👥</span><b>Tim &amp; Akses</b><small>Admin &amp; staff</small></button>
+            </div>
+          </div>
           <div class="stats-grid" id="statsGrid"></div>
           <div class="two-col">
             <div class="panel-card"><h3>Pesanan 7 Hari Terakhir</h3><div class="bars" id="barsChart"></div></div>
