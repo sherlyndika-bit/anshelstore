@@ -15,24 +15,27 @@
   const navMount = document.getElementById("siteNav");
   if (navMount) {
     navMount.innerHTML = `
-    <div class="sticky top-0 z-50 px-margin-mobile md:px-margin-desktop pt-sm">
-      <nav class="max-w-7xl mx-auto rounded-2xl bg-surface/80 backdrop-blur-xl shadow-[0_10px_34px_-14px_rgba(232,74,138,0.28)] border border-white/60 ring-1 ring-pink-soft/40">
-        <div class="flex justify-between items-center pl-md pr-xs py-2.5">
-          <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
-            <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(232,74,138,0.4)] group-hover:scale-110 transition-transform">A</span>
-            <span class="text-headline-md text-on-surface tracking-tight font-extrabold leading-none">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
-          </a>
-          <div class="hidden md:flex items-center gap-1">
-            ${NAV.map((n) => `<a class="px-3 py-2 rounded-xl font-label-md text-label-md transition-all inline-flex items-center gap-1.5 ${n.key === active ? "bg-gradient-to-r from-pink-50 to-secondary-fixed text-pink font-bold" : "text-on-surface-variant hover:bg-surface-container hover:text-secondary"}" href="${n.href}"><span class="material-symbols-outlined text-[18px]">${n.icon}</span>${n.label}</a>`).join("")}
+    <header class="sticky top-0 z-50">
+      <div class="h-[3px] w-full bg-gradient-to-r from-pink via-secondary to-pink"></div>
+      <div class="bg-surface/95 backdrop-blur-lg border-b border-outline-variant/40 shadow-[0_2px_14px_-8px_rgba(0,0,0,0.25)]">
+        <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop">
+          <div class="flex items-center justify-between h-16">
+            <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
+              <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(232,74,138,0.4)] group-hover:scale-110 transition-transform">A</span>
+              <span class="text-[19px] text-on-surface tracking-tight font-extrabold leading-none">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
+            </a>
+            <nav class="hidden md:flex items-center h-16">
+              ${NAV.map((n) => `<a href="${n.href}" class="relative h-16 flex items-center gap-1.5 px-4 font-label-md text-label-md transition-colors ${n.key === active ? "text-secondary font-bold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[18px]">${n.icon}</span>${n.label}${n.key === active ? '<span class="absolute left-3 right-3 bottom-0 h-[3px] rounded-t-full bg-gradient-to-r from-pink to-secondary"></span>' : ""}</a>`).join("")}
+            </nav>
+            <div class="hidden md:flex items-center gap-2 shrink-0" id="siteAuth">
+              <a href="/masuk" class="font-label-md text-label-md font-semibold text-on-surface-variant hover:text-secondary transition-colors px-2">Masuk</a>
+              <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-lg shadow-[0_4px_14px_rgba(232,74,138,0.35)] hover:shadow-[0_6px_20px_rgba(232,74,138,0.5)] hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">bolt</span>Top Up</a>
+            </div>
+            <a href="/akun" id="siteAuthMobile" class="md:hidden w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
           </div>
-          <div class="hidden md:flex items-center gap-1.5 pl-xs" id="siteAuth">
-            <a href="/masuk" class="px-md py-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors">Masuk</a>
-            <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-4 py-2 rounded-xl shadow-[0_4px_14px_rgba(232,74,138,0.35)] hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">bolt</span>Top Up</a>
-          </div>
-          <a href="/akun" id="siteAuthMobile" class="md:hidden w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
         </div>
-      </nav>
-    </div>`;
+      </div>
+    </header>`;
   }
   // Bottom tab bar (mobile) — pengganti hamburger
   const BOTTOM = [
@@ -48,42 +51,42 @@
 
   const footMount = document.getElementById("siteFooter");
   if (footMount) {
+    const pays = ["QRIS", "DANA", "OVO", "GoPay", "ShopeePay", "BCA", "Mandiri"];
     footMount.innerHTML = `
-    <footer class="relative w-full mt-2xl overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-secondary via-pink to-secondary opacity-[0.06]"></div>
-      <div class="relative bg-surface-container-low/80 backdrop-blur border-t-2 border-pink-soft/40">
-        <div class="px-margin-mobile md:px-margin-desktop pt-xl pb-lg max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-12 gap-gutter">
-          <div class="col-span-2 md:col-span-4 flex flex-col gap-sm">
-            <div class="flex items-center gap-2" id="footBrand">
-              <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold text-[18px]">A</span>
-              <span class="text-headline-md font-extrabold text-on-surface">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
-            </div>
-            <p class="font-body-md text-body-md text-on-surface-variant max-w-xs">Top up game instan & jasa AI automation untuk bisnismu. Satu tempat, lengkap, cepat, dan terpercaya.</p>
-            <div id="footSocial" class="flex gap-sm mt-xs"></div>
+    <footer class="mt-2xl bg-[#101317] text-white">
+      <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-xl pb-lg grid grid-cols-2 md:grid-cols-12 gap-gutter">
+        <div class="col-span-2 md:col-span-4 flex flex-col gap-sm">
+          <div id="footBrand" class="flex items-center gap-2">
+            <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-white flex items-center justify-center font-extrabold text-[18px]">A</span>
+            <span class="text-[19px] font-extrabold">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
           </div>
-          <div class="md:col-span-3">
-            <h4 class="font-label-md text-label-md text-on-surface font-extrabold mb-sm uppercase tracking-wide">Jelajahi</h4>
-            <div class="flex flex-col gap-2.5">${NAV.map((n) => `<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary hover:translate-x-1 transition-all inline-flex items-center gap-2" href="${n.href}"><span class="material-symbols-outlined text-[16px] opacity-70">${n.icon}</span>${n.label}</a>`).join("")}</div>
-          </div>
-          <div class="md:col-span-2">
-            <h4 class="font-label-md text-label-md text-on-surface font-extrabold mb-sm uppercase tracking-wide">Akun</h4>
-            <div class="flex flex-col gap-2.5">
-              <a href="/masuk" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors">Masuk / Daftar</a>
-              <a href="/akun" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors">Akun Saya</a>
-              <a href="/cek-transaksi" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors">Lacak Pesanan</a>
-            </div>
-          </div>
-          <div class="md:col-span-3">
-            <h4 class="font-label-md text-label-md text-on-surface font-extrabold mb-sm uppercase tracking-wide">Kontak</h4>
-            <a id="footWa" href="/tentang" target="_blank" rel="noopener" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary flex items-center gap-2 mb-2.5"><span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp</a>
-            <a id="footMail" href="/tentang" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> Email</a>
+          <p class="text-sm text-white/55 max-w-xs leading-relaxed">Top up game instan & jasa AI automation untuk bisnismu. Satu tempat, cepat, aman, dan terpercaya.</p>
+          <div id="footSocial" class="flex gap-2 mt-xs"></div>
+        </div>
+        <div class="md:col-span-2">
+          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mb-sm">Jelajahi</h4>
+          <div class="flex flex-col gap-2.5">${NAV.map((n) => `<a class="text-sm text-white/70 hover:text-white hover:translate-x-0.5 transition-all" href="${n.href}">${n.label}</a>`).join("")}</div>
+        </div>
+        <div class="md:col-span-2">
+          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mb-sm">Akun</h4>
+          <div class="flex flex-col gap-2.5">
+            <a href="/masuk" class="text-sm text-white/70 hover:text-white transition-colors">Masuk / Daftar</a>
+            <a href="/akun" class="text-sm text-white/70 hover:text-white transition-colors">Akun Saya</a>
+            <a href="/cek-transaksi" class="text-sm text-white/70 hover:text-white transition-colors">Lacak Pesanan</a>
           </div>
         </div>
-        <div class="border-t border-outline-variant/30">
-          <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-md flex flex-col sm:flex-row items-center justify-between gap-xs">
-            <span class="font-label-sm text-label-sm text-on-surface-variant">© ${new Date().getFullYear()} Anshel Store. Seluruh hak cipta dilindungi.</span>
-            <span class="font-label-sm text-label-sm text-on-surface-variant inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-secondary" style="font-variation-settings:'FILL' 1;">verified_user</span> Pembayaran aman & terenkripsi</span>
-          </div>
+        <div class="col-span-2 md:col-span-4">
+          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mb-sm">Kontak</h4>
+          <a id="footWa" href="/tentang" target="_blank" rel="noopener" class="text-sm text-white/70 hover:text-white flex items-center gap-2 mb-2.5"><span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp</a>
+          <a id="footMail" href="/tentang" class="text-sm text-white/70 hover:text-white flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> Email</a>
+          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mt-md mb-sm">Pembayaran</h4>
+          <div class="flex flex-wrap gap-1.5">${pays.map((p) => `<span class="text-[11px] font-bold text-white/80 bg-white/10 border border-white/10 rounded-md px-2 py-1">${p}</span>`).join("")}</div>
+        </div>
+      </div>
+      <div class="border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-md flex flex-col sm:flex-row items-center justify-between gap-xs">
+          <span class="text-xs text-white/45">© ${new Date().getFullYear()} Anshel Store. Seluruh hak cipta dilindungi.</span>
+          <span class="text-xs text-white/45 inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-secondary" style="font-variation-settings:'FILL' 1;">verified_user</span> Pembayaran aman & terenkripsi</span>
         </div>
       </div>
     </footer>`;
