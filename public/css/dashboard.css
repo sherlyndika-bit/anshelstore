@@ -13,6 +13,7 @@ body.dash { background: var(--bg-soft); }
 
 /* ---- Shell ---- */
 .shell { display: grid; grid-template-columns: 256px 1fr; min-height: 100vh; }
+.sidebar-backdrop { display: none; }   /* penting: di desktop jangan jadi kolom grid */
 .sidebar { background: #0f172a; color: #cbd5e1; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
 .sidebar .brand { color: #fff; padding: 22px 22px 18px; font-size: 1.15rem; }
 .side-nav { flex: 1; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }

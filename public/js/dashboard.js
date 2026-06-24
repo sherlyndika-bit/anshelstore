@@ -74,9 +74,14 @@ backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); bac
 
 const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses" };
 const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team"];
-document.querySelectorAll(".side-nav button").forEach((btn) =>
-  btn.addEventListener("click", () => { location.hash = btn.dataset.page; })
+document.querySelectorAll(".side-nav button[data-page], .bottom-nav button[data-page]").forEach((btn) =>
+  btn.addEventListener("click", () => goto(btn.dataset.page))
 );
+function goto(page) {
+  routeTo(page);
+  try { history.replaceState(null, "", "/dashboard"); } catch (e) {}
+  try { localStorage.setItem("anshel_page", page); } catch (e) {}
+}
 function routeTo(page) {
   if (!PAGES.includes(page)) page = "overview";
   document.querySelectorAll(".side-nav button").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
@@ -95,7 +100,6 @@ function routeTo(page) {
   if (page === "produk") loadProduk();
   if (page === "integrasi") loadIntegrasi();
 }
-window.addEventListener("hashchange", () => { if (TOKEN) routeTo(location.hash.replace("#", "")); });
 
 // ============================================================
 // OVERVIEW
@@ -226,8 +230,10 @@ function boot() {
   loginScreen.style.display = "none";
   shell.style.display = "grid";
   applyUser();
-  routeTo(location.hash.replace("#", "") || "overview");
-  if (!location.hash) location.hash = "overview";
+  let startPage = "overview";
+  try { startPage = localStorage.getItem("anshel_page") || "overview"; } catch (e) {}
+  routeTo(startPage);
+  try { history.replaceState(null, "", "/dashboard"); } catch (e) {}
   clearInterval(pollTimer);
   pollTimer = setInterval(() => {
     const active = document.querySelector(".page.active");
@@ -566,6 +572,6 @@ $("changePassBtn").addEventListener("click", async () => {
   document.body.appendChild(bn);
   bn.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
     if (b.dataset.page === "__more") { sidebar.classList.add("open"); backdrop.classList.add("show"); return; }
-    location.hash = b.dataset.page;
+    goto(b.dataset.page);
   }));
 })();
