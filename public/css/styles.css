@@ -13,14 +13,14 @@
   --grad-soft: linear-gradient(135deg, #ffe3ee, #dcfce7);
 
   /* Neutrals (light, professional) */
-  --bg: #ffffff;
-  --bg-soft: #f8fafc;
-  --bg-muted: #f1f5f9;
-  --surface: #ffffff;
-  --border: #e6e8ee;
-  --text: #0f172a;
-  --text-soft: #475569;
-  --text-muted: #94a3b8;
+  --bg: #0d0f14;
+  --bg-soft: #14171e;
+  --bg-muted: #1c2029;
+  --surface: #14171e;
+  --border: #2a303b;
+  --text: #e7e9ee;
+  --text-soft: #a8b0bd;
+  --text-muted: #6b7280;
 
   /* Status */
   --green: #10b981;
@@ -83,7 +83,7 @@ img, svg { max-width: 100%; display: block; }
 /* ---------- Navbar ---------- */
 .nav {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,.8); backdrop-filter: saturate(180%) blur(12px);
+  background: rgba(13,15,20,.8); backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid var(--border);
 }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }

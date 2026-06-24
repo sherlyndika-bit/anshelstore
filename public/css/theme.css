@@ -12,10 +12,10 @@
 
 /* Ambient bg untuk halaman transaksional (sentuhan pink tipis) */
 .bg-ambient {
-  background: radial-gradient(circle at top left, #ffe3ee 0%, transparent 42%),
-              radial-gradient(circle at top right, #d1fae5 0%, transparent 38%),
-              radial-gradient(circle at bottom right, #fde4ef 0%, transparent 40%);
-  background-color: #fdfbfc;
+  background: radial-gradient(circle at top left, rgba(232,74,138,.12) 0%, transparent 42%),
+              radial-gradient(circle at top right, rgba(16,185,129,.12) 0%, transparent 38%),
+              radial-gradient(circle at bottom right, rgba(232,74,138,.08) 0%, transparent 40%);
+  background-color: #0d0f14;
 }
 
 /* Pilihan metode bayar (radio tersembunyi) */

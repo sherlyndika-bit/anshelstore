@@ -97,9 +97,9 @@
     const s = d.store || {}, set = d.settings || {}, soc = set.social || {};
     if (set.logo) {
       const b = document.getElementById("siteBrand");
-      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-9 w-auto group-hover:scale-105 transition-transform"/>`;
+      if (b) b.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-2.5 py-1.5 shadow-md ring-1 ring-black/5 group-hover:scale-105 transition-transform"><img src="${set.logo}" alt="Anshel Store" class="h-7 w-auto"/></span>`;
       const fb = document.getElementById("footBrand");
-      if (fb) fb.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-9 w-auto"/>`;
+      if (fb) fb.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-2.5 py-1.5 shadow-md"><img src="${set.logo}" alt="Anshel Store" class="h-7 w-auto"/></span>`;
     }
     if (s.whatsapp) { const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo Anshel Store, saya mau tanya.")}`; const fw = document.getElementById("footWa"); if (fw) fw.href = wa; }
     const fm = document.getElementById("footMail"); if (fm && s.email) fm.href = "mailto:" + s.email;

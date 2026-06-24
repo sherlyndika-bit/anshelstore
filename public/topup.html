@@ -25,12 +25,12 @@
   #gameHeaderBg { position: absolute; inset: -40px; background-size: cover; background-position: center; filter: blur(26px) saturate(1.4); transform: scale(1.1); opacity: .55; }
   #gameHeaderBg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,4,15,.65), rgba(9,4,15,.92)); }
 
-  .nom-card { position: relative; border-radius: 14px; border: 2px solid #e2e1e6; background: #fff; padding: 12px; cursor: pointer; transition: .18s; }
-  .nom-card:hover { transform: translateY(-3px); border-color: #86efac; box-shadow: 0 12px 24px -14px rgba(16,185,129,.4); }
-  .nom-card.sel { border-color: #10b981; background: linear-gradient(160deg,#f0fdf4,#dcfce7); box-shadow: 0 0 0 3px rgba(16,185,129,.2); }
+  .nom-card { position: relative; border-radius: 14px; border: 2px solid #2a303b; background: #14171e; padding: 12px; cursor: pointer; transition: .18s; }
+  .nom-card:hover { transform: translateY(-3px); border-color: #10b981; box-shadow: 0 12px 24px -14px rgba(16,185,129,.5); }
+  .nom-card.sel { border-color: #10b981; background: linear-gradient(160deg,#0f2a22,#103a2e); box-shadow: 0 0 0 3px rgba(16,185,129,.25); }
   .nom-card.sel::after { content: '✓'; position: absolute; top: 8px; right: 10px; width: 20px; height: 20px; border-radius: 999px; background: #10b981; color: #fff; font-size: 12px; display: grid; place-items: center; }
-  .nom-amt { display:flex; align-items:center; gap:6px; font-weight: 800; color:#191c1e; }
-  .nom-price { color:#10b981; font-weight: 800; margin-top: 2px; }
+  .nom-amt { display:flex; align-items:center; gap:6px; font-weight: 800; color:#e7e9ee; }
+  .nom-price { color:#34d399; font-weight: 800; margin-top: 2px; }
 
   .step-badge { width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; font-weight: 800; color: #fff; flex: 0 0 auto; font-size: 14px; }
   .receipt-divider { border-top: 2px dashed #cdd3dc; }
@@ -43,7 +43,7 @@
   .gd-body p { margin-bottom: .6rem; } .gd-body { line-height: 1.7; }
 </style>
 </head>
-<body data-page="topup" class="text-on-background font-body-md min-h-screen overflow-x-hidden" style="background:radial-gradient(1200px 500px at 80% -10%, #ffe3ee 0%, transparent 55%), radial-gradient(1000px 460px at -10% 0%, #d1fae5 0%, transparent 50%), #f7faf8;">
+<body data-page="topup" class="text-on-background font-body-md min-h-screen overflow-x-hidden" style="background:radial-gradient(1200px 500px at 80% -10%, rgba(232,74,138,.14) 0%, transparent 55%), radial-gradient(1000px 460px at -10% 0%, rgba(16,185,129,.14) 0%, transparent 50%), #0d0f14;">
 
 <div id="siteNav"></div>
 
@@ -56,7 +56,7 @@
     </div>
     <div class="max-w-xl mx-auto relative mb-md">
       <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-      <input id="gameSearch" type="text" placeholder="Cari game (Mobile Legends, Free Fire, Genshin...)" class="w-full rounded-full border-transparent bg-white pl-12 pr-4 py-3.5 shadow-md shadow-secondary/10 focus:border-secondary focus:ring-secondary"/>
+      <input id="gameSearch" type="text" placeholder="Cari game (Mobile Legends, Free Fire, Genshin...)" class="w-full rounded-full border-transparent bg-surface-container-lowest pl-12 pr-4 py-3.5 shadow-md shadow-secondary/10 focus:border-secondary focus:ring-secondary"/>
     </div>
     <div id="catChips" class="flex flex-wrap justify-center gap-2"></div>
   </section>
@@ -70,10 +70,10 @@
     <p id="noGame" class="hidden text-center text-on-surface-variant py-xl">Game tidak ditemukan. Coba kata kunci lain ya 🙏</p>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-xl">
-      <div class="bg-white/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">⚡</div><div class="font-bold text-on-surface mt-1">Proses Instan</div><div class="text-label-sm text-on-surface-variant">Otomatis & cepat</div></div>
-      <div class="bg-white/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">🛡️</div><div class="font-bold text-on-surface mt-1">100% Aman</div><div class="text-label-sm text-on-surface-variant">Data terlindungi</div></div>
-      <div class="bg-white/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">💸</div><div class="font-bold text-on-surface mt-1">Harga Termurah</div><div class="text-label-sm text-on-surface-variant">Banyak promo</div></div>
-      <div class="bg-white/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">💬</div><div class="font-bold text-on-surface mt-1">CS 24/7</div><div class="text-label-sm text-on-surface-variant">Siap bantu kamu</div></div>
+      <div class="bg-surface-container/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">⚡</div><div class="font-bold text-on-surface mt-1">Proses Instan</div><div class="text-label-sm text-on-surface-variant">Otomatis & cepat</div></div>
+      <div class="bg-surface-container/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">🛡️</div><div class="font-bold text-on-surface mt-1">100% Aman</div><div class="text-label-sm text-on-surface-variant">Data terlindungi</div></div>
+      <div class="bg-surface-container/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">💸</div><div class="font-bold text-on-surface mt-1">Harga Termurah</div><div class="text-label-sm text-on-surface-variant">Banyak promo</div></div>
+      <div class="bg-surface-container/70 backdrop-blur rounded-2xl p-4 text-center shadow-sm"><div class="text-2xl">💬</div><div class="font-bold text-on-surface mt-1">CS 24/7</div><div class="text-label-sm text-on-surface-variant">Siap bantu kamu</div></div>
     </div>
   </main>
 </div>
@@ -103,13 +103,13 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-xl">
       <!-- KIRI: penjelasan game -->
       <div class="lg:col-span-7 flex flex-col gap-md">
-        <div class="bg-white rounded-2xl p-md md:p-lg shadow-sm">
+        <div class="bg-surface-container-lowest rounded-2xl p-md md:p-lg shadow-sm">
           <h2 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-2"><span class="material-symbols-outlined text-secondary">info</span> Tentang <span id="gameDescName"></span></h2>
           <div id="gameDesc" class="gd-body font-body-md text-body-md text-on-surface-variant"></div>
           <div id="gameNeeds" class="mt-md flex flex-wrap gap-2"></div>
           <div id="gameShots" class="flex gap-2 overflow-x-auto mt-md"></div>
         </div>
-        <div class="bg-white rounded-2xl p-md md:p-lg shadow-sm">
+        <div class="bg-surface-container-lowest rounded-2xl p-md md:p-lg shadow-sm">
           <h3 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">help</span> Cara Top Up</h3>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-md">
             <div class="text-center"><div class="text-3xl mb-2">🎮</div><div class="font-bold text-on-surface">1. Masukkan ID</div><p class="text-label-md text-on-surface-variant">Isi User ID & server akunmu.</p></div>
@@ -126,7 +126,7 @@
       <!-- KANAN: panel beli -->
       <div class="lg:col-span-5">
         <div class="sticky top-[88px] flex flex-col gap-md">
-          <div class="bg-white rounded-2xl p-md md:p-lg shadow-lg shadow-secondary/10 flex flex-col gap-md">
+          <div class="bg-surface-container-lowest rounded-2xl p-md md:p-lg shadow-lg shadow-secondary/10 flex flex-col gap-md">
             <div>
               <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#e84a8a,#10b981)">1</span> Masukkan Data Akun</h2>
               <div id="accountFields" class="grid grid-cols-1 sm:grid-cols-2 gap-sm"></div>
