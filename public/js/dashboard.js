@@ -17,6 +17,33 @@ async function api(path, opts = {}) {
   return res.json();
 }
 
+// ---------- Upload gambar (dari perangkat) ----------
+function pickAndUpload(el, mode) {
+  const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*";
+  inp.onchange = () => {
+    const f = inp.files && inp.files[0]; if (!f) return;
+    if (f.size > 4 * 1024 * 1024) { alert("Gambar terlalu besar (maks 4MB)."); return; }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const r = await api("/api/admin/upload", { method: "POST", body: JSON.stringify({ dataUrl: reader.result }) });
+        if (!r || r.error || !r.url) throw new Error(r && r.error ? r.error : "gagal");
+        if (mode === "append") el.value = (el.value.trim() ? el.value.trim() + "\n" : "") + r.url;
+        else el.value = r.url;
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+      } catch (e) { alert("Upload gagal: " + (e.message || "coba lagi")); }
+    };
+    reader.readAsDataURL(f);
+  };
+  inp.click();
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".upload-btn"); if (!b) return; e.preventDefault();
+  let el = b.dataset.target ? document.getElementById(b.dataset.target) : null;
+  if (!el) { const w = b.closest(".up-wrap"); if (w) el = w.querySelector("input, textarea"); }
+  if (el) pickAndUpload(el, b.dataset.mode || "set");
+});
+
 // ============================================================
 // AUTH
 // ============================================================
@@ -404,7 +431,7 @@ function renderPromoEditor() {
         <div class="field" style="margin:0"><label>Kategori (mis. Mobile Legends)</label><input class="input pr-cat" value="${escapeHtml(p.category || "")}" /></div>
         <div class="field" style="margin:0"><label>Judul Promo</label><input class="input pr-title" value="${escapeHtml(p.title || "")}" placeholder="Bonus Spesial" /></div>
         <div class="field" style="margin:0"><label>Info (mis. 210000 Diamond)</label><input class="input pr-info" value="${escapeHtml(p.info || "")}" /></div>
-        <div class="field" style="margin:0"><label>URL Gambar</label><input class="input pr-img" value="${escapeHtml(p.image || "")}" placeholder="https://..." /></div>
+        <div class="field up-wrap" style="margin:0"><label>URL Gambar</label><input class="input pr-img" value="${escapeHtml(p.image || "")}" placeholder="https://..." /><button type="button" class="btn btn-light btn-sm upload-btn" style="margin-top:6px">📷 Upload gambar</button></div>
         <div class="field" style="margin:0"><label>Batas Waktu (hitung mundur)</label><input class="input pr-deadline" type="datetime-local" value="${p.deadline ? toLocalInput(p.deadline) : ""}" /></div>
         <div class="field" style="margin:0"><label>Label Kuota</label><input class="input pr-qlabel" value="${escapeHtml(p.quotaLabel || "Sisa Kuota")}" /></div>
         <div class="field" style="margin:0"><label>Jumlah Kuota (kosong = sembunyi)</label><input class="input pr-quota" type="number" value="${p.quota != null ? p.quota : ""}" /></div>
@@ -450,11 +477,11 @@ function renderProduk() {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="set-grid">
         <div class="field" style="margin:0"><label>Nama</label><input class="input pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
         <div class="field" style="margin:0"><label>Publisher</label><input class="input pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
-        <div class="field" style="margin:0"><label>URL Gambar (cover)</label><input class="input pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/></div>
+        <div class="field up-wrap" style="margin:0"><label>URL Gambar (cover)</label><input class="input pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/><button type="button" class="btn btn-light btn-sm upload-btn" style="margin-top:6px">📷 Upload cover</button></div>
         <div class="field" style="margin:0"><label>Field diminta (koma)</label><input class="input pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
         <div class="field" style="margin:0;grid-column:1/-1"><label>Deskripsi / penjelasan game (tampil di kiri halaman detail)</label><textarea class="input pg-desc" data-g="${gi}" rows="3" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
         <div class="field" style="margin:0"><label>URL Video (YouTube / .mp4)</label><input class="input pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
-        <div class="field" style="margin:0"><label>Screenshots (URL gambar, 1 per baris)</label><textarea class="input pg-shots" data-g="${gi}" rows="2" placeholder="https://.../ss1.jpg">${escapeHtml((g.screenshots || []).join("\n"))}</textarea></div>
+        <div class="field up-wrap" style="margin:0"><label>Screenshots (URL gambar, 1 per baris)</label><textarea class="input pg-shots" data-g="${gi}" rows="2" placeholder="https://.../ss1.jpg">${escapeHtml((g.screenshots || []).join("\n"))}</textarea><button type="button" class="btn btn-light btn-sm upload-btn" data-mode="append" style="margin-top:6px">📷 Upload & tambah screenshot</button></div>
       </div>
       <div style="margin:10px 0 4px;font-weight:600;font-size:.82rem;color:var(--text-soft)">Item / Nominal (label · harga · stok)</div>
       ${g.items.map((it, ii) => `<div class="gitem">

@@ -31,6 +31,7 @@ const PUBLIC_DIR = path.join(__dirname, "public");
 const SEED_PATH = path.join(__dirname, "data", "db.json");
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
 const DB_PATH = path.join(DATA_DIR, "db.json");
+const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 
 const SMTP = {
@@ -236,7 +237,7 @@ function integrationStatus() {
   return { payment: !!i.paymentKey, ai: !!i.aiKey, idCheck: !!i.gameCheckUrl };
 }
 function readBody(req) { return new Promise((resolve) => { let raw = ""; req.on("data", (c) => (raw += c)); req.on("end", () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch { resolve({}); } }); }); }
-const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon", ".webp": "image/webp" };
+const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".ico": "image/x-icon", ".webp": "image/webp" };
 function serveFile(res, filePath) {
   fs.readFile(filePath, (err, content) => {
     if (err) { res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" }); return res.end("<h1>404 - Tidak ditemukan</h1>"); }
@@ -843,6 +844,21 @@ async function handleApi(req, res, pathname, query) {
     if (Array.isArray(b.games)) db.games = b.games;
     saveDB(); return sendJSON(res, 200, db.games);
   }
+  if (pathname === "/api/admin/upload" && method === "POST") {
+    if (!authed) return needAuth();
+    const b = await readBody(req);
+    const m = /^data:(image\/(png|jpe?g|gif|webp|svg\+xml));base64,(.+)$/.exec(String(b.dataUrl || ""));
+    if (!m) return sendJSON(res, 400, { error: "Format gambar tidak valid (png/jpg/gif/webp/svg)." });
+    const ext = m[2] === "jpeg" ? "jpg" : m[2] === "svg+xml" ? "svg" : m[2];
+    let buf; try { buf = Buffer.from(m[3], "base64"); } catch (e) { return sendJSON(res, 400, { error: "Gagal membaca gambar." }); }
+    if (buf.length > 4 * 1024 * 1024) return sendJSON(res, 413, { error: "Gambar terlalu besar (maks 4MB)." });
+    try {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+      const name = "img-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+      fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      return sendJSON(res, 201, { url: "/uploads/" + name });
+    } catch (e) { return sendJSON(res, 500, { error: "Gagal menyimpan gambar." }); }
+  }
   if (pathname === "/api/admin/sync-games" && method === "POST") {
     if (!authed) return needAuth();
     const integ = db.settings.integrations || {};
@@ -961,6 +977,7 @@ const server = http.createServer(async (req, res) => {
     // SEO routes (server-rendered)
     if (pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /dashboard\nSitemap: ${siteUrl()}/sitemap.xml\n`); }
     if (pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" }); return res.end(renderSitemap()); }
+    if (pathname.startsWith("/uploads/")) { const name = path.basename(pathname); const fp = path.join(UPLOAD_DIR, name); if (!fp.startsWith(UPLOAD_DIR)) { res.writeHead(403); return res.end("Forbidden"); } return serveFile(res, fp); }
     if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList(parsed.query.tag)); }
     const bm = pathname.match(/^\/(?:blog|artikel)\/([a-z0-9-]+)\/?$/);
     if (bm) {

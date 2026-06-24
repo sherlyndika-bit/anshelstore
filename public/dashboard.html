@@ -119,7 +119,7 @@
             <div class="field"><label>Judul</label><input class="input" id="artTitle" placeholder="Judul artikel" /></div>
             <div class="field"><label>Slug URL (opsional)</label><input class="input" id="artSlug" placeholder="otomatis-dari-judul" /></div>
             <div class="field"><label>Ringkasan (excerpt)</label><input class="input" id="artExcerpt" placeholder="Deskripsi singkat untuk SEO & kartu" /></div>
-            <div class="field"><label>URL Gambar Cover</label><input class="input" id="artCover" placeholder="https://..." /></div>
+            <div class="field"><label>URL Gambar Cover</label><input class="input" id="artCover" placeholder="https://..." /><button type="button" class="btn btn-light btn-sm upload-btn" data-target="artCover" style="margin-top:6px">📷 Upload gambar</button></div>
             <div class="field"><label>Tags (pisah koma)</label><input class="input" id="artTags" placeholder="Top Up, Tips" /></div>
             <div class="field"><label>Penulis</label><input class="input" id="artAuthor" placeholder="Tim Anshel Store" /></div>
             <div class="field"><label>Konten (Markdown: ## judul, **tebal**, - list, [teks](url))</label><textarea class="input" id="artContent" rows="10" placeholder="Tulis isi artikel di sini..."></textarea></div>
@@ -140,12 +140,12 @@
               <div class="field"><label>WhatsApp (628...)</label><input class="input" id="setWa" /></div>
               <div class="field"><label>Email</label><input class="input" id="setEmail" /></div>
               <div class="field"><label>Judul Hero</label><input class="input" id="setHeroTitle" /></div>
-              <div class="field"><label>URL Gambar Hero</label><input class="input" id="setHeroImage" /></div>
-              <div class="field"><label>URL Logo (gambar, kosong = teks)</label><input class="input" id="setLogo" placeholder="https://..." /></div>
+              <div class="field"><label>URL Gambar Hero</label><input class="input" id="setHeroImage" /><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setHeroImage" style="margin-top:6px">📷 Upload gambar</button></div>
+              <div class="field"><label>URL Logo (gambar, kosong = teks)</label><input class="input" id="setLogo" placeholder="https://..." /><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setLogo" style="margin-top:6px">📷 Upload logo</button></div>
             </div>
             <div class="field"><label>Subjudul Hero</label><textarea class="input" id="setHeroSub" rows="2"></textarea></div>
             <div class="field"><label>Meta Description (SEO)</label><textarea class="input" id="setMeta" rows="2"></textarea></div>
-            <div class="field"><label>Banner Utama / besar (URL gambar, 1 per baris — geser otomatis bila lebih dari 1)</label><textarea class="input" id="setBanners" rows="3" placeholder="https://contoh.com/banner1.jpg&#10;https://contoh.com/banner2.jpg"></textarea></div>
+            <div class="field"><label>Banner Utama / besar (URL gambar, 1 per baris — geser otomatis bila lebih dari 1)</label><textarea class="input" id="setBanners" rows="3" placeholder="https://contoh.com/banner1.jpg&#10;https://contoh.com/banner2.jpg"></textarea><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setBanners" data-mode="append" style="margin-top:6px">📷 Upload & tambah banner</button></div>
             <h4 style="margin:14px 0 6px;font-size:.9rem;color:var(--text-soft);font-weight:700">✏️ Teks Halaman Depan (bisa diubah)</h4>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
               <div class="field"><label>Judul "Layanan"</label><input class="input" id="setLayananTitle" /></div>
