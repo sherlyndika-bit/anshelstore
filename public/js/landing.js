@@ -1,6 +1,8 @@
 // Homepage anshelstore — carousel, kategori, katalog game (etalase), artikel
-if (location.hash && location.hash !== "#katalog" && location.hash !== "#layanan") { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
+if (location.hash) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
 window.scrollTo(0, 0);
+// Smooth-scroll tanpa # di URL (delegasi global)
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-scroll]"); if (b) { const t = document.getElementById(b.dataset.scroll); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); } } });
 
 const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
 const GRAD = { ml: "from-primary to-primary-container", ff: "from-tertiary to-tertiary-container", genshin: "from-secondary to-primary-container", valorant: "from-error to-secondary", pubgm: "from-primary-fixed-variant to-primary" };
@@ -11,55 +13,66 @@ let allGames = [], currentCat = "game", searchQ = "";
 
 const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
 
-// ---------- Banner utama (carousel gambar, dikelola dari dashboard) ----------
+// ---------- Slider banner (geser/translate, dikelola dari dashboard) ----------
+function buildSlider(el, slides, { interval = 5000 } = {}) {
+  if (!el) return;
+  if (!slides.length) { el.innerHTML = ""; return; }
+  const n = slides.length;
+  el.innerHTML =
+    `<div class="slider-track" style="display:flex;height:100%;width:${n * 100}%;transition:transform .7s cubic-bezier(.45,.05,.2,1)">` +
+    slides.map((s) => `<div style="flex:0 0 ${100 / n}%;width:${100 / n}%;height:100%;position:relative;overflow:hidden">${s}</div>`).join("") +
+    `</div>` +
+    (n > 1 ? `<div class="slider-dots absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>` : "");
+  if (n < 2) return;
+  const track = el.querySelector(".slider-track");
+  const dotsW = el.querySelector(".slider-dots");
+  dotsW.innerHTML = slides.map((_, k) => `<button class="carousel-dot ${k === 0 ? "active" : ""}" data-n="${k}"></button>`).join("");
+  const dots = dotsW.querySelectorAll(".carousel-dot");
+  let i = 0, timer;
+  const show = (k) => { i = (k + n) % n; track.style.transform = `translateX(-${i * (100 / n)}%)`; dots.forEach((d, x) => d.classList.toggle("active", x === i)); };
+  const play = () => { timer = setInterval(() => show(i + 1), interval); };
+  dots.forEach((d) => d.addEventListener("click", () => { show(Number(d.dataset.n)); clearInterval(timer); play(); }));
+  play();
+}
+
+const imgSlide = (src, n) => `<img src="${esc(src)}" alt="Banner ${n + 1}" class="absolute inset-0 w-full h-full object-cover"/>`;
+
+// Banner utama (besar) — etalase / AI Automation
 function renderMainBanner(banners) {
   const el = document.getElementById("mainBanner");
   if (!el) return;
-  if (banners && banners.length) {
-    el.innerHTML = banners.map((src, n) => `<div class="mb-slide absolute inset-0 transition-opacity duration-700" style="opacity:${n === 0 ? 1 : 0}"><img src="${esc(src)}" alt="Banner ${n + 1}" class="w-full h-full object-cover"/></div>`).join("") + `<div id="mbDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"></div>`;
-    const slides = el.querySelectorAll(".mb-slide"), dotsW = el.querySelector("#mbDots");
-    if (slides.length > 1) {
-      let i = 0;
-      dotsW.innerHTML = [...slides].map((_, n) => `<button class="carousel-dot ${n === 0 ? "active" : ""}" data-n="${n}"></button>`).join("");
-      const dots = dotsW.querySelectorAll(".carousel-dot");
-      const show = (n) => { slides.forEach((s, k) => (s.style.opacity = k === n ? "1" : "0")); dots.forEach((d, k) => d.classList.toggle("active", k === n)); i = n; };
-      dots.forEach((d) => d.addEventListener("click", () => show(Number(d.dataset.n))));
-      setInterval(() => show((i + 1) % slides.length), 4500);
-    }
-  } else {
-    // Placeholder bila belum ada banner diupload — tetap menonjolkan AI Automation
-    el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#8127cf,#6d28d9 45%,#00658d)">
-      <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><a href="#layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full">Pelajari Layanan</a></div>
+  if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
+  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#8127cf,#6d28d9 45%,#00658d)">
+      <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
       <span class="text-[70px] md:text-[120px] hidden sm:block opacity-90">🤖</span>
     </div>`;
-  }
 }
 renderMainBanner();
 
-// ---------- Banner promo PRODUK (kartu geser ala upoint) ----------
-function renderPromoProducts(games) {
-  const track = document.getElementById("promoTrack");
-  if (!track) return;
-  if (!games.length) { track.innerHTML = ""; return; }
-  const card = (g) => {
-    const min = Math.min(...g.items.map((i) => i.price));
-    const visual = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-12 h-12 rounded-lg object-cover"/>` : `<span class="w-12 h-12 rounded-lg bg-gradient-to-br ${gradOf(g.id)} flex items-center justify-center text-[22px]">${EMOJI[g.id] || "🎮"}</span>`;
-    return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="shrink-0 flex items-center gap-sm bg-surface-container-lowest border border-pink-soft/50 rounded-xl px-sm py-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-[230px]">${visual}<div class="min-w-0"><div class="font-label-md text-label-md text-on-surface font-bold truncate">${esc(g.name)}</div><div class="font-label-sm text-label-sm text-on-surface-variant">Mulai ${rupiah(min)}</div></div><span class="ml-auto bg-pink text-on-primary text-[10px] font-bold px-2 py-[2px] rounded-full">PROMO</span></a>`;
-  };
-  track.innerHTML = games.map(card).join("") + games.map(card).join(""); // duplikat untuk loop mulus
+// Banner kedua (lebih kecil) — promo / diskon, geser menggantikan sebelumnya
+function renderPromoBanner(banners) {
+  const el = document.getElementById("promoBanner");
+  if (!el) return;
+  if (banners && banners.length) { buildSlider(el, banners.map(imgSlide), { interval: 4200 }); return; }
+  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-md md:px-lg text-on-primary" style="background:linear-gradient(120deg,#e84a8a,#b81d68 55%,#8127cf)">
+      <div><span class="bg-white/20 rounded-full px-sm py-[2px] font-label-sm text-label-sm font-bold">PROMO</span><h3 class="font-headline-md md:font-headline-lg leading-tight mt-xs">Diskon spesial menantimu ✨</h3></div>
+      <span class="text-[40px] md:text-[64px] opacity-90">🎁</span>
+    </div>`;
 }
+renderPromoBanner();
 
 // ---------- Settings (teks, hero, banner) ----------
 async function loadStore() {
   try {
     const d = await fetch("/api/settings").then((r) => r.json());
     const s = d.store || {}, set = d.settings || {};
-    if (s.whatsapp) { const cb = document.getElementById("ctaBuild"); if (cb) cb.href = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau konsultasi jasa AI.")}`; }
+    if (s.whatsapp) { const cb = document.getElementById("ctaBuild"); if (cb) { cb.href = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau konsultasi jasa AI.")}`; cb.target = "_blank"; cb.rel = "noopener"; } }
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
     setText("txtLayananTitle", set.layananTitle); setText("txtLayananDesc", set.layananDesc);
     setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);
     if (set.heroImage) { const img = document.getElementById("heroImg"); if (img) img.src = set.heroImage; }
     renderMainBanner(Array.isArray(set.banners) ? set.banners : []);
+    renderPromoBanner(Array.isArray(set.promoBanners) ? set.promoBanners : []);
   } catch (e) {}
 }
 
@@ -90,7 +103,7 @@ function renderCatalog() {
   note.classList.toggle("hidden", list.length > 0);
 }
 async function loadGames() {
-  try { allGames = await fetch("/api/games").then((r) => r.json()); renderCatalog(); renderPromoProducts(allGames); }
+  try { allGames = await fetch("/api/games").then((r) => r.json()); renderCatalog(); }
   catch (e) { document.getElementById("gameCatalog").innerHTML = '<div class="col-span-full text-center text-error py-md">Gagal memuat game.</div>'; }
 }
 

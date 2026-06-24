@@ -64,8 +64,8 @@
         <div>
           <h4 class="font-label-md text-label-md text-on-surface font-bold mb-sm">Akun & Kontak</h4>
           <a href="/akun" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary block mb-xs">👤 Akun Saya</a>
-          <a id="footWa" href="#" target="_blank" rel="noopener" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary block mb-xs">💬 WhatsApp</a>
-          <a id="footMail" href="#" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary block">✉️ Email</a>
+          <a id="footWa" href="/tentang" target="_blank" rel="noopener" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary block mb-xs">💬 WhatsApp</a>
+          <a id="footMail" href="/tentang" class="font-label-md text-label-md text-on-surface-variant hover:text-secondary block">✉️ Email</a>
         </div>
       </div>
       <div class="border-t border-outline-variant/30 py-md text-center font-body-md text-body-md text-on-surface-variant">© ${new Date().getFullYear()} anshelstore. Dibuat dengan ❤️ di Indonesia.</div>
