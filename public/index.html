@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>anshelstore — Top Up Game Termurah & Jasa AI Automation</title>
+<title>anshelstore — Top Up Game Termurah, Instan & Aman</title>
 <meta name="description" content="Top up diamond Mobile Legends, Free Fire, Genshin, Valorant, PUBG & lainnya — instan, murah, aman. Plus jasa AI chatbot & automation untuk bisnismu." />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
@@ -16,91 +16,122 @@
 <div id="siteNav"></div>
 
 <main>
-  <!-- Hero ringkas + search -->
-  <section class="relative px-margin-mobile md:px-margin-desktop pt-lg pb-md overflow-hidden">
-    <div class="absolute top-[-15%] right-[-8%] w-[420px] h-[420px] rounded-full bg-pink-100/50 blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-[-20%] left-[-10%] w-[480px] h-[480px] rounded-full bg-secondary-fixed/30 blur-3xl pointer-events-none"></div>
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-lg items-center relative z-10">
-      <div class="flex flex-col gap-md text-center md:text-left">
-        <span class="inline-flex items-center gap-xs bg-pink-50 text-pink rounded-full px-sm py-xs w-fit mx-auto md:mx-0 font-label-md text-label-md" id="heroBadge"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1;">bolt</span> Instan • Murah • Aman</span>
-        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">Top Up Game <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Favoritmu</span>, Cepat & Termurah</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-[460px] mx-auto md:mx-0" id="heroSub">Diamond, UC, voucher game langsung masuk dalam hitungan menit. Plus jasa AI chatbot & automation untuk bisnismu.</p>
-        <div class="relative max-w-md mx-auto md:mx-0 w-full mt-xs">
-          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-          <input id="catalogSearch" type="text" placeholder="Cari game (Mobile Legends, Free Fire...)" class="w-full rounded-full border-pink-soft bg-surface-container-lowest pl-12 pr-4 py-3.5 shadow-sm focus:border-pink focus:ring-pink"/>
+  <!-- BANNER CAROUSEL -->
+  <section class="px-margin-mobile md:px-margin-desktop pt-md">
+    <div class="max-w-7xl mx-auto">
+      <div id="carousel" class="relative rounded-lg md:rounded-xl overflow-hidden h-[180px] md:h-[300px] shadow-[0_16px_40px_-16px_rgba(232,74,138,0.4)]">
+        <div class="carousel-slide absolute inset-0 opacity-100 transition-opacity duration-700" style="background:linear-gradient(120deg,#e84a8a,#8127cf)">
+          <div class="h-full flex items-center justify-between px-lg md:px-xl text-on-primary">
+            <div><div class="font-label-md text-label-md opacity-90 mb-xs">PROMO SPESIAL</div><h2 class="font-display-lg-mobile md:font-display-lg leading-tight">Top Up Makin Murah!</h2><a href="#katalog" class="inline-block mt-sm bg-surface text-pink font-label-md text-label-md px-md py-sm rounded-full">Top Up Sekarang</a></div>
+            <span class="text-[80px] md:text-[120px] hidden sm:block opacity-90">🎮</span>
+          </div>
         </div>
-      </div>
-      <div class="relative w-full h-[220px] md:h-[420px] flex items-center justify-center float-animation">
-        <img class="w-full h-full object-contain hero-pop" id="heroImg" alt="Maskot anshelstore" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUL34OTSMYqEtUJX9jDWkuNT0z0V_oq_osBhfARdBv7T4O-EXLs2rEaUM3YtGeCqS1bUEpEeV0UJvExwaBHbogCQaUzuKhE720JrC-khF_lMvDhqWya7Vkwp0b95pGqYgEsMoZSKlc7Nl8iviC7bme7a7xX01TUWhwHZjxmeAdQ3kCt9sTw34AthNnCUpjPP0tg0VUe04NA3Vb8nM2kdVg0FVnyqEXzbj7QMF-8zMn1RTT7nrD5QIM5hj3GoUZalEsK-hlPGyRXPE"/>
+        <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background:linear-gradient(120deg,#00658d,#00baff)">
+          <div class="h-full flex items-center justify-between px-lg md:px-xl text-on-primary">
+            <div><div class="font-label-md text-label-md opacity-90 mb-xs">CEPAT & AMAN</div><h2 class="font-display-lg-mobile md:font-display-lg leading-tight">Proses Instan 24/7</h2><a href="#katalog" class="inline-block mt-sm bg-surface text-primary font-label-md text-label-md px-md py-sm rounded-full">Pilih Game</a></div>
+            <span class="text-[80px] md:text-[120px] hidden sm:block opacity-90">⚡</span>
+          </div>
+        </div>
+        <div class="carousel-slide absolute inset-0 opacity-0 transition-opacity duration-700" style="background:linear-gradient(120deg,#8127cf,#00658d)">
+          <div class="h-full flex items-center justify-between px-lg md:px-xl text-on-primary">
+            <div><div class="font-label-md text-label-md opacity-90 mb-xs">UNTUK BISNIS</div><h2 class="font-display-lg-mobile md:font-display-lg leading-tight">Jasa AI Chatbot</h2><a href="#layanan" class="inline-block mt-sm bg-surface text-secondary font-label-md text-label-md px-md py-sm rounded-full">Konsultasi Gratis</a></div>
+            <span class="text-[80px] md:text-[120px] hidden sm:block opacity-90">🤖</span>
+          </div>
+        </div>
+        <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"></div>
       </div>
     </div>
-    <!-- Banner promo (opsional, dari dashboard) -->
-    <a id="promoBanner" href="#" class="hidden max-w-7xl mx-auto mt-md rounded-lg overflow-hidden shadow-md relative z-10"><img id="promoImg" src="" alt="Promo" class="w-full object-cover"/></a>
   </section>
 
-  <!-- KATALOG GAME (bintang utama) -->
-  <section id="katalog" class="px-margin-mobile md:px-margin-desktop py-lg scroll-mt-24">
+  <!-- SEARCH + KATEGORI -->
+  <section class="px-margin-mobile md:px-margin-desktop pt-md">
     <div class="max-w-7xl mx-auto">
-      <div class="flex items-end justify-between mb-md flex-wrap gap-sm">
-        <div>
-          <h2 class="font-headline-lg text-headline-lg text-on-surface" id="txtTopupTitle">Pilih Game</h2>
-          <p class="font-body-md text-body-md text-on-surface-variant" id="txtTopupDesc">Klik game untuk mulai top up. Proses instan & aman.</p>
-        </div>
-        <a href="/cek-transaksi" class="inline-flex items-center gap-xs font-label-md text-label-md text-pink hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Cek Transaksi</a>
+      <div class="relative mb-md">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input id="catalogSearch" type="text" placeholder="Cari game (Mobile Legends, Free Fire...)" class="w-full rounded-full border-pink-soft bg-surface-container-lowest pl-12 pr-4 py-3.5 shadow-sm focus:border-pink focus:ring-pink"/>
       </div>
-      <div id="gameCatalog" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-sm md:gap-gutter">
+      <div class="flex gap-xs overflow-x-auto pb-2" id="catTabs">
+        <button class="cat-tab active shrink-0" data-cat="game"><span class="material-symbols-outlined text-[18px]">sports_esports</span> Game</button>
+        <button class="cat-tab shrink-0" data-cat="voucher"><span class="material-symbols-outlined text-[18px]">card_giftcard</span> Voucher</button>
+        <button class="cat-tab shrink-0" data-cat="pulsa"><span class="material-symbols-outlined text-[18px]">sim_card</span> Pulsa & Data</button>
+        <button class="cat-tab shrink-0" data-cat="streaming"><span class="material-symbols-outlined text-[18px]">play_circle</span> Streaming</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- KATALOG GAME -->
+  <section id="katalog" class="px-margin-mobile md:px-margin-desktop py-md scroll-mt-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-md">
+        <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-xs" id="txtTopupTitle"><span class="material-symbols-outlined text-pink">local_fire_department</span> Game Populer</h2>
+        <a href="/cek-transaksi" class="font-label-md text-label-md text-pink inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Cek Transaksi</a>
+      </div>
+      <div id="gameCatalog" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-sm md:gap-gutter">
         <div class="col-span-full text-center text-on-surface-variant py-md">Memuat game…</div>
       </div>
-      <p id="noGameHome" class="hidden text-center text-on-surface-variant py-md">Game tidak ditemukan.</p>
+      <p id="noGameHome" class="hidden text-center text-on-surface-variant py-md">Belum ada produk di kategori ini. 🙏</p>
     </div>
   </section>
 
-  <!-- Kenapa kami / trust -->
+  <!-- CARA TOP UP -->
   <section class="px-margin-mobile md:px-margin-desktop py-md">
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-sm reveal">
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[28px] font-display-lg-mobile font-extrabold text-pink">1.000+</div><div class="font-label-md text-label-md text-on-surface-variant">Transaksi sukses</div></div>
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[28px] font-display-lg-mobile font-extrabold text-secondary">24/7</div><div class="font-label-md text-label-md text-on-surface-variant">Layanan & CS</div></div>
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[28px] font-display-lg-mobile font-extrabold text-primary">Instan</div><div class="font-label-md text-label-md text-on-surface-variant">Proses cepat</div></div>
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[28px] font-display-lg-mobile font-extrabold text-pink">4.9★</div><div class="font-label-md text-label-md text-on-surface-variant">Rating pembeli</div></div>
+    <div class="max-w-7xl mx-auto bg-surface-container-lowest rounded-lg p-md md:p-lg shadow-sm">
+      <h2 class="font-headline-md text-headline-md text-on-surface text-center mb-md">Cara Top Up — 3 Langkah ⚡</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+        <div class="flex items-center gap-sm"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold">1</div><div><b class="text-on-surface font-label-md">Pilih Game & Nominal</b><p class="font-label-sm text-label-sm text-on-surface-variant">Cari game, pilih item.</p></div></div>
+        <div class="flex items-center gap-sm"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold">2</div><div><b class="text-on-surface font-label-md">Masukkan ID & Bayar</b><p class="font-label-sm text-label-sm text-on-surface-variant">Isi User ID, pilih metode bayar.</p></div></div>
+        <div class="flex items-center gap-sm"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold">3</div><div><b class="text-on-surface font-label-md">Pesanan Diproses</b><p class="font-label-sm text-label-sm text-on-surface-variant">Item masuk dalam menit.</p></div></div>
+      </div>
     </div>
   </section>
 
-  <!-- Layanan AI (sekunder) -->
-  <section id="layanan" class="px-margin-mobile md:px-margin-desktop py-xl bg-surface relative">
-    <div class="max-w-7xl mx-auto text-center mb-lg reveal">
+  <!-- Trust -->
+  <section class="px-margin-mobile md:px-margin-desktop py-md">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-sm">
+      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-pink">1.000+</div><div class="font-label-sm text-label-sm text-on-surface-variant">Transaksi sukses</div></div>
+      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-secondary">24/7</div><div class="font-label-sm text-label-sm text-on-surface-variant">Layanan & CS</div></div>
+      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-primary">Instan</div><div class="font-label-sm text-label-sm text-on-surface-variant">Proses cepat</div></div>
+      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-pink">4.9★</div><div class="font-label-sm text-label-sm text-on-surface-variant">Rating pembeli</div></div>
+    </div>
+  </section>
+
+  <!-- Layanan AI -->
+  <section id="layanan" class="px-margin-mobile md:px-margin-desktop py-lg bg-surface">
+    <div class="max-w-7xl mx-auto text-center mb-md reveal">
       <span class="font-label-md text-label-md text-secondary font-bold">UNTUK BISNIS</span>
       <h2 class="font-headline-lg text-headline-lg text-on-surface mt-xs" id="txtLayananTitle">Jasa AI Automation</h2>
       <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto" id="txtLayananDesc">Chatbot AI 24/7, dashboard human takeover, dan otomasi workflow untuk bisnismu.</p>
     </div>
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter reveal">
-      <div class="rounded-xl p-md border border-pink-soft/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
-        <div class="w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center mb-md"><span class="material-symbols-outlined text-pink text-[28px]" style="font-variation-settings:'FILL' 1;">smart_toy</span></div>
-        <h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Chatbot Pintar</h3>
-        <p class="font-body-md text-body-md text-on-surface-variant">AI yang paham konteks bisnismu & bicara dengan gaya brand-mu.</p>
-      </div>
-      <div class="rounded-xl p-md border border-secondary-fixed/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
-        <div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center mb-md"><span class="material-symbols-outlined text-secondary text-[28px]" style="font-variation-settings:'FILL' 1;">support_agent</span></div>
-        <h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Support 24/7 + Takeover</h3>
-        <p class="font-body-md text-body-md text-on-surface-variant">Otomatis sepanjang waktu; agent bisa ambil alih kapan saja.</p>
-      </div>
-      <div class="rounded-xl p-md border border-primary-fixed/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
-        <div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center mb-md"><span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings:'FILL' 1;">bolt</span></div>
-        <h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Workflow Automation</h3>
-        <p class="font-body-md text-body-md text-on-surface-variant">Sambungkan semua tools; robot urus tugas berulang.</p>
+      <div class="rounded-xl p-md border border-pink-soft/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"><div class="w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center mb-md"><span class="material-symbols-outlined text-pink text-[28px]" style="font-variation-settings:'FILL' 1;">smart_toy</span></div><h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Chatbot Pintar</h3><p class="font-body-md text-body-md text-on-surface-variant">AI yang paham konteks bisnismu & bicara dengan gaya brand-mu.</p></div>
+      <div class="rounded-xl p-md border border-secondary-fixed/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"><div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center mb-md"><span class="material-symbols-outlined text-secondary text-[28px]" style="font-variation-settings:'FILL' 1;">support_agent</span></div><h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Support 24/7 + Takeover</h3><p class="font-body-md text-body-md text-on-surface-variant">Otomatis sepanjang waktu; agent bisa ambil alih kapan saja.</p></div>
+      <div class="rounded-xl p-md border border-primary-fixed/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"><div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center mb-md"><span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings:'FILL' 1;">bolt</span></div><h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Workflow Automation</h3><p class="font-body-md text-body-md text-on-surface-variant">Sambungkan semua tools; robot urus tugas berulang.</p></div>
+    </div>
+    <div class="max-w-7xl mx-auto text-center mt-md"><a id="ctaBuild" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-xs bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md px-gutter py-md rounded-full hover:scale-105 transition-transform">💬 Konsultasi Gratis</a></div>
+  </section>
+
+  <!-- Metode pembayaran -->
+  <section class="px-margin-mobile md:px-margin-desktop py-lg">
+    <div class="max-w-7xl mx-auto text-center">
+      <p class="font-label-md text-label-md text-on-surface-variant mb-sm">Metode Pembayaran Didukung</p>
+      <div class="flex flex-wrap justify-center gap-xs">
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">QRIS</span>
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">DANA</span>
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">OVO</span>
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">GoPay</span>
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">ShopeePay</span>
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">BCA</span>
+        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">Mandiri</span>
       </div>
     </div>
-    <div class="max-w-7xl mx-auto text-center mt-lg"><a id="ctaBuild" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-xs bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md px-gutter py-md rounded-full hover:scale-105 transition-transform">💬 Konsultasi Gratis</a></div>
   </section>
 
   <!-- Artikel -->
-  <section id="articlesSection" class="px-margin-mobile md:px-margin-desktop py-xl hidden">
+  <section id="articlesSection" class="px-margin-mobile md:px-margin-desktop py-lg hidden">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-lg reveal">
-        <h2 class="font-headline-lg text-headline-lg text-on-surface" id="txtArtikelTitle">Artikel & Tips</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant">Panduan top up, tips gaming & insight AI.</p>
-      </div>
+      <div class="text-center mb-md reveal"><h2 class="font-headline-lg text-headline-lg text-on-surface" id="txtArtikelTitle">Artikel & Tips</h2></div>
       <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter"></div>
-      <div class="text-center mt-lg"><a href="/blog" class="inline-flex items-center gap-xs font-label-md text-label-md text-pink hover:scale-105 transition-transform">Lihat semua artikel <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+      <div class="text-center mt-md"><a href="/blog" class="inline-flex items-center gap-xs font-label-md text-label-md text-pink">Lihat semua <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
     </div>
   </section>
 </main>

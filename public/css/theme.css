@@ -106,3 +106,11 @@
   .cw-bubble { bottom: 92px !important; }
   .cw-panel { bottom: 162px !important; max-height: 62vh !important; }
 }
+
+
+
+/* Tab kategori & carousel homepage */
+.cat-tab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 999px; background: #fff; border: 1px solid #ffe3ee; color: #3d4850; font-weight: 600; font-size: .85rem; cursor: pointer; white-space: nowrap; transition: .18s; font-family: inherit; }
+.cat-tab.active { background: linear-gradient(135deg, #e84a8a, #8127cf); color: #fff; border-color: transparent; box-shadow: 0 6px 16px -6px rgba(232,74,138,.5); }
+.carousel-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.5); cursor: pointer; transition: .25s; border: 0; padding: 0; }
+.carousel-dot.active { width: 22px; background: #fff; }

@@ -1,5 +1,5 @@
-// Homepage anshelstore — katalog game (bintang), search, banner promo, artikel
-if (location.hash) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
+// Homepage anshelstore — carousel, kategori, katalog game (etalase), artikel
+if (location.hash && location.hash !== "#katalog" && location.hash !== "#layanan") { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
 window.scrollTo(0, 0);
 
 const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
@@ -7,67 +7,77 @@ const GRAD = { ml: "from-primary to-primary-container", ff: "from-tertiary to-te
 const gradOf = (id) => GRAD[id] || "from-pink to-secondary";
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-let allGames = [];
+let allGames = [], currentCat = "game", searchQ = "";
 
+// ---------- Carousel ----------
+(function carousel() {
+  const slides = document.querySelectorAll(".carousel-slide");
+  const dotsWrap = document.getElementById("carouselDots");
+  if (!slides.length || !dotsWrap) return;
+  let i = 0;
+  dotsWrap.innerHTML = [...slides].map((_, n) => `<button class="carousel-dot ${n === 0 ? "active" : ""}" data-n="${n}"></button>`).join("");
+  const dots = dotsWrap.querySelectorAll(".carousel-dot");
+  const show = (n) => { slides.forEach((s, k) => s.style.opacity = k === n ? "1" : "0"); dots.forEach((d, k) => d.classList.toggle("active", k === n)); i = n; };
+  dots.forEach((d) => d.addEventListener("click", () => show(Number(d.dataset.n))));
+  setInterval(() => show((i + 1) % slides.length), 4500);
+})();
+
+// ---------- Settings (teks, hero, banner) ----------
 async function loadStore() {
   try {
     const d = await fetch("/api/settings").then((r) => r.json());
     const s = d.store || {}, set = d.settings || {};
-    if (s.whatsapp) {
-      const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau konsultasi jasa AI.")}`;
-      const cb = document.getElementById("ctaBuild"); if (cb) cb.href = wa;
-    }
+    if (s.whatsapp) { const cb = document.getElementById("ctaBuild"); if (cb) cb.href = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo anshelstore, saya mau konsultasi jasa AI.")}`; }
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
-    setText("heroSub", set.heroSubtitle);
-    setText("txtLayananTitle", set.layananTitle);
-    setText("txtLayananDesc", set.layananDesc);
-    setText("txtTopupTitle", set.topupTitle);
-    setText("txtTopupDesc", set.topupDesc);
-    setText("txtArtikelTitle", set.articlesTitle);
-    const img = document.getElementById("heroImg");
-    if (img && set.heroImage) img.src = set.heroImage;
-    // Banner promo
+    setText("txtLayananTitle", set.layananTitle); setText("txtLayananDesc", set.layananDesc);
+    setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);
     if (set.bannerImage) {
-      const b = document.getElementById("promoBanner");
-      document.getElementById("promoImg").src = set.bannerImage;
-      if (set.bannerLink) b.href = set.bannerLink;
-      b.classList.remove("hidden");
+      const slide = document.querySelector(".carousel-slide");
+      if (slide) { slide.style.backgroundImage = `url('${set.bannerImage}')`; slide.style.backgroundSize = "cover"; slide.style.backgroundPosition = "center"; }
     }
-  } catch (e) { /* abaikan */ }
+  } catch (e) {}
 }
 
-function gameCard(g) {
+// ---------- Katalog (etalase) ----------
+function gameCard(g, i) {
   const visual = g.image
-    ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-full h-full object-cover"/>`
-    : `<span class="text-[2.4rem]">${EMOJI[g.id] || "🎮"}</span>`;
-  return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group bg-surface-container-lowest rounded-lg p-sm border border-pink-soft/40 shadow-sm hover:-translate-y-1 hover:shadow-[0_12px_28px_-10px_rgba(232,74,138,0.4)] transition-all text-center">
-    <div class="aspect-square rounded-xl overflow-hidden bg-gradient-to-br ${gradOf(g.id)} flex items-center justify-center mb-xs">${visual}</div>
-    <div class="font-label-md text-label-md text-on-surface font-bold leading-tight truncate">${esc(g.name)}</div>
-    <div class="font-label-sm text-label-sm text-on-surface-variant truncate">${esc(g.publisher || "")}</div>
+    ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="absolute inset-0 w-full h-full object-cover"/>`
+    : `<span class="text-[2.6rem] md:text-[3rem]">${EMOJI[g.id] || "🎮"}</span>`;
+  const badge = i < 3 ? `<span class="absolute top-1.5 left-1.5 bg-pink text-on-primary text-[10px] font-bold px-2 py-[2px] rounded-full shadow">POPULER</span>` : "";
+  return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group rounded-xl overflow-hidden bg-surface-container-lowest shadow-sm border border-pink-soft/40 hover:-translate-y-1 hover:shadow-[0_14px_30px_-12px_rgba(232,74,138,0.45)] transition-all">
+    <div class="aspect-[3/4] bg-gradient-to-br ${gradOf(g.id)} relative flex items-center justify-center overflow-hidden">
+      ${visual}${badge}
+      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 pt-6">
+        <div class="text-white font-bold text-[12px] md:text-[13px] leading-tight line-clamp-2">${esc(g.name)}</div>
+      </div>
+    </div>
+    <div class="px-2 py-1.5 text-center"><div class="font-label-sm text-label-sm text-on-surface-variant truncate">${esc(g.publisher || "Top Up")}</div></div>
   </a>`;
 }
-
-function renderCatalog(filter) {
+function renderCatalog() {
   const wrap = document.getElementById("gameCatalog");
-  const q = (filter || "").toLowerCase().trim();
+  const note = document.getElementById("noGameHome");
+  if (currentCat !== "game") { wrap.innerHTML = ""; note.textContent = "Kategori ini segera hadir 🙏"; note.classList.remove("hidden"); return; }
+  const q = searchQ.toLowerCase().trim();
   const list = q ? allGames.filter((g) => g.name.toLowerCase().includes(q) || (g.publisher || "").toLowerCase().includes(q)) : allGames;
   wrap.innerHTML = list.map(gameCard).join("");
-  document.getElementById("noGameHome").classList.toggle("hidden", list.length > 0);
+  note.textContent = "Game tidak ditemukan.";
+  note.classList.toggle("hidden", list.length > 0);
 }
-
 async function loadGames() {
-  try {
-    allGames = await fetch("/api/games").then((r) => r.json());
-    renderCatalog("");
-  } catch (e) { document.getElementById("gameCatalog").innerHTML = '<div class="col-span-full text-center text-error py-md">Gagal memuat game.</div>'; }
+  try { allGames = await fetch("/api/games").then((r) => r.json()); renderCatalog(); }
+  catch (e) { document.getElementById("gameCatalog").innerHTML = '<div class="col-span-full text-center text-error py-md">Gagal memuat game.</div>'; }
 }
 
-const searchEl = document.getElementById("catalogSearch");
-if (searchEl) searchEl.addEventListener("input", (e) => {
-  renderCatalog(e.target.value);
-  if (e.target.value) document.getElementById("katalog").scrollIntoView({ behavior: "smooth", block: "start" });
-});
+document.getElementById("catalogSearch").addEventListener("input", (e) => { searchQ = e.target.value; if (currentCat !== "game") { currentCat = "game"; document.querySelectorAll(".cat-tab").forEach((t) => t.classList.toggle("active", t.dataset.cat === "game")); } renderCatalog(); });
+document.querySelectorAll(".cat-tab").forEach((t) => t.addEventListener("click", () => {
+  currentCat = t.dataset.cat;
+  document.querySelectorAll(".cat-tab").forEach((x) => x.classList.toggle("active", x === t));
+  renderCatalog();
+  document.getElementById("katalog").scrollIntoView({ behavior: "smooth", block: "start" });
+}));
 
+// ---------- Artikel ----------
 async function loadArticles() {
   try {
     const arts = await fetch("/api/articles").then((r) => r.json());
@@ -78,11 +88,10 @@ async function loadArticles() {
         <div class="p-md flex flex-col gap-xs flex-grow">
           <div class="flex flex-wrap gap-xs">${(a.tags || []).slice(0, 2).map((t) => `<span class="bg-pink-50 text-pink font-label-sm text-label-sm px-xs py-[2px] rounded-full">${esc(t)}</span>`).join("")}</div>
           <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${esc(a.title)}</h3>
-          <p class="font-body-md text-body-md text-on-surface-variant flex-grow">${esc(a.excerpt)}</p>
         </div>
       </a>`).join("");
     document.getElementById("articlesSection").classList.remove("hidden");
-  } catch (e) { /* abaikan */ }
+  } catch (e) {}
 }
 
 loadStore();
