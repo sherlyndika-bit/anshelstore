@@ -52,31 +52,30 @@ $("gameSearch").addEventListener("input", (e) => { searchQ = e.target.value.toLo
 
 /* ---------------- DETAIL GAME ---------------- */
 function ytId(u) { const m = String(u).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(u) ? u : null); }
-function renderGameMedia(game) {
-  const media = [];
-  if (game.video) { const id = ytId(game.video); media.push(id ? { type: "yt", src: id } : { type: "mp4", src: game.video }); }
-  (game.screenshots || []).filter(Boolean).forEach((s) => media.push({ type: "img", src: s }));
-  if (game.image) media.push({ type: "img", src: game.image });
-  const viewer = $("gameMedia"), thumbs = $("gameThumbs");
-  if (!media.length) {
-    viewer.innerHTML = `<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white" style="background:${gradOf(game)}"><span class="text-[72px]">${EMOJI[game.id] || "🎮"}</span><span class="font-headline-md font-bold opacity-90">${esc(game.name)}</span></div>`;
-    thumbs.innerHTML = ""; return;
+function renderGameHeaderBg(game) {
+  const bg = $("gameHeaderBg");
+  bg.style.filter = ""; bg.style.transform = ""; bg.style.opacity = ""; bg.style.inset = ""; bg.style.background = "";
+  if (game.video) {
+    const id = ytId(game.video);
+    // video jadi SAMPUL background di belakang nama/publisher/kategori — autoplay, mute, loop
+    bg.style.inset = "0"; bg.style.filter = "none"; bg.style.transform = "none"; bg.style.opacity = "1";
+    bg.innerHTML = id
+      ? `<div class="absolute inset-0 overflow-hidden"><iframe class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style="width:100%;aspect-ratio:16/9;min-height:100%;min-width:100%" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0&iv_load_policy=3" frameborder="0" allow="autoplay; encrypted-media"></iframe></div>`
+      : `<video class="absolute inset-0 w-full h-full object-cover" src="${esc(game.video)}" autoplay muted loop playsinline></video>`;
+  } else if (game.image) {
+    bg.innerHTML = "";
+    bg.style.background = `center/cover no-repeat url('${game.image}')`;
+  } else {
+    bg.innerHTML = "";
+    bg.style.background = gradOf(game);
   }
-  const show = (i) => {
-    const m = media[i];
-    if (m.type === "yt") {
-      // video jadi SAMPUL: autoplay, muted, loop, tanpa kontrol
-      viewer.innerHTML = `<iframe class="absolute inset-0 w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${m.src}?autoplay=1&mute=1&loop=1&playlist=${m.src}&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0" title="${esc(game.name)}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-    } else if (m.type === "mp4") {
-      viewer.innerHTML = `<video class="absolute inset-0 w-full h-full object-cover bg-black" src="${esc(m.src)}" autoplay muted loop playsinline></video>`;
-    } else {
-      viewer.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover" src="${esc(m.src)}" alt="${esc(game.name)}"/>`;
-    }
-    thumbs.querySelectorAll(".thumb").forEach((t, x) => t.classList.toggle("active", x === i));
-  };
-  thumbs.innerHTML = media.map((m, i) => `<button type="button" class="thumb ${i === 0 ? "active" : ""}" data-i="${i}">${m.type === "img" ? `<img src="${esc(m.src)}" alt=""/>` : `<div class="w-full h-full grid place-items-center text-white text-[16px]" style="background:${gradOf(game)}"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">play_circle</span></div>`}</button>`).join("");
-  thumbs.querySelectorAll(".thumb").forEach((t) => t.addEventListener("click", () => show(Number(t.dataset.i))));
-  show(0);
+}
+function renderGameShots(game) {
+  const el = $("gameShots"); if (!el) return;
+  const shots = (game.screenshots || []).filter(Boolean);
+  el.innerHTML = shots.length
+    ? shots.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener" class="thumb !w-32 !h-20"><img src="${esc(s)}" alt="${esc(game.name)}"/></a>`).join("")
+    : "";
 }
 function renderGameInfo(game) {
   $("gameDescName").textContent = game.name;
@@ -90,15 +89,15 @@ function showDetail(game) {
   $("detailView").classList.remove("hidden");
   document.body.setAttribute("data-view", "detail");
 
-  // Header
+  // Header — video/gambar jadi background DI BELAKANG nama/publisher/kategori
+  renderGameHeaderBg(game);
   const useImg = !!game.image;
-  $("gameHeaderBg").style.background = useImg ? `center/cover no-repeat url('${game.image}')` : gradOf(game);
   $("ghCover").style.background = useImg ? "#0000" : gradOf(game);
   $("ghCover").innerHTML = useImg ? `<img src="${esc(game.image)}" alt="${esc(game.name)}" class="w-full h-full object-cover"/>` : (EMOJI[game.id] || "🎮");
   $("ghName").textContent = game.name;
   $("ghPub").textContent = game.publisher ? "oleh " + game.publisher : "";
-  renderGameMedia(game);
   renderGameInfo(game);
+  renderGameShots(game);
 
   // Akun
   $("accountFields").innerHTML = game.needs.map((n) => `

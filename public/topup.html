@@ -36,7 +36,7 @@
   .receipt-divider { border-top: 2px dashed #cdd3dc; }
   .payment-card.sel { border-color: #10b981 !important; background: linear-gradient(160deg,#f0fdf4,#dcfce7); }
   .cat-chip.active { background: linear-gradient(135deg,#e84a8a,#10b981); color: #fff; border-color: transparent; }
-  #gameThumbs::-webkit-scrollbar { display: none; }
+  #gameShots::-webkit-scrollbar { display: none; }
   .thumb { width: 92px; height: 56px; border-radius: 10px; overflow: hidden; flex: 0 0 auto; cursor: pointer; border: 2px solid transparent; opacity: .7; transition: .15s; }
   .thumb.active, .thumb:hover { opacity: 1; border-color: #10b981; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -82,9 +82,9 @@
 <div id="detailView" class="hidden">
   <section id="gameHeader" class="text-white">
     <div id="gameHeaderBg"></div>
-    <div class="relative max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-md pb-lg md:pt-lg md:pb-xl">
-      <button id="backToCatalog" type="button" class="inline-flex items-center gap-1.5 text-label-md font-bold bg-white/15 hover:bg-white/25 backdrop-blur rounded-full px-3 py-1.5 mb-md transition"><span class="material-symbols-outlined text-[18px]">arrow_back</span> Pilih game lain</button>
-      <div class="flex items-end gap-4 md:gap-6">
+    <div class="relative max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-md pb-lg md:pt-lg md:pb-xl min-h-[280px] md:min-h-[360px] flex flex-col">
+      <button id="backToCatalog" type="button" class="self-start inline-flex items-center gap-1.5 text-label-md font-bold bg-white/15 hover:bg-white/25 backdrop-blur rounded-full px-3 py-1.5 mb-md transition"><span class="material-symbols-outlined text-[18px]">arrow_back</span> Pilih game lain</button>
+      <div class="flex items-end gap-4 md:gap-6 mt-auto">
         <div id="ghCover" class="w-24 h-24 md:w-32 md:h-32 rounded-2xl shadow-2xl shrink-0 overflow-hidden flex items-center justify-center text-[52px] ring-2 ring-white/30"></div>
         <div class="min-w-0 pb-1">
           <h1 id="ghName" class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg leading-none"></h1>
@@ -101,16 +101,13 @@
 
   <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-xl">
-      <!-- KIRI: media + penjelasan game -->
+      <!-- KIRI: penjelasan game -->
       <div class="lg:col-span-7 flex flex-col gap-md">
-        <div class="bg-white rounded-2xl p-sm md:p-md shadow-sm">
-          <div id="gameMedia" class="relative rounded-xl overflow-hidden aspect-video bg-surface-container"></div>
-          <div id="gameThumbs" class="flex gap-2 overflow-x-auto mt-2"></div>
-        </div>
         <div class="bg-white rounded-2xl p-md md:p-lg shadow-sm">
           <h2 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-2"><span class="material-symbols-outlined text-secondary">info</span> Tentang <span id="gameDescName"></span></h2>
           <div id="gameDesc" class="gd-body font-body-md text-body-md text-on-surface-variant"></div>
           <div id="gameNeeds" class="mt-md flex flex-wrap gap-2"></div>
+          <div id="gameShots" class="flex gap-2 overflow-x-auto mt-md"></div>
         </div>
         <div class="bg-white rounded-2xl p-md md:p-lg shadow-sm">
           <h3 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">help</span> Cara Top Up</h3>
