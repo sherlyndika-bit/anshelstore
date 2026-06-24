@@ -38,18 +38,11 @@ function buildSlider(el, slides, opts = {}) {
 
 const imgSlide = (src, n) => `<img src="${esc(src)}" alt="Banner ${n + 1}" class="absolute inset-0 w-full h-full object-cover"/>`;
 
-// Banner utama — 16:9 di tengah, kiri & kanan pantulan cermin (flip) dari banner aktif
+// Banner utama — bersih: 16:9 di tengah, satu tampil penuh, geser otomatis bila >1
 function renderMainBanner(banners) {
   const el = document.getElementById("mainBanner");
   if (!el) return;
-  const ml = document.getElementById("mbMirrorL"), mr = document.getElementById("mbMirrorR");
-  const setMirror = (src) => { [ml, mr].forEach((m) => { if (!m) return; if (src) { m.src = src; m.style.display = ""; } else { m.removeAttribute("src"); m.style.display = "none"; } }); };
-  if (banners && banners.length) {
-    setMirror(banners[0]);
-    buildSlider(el, banners.map(imgSlide), { onChange: (i) => setMirror(banners[i]) });
-    return;
-  }
-  setMirror(null);
+  if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
   el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#bf5d7e,#a84668 45%,#7d9b78)">
       <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
       <span class="text-[60px] md:text-[110px] hidden sm:block opacity-90">🤖</span>
