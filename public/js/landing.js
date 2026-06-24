@@ -37,15 +37,23 @@ function buildSlider(el, slides, { interval = 5000 } = {}) {
 
 const imgSlide = (src, n) => `<img src="${esc(src)}" alt="Banner ${n + 1}" class="absolute inset-0 w-full h-full object-cover"/>`;
 
-// Banner utama (besar) — etalase / AI Automation
+// Banner utama — carousel "peek" ala upoint (banner di tengah, sisi kiri/kanan ngintip)
 function renderMainBanner(banners) {
   const el = document.getElementById("mainBanner");
   if (!el) return;
-  if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
-  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#bf5d7e,#a84668 45%,#7d9b78)">
-      <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
-      <span class="text-[70px] md:text-[120px] hidden sm:block opacity-90">🤖</span>
-    </div>`;
+  const wrap = (inner) => `<div class="mb-slide snap-center shrink-0 w-[82%] md:w-[76%] h-full relative rounded-xl md:rounded-2xl overflow-hidden shadow-[0_16px_40px_-18px_rgba(125,155,120,0.5)]">${inner}</div>`;
+  let slides;
+  if (banners && banners.length) {
+    slides = banners.map((src, n) => wrap(`<img src="${esc(src)}" alt="Banner ${n + 1}" class="absolute inset-0 w-full h-full object-cover"/>`));
+  } else {
+    slides = [wrap(`<div class="absolute inset-0 flex items-center justify-between px-lg text-on-primary" style="background:linear-gradient(120deg,#bf5d7e,#a84668 45%,#7d9b78)"><div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div><span class="text-[60px] md:text-[110px] hidden sm:block opacity-90">🤖</span></div>`)];
+  }
+  el.innerHTML = slides.join("");
+  const items = el.querySelectorAll(".mb-slide");
+  if (items.length < 2) return;
+  let i = 0;
+  const center = (idx) => { const it = items[idx]; el.scrollTo({ left: it.offsetLeft - (el.clientWidth - it.offsetWidth) / 2, behavior: "smooth" }); };
+  setInterval(() => { i = (i + 1) % items.length; center(i); }, 5000);
 }
 renderMainBanner();
 
