@@ -16,38 +16,18 @@
 <div id="siteNav"></div>
 
 <main>
-  <!-- BANNER UTAMA: AI Automation + etalase layanan -->
+  <!-- BANNER UTAMA: carousel gambar (dikelola dari dashboard) -->
   <section class="px-margin-mobile md:px-margin-desktop pt-md">
-    <div class="max-w-7xl mx-auto rounded-lg md:rounded-xl overflow-hidden relative shadow-[0_18px_44px_-18px_rgba(129,39,207,0.55)]" style="background:linear-gradient(120deg,#8127cf 0%,#6d28d9 45%,#00658d 100%)">
-      <div class="absolute inset-0 opacity-25 pointer-events-none" style="background:radial-gradient(circle at 82% 18%, #e84a8a, transparent 50%)"></div>
-      <div class="relative grid grid-cols-1 md:grid-cols-2 gap-md items-center p-lg md:p-xl text-on-primary">
-        <div class="flex flex-col gap-sm text-center md:text-left">
-          <span class="inline-flex items-center gap-xs bg-white/15 rounded-full px-sm py-xs w-fit mx-auto md:mx-0 font-label-md text-label-md">⭐ Spesialis AI Automation</span>
-          <h1 class="font-display-lg-mobile md:font-display-lg leading-tight">Otomatiskan Bisnismu dengan <span class="text-pink-soft">AI</span></h1>
-          <p class="font-body-md text-body-md opacity-90 max-w-[460px] mx-auto md:mx-0" id="heroSub">Chatbot AI 24/7, dashboard human takeover & automasi workflow. Plus layanan top up game instan — semua dalam satu ekosistem.</p>
-          <div class="flex flex-wrap gap-xs justify-center md:justify-start mt-xs">
-            <a id="ctaBuild" href="#" target="_blank" rel="noopener" class="bg-white text-secondary font-label-md text-label-md px-gutter py-sm rounded-full hover:scale-105 transition-transform">🤖 Konsultasi AI Gratis</a>
-            <a href="#katalog" class="bg-white/15 text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full hover:bg-white/25 transition-colors">🎮 Top Up Game</a>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-xs mt-sm">
-            <a href="#layanan" class="bg-white/10 hover:bg-white/20 rounded-DEFAULT px-2 py-2 text-center transition-colors"><div class="text-[20px]">🤖</div><div class="font-label-sm text-label-sm">AI Chatbot</div></a>
-            <a href="#layanan" class="bg-white/10 hover:bg-white/20 rounded-DEFAULT px-2 py-2 text-center transition-colors"><div class="text-[20px]">⚙️</div><div class="font-label-sm text-label-sm">Automation</div></a>
-            <a href="#katalog" class="bg-white/10 hover:bg-white/20 rounded-DEFAULT px-2 py-2 text-center transition-colors"><div class="text-[20px]">🎮</div><div class="font-label-sm text-label-sm">Top Up Game</div></a>
-            <a href="/blog" class="bg-white/10 hover:bg-white/20 rounded-DEFAULT px-2 py-2 text-center transition-colors"><div class="text-[20px]">📝</div><div class="font-label-sm text-label-sm">Artikel</div></a>
-          </div>
-        </div>
-        <div class="hidden md:flex justify-end items-center h-[280px]">
-          <img id="heroImg" class="w-full h-full object-contain hero-pop" alt="Maskot anshelstore AI" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUL34OTSMYqEtUJX9jDWkuNT0z0V_oq_osBhfARdBv7T4O-EXLs2rEaUM3YtGeCqS1bUEpEeV0UJvExwaBHbogCQaUzuKhE720JrC-khF_lMvDhqWya7Vkwp0b95pGqYgEsMoZSKlc7Nl8iviC7bme7a7xX01TUWhwHZjxmeAdQ3kCt9sTw34AthNnCUpjPP0tg0VUe04NA3Vb8nM2kdVg0FVnyqEXzbj7QMF-8zMn1RTT7nrD5QIM5hj3GoUZalEsK-hlPGyRXPE"/>
-        </div>
-      </div>
+    <div class="max-w-7xl mx-auto">
+      <div id="mainBanner" class="relative rounded-lg md:rounded-xl overflow-hidden h-[180px] md:h-[300px] shadow-[0_18px_44px_-18px_rgba(129,39,207,0.5)]"></div>
     </div>
   </section>
 
-  <!-- BANNER PROMO BERJALAN -->
+  <!-- BANNER PROMO PRODUK (geser, ala upoint) -->
   <section class="px-margin-mobile md:px-margin-desktop pt-md">
     <div class="max-w-7xl mx-auto">
-      <div class="flex items-center gap-xs mb-xs"><span class="material-symbols-outlined text-pink">campaign</span><span class="font-label-md text-label-md text-on-surface font-bold">Promo & Diskon</span></div>
-      <div class="marquee rounded-lg py-1"><div class="marquee-track" id="promoTrack"></div></div>
+      <div class="flex items-center gap-xs mb-xs"><span class="material-symbols-outlined text-pink">local_offer</span><span class="font-label-md text-label-md text-on-surface font-bold">Promo &amp; Terlaris</span></div>
+      <div class="marquee"><div class="marquee-track" id="promoTrack"></div></div>
     </div>
   </section>
 

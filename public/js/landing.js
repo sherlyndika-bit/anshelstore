@@ -9,23 +9,45 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 
 let allGames = [], currentCat = "game", searchQ = "";
 
-// ---------- Promo marquee (banner kedua berjalan) ----------
-const DEFAULT_PROMOS = [
-  "🎮 Top Up ML mulai Rp22.000",
-  "⚡ Proses instan 24 jam nonstop",
-  "🤖 Konsultasi AI Chatbot GRATIS",
-  "💸 Harga termurah se-Indonesia",
-  "🔒 100% aman tanpa password akun",
-  "🎁 Cashback QRIS transaksi pertama",
-];
-function renderPromos(list) {
+const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
+
+// ---------- Banner utama (carousel gambar, dikelola dari dashboard) ----------
+function renderMainBanner(banners) {
+  const el = document.getElementById("mainBanner");
+  if (!el) return;
+  if (banners && banners.length) {
+    el.innerHTML = banners.map((src, n) => `<div class="mb-slide absolute inset-0 transition-opacity duration-700" style="opacity:${n === 0 ? 1 : 0}"><img src="${esc(src)}" alt="Banner ${n + 1}" class="w-full h-full object-cover"/></div>`).join("") + `<div id="mbDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"></div>`;
+    const slides = el.querySelectorAll(".mb-slide"), dotsW = el.querySelector("#mbDots");
+    if (slides.length > 1) {
+      let i = 0;
+      dotsW.innerHTML = [...slides].map((_, n) => `<button class="carousel-dot ${n === 0 ? "active" : ""}" data-n="${n}"></button>`).join("");
+      const dots = dotsW.querySelectorAll(".carousel-dot");
+      const show = (n) => { slides.forEach((s, k) => (s.style.opacity = k === n ? "1" : "0")); dots.forEach((d, k) => d.classList.toggle("active", k === n)); i = n; };
+      dots.forEach((d) => d.addEventListener("click", () => show(Number(d.dataset.n))));
+      setInterval(() => show((i + 1) % slides.length), 4500);
+    }
+  } else {
+    // Placeholder bila belum ada banner diupload — tetap menonjolkan AI Automation
+    el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#8127cf,#6d28d9 45%,#00658d)">
+      <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><a href="#layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full">Pelajari Layanan</a></div>
+      <span class="text-[70px] md:text-[120px] hidden sm:block opacity-90">🤖</span>
+    </div>`;
+  }
+}
+renderMainBanner();
+
+// ---------- Banner promo PRODUK (kartu geser ala upoint) ----------
+function renderPromoProducts(games) {
   const track = document.getElementById("promoTrack");
   if (!track) return;
-  const items = list && list.length ? list : DEFAULT_PROMOS;
-  const card = (t) => `<div class="shrink-0 flex items-center gap-xs bg-surface-container-lowest border border-pink-soft/50 rounded-full px-md py-sm shadow-sm"><span class="font-label-md text-label-md text-on-surface whitespace-nowrap">${esc(t)}</span></div>`;
-  track.innerHTML = items.map(card).join("") + items.map(card).join(""); // duplikat untuk loop mulus
+  if (!games.length) { track.innerHTML = ""; return; }
+  const card = (g) => {
+    const min = Math.min(...g.items.map((i) => i.price));
+    const visual = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-12 h-12 rounded-lg object-cover"/>` : `<span class="w-12 h-12 rounded-lg bg-gradient-to-br ${gradOf(g.id)} flex items-center justify-center text-[22px]">${EMOJI[g.id] || "🎮"}</span>`;
+    return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="shrink-0 flex items-center gap-sm bg-surface-container-lowest border border-pink-soft/50 rounded-xl px-sm py-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-[230px]">${visual}<div class="min-w-0"><div class="font-label-md text-label-md text-on-surface font-bold truncate">${esc(g.name)}</div><div class="font-label-sm text-label-sm text-on-surface-variant">Mulai ${rupiah(min)}</div></div><span class="ml-auto bg-pink text-on-primary text-[10px] font-bold px-2 py-[2px] rounded-full">PROMO</span></a>`;
+  };
+  track.innerHTML = games.map(card).join("") + games.map(card).join(""); // duplikat untuk loop mulus
 }
-renderPromos();
 
 // ---------- Settings (teks, hero, banner) ----------
 async function loadStore() {
@@ -37,7 +59,7 @@ async function loadStore() {
     setText("txtLayananTitle", set.layananTitle); setText("txtLayananDesc", set.layananDesc);
     setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);
     if (set.heroImage) { const img = document.getElementById("heroImg"); if (img) img.src = set.heroImage; }
-    if (Array.isArray(set.promos) && set.promos.length) renderPromos(set.promos);
+    renderMainBanner(Array.isArray(set.banners) ? set.banners : []);
   } catch (e) {}
 }
 
@@ -68,7 +90,7 @@ function renderCatalog() {
   note.classList.toggle("hidden", list.length > 0);
 }
 async function loadGames() {
-  try { allGames = await fetch("/api/games").then((r) => r.json()); renderCatalog(); }
+  try { allGames = await fetch("/api/games").then((r) => r.json()); renderCatalog(); renderPromoProducts(allGames); }
   catch (e) { document.getElementById("gameCatalog").innerHTML = '<div class="col-span-full text-center text-error py-md">Gagal memuat game.</div>'; }
 }
 
