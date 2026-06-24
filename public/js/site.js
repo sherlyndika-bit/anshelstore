@@ -21,7 +21,7 @@
         <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop">
           <div class="flex items-center justify-between h-16">
             <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
-              <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(232,74,138,0.4)] group-hover:scale-110 transition-transform">A</span>
+              <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(191,93,126,0.4)] group-hover:scale-110 transition-transform">A</span>
               <span class="text-[19px] text-on-surface tracking-tight font-extrabold leading-none">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
             </a>
             <nav class="hidden md:flex items-center h-16">
@@ -29,7 +29,7 @@
             </nav>
             <div class="hidden md:flex items-center gap-2 shrink-0" id="siteAuth">
               <a href="/masuk" class="font-label-md text-label-md font-semibold text-on-surface-variant hover:text-secondary transition-colors px-2">Masuk</a>
-              <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-lg shadow-[0_4px_14px_rgba(232,74,138,0.35)] hover:shadow-[0_6px_20px_rgba(232,74,138,0.5)] hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">bolt</span>Top Up</a>
+              <a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-lg shadow-[0_4px_14px_rgba(191,93,126,0.35)] hover:shadow-[0_6px_20px_rgba(191,93,126,0.5)] hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">bolt</span>Top Up</a>
             </div>
             <a href="/akun" id="siteAuthMobile" class="md:hidden w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
           </div>
@@ -53,7 +53,7 @@
   if (footMount) {
     const pays = ["QRIS", "DANA", "OVO", "GoPay", "ShopeePay", "BCA", "Mandiri"];
     footMount.innerHTML = `
-    <footer class="mt-2xl bg-[#101317] text-white">
+    <footer class="mt-2xl bg-[#332b2e] text-white">
       <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-xl pb-lg grid grid-cols-2 md:grid-cols-12 gap-gutter">
         <div class="col-span-2 md:col-span-4 flex flex-col gap-sm">
           <div id="footBrand" class="flex items-center gap-2">
@@ -97,7 +97,7 @@
     const s = d.store || {}, set = d.settings || {}, soc = set.social || {};
     if (set.logo) {
       const b = document.getElementById("siteBrand");
-      if (b) b.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-2.5 py-1.5 shadow-md ring-1 ring-black/5 group-hover:scale-105 transition-transform"><img src="${set.logo}" alt="Anshel Store" class="h-7 w-auto"/></span>`;
+      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-10 w-auto group-hover:scale-105 transition-transform"/>`;
       const fb = document.getElementById("footBrand");
       if (fb) fb.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-2.5 py-1.5 shadow-md"><img src="${set.logo}" alt="Anshel Store" class="h-7 w-auto"/></span>`;
     }
@@ -115,7 +115,7 @@
       const nm = (d.user.name || d.user.email || "Akun").split(" ")[0];
       const av = d.user.picture ? `<img src="${d.user.picture}" class="w-8 h-8 rounded-full object-cover"/>` : `<span class="w-8 h-8 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-bold text-[14px]">${nm.charAt(0).toUpperCase()}</span>`;
       const auth = document.getElementById("siteAuth");
-      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs px-sm py-xs rounded-full hover:bg-pink-50 font-label-md text-label-md text-on-surface transition-colors">${av} ${nm}</a><a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(232,74,138,0.35)]">Top Up ✨</a>`;
+      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs px-sm py-xs rounded-full hover:bg-pink-50 font-label-md text-label-md text-on-surface transition-colors">${av} ${nm}</a><a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(191,93,126,0.35)]">Top Up ✨</a>`;
       const authM = document.getElementById("siteAuthM");
       if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-label-md text-label-md text-on-surface">👤 ${nm} (Akun Saya)</a><a href="/topup" class="text-center bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up ✨</a>`;
     }).catch(() => {});

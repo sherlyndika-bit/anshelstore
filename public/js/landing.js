@@ -42,7 +42,7 @@ function renderMainBanner(banners) {
   const el = document.getElementById("mainBanner");
   if (!el) return;
   if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
-  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#e84a8a,#db2777 45%,#10b981)">
+  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#bf5d7e,#a84668 45%,#7d9b78)">
       <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
       <span class="text-[70px] md:text-[120px] hidden sm:block opacity-90">🤖</span>
     </div>`;
@@ -58,7 +58,7 @@ function renderPromos(promos) {
   const card = (p) => {
     const bg = p.image
       ? `background-image:linear-gradient(180deg,rgba(18,6,18,.30),rgba(18,6,18,.88)),url('${esc(p.image)}');background-size:cover;background-position:center`
-      : `background:linear-gradient(135deg,#e84a8a,#10b981)`;
+      : `background:linear-gradient(135deg,#bf5d7e,#7d9b78)`;
     const dl = p.deadline ? `data-deadline="${esc(p.deadline)}"` : "";
     const tag = (u) => `<div class="bg-black/40 rounded-md py-1 text-center"><div class="cd-${u} font-bold text-base leading-none">--</div><div class="text-[10px] opacity-70">${u}</div></div>`;
     return `<a ${p.link ? `href="${esc(p.link)}"` : 'href="javascript:void(0)"'} class="snap-start shrink-0 w-[280px] md:w-[320px] min-h-[230px] rounded-xl overflow-hidden p-4 flex flex-col gap-2 text-white shadow-[0_16px_36px_-20px_rgba(0,0,0,.8)] hover:-translate-y-1 transition-transform" style="${bg}">
@@ -126,7 +126,7 @@ function gameCard(g, i) {
     ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="absolute inset-0 w-full h-full object-cover"/>`
     : `<span class="text-[2.6rem] md:text-[3rem]">${EMOJI[g.id] || "🎮"}</span>`;
   const badge = i < 3 ? `<span class="absolute top-1.5 left-1.5 bg-pink text-on-primary text-[10px] font-bold px-2 py-[2px] rounded-full shadow">POPULER</span>` : "";
-  return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group rounded-xl overflow-hidden bg-surface-container-lowest shadow-sm border border-pink-soft/40 hover:-translate-y-1 hover:shadow-[0_14px_30px_-12px_rgba(232,74,138,0.45)] transition-all">
+  return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group rounded-xl overflow-hidden bg-surface-container-lowest shadow-sm border border-pink-soft/40 hover:-translate-y-1 hover:shadow-[0_14px_30px_-12px_rgba(191,93,126,0.45)] transition-all">
     <div class="aspect-[3/4] bg-gradient-to-br ${gradOf(g.id)} relative flex items-center justify-center overflow-hidden">
       ${visual}${badge}
       <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 pt-6">

@@ -9,7 +9,7 @@ const GRAD = {
   genshin: "linear-gradient(160deg,#0ea5b7,#0369a1)", valorant: "linear-gradient(160deg,#ff4655,#e11d48)",
   pubgm: "linear-gradient(160deg,#f7971e,#a85a00)",
 };
-const DEF_GRAD = "linear-gradient(160deg,#e84a8a,#10b981)";
+const DEF_GRAD = "linear-gradient(160deg,#bf5d7e,#7d9b78)";
 const CAT = { ml: "MOBA", ff: "Battle Royale", pubgm: "Battle Royale", genshin: "RPG", valorant: "FPS" };
 const gradOf = (g) => GRAD[g.id] || DEF_GRAD;
 const catOf = (g) => CAT[g.id] || "Lainnya";
