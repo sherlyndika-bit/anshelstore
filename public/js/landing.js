@@ -14,9 +14,10 @@ let allGames = [], currentCat = "game", searchQ = "";
 const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
 
 // ---------- Slider banner (geser/translate, dikelola dari dashboard) ----------
-function buildSlider(el, slides, { interval = 5000 } = {}) {
+function buildSlider(el, slides, opts = {}) {
   if (!el) return;
   if (!slides.length) { el.innerHTML = ""; return; }
+  const interval = opts.interval || 5000;
   const n = slides.length;
   el.innerHTML =
     `<div class="slider-track" style="display:flex;height:100%;width:${n * 100}%;transition:transform .7s cubic-bezier(.45,.05,.2,1)">` +
@@ -29,7 +30,7 @@ function buildSlider(el, slides, { interval = 5000 } = {}) {
   dotsW.innerHTML = slides.map((_, k) => `<button class="carousel-dot ${k === 0 ? "active" : ""}" data-n="${k}"></button>`).join("");
   const dots = dotsW.querySelectorAll(".carousel-dot");
   let i = 0, timer;
-  const show = (k) => { i = (k + n) % n; track.style.transform = `translateX(-${i * (100 / n)}%)`; dots.forEach((d, x) => d.classList.toggle("active", x === i)); };
+  const show = (k) => { i = (k + n) % n; track.style.transform = `translateX(-${i * (100 / n)}%)`; dots.forEach((d, x) => d.classList.toggle("active", x === i)); if (opts.onChange) opts.onChange(i); };
   const play = () => { timer = setInterval(() => show(i + 1), interval); };
   dots.forEach((d) => d.addEventListener("click", () => { show(Number(d.dataset.n)); clearInterval(timer); play(); }));
   play();
@@ -37,11 +38,18 @@ function buildSlider(el, slides, { interval = 5000 } = {}) {
 
 const imgSlide = (src, n) => `<img src="${esc(src)}" alt="Banner ${n + 1}" class="absolute inset-0 w-full h-full object-cover"/>`;
 
-// Banner utama — rasio 16:9 (pas dgn gambar 1376x768), satu tampil penuh, geser otomatis
+// Banner utama — 16:9 di tengah, sisi kiri/kanan diisi pantulan blur (mirror) dari banner aktif
 function renderMainBanner(banners) {
   const el = document.getElementById("mainBanner");
   if (!el) return;
-  if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
+  const bg = document.getElementById("mainBannerBg");
+  const setBg = (src) => { if (!bg) return; if (src) { bg.style.backgroundImage = `url('${src}')`; bg.style.opacity = "1"; } else { bg.style.backgroundImage = "none"; } };
+  if (banners && banners.length) {
+    setBg(banners[0]);
+    buildSlider(el, banners.map(imgSlide), { onChange: (i) => setBg(banners[i]) });
+    return;
+  }
+  setBg(null);
   el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#bf5d7e,#a84668 45%,#7d9b78)">
       <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
       <span class="text-[60px] md:text-[110px] hidden sm:block opacity-90">🤖</span>
