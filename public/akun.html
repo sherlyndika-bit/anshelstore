@@ -14,17 +14,53 @@
 <body data-page="akun" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
 <div id="siteNav"></div>
 
-<main class="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-  <div id="profileCard" class="bg-surface-container-lowest rounded-lg shadow-md shadow-primary/10 p-md md:p-lg flex items-center gap-md mb-md reveal in">
-    <div id="avatar" class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary text-on-primary flex items-center justify-center text-[28px] font-extrabold">a</div>
-    <div class="flex-1">
-      <h1 id="uName" class="font-headline-md text-headline-md text-on-surface">Memuat…</h1>
+<main class="max-w-5xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl">
+  <!-- Header profil -->
+  <div class="bg-surface-container-lowest rounded-2xl shadow-md shadow-primary/5 p-md md:p-lg flex flex-col sm:flex-row items-center gap-md mb-md text-center sm:text-left">
+    <div id="avatar" class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary text-on-primary flex items-center justify-center text-[32px] font-extrabold shrink-0">a</div>
+    <div class="flex-1 min-w-0">
+      <h1 id="uName" class="font-headline-lg text-headline-lg text-on-surface">Memuat…</h1>
       <p id="uEmail" class="font-body-md text-body-md text-on-surface-variant"></p>
+      <span id="uRole" class="inline-block mt-1 font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed-variant px-2 py-[2px] rounded-full"></span>
     </div>
-    <button id="logoutBtn" class="bg-surface-container hover:bg-error-container hover:text-on-error-container text-on-surface-variant font-label-md text-label-md px-md py-sm rounded-full transition-colors">Keluar</button>
+    <button id="logoutBtn" class="bg-surface-container hover:bg-error-container hover:text-on-error-container text-on-surface-variant font-label-md text-label-md px-md py-sm rounded-full transition-colors inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">logout</span> Keluar</button>
   </div>
 
-  <div class="flex items-center justify-between mb-sm">
+  <!-- Statistik ringkas -->
+  <div class="grid grid-cols-3 gap-sm mb-md">
+    <div class="bg-surface-container-lowest rounded-xl p-md text-center shadow-sm"><div id="statTotal" class="font-headline-md text-headline-md text-primary font-extrabold">0</div><div class="font-label-sm text-label-sm text-on-surface-variant">Total Pesanan</div></div>
+    <div class="bg-surface-container-lowest rounded-xl p-md text-center shadow-sm"><div id="statDone" class="font-headline-md text-headline-md text-secondary font-extrabold">0</div><div class="font-label-sm text-label-sm text-on-surface-variant">Selesai</div></div>
+    <div class="bg-surface-container-lowest rounded-xl p-md text-center shadow-sm"><div id="statSpend" class="font-headline-md text-headline-md text-on-surface font-extrabold">Rp0</div><div class="font-label-sm text-label-sm text-on-surface-variant">Total Belanja</div></div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-md">
+    <!-- Edit profil -->
+    <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-md md:p-lg">
+      <h2 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-primary">badge</span> Edit Profil</h2>
+      <div class="flex flex-col gap-sm">
+        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">Nama</span><input id="pfName" type="text" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
+        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">No. WhatsApp</span><input id="pfPhone" type="text" placeholder="08xxxxxxxxxx" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
+        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">Bio (opsional)</span><textarea id="pfBio" rows="2" maxlength="200" placeholder="Ceritakan sedikit tentang kamu…" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"></textarea></label>
+        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">URL Foto Profil (opsional)</span><input id="pfPicture" type="text" placeholder="https://…" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
+        <button id="saveProfile" class="mt-xs bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md font-bold px-md py-sm rounded-full hover:scale-[1.02] transition-transform self-start inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">save</span> Simpan Profil</button>
+        <span id="pfMsg" class="font-label-sm text-label-sm"></span>
+      </div>
+    </div>
+
+    <!-- Keamanan -->
+    <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-md md:p-lg">
+      <h2 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-primary">lock</span> Keamanan</h2>
+      <div id="pwBox" class="flex flex-col gap-sm">
+        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">Password Lama</span><input id="pwOld" type="password" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
+        <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">Password Baru</span><input id="pwNew" type="password" placeholder="Minimal 6 karakter" class="mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-primary focus:ring-primary"/></label>
+        <button id="savePassword" class="mt-xs bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-bold px-md py-sm rounded-full transition-colors self-start inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">key</span> Ubah Password</button>
+        <span id="pwMsg" class="font-label-sm text-label-sm"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Riwayat pesanan -->
+  <div class="flex items-center justify-between mt-lg mb-sm">
     <h2 class="font-headline-md text-headline-md text-on-surface">Riwayat Pesanan</h2>
     <a href="/topup" class="font-label-md text-label-md text-primary hover:scale-105 transition-transform inline-flex items-center gap-xs">Top Up lagi <span class="material-symbols-outlined text-[18px]">add</span></a>
   </div>
@@ -37,34 +73,62 @@
   const $ = (id) => document.getElementById(id);
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   const token = localStorage.getItem("anshel_token");
-  const BADGE = { pending: "bg-tertiary-fixed text-on-tertiary-fixed-variant", paid: "bg-primary-fixed text-on-primary-fixed-variant", processing: "bg-secondary-fixed text-on-secondary-fixed-variant", done: "bg-primary-fixed text-primary", cancelled: "bg-error-container text-on-error-container" };
+  const BADGE = { pending: "bg-tertiary-fixed text-on-tertiary-fixed-variant", paid: "bg-primary-fixed text-on-primary-fixed-variant", processing: "bg-secondary-fixed text-on-secondary-fixed-variant", done: "bg-secondary-fixed text-on-secondary-fixed-variant", cancelled: "bg-error-container text-on-error-container" };
   if (!token) { location.replace("/masuk?next=/akun"); }
+  const H = { "x-auth-token": token, "Content-Type": "application/json" };
 
   async function load() {
-    const me = await fetch("/api/auth/me", { headers: { "x-auth-token": token } });
+    const me = await fetch("/api/auth/me", { headers: H });
     if (!me.ok) { localStorage.removeItem("anshel_token"); return location.replace("/masuk?next=/akun"); }
     const { user } = await me.json();
     $("uName").textContent = user.name || "Pengguna";
     $("uEmail").textContent = user.email;
-    if (user.picture) $("avatar").innerHTML = `<img src="${user.picture}" class="w-16 h-16 rounded-full object-cover"/>`;
+    $("uRole").textContent = user.admin ? "Admin" : "Member";
+    $("pfName").value = user.name || "";
+    $("pfPhone").value = user.phone || "";
+    $("pfBio").value = user.bio || "";
+    $("pfPicture").value = user.picture || "";
+    if (user.picture) $("avatar").innerHTML = `<img src="${user.picture}" class="w-20 h-20 rounded-full object-cover"/>`;
     else $("avatar").textContent = (user.name || user.email || "a").charAt(0).toUpperCase();
+    if (user.provider === "google") { $("pwBox").innerHTML = '<p class="font-body-md text-body-md text-on-surface-variant">Kamu masuk lewat Google, jadi password dikelola oleh akun Google-mu.</p>'; }
 
-    const orders = await fetch("/api/my/orders", { headers: { "x-auth-token": token } }).then(r => r.json());
+    const orders = await fetch("/api/my/orders", { headers: H }).then(r => r.json());
+    $("statTotal").textContent = orders.length;
+    $("statDone").textContent = orders.filter(o => o.status === "done").length;
+    $("statSpend").textContent = rupiah(orders.filter(o => o.status !== "cancelled").reduce((s, o) => s + (o.price || 0), 0));
     const box = $("orders");
-    if (!orders.length) { box.innerHTML = `<div class="bg-surface-container-lowest rounded-lg p-lg text-center text-on-surface-variant shadow-sm"><div class="text-[40px] mb-sm">🎮</div>Belum ada pesanan. <a href="/topup" class="text-primary font-bold">Top Up sekarang →</a></div>`; return; }
+    if (!orders.length) { box.innerHTML = `<div class="bg-surface-container-lowest rounded-2xl p-lg text-center text-on-surface-variant shadow-sm"><div class="text-[40px] mb-sm">🎮</div>Belum ada pesanan. <a href="/topup" class="text-primary font-bold">Top Up sekarang →</a></div>`; return; }
     box.innerHTML = orders.map(o => `
-      <a href="/cek-transaksi?code=${o.code}" class="bg-surface-container-lowest rounded-lg p-md shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-between gap-sm">
-        <div>
-          <div class="font-label-md text-label-md text-on-surface font-bold">${o.gameName} · ${o.itemLabel}</div>
-          <div class="font-label-sm text-label-sm text-on-surface-variant">${o.code} • ${new Date(o.createdAt).toLocaleDateString("id-ID")}</div>
-        </div>
-        <div class="text-right">
-          <div class="font-label-md text-label-md text-secondary font-bold">${rupiah(o.price)}</div>
-          <span class="font-label-sm text-label-sm px-sm py-[2px] rounded-full ${BADGE[o.status] || ""}">${o.status}</span>
-        </div>
+      <a href="/cek-transaksi?code=${o.code}" class="bg-surface-container-lowest rounded-2xl p-md shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-between gap-sm">
+        <div><div class="font-label-md text-label-md text-on-surface font-bold">${o.gameName} · ${o.itemLabel}</div>
+        <div class="font-label-sm text-label-sm text-on-surface-variant">${o.code} • ${new Date(o.createdAt).toLocaleDateString("id-ID")}</div></div>
+        <div class="text-right"><div class="font-label-md text-label-md text-secondary font-bold">${rupiah(o.price)}</div>
+        <span class="font-label-sm text-label-sm px-sm py-[2px] rounded-full ${BADGE[o.status] || ""}">${o.status}</span></div>
       </a>`).join("");
   }
-  $("logoutBtn").addEventListener("click", async () => { try { await fetch("/api/auth/logout", { method: "POST", headers: { "x-auth-token": token } }); } catch (e) {} localStorage.removeItem("anshel_token"); location.replace("/"); });
+
+  $("saveProfile").addEventListener("click", async () => {
+    const m = $("pfMsg"); m.textContent = "Menyimpan…"; m.className = "font-label-sm text-label-sm text-on-surface-variant";
+    try {
+      const r = await fetch("/api/auth/profile", { method: "PUT", headers: H, body: JSON.stringify({ name: $("pfName").value, phone: $("pfPhone").value, bio: $("pfBio").value, picture: $("pfPicture").value }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "gagal");
+      m.textContent = "Profil tersimpan! ✅"; m.className = "font-label-sm text-label-sm text-secondary font-bold";
+      $("uName").textContent = d.user.name; if (d.user.picture) $("avatar").innerHTML = `<img src="${d.user.picture}" class="w-20 h-20 rounded-full object-cover"/>`;
+    } catch (e) { m.textContent = "Gagal menyimpan."; m.className = "font-label-sm text-label-sm text-error"; }
+  });
+
+  $("savePassword").addEventListener("click", async () => {
+    const m = $("pwMsg");
+    try {
+      const r = await fetch("/api/auth/change-password", { method: "POST", headers: H, body: JSON.stringify({ oldPassword: $("pwOld").value, newPassword: $("pwNew").value }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "gagal");
+      m.textContent = "Password berhasil diubah! ✅"; m.className = "font-label-sm text-label-sm text-secondary font-bold"; $("pwOld").value = ""; $("pwNew").value = "";
+    } catch (e) { m.textContent = e.message; m.className = "font-label-sm text-label-sm text-error"; }
+  });
+
+  $("logoutBtn").addEventListener("click", async () => { try { await fetch("/api/auth/logout", { method: "POST", headers: H }); } catch (e) {} localStorage.removeItem("anshel_token"); location.replace("/"); });
   if (token) load();
 </script>
 </body>

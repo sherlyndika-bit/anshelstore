@@ -112,7 +112,7 @@ function assignRole(email) {
 }
 function isAdmin(u) { return !!u && DASH_ROLES.includes(u.role); }          // akses dashboard
 function canManageUsers(u) { return !!u && ["owner", "admin"].includes(u.role); }
-function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, provider: u.provider, role: u.role || "customer", admin: isAdmin(u) }; }
+function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, phone: u.phone || "", bio: u.bio || "", provider: u.provider, role: u.role || "customer", admin: isAdmin(u) }; }
 function findUser(email) { return db.users.find((u) => u.email.toLowerCase() === String(email).toLowerCase()); }
 function upsertUser({ email, name, provider, picture, passwordHash, role }) {
   let u = findUser(email);
@@ -335,12 +335,13 @@ function communityChatCard(boxStyle) {
           <span id="chatOnline" class="ml-auto font-label-sm text-label-sm opacity-90"></span>
         </div>
         <div id="chatList" class="flex-grow overflow-y-auto p-md flex flex-col gap-sm bg-surface" style="min-height:0"></div>
-        <form id="chatForm" class="p-sm border-t border-outline-variant/30 flex flex-col gap-xs bg-surface-container-lowest">
-          <input id="chatName" type="text" placeholder="Nama kamu (opsional)" class="w-full rounded-full border-outline-variant bg-surface text-[13px] px-3 py-1.5 focus:border-secondary focus:ring-secondary"/>
-          <div class="flex gap-xs">
-            <input id="chatText" type="text" maxlength="400" placeholder="Tulis pesan ke komunitas..." class="flex-grow rounded-full border-outline-variant bg-surface text-[14px] px-3 py-2 focus:border-secondary focus:ring-secondary"/>
-            <button class="shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-pink text-on-primary grid place-items-center hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></button>
-          </div>
+        <div id="chatGate" class="p-sm border-t border-outline-variant/30 bg-surface-container-lowest text-center hidden">
+          <p class="font-label-sm text-label-sm text-on-surface-variant mb-2">Masuk dulu untuk ikut ngobrol 💬</p>
+          <a href="/masuk?next=/blog" class="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-full"><span class="material-symbols-outlined text-[18px]">login</span> Masuk / Daftar</a>
+        </div>
+        <form id="chatForm" class="p-sm border-t border-outline-variant/30 flex gap-xs bg-surface-container-lowest hidden">
+          <input id="chatText" type="text" maxlength="400" placeholder="Tulis pesan ke komunitas..." class="flex-grow rounded-full border-outline-variant bg-surface text-[14px] px-3 py-2 focus:border-secondary focus:ring-secondary"/>
+          <button class="shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-pink text-on-primary grid place-items-center hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[20px]">send</span></button>
         </form>
       </div>`;
 }
@@ -348,11 +349,14 @@ function communityChatScript() {
   return `<script>
       (function(){
         var list=document.getElementById("chatList"); if(!list) return;
-        var last=0, atBottom=true, nameEl=document.getElementById("chatName"), textEl=document.getElementById("chatText");
+        var last=0, atBottom=true, textEl=document.getElementById("chatText");
+        var form=document.getElementById("chatForm"), gate=document.getElementById("chatGate");
         var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
-        var savedName=localStorage.getItem("anshel_chat_name"); if(savedName&&nameEl) nameEl.value=savedName;
+        function loggedIn(){ return !!localStorage.getItem("anshel_token"); }
+        function refreshGate(){ if(loggedIn()){ form.classList.remove("hidden"); gate.classList.add("hidden"); } else { form.classList.add("hidden"); gate.classList.remove("hidden"); } }
+        refreshGate();
         function time(ts){var d=new Date(ts);return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);}
-        function color(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return "hsl("+(h%360)+",60%,42%)";}
+        function color(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return "hsl("+(h%360)+",45%,55%)";}
         list.addEventListener("scroll",function(){atBottom=list.scrollHeight-list.scrollTop-list.clientHeight<60;});
         function add(m){
           var d=document.createElement("div"); d.className="flex gap-2 items-start";
@@ -363,18 +367,20 @@ function communityChatScript() {
         }
         function poll(){
           fetch("/api/community"+(last?"?since="+last:"")).then(function(r){return r.json();}).then(function(ms){
-            if(!ms.length && !last){ list.innerHTML='<p class="text-center text-on-surface-variant font-label-md text-label-md m-auto">Belum ada pesan. Sapa duluan yuk! 💬</p>'; }
+            if(!ms.length && !last){ list.innerHTML='<p class="text-center text-on-surface-variant font-label-md text-label-md m-auto">Belum ada pesan. Jadi yang pertama menyapa! 💬</p>'; }
             if(ms.length && last===0) list.innerHTML="";
             ms.forEach(function(m){ if(m.createdAt>last)last=m.createdAt; add(m); });
             if(ms.length && atBottom) list.scrollTop=list.scrollHeight;
           }).catch(function(){});
         }
-        document.getElementById("chatForm").addEventListener("submit",function(e){ e.preventDefault();
+        form.addEventListener("submit",function(e){ e.preventDefault();
+          if(!loggedIn()){ refreshGate(); return; }
           var text=textEl.value.trim(); if(!text)return;
-          var name=nameEl.value.trim(); if(name)localStorage.setItem("anshel_chat_name",name);
-          var tok=localStorage.getItem("anshel_token"); var h={"Content-Type":"application/json"}; if(tok)h["x-auth-token"]=tok;
+          var tok=localStorage.getItem("anshel_token");
           textEl.value="";
-          fetch("/api/community",{method:"POST",headers:h,body:JSON.stringify({name:name,text:text})}).then(function(r){return r.json();}).then(function(){ atBottom=true; poll(); }).catch(function(){});
+          fetch("/api/community",{method:"POST",headers:{"Content-Type":"application/json","x-auth-token":tok},body:JSON.stringify({text:text})})
+            .then(function(r){ if(r.status===401){ localStorage.removeItem("anshel_token"); refreshGate(); return null; } return r.json(); })
+            .then(function(){ atBottom=true; poll(); }).catch(function(){});
         });
         poll(); setInterval(poll,4000);
       })();
@@ -604,6 +610,16 @@ async function handleApi(req, res, pathname, query) {
     const token = req.headers["x-auth-token"]; if (token) sessions.delete(token);
     return sendJSON(res, 200, { ok: true });
   }
+  if (pathname === "/api/auth/profile" && method === "PUT") {
+    const u = userFromReq(req); if (!u) return sendJSON(res, 401, { error: "Unauthorized" });
+    const b = await readBody(req);
+    if (typeof b.name === "string") u.name = b.name.trim().slice(0, 60) || u.name;
+    if (typeof b.phone === "string") u.phone = b.phone.trim().slice(0, 20);
+    if (typeof b.bio === "string") u.bio = b.bio.trim().slice(0, 200);
+    if (typeof b.picture === "string") u.picture = b.picture.trim().slice(0, 500);
+    saveDB();
+    return sendJSON(res, 200, { user: publicUser(u) });
+  }
   if (pathname === "/api/auth/change-password" && method === "POST") {
     const u = userFromReq(req); if (!u) return sendJSON(res, 401, { error: "Unauthorized" });
     const b = await readBody(req);
@@ -677,12 +693,13 @@ async function handleApi(req, res, pathname, query) {
     return sendJSON(res, 200, msgs.slice(-80));
   }
   if (pathname === "/api/community" && method === "POST") {
+    const u = userFromReq(req);
+    if (!u) return sendJSON(res, 401, { error: "Login dulu untuk ikut ngobrol di komunitas." });
     if (!rateLimit(req, "community", 12, 60000)) return sendJSON(res, 429, { error: "Santai dulu, kirim lagi sebentar ya 🙏" });
     const b = await readBody(req);
     const text = String(b.text || "").trim().slice(0, 400);
     if (!text) return sendJSON(res, 400, { error: "Pesan kosong" });
-    const u = userFromReq(req);
-    const name = (u && u.name) || String(b.name || "").trim().slice(0, 32) || "Anonim";
+    const name = u.name || (u.email ? u.email.split("@")[0] : "Member");
     const m = { id: nextId("cm"), name, text, createdAt: Date.now() };
     db.community.push(m);
     if (db.community.length > 500) db.community = db.community.slice(-500);

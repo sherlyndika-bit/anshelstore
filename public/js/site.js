@@ -25,7 +25,7 @@
               <span class="text-[19px] text-on-surface tracking-tight font-extrabold leading-none">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
             </a>
             <nav class="hidden md:flex items-center h-16">
-              ${NAV.map((n) => `<a href="${n.href}" class="relative h-16 flex items-center gap-1.5 px-4 font-label-md text-label-md transition-colors ${n.key === active ? "text-secondary font-bold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[18px]">${n.icon}</span>${n.label}${n.key === active ? '<span class="absolute left-3 right-3 bottom-0 h-[3px] rounded-t-full bg-gradient-to-r from-pink to-secondary"></span>' : ""}</a>`).join("")}
+              ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang").map((n) => `<a href="${n.href}" class="relative h-16 flex items-center gap-1.5 px-4 font-label-md text-label-md transition-colors ${n.key === active ? "text-secondary font-bold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[18px]">${n.icon}</span>${n.label}${n.key === active ? '<span class="absolute left-3 right-3 bottom-0 h-[3px] rounded-t-full bg-gradient-to-r from-pink to-secondary"></span>' : ""}</a>`).join("")}
             </nav>
             <div class="hidden md:flex items-center gap-2 shrink-0" id="siteAuth">
               <a href="/masuk" class="font-label-md text-label-md font-semibold text-on-surface-variant hover:text-secondary transition-colors px-2">Masuk</a>
