@@ -140,9 +140,9 @@ function renderOrderTable(table, orders, editable) {
   if (!orders.length) { table.innerHTML = `<tr><td style="text-align:center;color:var(--text-muted);padding:30px">Belum ada pesanan.</td></tr>`; return; }
   const head = `<thead><tr><th>Invoice</th><th>Game</th><th>Item</th><th>Akun</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>`;
   const rows = orders.map((o) => {
-    const acc = Object.entries(o.account || {}).map(([k, v]) => `${k}: ${v}`).join(", ");
+    const acc = Object.entries(o.account || {}).map(([k, v]) => `${escapeHtml(k)}: ${escapeHtml(v)}`).join(", ");
     const cell = editable ? `<select class="status-select" data-id="${o.id}">${STATUSES.map((s) => `<option value="${s}" ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select>` : `<span class="badge badge-${o.status}">${o.status}</span>`;
-    return `<tr><td><b>${o.code}</b></td><td>${o.gameName}</td><td>${o.itemLabel}</td><td style="color:var(--text-muted)">${acc || "-"}</td><td>${o.customerName}<br><span style="color:var(--text-muted);font-size:.82rem">${o.customerContact || "-"}</span></td><td><b>${rupiah(o.price)}</b></td><td>${cell}</td></tr>`;
+    return `<tr><td><b>${escapeHtml(o.code)}</b></td><td>${escapeHtml(o.gameName)}</td><td>${escapeHtml(o.itemLabel)}</td><td style="color:var(--text-muted)">${acc || "-"}</td><td>${escapeHtml(o.customerName)}<br><span style="color:var(--text-muted);font-size:.82rem">${escapeHtml(o.customerContact || "-")}</span></td><td><b>${rupiah(o.price)}</b></td><td>${cell}</td></tr>`;
   }).join("");
   table.innerHTML = head + "<tbody>" + rows + "</tbody>";
   if (editable) table.querySelectorAll(".status-select").forEach((sel) =>
@@ -167,7 +167,7 @@ async function loadConversations() {
     const tag = c.mode === "human" ? '<span class="badge badge-human">HUMAN</span>' : '<span class="badge badge-ai">AI</span>';
     const esc = c.escalate ? '<span class="escalate-dot">● minta admin</span>' : "";
     const unread = c.unread ? `<span class="unread">${c.unread}</span>` : "";
-    return `<div class="conv-item ${activeConv === c.id ? "sel" : ""}" data-id="${c.id}"><div class="top"><span class="nm">${c.name}</span>${unread}</div><div class="last">${(c.lastText || "").slice(0, 42)}</div><div class="meta">${tag}${esc}</div></div>`;
+    return `<div class="conv-item ${activeConv === c.id ? "sel" : ""}" data-id="${c.id}"><div class="top"><span class="nm">${escapeHtml(c.name)}</span>${unread}</div><div class="last">${escapeHtml((c.lastText || "").slice(0, 42))}</div><div class="meta">${tag}${esc}</div></div>`;
   }).join("");
   el.querySelectorAll(".conv-item").forEach((it) => it.addEventListener("click", () => openConversation(Number(it.dataset.id))));
 }
@@ -185,7 +185,7 @@ async function renderChat(full) {
     const isHuman = conv.mode === "human";
     pane.innerHTML = `
       <div class="chat-head">
-        <div><strong>${conv.name}</strong><div style="font-size:.8rem;color:var(--text-muted)">${isHuman ? "🧑‍💼 Ditangani " + (conv.agentName || "Agent") : "🤖 Mode AI otomatis"}</div></div>
+        <div><strong>${escapeHtml(conv.name)}</strong><div style="font-size:.8rem;color:var(--text-muted)">${isHuman ? "🧑‍💼 Ditangani " + escapeHtml(conv.agentName || "Agent") : "🤖 Mode AI otomatis"}</div></div>
         ${isHuman ? `<button class="btn btn-light btn-sm" id="btnRelease">↩︎ Kembalikan ke AI</button>` : `<button class="btn btn-primary btn-sm" id="btnTakeover">🙋 Take Over</button>`}
       </div>
       <div class="chat-msgs" id="chatMsgs"></div>

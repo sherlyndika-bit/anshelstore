@@ -498,7 +498,7 @@ async function handleApi(req, res, pathname, query) {
     const email = (b.email || "").trim().toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return sendJSON(res, 400, { error: "Email tidak valid" });
     if (!b.password || b.password.length < 6) return sendJSON(res, 400, { error: "Password minimal 6 karakter" });
-    if (findUser(email) && findUser(email).passwordHash) return sendJSON(res, 409, { error: "Email sudah terdaftar" });
+    if (findUser(email)) return sendJSON(res, 409, { error: "Email sudah terdaftar. Silakan login." });
     const u = upsertUser({ email, name: b.name, provider: "email", passwordHash: hashPassword(b.password) });
     return sendJSON(res, 201, { token: createSession(u.id), user: publicUser(u) });
   }
