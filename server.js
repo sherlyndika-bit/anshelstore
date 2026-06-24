@@ -46,30 +46,69 @@ const GOOGLE_READY = !!(GOOGLE.id && GOOGLE.secret);
 // ---------------------------------------------------------------------------
 // DB
 // ---------------------------------------------------------------------------
-let db;
-try {
-  // Bootstrap: jika DB belum ada di DATA_DIR (mis. volume baru), salin dari seed bawaan.
-  if (!fs.existsSync(DB_PATH)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-    if (fs.existsSync(SEED_PATH) && SEED_PATH !== DB_PATH) fs.copyFileSync(SEED_PATH, DB_PATH);
+let db = {};
+const USE_PG = !!process.env.DATABASE_URL;
+let pgPool = null;
+
+function applyDefaults() {
+  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= [];
+  db.settings.integrations ||= {};
+  db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
+  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment"].forEach((k) => (db._seq[k] ||= 0));
+}
+function readSeedOrFile() {
+  try {
+    if (!fs.existsSync(DB_PATH)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+      if (fs.existsSync(SEED_PATH) && SEED_PATH !== DB_PATH) fs.copyFileSync(SEED_PATH, DB_PATH);
+    }
+    return JSON.parse(fs.readFileSync(DB_PATH, "utf8"));
+  } catch (e) { console.error("DB seed/file load:", e.message); return {}; }
+}
+async function loadDB() {
+  if (USE_PG) {
+    try {
+      const { Pool } = require("pg");
+      pgPool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: process.env.PGSSL === "require" ? { rejectUnauthorized: false } : false,
+      });
+      await pgPool.query("CREATE TABLE IF NOT EXISTS app_state (id int PRIMARY KEY, data jsonb NOT NULL, updated_at timestamptz DEFAULT now())");
+      await pgPool.query("CREATE TABLE IF NOT EXISTS uploads (name text PRIMARY KEY, mime text NOT NULL, data bytea NOT NULL, created_at timestamptz DEFAULT now())");
+      const r = await pgPool.query("SELECT data FROM app_state WHERE id = 1");
+      if (r.rows.length) {
+        db = r.rows[0].data || {};
+        console.log("DB: PostgreSQL terhubung — data dimuat ✅");
+      } else {
+        db = readSeedOrFile(); applyDefaults();
+        await pgPool.query("INSERT INTO app_state (id, data) VALUES (1, $1::jsonb)", [JSON.stringify(db)]);
+        console.log("DB: PostgreSQL terhubung — di-seed dari data awal ✅");
+      }
+    } catch (e) {
+      console.error("Postgres gagal terhubung, fallback ke file:", e.message);
+      pgPool = null; db = readSeedOrFile();
+    }
+  } else {
+    db = readSeedOrFile();
   }
-  db = JSON.parse(fs.readFileSync(DB_PATH, "utf8"));
-} catch (e) { console.error("DB load:", e.message); db = {}; }
+  applyDefaults();
+}
 let saveTimer = null;
 function saveDB() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    const tmp = DB_PATH + ".tmp";
-    fs.writeFile(tmp, JSON.stringify(db, null, 2), (e) => {
-      if (e) return console.error("save:", e.message);
-      fs.rename(tmp, DB_PATH, (er) => er && console.error("rename:", er.message)); // atomic
-    });
+    if (pgPool) {
+      pgPool.query("INSERT INTO app_state (id, data) VALUES (1, $1::jsonb) ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = now()", [JSON.stringify(db)])
+        .catch((e) => console.error("pg save:", e.message));
+    } else {
+      const tmp = DB_PATH + ".tmp";
+      fs.writeFile(tmp, JSON.stringify(db, null, 2), (e) => {
+        if (e) return console.error("save:", e.message);
+        fs.rename(tmp, DB_PATH, (er) => er && console.error("rename:", er.message)); // atomic
+      });
+    }
   }, 150);
 }
-db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= [];
-db.settings.integrations ||= {};
-db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment"].forEach((k) => (db._seq[k] ||= 0));
 
 function nextId(kind) { db._seq[kind] = (db._seq[kind] || 0) + 1; return db._seq[kind]; }
 
@@ -852,10 +891,14 @@ async function handleApi(req, res, pathname, query) {
     const ext = m[2] === "jpeg" ? "jpg" : m[2] === "svg+xml" ? "svg" : m[2];
     let buf; try { buf = Buffer.from(m[3], "base64"); } catch (e) { return sendJSON(res, 400, { error: "Gagal membaca gambar." }); }
     if (buf.length > 4 * 1024 * 1024) return sendJSON(res, 413, { error: "Gambar terlalu besar (maks 4MB)." });
+    const name = "img-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
     try {
-      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-      const name = "img-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
-      fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      if (pgPool) {
+        await pgPool.query("INSERT INTO uploads (name, mime, data) VALUES ($1, $2, $3)", [name, m[1], buf]);
+      } else {
+        fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+        fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      }
       return sendJSON(res, 201, { url: "/uploads/" + name });
     } catch (e) { return sendJSON(res, 500, { error: "Gagal menyimpan gambar." }); }
   }
@@ -977,7 +1020,17 @@ const server = http.createServer(async (req, res) => {
     // SEO routes (server-rendered)
     if (pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /dashboard\nSitemap: ${siteUrl()}/sitemap.xml\n`); }
     if (pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" }); return res.end(renderSitemap()); }
-    if (pathname.startsWith("/uploads/")) { const name = path.basename(pathname); const fp = path.join(UPLOAD_DIR, name); if (!fp.startsWith(UPLOAD_DIR)) { res.writeHead(403); return res.end("Forbidden"); } return serveFile(res, fp); }
+    if (pathname.startsWith("/uploads/")) {
+      const name = path.basename(pathname);
+      if (pgPool) {
+        try {
+          const r = await pgPool.query("SELECT mime, data FROM uploads WHERE name = $1", [name]);
+          if (r.rows.length) { res.writeHead(200, { "Content-Type": r.rows[0].mime, "Cache-Control": "public, max-age=31536000" }); return res.end(r.rows[0].data); }
+        } catch (e) {}
+        res.writeHead(404, { "Content-Type": "text/plain" }); return res.end("Not found");
+      }
+      const fp = path.join(UPLOAD_DIR, name); if (!fp.startsWith(UPLOAD_DIR)) { res.writeHead(403); return res.end("Forbidden"); } return serveFile(res, fp);
+    }
     if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList(parsed.query.tag)); }
     const bm = pathname.match(/^\/(?:blog|artikel)\/([a-z0-9-]+)\/?$/);
     if (bm) {
@@ -988,8 +1041,11 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(req, res, pathname);
   } catch (err) { console.error("Server error:", err); sendJSON(res, 500, { error: "Internal server error" }); }
 });
-server.listen(PORT, HOST, () => {
-  console.log(`anshelstore berjalan di http://${HOST}:${PORT}`);
-  console.log(`  Email OTP: ${SMTP_READY ? "AKTIF (SMTP)" : "mode dev (kode tampil di layar/log)"}`);
-  console.log(`  Google login: ${GOOGLE_READY ? "AKTIF" : "belum dikonfigurasi"}`);
+loadDB().then(() => {
+  server.listen(PORT, HOST, () => {
+    console.log(`Anshel Store berjalan di http://${HOST}:${PORT}`);
+    console.log(`  Database: ${pgPool ? "PostgreSQL" : "file JSON (" + DB_PATH + ")"}`);
+    console.log(`  Email OTP: ${SMTP_READY ? "AKTIF (SMTP)" : "mode dev (kode tampil di layar/log)"}`);
+    console.log(`  Google login: ${GOOGLE_READY ? "AKTIF" : "belum dikonfigurasi"}`);
+  });
 });
