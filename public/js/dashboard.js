@@ -355,8 +355,7 @@ async function loadSettings() {
   const st = d.store || {}, s = d.settings || {};
   $("setName").value = st.name || ""; $("setTagline").value = st.tagline || "";
   $("setWa").value = st.whatsapp || ""; $("setEmail").value = st.email || "";
-  $("setHeroTitle").value = s.heroTitle || ""; $("setHeroImage").value = s.heroImage || "";
-  $("setHeroSub").value = s.heroSubtitle || ""; $("setMeta").value = s.metaDescription || "";
+  $("setMeta").value = s.metaDescription || "";
   $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
   $("setLogo").value = s.logo || "";
   $("setBanners").value = Array.isArray(s.banners) ? s.banners.join("\n") : "";
@@ -450,7 +449,7 @@ $("savePromos").addEventListener("click", async () => {
 $("saveSettings").addEventListener("click", async () => {
   const body = {
     store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
-    settings: { heroTitle: $("setHeroTitle").value.trim(), heroImage: $("setHeroImage").value.trim(), heroSubtitle: $("setHeroSub").value.trim(), metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), banners: $("setBanners").value.split("\n").map((x) => x.trim()).filter(Boolean), layananTitle: $("setLayananTitle").value.trim(), layananDesc: $("setLayananDesc").value.trim(), topupTitle: $("setTopupTitle").value.trim(), topupDesc: $("setTopupDesc").value.trim(), articlesTitle: $("setArtikelTitle").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
+    settings: { metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), banners: $("setBanners").value.split("\n").map((x) => x.trim()).filter(Boolean), layananTitle: $("setLayananTitle").value.trim(), layananDesc: $("setLayananDesc").value.trim(), topupTitle: $("setTopupTitle").value.trim(), topupDesc: $("setTopupDesc").value.trim(), articlesTitle: $("setArtikelTitle").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
   };
   try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); const e = $("setMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("setMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
 });

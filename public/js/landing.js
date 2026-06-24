@@ -114,7 +114,6 @@ async function loadStore() {
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
     setText("txtLayananTitle", set.layananTitle); setText("txtLayananDesc", set.layananDesc);
     setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);
-    if (set.heroImage) { const img = document.getElementById("heroImg"); if (img) img.src = set.heroImage; }
     renderMainBanner(Array.isArray(set.banners) ? set.banners : []);
     renderPromos(Array.isArray(set.promos) ? set.promos : []);
   } catch (e) {}
