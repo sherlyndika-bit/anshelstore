@@ -24,29 +24,29 @@
     { "id": "topup-game", "icon": "stadia_controller", "title": "Top Up Game", "desc": "Top up diamond, UC, dan voucher game favoritmu. Proses cepat, harga bersaing, aman.", "priceFrom": 5000, "image": "" }
   ],
   "games": [
-    { "id": "ml", "name": "Mobile Legends", "publisher": "Moonton", "image": "", "needs": ["User ID", "Zone ID"], "items": [
+    { "id": "ml", "name": "Mobile Legends", "publisher": "Moonton", "image": "", "needs": ["User ID", "Zone ID"], "description": "Mobile Legends: Bang Bang adalah game MOBA 5v5 paling populer di Indonesia dari Moonton. Top up Diamond untuk membeli skin keren, hero baru, Weekly Diamond Pass, dan Starlight Member. Proses instan, cukup masukkan User ID dan Zone ID kamu.", "items": [
       { "id": "ml-86", "label": "86 Diamonds", "price": 22000 },
       { "id": "ml-172", "label": "172 Diamonds", "price": 43000 },
       { "id": "ml-257", "label": "257 Diamonds", "price": 63000 },
       { "id": "ml-wdp", "label": "Weekly Diamond Pass", "price": 28000 }
     ] },
-    { "id": "ff", "name": "Free Fire", "publisher": "Garena", "image": "", "needs": ["User ID"], "items": [
+    { "id": "ff", "name": "Free Fire", "publisher": "Garena", "image": "", "needs": ["User ID"], "description": "Free Fire adalah game battle royale ringan dan seru dari Garena. Top up Diamond untuk membuka bundle eksklusif, karakter, senjata, dan membership mingguan/bulanan. Cukup masukkan User ID kamu, diamond langsung masuk.", "items": [
       { "id": "ff-70", "label": "70 Diamonds", "price": 10000 },
       { "id": "ff-140", "label": "140 Diamonds", "price": 20000 },
       { "id": "ff-355", "label": "355 Diamonds", "price": 49000 },
       { "id": "ff-member", "label": "Membership Mingguan", "price": 30000 }
     ] },
-    { "id": "genshin", "name": "Genshin Impact", "publisher": "HoYoverse", "image": "", "needs": ["UID", "Server"], "items": [
+    { "id": "genshin", "name": "Genshin Impact", "publisher": "HoYoverse", "image": "", "needs": ["UID", "Server"], "description": "Genshin Impact adalah action RPG open-world memukau dari HoYoverse. Top up Genesis Crystals dan Blessing of the Welkin Moon untuk gacha karakter & senjata impianmu. Masukkan UID dan pilih server kamu.", "items": [
       { "id": "gi-60", "label": "60 Genesis Crystals", "price": 16000 },
       { "id": "gi-300", "label": "300 + 30 Genesis Crystals", "price": 79000 },
       { "id": "gi-bp", "label": "Blessing of the Welkin Moon", "price": 75000 }
     ] },
-    { "id": "valorant", "name": "Valorant", "publisher": "Riot Games", "image": "", "needs": ["Riot ID"], "items": [
+    { "id": "valorant", "name": "Valorant", "publisher": "Riot Games", "image": "", "needs": ["Riot ID"], "description": "Valorant adalah FPS taktis 5v5 kompetitif dari Riot Games. Top up Valorant Points (VP) untuk skin senjata eksklusif, Battle Pass, dan agent. Cukup masukkan Riot ID kamu.", "items": [
       { "id": "val-125", "label": "125 VP", "price": 15000 },
       { "id": "val-420", "label": "420 VP", "price": 49000 },
       { "id": "val-700", "label": "700 VP", "price": 79000 }
     ] },
-    { "id": "pubgm", "name": "PUBG Mobile", "publisher": "Tencent", "image": "", "needs": ["Player ID"], "items": [
+    { "id": "pubgm", "name": "PUBG Mobile", "publisher": "Tencent", "image": "", "needs": ["Player ID"], "description": "PUBG Mobile adalah battle royale 100 pemain legendaris dari Tencent. Top up Unknown Cash (UC) untuk Royale Pass, skin senjata, outfit, dan crate. Masukkan Player ID kamu untuk mulai.", "items": [
       { "id": "pubg-60", "label": "60 UC", "price": 14000 },
       { "id": "pubg-325", "label": "325 UC", "price": 70000 },
       { "id": "pubg-660", "label": "660 UC", "price": 139000 }

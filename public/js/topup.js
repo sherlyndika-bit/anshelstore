@@ -51,6 +51,34 @@ function renderGames() {
 $("gameSearch").addEventListener("input", (e) => { searchQ = e.target.value.toLowerCase().trim(); renderGames(); });
 
 /* ---------------- DETAIL GAME ---------------- */
+function ytId(u) { const m = String(u).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(u) ? u : null); }
+function renderGameMedia(game) {
+  const media = [];
+  if (game.video) { const id = ytId(game.video); media.push(id ? { type: "yt", src: id } : { type: "mp4", src: game.video }); }
+  (game.screenshots || []).filter(Boolean).forEach((s) => media.push({ type: "img", src: s }));
+  if (game.image) media.push({ type: "img", src: game.image });
+  const viewer = $("gameMedia"), thumbs = $("gameThumbs");
+  if (!media.length) {
+    viewer.innerHTML = `<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white" style="background:${gradOf(game)}"><span class="text-[72px]">${EMOJI[game.id] || "🎮"}</span><span class="font-headline-md font-bold opacity-90">${esc(game.name)}</span></div>`;
+    thumbs.innerHTML = ""; return;
+  }
+  const show = (i) => {
+    const m = media[i];
+    viewer.innerHTML = m.type === "yt" ? `<iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${m.src}" title="${esc(game.name)}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`
+      : m.type === "mp4" ? `<video class="absolute inset-0 w-full h-full object-cover bg-black" src="${esc(m.src)}" controls playsinline></video>`
+      : `<img class="absolute inset-0 w-full h-full object-cover" src="${esc(m.src)}" alt="${esc(game.name)}"/>`;
+    thumbs.querySelectorAll(".thumb").forEach((t, x) => t.classList.toggle("active", x === i));
+  };
+  thumbs.innerHTML = media.map((m, i) => `<button type="button" class="thumb ${i === 0 ? "active" : ""}" data-i="${i}">${m.type === "img" ? `<img src="${esc(m.src)}" alt=""/>` : `<div class="w-full h-full grid place-items-center text-white text-[18px]" style="background:${gradOf(game)}">▶</div>`}</button>`).join("");
+  thumbs.querySelectorAll(".thumb").forEach((t) => t.addEventListener("click", () => show(Number(t.dataset.i))));
+  show(0);
+}
+function renderGameInfo(game) {
+  $("gameDescName").textContent = game.name;
+  const desc = game.description || `${game.name}${game.publisher ? ` dari ${game.publisher}` : ""} — top up resmi dengan proses instan & aman di Anshel Store. Pilih nominal di panel sebelah kanan, masukkan ID akunmu dengan benar, lalu lakukan pembayaran. Item/diamond akan langsung masuk ke akunmu dalam hitungan menit. Tersedia berbagai pilihan nominal mulai dari yang termurah, plus promo menarik setiap minggu.`;
+  $("gameDesc").innerHTML = desc.split(/\n{2,}|\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
+  $("gameNeeds").innerHTML = game.needs.map((n) => `<span class="inline-flex items-center gap-1 bg-secondary-fixed text-secondary font-label-sm text-label-sm px-3 py-1 rounded-full"><span class="material-symbols-outlined text-[15px]">badge</span> Butuh: ${esc(n)}</span>`).join("");
+}
 function showDetail(game) {
   selGame = game; selItem = null;
   $("catalogView").classList.add("hidden");
@@ -64,6 +92,8 @@ function showDetail(game) {
   $("ghCover").innerHTML = useImg ? `<img src="${esc(game.image)}" alt="${esc(game.name)}" class="w-full h-full object-cover"/>` : (EMOJI[game.id] || "🎮");
   $("ghName").textContent = game.name;
   $("ghPub").textContent = game.publisher ? "oleh " + game.publisher : "";
+  renderGameMedia(game);
+  renderGameInfo(game);
 
   // Akun
   $("accountFields").innerHTML = game.needs.map((n) => `

@@ -431,8 +431,11 @@ function renderProduk() {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="set-grid">
         <div class="field" style="margin:0"><label>Nama</label><input class="input pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
         <div class="field" style="margin:0"><label>Publisher</label><input class="input pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
-        <div class="field" style="margin:0"><label>URL Gambar</label><input class="input pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/></div>
+        <div class="field" style="margin:0"><label>URL Gambar (cover)</label><input class="input pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/></div>
         <div class="field" style="margin:0"><label>Field diminta (koma)</label><input class="input pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
+        <div class="field" style="margin:0;grid-column:1/-1"><label>Deskripsi / penjelasan game (tampil di kiri halaman detail)</label><textarea class="input pg-desc" data-g="${gi}" rows="3" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
+        <div class="field" style="margin:0"><label>URL Video (YouTube / .mp4)</label><input class="input pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
+        <div class="field" style="margin:0"><label>Screenshots (URL gambar, 1 per baris)</label><textarea class="input pg-shots" data-g="${gi}" rows="2" placeholder="https://.../ss1.jpg">${escapeHtml((g.screenshots || []).join("\n"))}</textarea></div>
       </div>
       <div style="margin:10px 0 4px;font-weight:600;font-size:.82rem;color:var(--text-soft)">Item / Nominal (label · harga · stok)</div>
       ${g.items.map((it, ii) => `<div class="gitem">
@@ -450,6 +453,9 @@ function syncProduk() {
   document.querySelectorAll(".pg-pub").forEach((el) => (loadedGames[el.dataset.g].publisher = el.value));
   document.querySelectorAll(".pg-img").forEach((el) => (loadedGames[el.dataset.g].image = el.value.trim()));
   document.querySelectorAll(".pg-needs").forEach((el) => (loadedGames[el.dataset.g].needs = el.value.split(",").map((s) => s.trim()).filter(Boolean)));
+  document.querySelectorAll(".pg-desc").forEach((el) => (loadedGames[el.dataset.g].description = el.value));
+  document.querySelectorAll(".pg-video").forEach((el) => (loadedGames[el.dataset.g].video = el.value.trim()));
+  document.querySelectorAll(".pg-shots").forEach((el) => (loadedGames[el.dataset.g].screenshots = el.value.split("\n").map((s) => s.trim()).filter(Boolean)));
   document.querySelectorAll(".pg-ilabel").forEach((el) => (loadedGames[el.dataset.g].items[el.dataset.i].label = el.value));
   document.querySelectorAll(".pg-iprice").forEach((el) => (loadedGames[el.dataset.g].items[el.dataset.i].price = Number(el.value) || 0));
   document.querySelectorAll(".pg-istock").forEach((el) => { const it = loadedGames[el.dataset.g].items[el.dataset.i]; if (el.value === "") delete it.stock; else it.stock = Math.max(0, Number(el.value) || 0); });
