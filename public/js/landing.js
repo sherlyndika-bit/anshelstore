@@ -9,18 +9,23 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 
 let allGames = [], currentCat = "game", searchQ = "";
 
-// ---------- Carousel ----------
-(function carousel() {
-  const slides = document.querySelectorAll(".carousel-slide");
-  const dotsWrap = document.getElementById("carouselDots");
-  if (!slides.length || !dotsWrap) return;
-  let i = 0;
-  dotsWrap.innerHTML = [...slides].map((_, n) => `<button class="carousel-dot ${n === 0 ? "active" : ""}" data-n="${n}"></button>`).join("");
-  const dots = dotsWrap.querySelectorAll(".carousel-dot");
-  const show = (n) => { slides.forEach((s, k) => s.style.opacity = k === n ? "1" : "0"); dots.forEach((d, k) => d.classList.toggle("active", k === n)); i = n; };
-  dots.forEach((d) => d.addEventListener("click", () => show(Number(d.dataset.n))));
-  setInterval(() => show((i + 1) % slides.length), 4500);
-})();
+// ---------- Promo marquee (banner kedua berjalan) ----------
+const DEFAULT_PROMOS = [
+  "🎮 Top Up ML mulai Rp22.000",
+  "⚡ Proses instan 24 jam nonstop",
+  "🤖 Konsultasi AI Chatbot GRATIS",
+  "💸 Harga termurah se-Indonesia",
+  "🔒 100% aman tanpa password akun",
+  "🎁 Cashback QRIS transaksi pertama",
+];
+function renderPromos(list) {
+  const track = document.getElementById("promoTrack");
+  if (!track) return;
+  const items = list && list.length ? list : DEFAULT_PROMOS;
+  const card = (t) => `<div class="shrink-0 flex items-center gap-xs bg-surface-container-lowest border border-pink-soft/50 rounded-full px-md py-sm shadow-sm"><span class="font-label-md text-label-md text-on-surface whitespace-nowrap">${esc(t)}</span></div>`;
+  track.innerHTML = items.map(card).join("") + items.map(card).join(""); // duplikat untuk loop mulus
+}
+renderPromos();
 
 // ---------- Settings (teks, hero, banner) ----------
 async function loadStore() {
@@ -31,10 +36,8 @@ async function loadStore() {
     const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
     setText("txtLayananTitle", set.layananTitle); setText("txtLayananDesc", set.layananDesc);
     setText("txtTopupTitle", set.topupTitle); setText("txtArtikelTitle", set.articlesTitle);
-    if (set.bannerImage) {
-      const slide = document.querySelector(".carousel-slide");
-      if (slide) { slide.style.backgroundImage = `url('${set.bannerImage}')`; slide.style.backgroundSize = "cover"; slide.style.backgroundPosition = "center"; }
-    }
+    if (set.heroImage) { const img = document.getElementById("heroImg"); if (img) img.src = set.heroImage; }
+    if (Array.isArray(set.promos) && set.promos.length) renderPromos(set.promos);
   } catch (e) {}
 }
 

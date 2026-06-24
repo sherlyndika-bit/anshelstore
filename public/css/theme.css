@@ -114,3 +114,12 @@
 .cat-tab.active { background: linear-gradient(135deg, #e84a8a, #8127cf); color: #fff; border-color: transparent; box-shadow: 0 6px 16px -6px rgba(232,74,138,.5); }
 .carousel-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.5); cursor: pointer; transition: .25s; border: 0; padding: 0; }
 .carousel-dot.active { width: 22px; background: #fff; }
+
+
+
+/* Banner promo berjalan (marquee) */
+.marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee-track { display: flex; gap: 12px; width: max-content; animation: marquee 26s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
