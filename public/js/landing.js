@@ -42,7 +42,7 @@ function renderMainBanner(banners) {
   const el = document.getElementById("mainBanner");
   if (!el) return;
   if (banners && banners.length) { buildSlider(el, banners.map(imgSlide)); return; }
-  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#e84a8a,#db2777 45%,#16a34a)">
+  el.innerHTML = `<div class="absolute inset-0 flex items-center justify-between px-lg md:px-xl text-on-primary" style="background:linear-gradient(120deg,#e84a8a,#db2777 45%,#10b981)">
       <div><span class="bg-white/15 rounded-full px-sm py-xs font-label-md text-label-md">⭐ Spesialis AI Automation</span><h2 class="font-display-lg-mobile md:font-display-lg leading-tight mt-xs">Otomatiskan Bisnismu dengan AI</h2><button type="button" data-scroll="layanan" class="inline-block mt-sm bg-white text-secondary font-label-md text-label-md px-md py-sm rounded-full hover:scale-105 transition-transform">Pelajari Layanan</button></div>
       <span class="text-[70px] md:text-[120px] hidden sm:block opacity-90">🤖</span>
     </div>`;
@@ -58,7 +58,7 @@ function renderPromos(promos) {
   const card = (p) => {
     const bg = p.image
       ? `background-image:linear-gradient(180deg,rgba(18,6,18,.30),rgba(18,6,18,.88)),url('${esc(p.image)}');background-size:cover;background-position:center`
-      : `background:linear-gradient(135deg,#e84a8a,#16a34a)`;
+      : `background:linear-gradient(135deg,#e84a8a,#10b981)`;
     const dl = p.deadline ? `data-deadline="${esc(p.deadline)}"` : "";
     const tag = (u) => `<div class="bg-black/40 rounded-md py-1 text-center"><div class="cd-${u} font-bold text-base leading-none">--</div><div class="text-[10px] opacity-70">${u}</div></div>`;
     return `<a ${p.link ? `href="${esc(p.link)}"` : 'href="javascript:void(0)"'} class="snap-start shrink-0 w-[280px] md:w-[320px] min-h-[230px] rounded-xl overflow-hidden p-4 flex flex-col gap-2 text-white shadow-[0_16px_36px_-20px_rgba(0,0,0,.8)] hover:-translate-y-1 transition-transform" style="${bg}">

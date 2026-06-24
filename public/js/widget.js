@@ -92,10 +92,10 @@ function initChatWidget(options = {}) {
   function injectStyles() {
     if (document.getElementById("cwStyles")) return;
     const css = `
-    .cw-bubble{position:fixed;right:22px;bottom:22px;width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(135deg,#e84a8a,#16a34a);color:#fff;box-shadow:0 12px 30px -6px rgba(232,74,138,.5);z-index:200;display:grid;place-items:center;transition:transform .2s}
+    .cw-bubble{position:fixed;right:22px;bottom:22px;width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(135deg,#e84a8a,#10b981);color:#fff;box-shadow:0 12px 30px -6px rgba(232,74,138,.5);z-index:200;display:grid;place-items:center;transition:transform .2s}
     .cw-bubble:hover{transform:scale(1.06)}
     .cw-panel{position:fixed;right:22px;bottom:94px;width:360px;max-width:calc(100vw - 36px);height:520px;max-height:72vh;background:#fff;border:1px solid #e6e8ee;border-radius:18px;display:none;flex-direction:column;overflow:hidden;z-index:200;box-shadow:0 24px 60px -12px rgba(15,23,42,.3)}
-    .cw-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,#e84a8a,#16a34a);color:#fff}
+    .cw-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,#e84a8a,#10b981);color:#fff}
     .cw-head strong{font-size:.98rem}
     .cw-ava{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:1.1rem}
     .cw-sub{font-size:.74rem;opacity:.9;margin-top:1px}
@@ -103,12 +103,12 @@ function initChatWidget(options = {}) {
     .cw-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:9px;background:#f8fafc}
     .cw-msg{max-width:82%;padding:9px 13px;border-radius:14px;font-size:.9rem;line-height:1.45;word-wrap:break-word}
     .cw-in{align-self:flex-start;background:#fff;border:1px solid #e6e8ee;color:#0f172a;border-bottom-left-radius:4px}
-    .cw-out{align-self:flex-end;background:linear-gradient(135deg,#e84a8a,#16a34a);color:#fff;border-bottom-right-radius:4px}
+    .cw-out{align-self:flex-end;background:linear-gradient(135deg,#e84a8a,#10b981);color:#fff;border-bottom-right-radius:4px}
     .cw-who{display:block;font-size:.66rem;font-weight:700;opacity:.7;margin-bottom:2px}
     .cw-input{display:flex;gap:8px;padding:12px;border-top:1px solid #e6e8ee;background:#fff}
     .cw-input input{flex:1;padding:11px 14px;border-radius:999px;border:1px solid #e6e8ee;font-size:.9rem;font-family:inherit;color:#0f172a}
-    .cw-input input:focus{outline:none;border-color:#34d399;box-shadow:0 0 0 3px rgba(22,163,74,.15)}
-    .cw-send{border:0;background:linear-gradient(135deg,#e84a8a,#16a34a);color:#fff;width:42px;border-radius:50%;cursor:pointer;font-size:1rem}`;
+    .cw-input input:focus{outline:none;border-color:#34d399;box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+    .cw-send{border:0;background:linear-gradient(135deg,#e84a8a,#10b981);color:#fff;width:42px;border-radius:50%;cursor:pointer;font-size:1rem}`;
     const tag = document.createElement("style");
     tag.id = "cwStyles"; tag.textContent = css;
     document.head.appendChild(tag);

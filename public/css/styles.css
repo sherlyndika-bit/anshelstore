@@ -8,8 +8,8 @@
   --primary-600: #e84a8a;
   --primary-500: #f06ba3;
   --primary-50: #fff0f6;
-  --accent: #16a34a;
-  --grad: linear-gradient(135deg, #e84a8a 0%, #ec4899 40%, #16a34a 100%);
+  --accent: #10b981;
+  --grad: linear-gradient(135deg, #e84a8a 0%, #ec4899 40%, #10b981 100%);
   --grad-soft: linear-gradient(135deg, #ffe3ee, #dcfce7);
 
   /* Neutrals (light, professional) */
@@ -23,7 +23,7 @@
   --text-muted: #94a3b8;
 
   /* Status */
-  --green: #16a34a;
+  --green: #10b981;
   --green-bg: #dcfce7;
   --amber: #d97706;
   --amber-bg: #fef3c7;

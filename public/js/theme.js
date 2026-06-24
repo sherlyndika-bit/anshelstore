@@ -3,7 +3,7 @@ tailwind.config = {
   darkMode: "class",
   theme: { extend: {
     colors: {
-      "primary": "#e84a8a", "surface-dim": "#d8dadc", "secondary": "#16a34a",
+      "primary": "#e84a8a", "surface-dim": "#d8dadc", "secondary": "#10b981",
       "surface-container": "#eceef0", "outline-variant": "#bdc8d2", "primary-container": "#ff8fbb",
       "tertiary-container": "#5eead4", "on-secondary": "#ffffff", "error": "#ba1a1a",
       "on-secondary-container": "#f0fff6", "inverse-primary": "#ffafd0", "on-surface": "#191c1e",
@@ -12,9 +12,9 @@ tailwind.config = {
       "on-primary": "#ffffff", "on-background": "#191c1e", "on-tertiary-container": "#042f2e",
       "on-primary-fixed": "#3d0420", "on-error": "#ffffff", "on-primary-fixed-variant": "#7a0f3d",
       "tertiary": "#0d9488", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6",
-      "on-secondary-fixed": "#052e16", "on-secondary-fixed-variant": "#15803d", "surface-variant": "#e0e3e5",
+      "on-secondary-fixed": "#052e16", "on-secondary-fixed-variant": "#059669", "surface-variant": "#e0e3e5",
       "on-primary-container": "#7a0f3d", "surface-container-high": "#e6e8ea", "tertiary-fixed": "#ccfbf1",
-      "secondary-container": "#22c55e", "surface-container-low": "#f2f4f6", "tertiary-fixed-dim": "#5eead4",
+      "secondary-container": "#34d399", "surface-container-low": "#f2f4f6", "tertiary-fixed-dim": "#5eead4",
       "on-tertiary": "#ffffff", "surface-tint": "#e84a8a", "outline": "#6d7881", "primary-fixed-dim": "#ff8fbb",
       "on-surface-variant": "#3d4850", "on-error-container": "#93000a", "secondary-fixed-dim": "#86efac",
       "primary-fixed": "#ffd9e8", "secondary-fixed": "#dcfce7", "on-tertiary-fixed-variant": "#115e59",

@@ -9,7 +9,7 @@ const GRAD = {
   genshin: "linear-gradient(160deg,#0ea5b7,#0369a1)", valorant: "linear-gradient(160deg,#ff4655,#e11d48)",
   pubgm: "linear-gradient(160deg,#f7971e,#a85a00)",
 };
-const DEF_GRAD = "linear-gradient(160deg,#e84a8a,#16a34a)";
+const DEF_GRAD = "linear-gradient(160deg,#e84a8a,#10b981)";
 const CAT = { ml: "MOBA", ff: "Battle Royale", pubgm: "Battle Royale", genshin: "RPG", valorant: "FPS" };
 const gradOf = (g) => GRAD[g.id] || DEF_GRAD;
 const catOf = (g) => CAT[g.id] || "Lainnya";
@@ -64,12 +64,17 @@ function renderGameMedia(game) {
   }
   const show = (i) => {
     const m = media[i];
-    viewer.innerHTML = m.type === "yt" ? `<iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${m.src}" title="${esc(game.name)}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`
-      : m.type === "mp4" ? `<video class="absolute inset-0 w-full h-full object-cover bg-black" src="${esc(m.src)}" controls playsinline></video>`
-      : `<img class="absolute inset-0 w-full h-full object-cover" src="${esc(m.src)}" alt="${esc(game.name)}"/>`;
+    if (m.type === "yt") {
+      // video jadi SAMPUL: autoplay, muted, loop, tanpa kontrol
+      viewer.innerHTML = `<iframe class="absolute inset-0 w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${m.src}?autoplay=1&mute=1&loop=1&playlist=${m.src}&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0" title="${esc(game.name)}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    } else if (m.type === "mp4") {
+      viewer.innerHTML = `<video class="absolute inset-0 w-full h-full object-cover bg-black" src="${esc(m.src)}" autoplay muted loop playsinline></video>`;
+    } else {
+      viewer.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover" src="${esc(m.src)}" alt="${esc(game.name)}"/>`;
+    }
     thumbs.querySelectorAll(".thumb").forEach((t, x) => t.classList.toggle("active", x === i));
   };
-  thumbs.innerHTML = media.map((m, i) => `<button type="button" class="thumb ${i === 0 ? "active" : ""}" data-i="${i}">${m.type === "img" ? `<img src="${esc(m.src)}" alt=""/>` : `<div class="w-full h-full grid place-items-center text-white text-[18px]" style="background:${gradOf(game)}">▶</div>`}</button>`).join("");
+  thumbs.innerHTML = media.map((m, i) => `<button type="button" class="thumb ${i === 0 ? "active" : ""}" data-i="${i}">${m.type === "img" ? `<img src="${esc(m.src)}" alt=""/>` : `<div class="w-full h-full grid place-items-center text-white text-[16px]" style="background:${gradOf(game)}"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">play_circle</span></div>`}</button>`).join("");
   thumbs.querySelectorAll(".thumb").forEach((t) => t.addEventListener("click", () => show(Number(t.dataset.i))));
   show(0);
 }

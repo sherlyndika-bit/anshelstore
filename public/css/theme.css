@@ -20,9 +20,9 @@
 
 /* Pilihan metode bayar (radio tersembunyi) */
 .payment-radio input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-.payment-radio input[type="radio"]:checked + .payment-card { border-color: #16a34a; background-color: #dcfce7; }
+.payment-radio input[type="radio"]:checked + .payment-card { border-color: #10b981; background-color: #dcfce7; }
 .payment-radio input[type="radio"]:checked + .payment-card .check-icon { opacity: 1; transform: scale(1); }
-.payment-radio input[type="radio"]:focus-visible + .payment-card { outline: 2px solid #16a34a; outline-offset: 2px; }
+.payment-radio input[type="radio"]:focus-visible + .payment-card { outline: 2px solid #10b981; outline-offset: 2px; }
 
 
 
@@ -33,7 +33,7 @@
 .article-body p { margin: 1rem 0; }
 .article-body ul { margin: 1rem 0; padding-left: 1.4rem; list-style: disc; display: flex; flex-direction: column; gap: .4rem; }
 .article-body strong { color: #191c1e; font-weight: 700; }
-.article-body a { color: #16a34a; text-decoration: underline; text-underline-offset: 2px; }
+.article-body a { color: #10b981; text-decoration: underline; text-underline-offset: 2px; }
 .article-body > p:first-of-type { font-size: 1.22rem; color: #191c1e; }
 .article-body > p:first-of-type::first-letter { font-size: 3.2rem; font-weight: 800; float: left; line-height: .9; padding: 4px 10px 0 0; color: #e84a8a; font-family: "Plus Jakarta Sans"; }
 
@@ -55,7 +55,7 @@
 .hero-pop {
   -webkit-mask-image: radial-gradient(ellipse 78% 80% at 50% 42%, #000 58%, rgba(0,0,0,0.55) 78%, transparent 100%);
   mask-image: radial-gradient(ellipse 78% 80% at 50% 42%, #000 58%, rgba(0,0,0,0.55) 78%, transparent 100%);
-  filter: drop-shadow(0 30px 50px rgba(232,74,138,0.28)) drop-shadow(0 10px 20px rgba(22,163,74,0.20));
+  filter: drop-shadow(0 30px 50px rgba(232,74,138,0.28)) drop-shadow(0 10px 20px rgba(16,185,129,0.20));
   transform: scale(1.06);
   transition: transform .5s cubic-bezier(.22,1,.36,1);
 }
@@ -100,7 +100,7 @@
     color: #94a3b8; font-size: .64rem; font-weight: 700; padding: 6px 2px; border-radius: 16px; text-decoration: none; transition: .18s;
   }
   .site-bottom-nav a .material-symbols-outlined { font-size: 22px; }
-  .site-bottom-nav a.active { color: #fff; background: linear-gradient(135deg,#e84a8a,#16a34a); box-shadow: 0 6px 16px -4px rgba(232,74,138,.5); }
+  .site-bottom-nav a.active { color: #fff; background: linear-gradient(135deg,#e84a8a,#10b981); box-shadow: 0 6px 16px -4px rgba(232,74,138,.5); }
   .site-bottom-nav a.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
   /* geser gelembung chat agar tidak menutupi bottom nav */
   .cw-bubble { bottom: 92px !important; }
@@ -111,7 +111,7 @@
 
 /* Tab kategori & carousel homepage */
 .cat-tab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 999px; background: #fff; border: 1px solid #ffe3ee; color: #3d4850; font-weight: 600; font-size: .85rem; cursor: pointer; white-space: nowrap; transition: .18s; font-family: inherit; }
-.cat-tab.active { background: linear-gradient(135deg, #e84a8a, #16a34a); color: #fff; border-color: transparent; box-shadow: 0 6px 16px -6px rgba(232,74,138,.5); }
+.cat-tab.active { background: linear-gradient(135deg, #e84a8a, #10b981); color: #fff; border-color: transparent; box-shadow: 0 6px 16px -6px rgba(232,74,138,.5); }
 .carousel-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.5); cursor: pointer; transition: .25s; border: 0; padding: 0; }
 .carousel-dot.active { width: 22px; background: #fff; }
 

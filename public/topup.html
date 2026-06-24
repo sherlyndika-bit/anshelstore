@@ -12,7 +12,7 @@
 <link href="/css/theme.css" rel="stylesheet"/>
 <style>
   .cover-card { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 3/4; cursor: pointer; transition: transform .25s ease, box-shadow .25s ease; isolation: isolate; }
-  .cover-card:hover { transform: translateY(-6px); box-shadow: 0 22px 40px -18px rgba(22,163,74,.5); }
+  .cover-card:hover { transform: translateY(-6px); box-shadow: 0 22px 40px -18px rgba(16,185,129,.5); }
   .cover-card .cover-art { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 64px; }
   .cover-card .cover-art img { width: 100%; height: 100%; object-fit: cover; }
   .cover-card .cover-grad { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,4,16,0) 35%, rgba(10,4,16,.92) 100%); }
@@ -26,19 +26,19 @@
   #gameHeaderBg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,4,15,.65), rgba(9,4,15,.92)); }
 
   .nom-card { position: relative; border-radius: 14px; border: 2px solid #e2e1e6; background: #fff; padding: 12px; cursor: pointer; transition: .18s; }
-  .nom-card:hover { transform: translateY(-3px); border-color: #86efac; box-shadow: 0 12px 24px -14px rgba(22,163,74,.4); }
-  .nom-card.sel { border-color: #16a34a; background: linear-gradient(160deg,#f0fdf4,#dcfce7); box-shadow: 0 0 0 3px rgba(22,163,74,.2); }
-  .nom-card.sel::after { content: '✓'; position: absolute; top: 8px; right: 10px; width: 20px; height: 20px; border-radius: 999px; background: #16a34a; color: #fff; font-size: 12px; display: grid; place-items: center; }
+  .nom-card:hover { transform: translateY(-3px); border-color: #86efac; box-shadow: 0 12px 24px -14px rgba(16,185,129,.4); }
+  .nom-card.sel { border-color: #10b981; background: linear-gradient(160deg,#f0fdf4,#dcfce7); box-shadow: 0 0 0 3px rgba(16,185,129,.2); }
+  .nom-card.sel::after { content: '✓'; position: absolute; top: 8px; right: 10px; width: 20px; height: 20px; border-radius: 999px; background: #10b981; color: #fff; font-size: 12px; display: grid; place-items: center; }
   .nom-amt { display:flex; align-items:center; gap:6px; font-weight: 800; color:#191c1e; }
-  .nom-price { color:#16a34a; font-weight: 800; margin-top: 2px; }
+  .nom-price { color:#10b981; font-weight: 800; margin-top: 2px; }
 
   .step-badge { width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; font-weight: 800; color: #fff; flex: 0 0 auto; font-size: 14px; }
   .receipt-divider { border-top: 2px dashed #cdd3dc; }
-  .payment-card.sel { border-color: #16a34a !important; background: linear-gradient(160deg,#f0fdf4,#dcfce7); }
-  .cat-chip.active { background: linear-gradient(135deg,#e84a8a,#16a34a); color: #fff; border-color: transparent; }
+  .payment-card.sel { border-color: #10b981 !important; background: linear-gradient(160deg,#f0fdf4,#dcfce7); }
+  .cat-chip.active { background: linear-gradient(135deg,#e84a8a,#10b981); color: #fff; border-color: transparent; }
   #gameThumbs::-webkit-scrollbar { display: none; }
   .thumb { width: 92px; height: 56px; border-radius: 10px; overflow: hidden; flex: 0 0 auto; cursor: pointer; border: 2px solid transparent; opacity: .7; transition: .15s; }
-  .thumb.active, .thumb:hover { opacity: 1; border-color: #16a34a; }
+  .thumb.active, .thumb:hover { opacity: 1; border-color: #10b981; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; }
   .gd-body p { margin-bottom: .6rem; } .gd-body { line-height: 1.7; }
 </style>
@@ -131,12 +131,12 @@
         <div class="sticky top-[88px] flex flex-col gap-md">
           <div class="bg-white rounded-2xl p-md md:p-lg shadow-lg shadow-secondary/10 flex flex-col gap-md">
             <div>
-              <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#e84a8a,#16a34a)">1</span> Masukkan Data Akun</h2>
+              <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#e84a8a,#10b981)">1</span> Masukkan Data Akun</h2>
               <div id="accountFields" class="grid grid-cols-1 sm:grid-cols-2 gap-sm"></div>
               <div id="idPreview" class="hidden mt-sm rounded-xl px-md py-sm font-label-md text-label-md"></div>
             </div>
             <div>
-              <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#16a34a,#22c55e)">2</span> Pilih Nominal</h2>
+              <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#10b981,#34d399)">2</span> Pilih Nominal</h2>
               <div id="items" class="grid grid-cols-2 gap-sm"></div>
             </div>
             <div>
@@ -147,7 +147,7 @@
               </div>
             </div>
             <div>
-              <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#16a34a,#22c55e)">4</span> Pembayaran</h2>
+              <h2 class="font-label-lg text-label-lg text-on-surface font-extrabold mb-sm flex items-center gap-2"><span class="step-badge" style="background:linear-gradient(135deg,#10b981,#34d399)">4</span> Pembayaran</h2>
               <div class="grid grid-cols-3 gap-2" id="payMethods">
                 <label class="payment-radio cursor-pointer block relative"><input checked name="pay" type="radio" value="E-Wallet" class="sr-only"/>
                   <div class="payment-card bg-surface rounded-xl p-2 border-2 border-outline-variant/50 transition-all hover:shadow-md text-center"><span class="material-symbols-outlined text-secondary">account_balance_wallet</span><div class="font-bold text-on-surface text-[12px]">E-Wallet</div></div></label>
