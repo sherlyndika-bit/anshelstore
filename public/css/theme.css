@@ -100,7 +100,7 @@
     color: #94a3b8; font-size: .64rem; font-weight: 700; padding: 6px 2px; border-radius: 16px; text-decoration: none; transition: .18s;
   }
   .site-bottom-nav a .material-symbols-outlined { font-size: 22px; }
-  .site-bottom-nav a.active { color: #fff; background: linear-gradient(135deg,#bf5d7e,#7d9b78); box-shadow: 0 6px 16px -4px rgba(191,93,126,.5); }
+  .site-bottom-nav a.active { color: #fff; background: linear-gradient(135deg,#8c4c52,#bf5d7e); box-shadow: 0 6px 16px -4px rgba(140,76,82,.5); }
   .site-bottom-nav a.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
   /* geser gelembung chat agar tidak menutupi bottom nav */
   .cw-bubble { bottom: 92px !important; }

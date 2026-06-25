@@ -62,27 +62,9 @@
   @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 </style>
 </head>
-<body class="font-body-md text-on-surface bg-gradient-animated min-h-screen flex flex-col">
+<body data-page="home" class="font-body-md text-on-surface bg-gradient-animated min-h-screen flex flex-col">
 
-<!-- Top Navigation (Web) -->
-<header class="hidden md:flex bg-surface/80 sticky top-0 px-6 py-4 backdrop-blur-md shadow-sm border-b-2 border-dashed border-outline-variant z-50">
-  <div class="flex justify-between items-center w-full max-w-7xl mx-auto">
-    <a href="/" class="flex items-center gap-2 group">
-      <span class="w-10 h-10 rounded-full bg-primary text-on-primary grid place-items-center font-display-lg text-xl group-hover:scale-110 transition-transform">A</span>
-      <span class="font-display-lg text-headline-md text-primary drop-shadow-sm">Anshel Store</span>
-    </a>
-    <nav class="flex gap-8 items-center">
-      <a class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300" href="/layanan">Layanan AI</a>
-      <a class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300" href="/topup">Top Up Game</a>
-      <a class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300" href="/blog">Komunitas</a>
-    </nav>
-    <div class="flex items-center gap-5">
-      <a href="/topup" title="Top Up" class="text-primary hover:scale-110 transition-transform"><span class="material-symbols-outlined">shopping_cart</span></a>
-      <a href="/masuk" class="text-on-surface-variant font-medium hover:text-primary">Masuk</a>
-      <a href="/akun" title="Akun" class="w-10 h-10 rounded-full bg-primary-container grid place-items-center text-on-primary-container hover:scale-110 transition-transform"><span class="material-symbols-outlined">person</span></a>
-    </div>
-  </div>
-</header>
+<div id="siteNav"></div>
 
 <main class="flex-grow w-full relative overflow-hidden flex flex-col items-center justify-start pt-12 md:pt-20 pb-32">
   <!-- Hero -->
@@ -101,15 +83,15 @@
       Masuk ke dunia lembut tempat sosial media bisnismu diurus dengan penuh perhatian — dari bot WhatsApp sampai interaksi Instagram. Plus, top up game instan, murah & aman.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 items-center z-20">
-      <a href="/layanan" class="bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
-        <span class="relative z-10">Jelajahi Layanan AI</span>
-        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
-      </a>
-      <a href="/topup" class="bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
+      <a href="/topup" class="bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
         <span class="relative z-10">Portal Top Up Game</span>
         <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">sports_esports</span>
+      </a>
+      <a href="/layanan" class="bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
+        <span class="relative z-10">Jelajahi Layanan AI</span>
+        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
       </a>
     </div>
   </section>
@@ -142,37 +124,13 @@
   </section>
 </main>
 
-<!-- Footer -->
-<footer class="bg-surface-container-lowest border-t-2 border-dashed border-outline-variant py-10 px-4 relative z-10">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
-    <div>
-      <div class="font-display-lg text-headline-md text-primary">Anshel Store</div>
-      <p class="text-on-surface-variant text-sm mt-1 max-w-xs">Top up game & otomasi sosial media, dibungkus hangat, lucu & terpercaya.</p>
-    </div>
-    <div class="flex flex-wrap justify-center gap-5 text-on-surface-variant font-medium">
-      <a href="/topup" class="hover:text-primary transition-colors">Top Up</a>
-      <a href="/layanan" class="hover:text-primary transition-colors">Layanan AI</a>
-      <a href="/blog" class="hover:text-primary transition-colors">Komunitas</a>
-      <a href="/tentang" class="hover:text-primary transition-colors">Tentang</a>
-      <a href="/faq" class="hover:text-primary transition-colors">FAQ</a>
-      <a href="/akun" class="hover:text-primary transition-colors">Akun</a>
-    </div>
-  </div>
-  <div class="text-center text-xs text-on-surface-variant mt-6">© <span id="yr"></span> Anshel Store. Seluruh hak cipta dilindungi.</div>
-</footer>
-
-<!-- Bottom Navigation (Mobile) -->
-<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md rounded-full px-4 py-3 border-2 border-primary/20 bg-surface-container-lowest shadow-[0_20px_40px_rgba(139,111,91,0.25)] z-50 flex justify-around items-center">
-  <a href="/" class="flex flex-col items-center justify-center text-on-secondary-container/70 rounded-full w-16 h-14"><span class="material-symbols-outlined">cottage</span><span class="font-label-md text-[10px] mt-0.5">Beranda</span></a>
-  <a href="/topup" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 scale-110 shadow-md"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">sports_esports</span><span class="font-label-md text-[10px] mt-0.5">Top Up</span></a>
-  <a href="/blog" class="flex flex-col items-center justify-center text-on-secondary-container/70 rounded-full w-16 h-14"><span class="material-symbols-outlined">forum</span><span class="font-label-md text-[10px] mt-0.5">Komunitas</span></a>
-  <a href="/akun" class="flex flex-col items-center justify-center text-on-secondary-container/70 rounded-full w-16 h-14"><span class="material-symbols-outlined">person</span><span class="font-label-md text-[10px] mt-0.5">Akun</span></a>
-</nav>
+<!-- Footer & bottom nav site-wide -->
+<div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
+<script src="/js/site.js"></script>
 <script src="/js/widget.js"></script>
 <script>
-  document.getElementById("yr").textContent = new Date().getFullYear();
   // Smooth scroll untuk tombol data-scroll
   document.addEventListener("click", (e) => { const a = e.target.closest("[data-scroll]"); if (a) { e.preventDefault(); const t = document.getElementById(a.dataset.scroll); if (t) t.scrollIntoView({ behavior: "smooth" }); } });
   // Etalase game dinamis dari database

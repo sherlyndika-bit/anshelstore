@@ -1,28 +1,28 @@
-// Konfigurasi tema Tailwind anshelstore (dipakai semua halaman publik)
+// Konfigurasi tema Tailwind Anshel Store — gaya marshmallow (dipakai semua halaman publik)
 tailwind.config = {
   darkMode: "class",
   theme: { extend: {
     colors: {
-      "primary": "#bf5d7e", "surface-dim": "#ece0d8", "secondary": "#7d9b78",
-      "surface-container": "#f6ece4", "outline-variant": "#e6d8d0", "primary-container": "#f3c6d5",
-      "tertiary-container": "#ead6c4", "on-secondary": "#ffffff", "error": "#ba1a1a",
-      "on-secondary-container": "#16240f", "inverse-primary": "#ffb1c8", "on-surface": "#3a2f33",
-      "inverse-on-surface": "#fbf0f3", "surface": "#fbf5f0", "background": "#fbf5f0",
-      "inverse-surface": "#352e30", "surface-container-highest": "#ead9cf", "surface-bright": "#fffdfb",
-      "on-primary": "#ffffff", "on-background": "#3a2f33", "on-tertiary-container": "#3a2a1a",
-      "on-primary-fixed": "#3f0d1f", "on-error": "#ffffff", "on-primary-fixed-variant": "#7d2f49",
-      "tertiary": "#b08968", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6",
-      "on-secondary-fixed": "#16240f", "on-secondary-fixed-variant": "#3f5a39", "surface-variant": "#ece0d8",
-      "on-primary-container": "#7d2f49", "surface-container-high": "#f0e5db", "tertiary-fixed": "#f0e2d6",
-      "secondary-container": "#bcd4b7", "surface-container-low": "#fbf3ec", "tertiary-fixed-dim": "#e0c9b4",
-      "on-tertiary": "#ffffff", "surface-tint": "#bf5d7e", "outline": "#a89aa0", "primary-fixed-dim": "#f3c6d5",
-      "on-surface-variant": "#8a7a80", "on-error-container": "#410002", "secondary-fixed-dim": "#bcd4b7",
-      "primary-fixed": "#fbe1e9", "secondary-fixed": "#e2efe0", "on-tertiary-fixed-variant": "#6b4f38",
-      "pink": "#cf7e98", "pink-soft": "#fbe1e9", "pink-50": "#fdf3f6", "pink-100": "#fbe7ee", "on-pink": "#7d2f49"
+      "primary": "#8c4c52", "surface-dim": "#ded9d5", "secondary": "#735946",
+      "surface-container": "#f3ede9", "outline-variant": "#d7c1c2", "primary-container": "#f2a2a9",
+      "tertiary-container": "#d4b191", "on-secondary": "#ffffff", "error": "#ba1a1a",
+      "on-secondary-container": "#785d4a", "inverse-primary": "#ffb2b9", "on-surface": "#1d1b19",
+      "inverse-on-surface": "#f5f0ec", "surface": "#fef8f4", "background": "#fef8f4",
+      "inverse-surface": "#32302e", "surface-container-highest": "#e7e1de", "surface-bright": "#fef8f4",
+      "on-primary": "#ffffff", "on-background": "#1d1b19", "on-tertiary-container": "#5c432a",
+      "on-primary-fixed": "#390a12", "on-error": "#ffffff", "on-primary-fixed-variant": "#6f353c",
+      "tertiary": "#75593e", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6",
+      "on-secondary-fixed": "#291709", "on-secondary-fixed-variant": "#594230", "surface-variant": "#e7e1de",
+      "on-primary-container": "#71363d", "surface-container-high": "#ede7e3", "tertiary-fixed": "#ffdcbe",
+      "secondary-container": "#fcd9c1", "surface-container-low": "#f8f2ef", "tertiary-fixed-dim": "#e4c09f",
+      "on-tertiary": "#ffffff", "surface-tint": "#8c4c52", "outline": "#857374", "primary-fixed-dim": "#ffb2b9",
+      "on-surface-variant": "#524344", "on-error-container": "#93000a", "secondary-fixed-dim": "#e2c0a9",
+      "primary-fixed": "#ffdadb", "secondary-fixed": "#ffdcc4", "on-tertiary-fixed-variant": "#5b4229",
+      "pink": "#bf5d7e", "pink-soft": "#fbe1e9", "pink-50": "#fdf3f6", "pink-100": "#fbe7ee", "on-pink": "#7d2f49"
     },
     borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
     spacing: { "margin-mobile": "16px", "sm": "12px", "gutter": "24px", "md": "24px", "xs": "4px", "lg": "48px", "margin-desktop": "40px", "base": "8px", "xl": "80px", "2xl": "120px" },
-    fontFamily: { "display-lg-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-sm": ["Inter"], "label-md": ["Inter"], "label-lg": ["Inter"] },
+    fontFamily: { "display-lg-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "headline-lg": ["Plus Jakarta Sans"], "label-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "label-lg": ["Be Vietnam Pro"] },
     fontSize: {
       "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
       "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],

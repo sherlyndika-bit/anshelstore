@@ -4,7 +4,7 @@
   if (history.scrollRestoration) history.scrollRestoration = "manual";
 
   const NAV = [
-    { href: "/topup", label: "Top Up", key: "topup", icon: "stadia_controller" },
+    { href: "/topup", label: "Top Up Game", key: "topup", icon: "stadia_controller" },
     { href: "/layanan", label: "Layanan AI", key: "layanan", icon: "smart_toy" },
     { href: "/blog", label: "Komunitas", key: "blog", icon: "forum" },
     { href: "/faq", label: "FAQ", key: "faq", icon: "help" },
@@ -16,32 +16,28 @@
   const navMount = document.getElementById("siteNav");
   if (navMount) {
     navMount.innerHTML = `
-    <header class="sticky top-0 z-50">
-      <div class="h-[3px] w-full bg-gradient-to-r from-pink via-secondary to-pink"></div>
-      <div class="bg-surface/95 backdrop-blur-lg border-b border-outline-variant/40 shadow-[0_2px_14px_-8px_rgba(0,0,0,0.25)]">
-        <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop">
-          <div class="flex items-center justify-between h-16">
-            <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
-              <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold text-[18px] shadow-[0_4px_12px_rgba(191,93,126,0.4)] group-hover:scale-110 transition-transform">A</span>
-              <span class="text-[19px] text-on-surface tracking-tight font-extrabold leading-none">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
-            </a>
-            <nav class="hidden md:flex items-center h-16">
-              ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang").map((n) => `<a href="${n.href}" class="relative h-16 flex items-center gap-1.5 px-4 font-label-md text-label-md transition-colors ${n.key === active ? "text-secondary font-bold" : "text-on-surface-variant hover:text-on-surface"}"><span class="material-symbols-outlined text-[18px]">${n.icon}</span>${n.label}${n.key === active ? '<span class="absolute left-3 right-3 bottom-0 h-[3px] rounded-t-full bg-gradient-to-r from-pink to-secondary"></span>' : ""}</a>`).join("")}
-            </nav>
-            <div class="hidden md:flex items-center gap-2 shrink-0" id="siteAuth">
-              <a href="/masuk" class="font-label-md text-label-md font-semibold text-on-surface-variant hover:text-secondary transition-colors px-2">Masuk</a>
-              <a href="/masuk" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md font-bold px-4 py-2 rounded-lg shadow-[0_4px_14px_rgba(191,93,126,0.35)] hover:shadow-[0_6px_20px_rgba(191,93,126,0.5)] hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">person_add</span>Daftar</a>
-            </div>
-            <a href="/akun" id="siteAuthMobile" class="md:hidden w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">person</span></a>
-          </div>
+    <header class="bg-surface/80 backdrop-blur-md border-b-2 border-dashed border-outline-variant shadow-[0_10px_30px_-10px_rgba(139,111,91,0.15)] sticky top-0 z-50 px-margin-mobile md:px-margin-desktop py-md">
+      <div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
+        <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
+          <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[18px] group-hover:scale-110 transition-transform">A</span>
+          <span class="text-headline-md text-primary font-extrabold drop-shadow-sm">Anshel <span class="text-on-primary-container">Store</span></span>
+        </a>
+        <nav class="hidden md:flex items-center gap-1">
+          ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-4 py-2 rounded-t-lg font-label-md transition-all hover:bg-secondary-container/30 hover:scale-105 ${n.key === active ? "text-primary font-bold border-b-4 border-primary-container" : "text-on-surface-variant hover:text-primary"}">${n.label}</a>`).join("")}
+        </nav>
+        <div class="flex items-center gap-1 shrink-0" id="siteAuth">
+          <a href="/topup" title="Cart" class="hidden sm:grid w-10 h-10 place-items-center rounded-full text-primary hover:bg-secondary-container/30 hover:scale-105 transition-all"><span class="material-symbols-outlined">shopping_cart</span></a>
+          <a href="/cek-transaksi" title="Cek Transaksi" class="hidden md:grid w-10 h-10 place-items-center rounded-full text-primary hover:bg-secondary-container/30 hover:scale-105 transition-all"><span class="material-symbols-outlined">receipt_long</span></a>
+          <a href="/akun" title="Akun" class="w-10 h-10 grid place-items-center rounded-full text-primary hover:bg-secondary-container/30 hover:scale-105 transition-all"><span class="material-symbols-outlined">account_circle</span></a>
         </div>
       </div>
     </header>`;
   }
-  // Bottom tab bar (mobile) — pengganti hamburger
+  // Bottom tab bar (mobile)
   const BOTTOM = [
-    { href: "/", label: "Beranda", icon: "home", key: "home" },
+    { href: "/", label: "Beranda", icon: "cottage", key: "home" },
     { href: "/topup", label: "Top Up", icon: "stadia_controller", key: "topup" },
+    { href: "/layanan", label: "Layanan", icon: "smart_toy", key: "layanan" },
     { href: "/blog", label: "Komunitas", icon: "forum", key: "blog" },
     { href: "/akun", label: "Akun", icon: "person", key: "akun" },
   ];
@@ -52,43 +48,34 @@
 
   const footMount = document.getElementById("siteFooter");
   if (footMount) {
-    const pays = ["QRIS", "DANA", "OVO", "GoPay", "ShopeePay", "BCA", "Mandiri"];
     footMount.innerHTML = `
-    <footer class="mt-2xl bg-[#332b2e] text-white">
-      <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-xl pb-lg grid grid-cols-2 md:grid-cols-12 gap-gutter">
-        <div class="col-span-2 md:col-span-4 flex flex-col gap-sm">
+    <footer class="bg-surface-container-low border-t-2 border-dashed border-outline-variant w-full py-xl px-margin-mobile md:px-margin-desktop mt-2xl">
+      <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-12 gap-gutter">
+        <div class="col-span-2 md:col-span-5 flex flex-col gap-sm">
           <div id="footBrand" class="flex items-center gap-2">
-            <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink to-secondary text-white flex items-center justify-center font-extrabold text-[18px]">A</span>
-            <span class="text-[19px] font-extrabold">Anshel <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink to-secondary">Store</span></span>
+            <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[18px]">A</span>
+            <span class="text-headline-md text-primary font-extrabold">Anshel <span class="text-on-primary-container">Store</span></span>
           </div>
-          <p class="text-sm text-white/55 max-w-xs leading-relaxed">Top up game instan & jasa AI automation untuk bisnismu. Satu tempat, cepat, aman, dan terpercaya.</p>
+          <p class="text-body-md text-on-surface-variant max-w-xs">Top up game instan & jasa AI automation untuk bisnismu. Satu tempat, hangat, terpercaya.</p>
           <div id="footSocial" class="flex gap-2 mt-xs"></div>
         </div>
-        <div class="md:col-span-2">
-          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mb-sm">Jelajahi</h4>
-          <div class="flex flex-col gap-2.5">${NAV.map((n) => `<a class="text-sm text-white/70 hover:text-white hover:translate-x-0.5 transition-all" href="${n.href}">${n.label}</a>`).join("")}</div>
+        <div class="md:col-span-3">
+          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-on-surface-variant mb-sm">Jelajahi</h4>
+          <div class="flex flex-col gap-2.5">${NAV.map((n) => `<a class="text-body-md text-on-surface-variant hover:text-primary hover:translate-x-0.5 transition-all" href="${n.href}">${n.label}</a>`).join("")}</div>
         </div>
-        <div class="md:col-span-2">
-          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mb-sm">Akun</h4>
+        <div class="md:col-span-4">
+          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-on-surface-variant mb-sm">Akun &amp; Kontak</h4>
           <div class="flex flex-col gap-2.5">
-            <a href="/masuk" class="text-sm text-white/70 hover:text-white transition-colors">Masuk / Daftar</a>
-            <a href="/akun" class="text-sm text-white/70 hover:text-white transition-colors">Akun Saya</a>
-            <a href="/cek-transaksi" class="text-sm text-white/70 hover:text-white transition-colors">Lacak Pesanan</a>
+            <a href="/masuk" class="text-body-md text-on-surface-variant hover:text-primary transition-colors">Masuk / Daftar</a>
+            <a href="/akun" class="text-body-md text-on-surface-variant hover:text-primary transition-colors">Akun Saya</a>
+            <a id="footWa" href="/tentang" target="_blank" rel="noopener" class="text-body-md text-on-surface-variant hover:text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp</a>
+            <a id="footMail" href="/tentang" class="text-body-md text-on-surface-variant hover:text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> Email</a>
           </div>
         </div>
-        <div class="col-span-2 md:col-span-4">
-          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mb-sm">Kontak</h4>
-          <a id="footWa" href="/tentang" target="_blank" rel="noopener" class="text-sm text-white/70 hover:text-white flex items-center gap-2 mb-2.5"><span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp</a>
-          <a id="footMail" href="/tentang" class="text-sm text-white/70 hover:text-white flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> Email</a>
-          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-white/40 mt-md mb-sm">Pembayaran</h4>
-          <div class="flex flex-wrap gap-1.5">${pays.map((p) => `<span class="text-[11px] font-bold text-white/80 bg-white/10 border border-white/10 rounded-md px-2 py-1">${p}</span>`).join("")}</div>
-        </div>
       </div>
-      <div class="border-t border-white/10">
-        <div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-md flex flex-col sm:flex-row items-center justify-between gap-xs">
-          <span class="text-xs text-white/45">© ${new Date().getFullYear()} Anshel Store. Seluruh hak cipta dilindungi.</span>
-          <span class="text-xs text-white/45 inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-secondary" style="font-variation-settings:'FILL' 1;">verified_user</span> Pembayaran aman & terenkripsi</span>
-        </div>
+      <div class="max-w-7xl mx-auto mt-lg pt-md border-t border-outline-variant/40 flex flex-col sm:flex-row items-center justify-between gap-xs">
+        <span class="text-label-sm text-on-surface-variant">© ${new Date().getFullYear()} Anshel Store. Seluruh hak cipta dilindungi.</span>
+        <span class="text-label-sm text-on-surface-variant inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings:'FILL' 1;">verified_user</span> Pembayaran aman & terenkripsi</span>
       </div>
     </footer>`;
   }
