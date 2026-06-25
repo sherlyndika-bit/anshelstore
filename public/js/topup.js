@@ -17,7 +17,11 @@ const catOf = (g) => CAT[g.id] || "Lainnya";
 let games = [], selGame = null, selItem = null, WA = null;
 let activeCat = "Semua", searchQ = "";
 
-fetch("/api/settings").then((r) => r.json()).then((d) => { if (d.store && d.store.whatsapp) WA = d.store.whatsapp; }).catch(() => {});
+fetch("/api/settings").then((r) => r.json()).then((d) => {
+  if (d.store && d.store.whatsapp) WA = d.store.whatsapp;
+  const logo = d.settings && d.settings.logo;
+  if (logo) { const bg = document.getElementById("topupHeroBg"); if (bg) bg.style.background = `center/cover no-repeat url("${logo}")`; }
+}).catch(() => {});
 
 /* ---------------- KATALOG ---------------- */
 function coverCard(g) {

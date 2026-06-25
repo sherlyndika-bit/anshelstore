@@ -15,30 +15,36 @@
 <div id="siteNav"></div>
 
 <main class="flex-grow w-full relative overflow-hidden flex flex-col items-center justify-start pt-12 md:pt-20 pb-32">
-  <!-- Hero: LOGO jadi background penuh, teks overlay di kiri (gaya banner) -->
-  <section class="w-full max-w-6xl mx-auto px-4 lg:px-container-margin mb-16 z-10">
-    <div class="relative w-full rounded-[32px] overflow-hidden marshmallow-shadow border-2 border-white/60 min-h-[360px] md:min-h-[460px] flex items-center group">
-      <!-- Background penuh: diisi LOGO TOKO (object-cover) bila ada, fallback gradient marshmallow -->
-      <div id="heroBg" class="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-105" style="background:linear-gradient(120deg,#f9d9d6 0%,#fce9e2 45%,#f6e4cf 100%);background-size:cover;background-position:center"></div>
-      <!-- Overlay supaya teks kiri tetap kebaca -->
-      <div class="absolute inset-0 z-[1] bg-gradient-to-r from-surface/95 via-surface/75 to-transparent"></div>
-      <div class="relative z-10 w-full px-6 md:px-12 py-10 flex flex-col items-start gap-4 max-w-2xl text-left">
-        <div class="inline-flex items-center gap-2 bg-white/70 text-primary font-label-md text-label-md px-4 py-2 rounded-full shadow-sm">
-          <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Top Up Game &amp; AI Automation
-        </div>
-        <h1 class="font-display-lg text-3xl md:text-display-lg text-on-surface leading-tight">
-          Sosial Media-mu, <span class="text-primary">Otomatis &amp; Naik Level</span>
-        </h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">
-          Bot WhatsApp, Telegram &amp; Instagram untuk bisnismu — plus top up game instan, murah &amp; aman. Hangat, lucu, terpercaya.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 mt-2">
-          <a href="/topup" class="bg-primary text-on-primary font-label-md px-7 py-4 rounded-full marshmallow-shadow hover:-translate-y-1 active:translate-y-0 transition-transform flex items-center gap-2"><span class="material-symbols-outlined">sports_esports</span> Portal Top Up Game</a>
-          <a href="/layanan" class="bg-white/80 text-primary font-label-md px-7 py-4 rounded-full marshmallow-shadow hover:-translate-y-1 active:translate-y-0 transition-transform flex items-center gap-2">Jelajahi Layanan AI <span class="material-symbols-outlined">arrow_forward</span></a>
-        </div>
+  <!-- Hero -->
+  <section class="relative w-full max-w-6xl mx-auto px-4 lg:px-container-margin flex flex-col items-center text-center z-10 mb-20">
+    <div class="relative w-full max-w-3xl aspect-[16/9] md:aspect-[21/9] flex items-center justify-center animate-float mb-10">
+      <div class="absolute inset-0 floating-island opacity-80 z-0"></div>
+      <!-- Default brand mark (diganti otomatis dgn LOGO TOKO bila sudah diupload di dashboard) -->
+      <div id="heroArt" class="relative z-10 w-full h-full flex flex-col items-center justify-center gap-3 p-8 drop-shadow-xl">
+        <span class="text-7xl md:text-8xl animate-float">🍡</span>
+        <span class="font-display-lg text-3xl md:text-5xl text-primary">Anshel Store</span>
       </div>
-      <span class="material-symbols-outlined absolute top-10 right-16 text-primary text-[44px] opacity-40 animate-pulse hidden md:block">favorite</span>
-      <span class="material-symbols-outlined absolute bottom-16 right-32 text-secondary text-[30px] opacity-40 hidden md:block">star</span>
+    </div>
+    <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-6 max-w-4xl relative z-20">
+      Sosial Media-mu, <span class="text-primary relative inline-block">Otomatis &amp; Naik Level
+        <span class="material-symbols-outlined absolute -top-4 -right-6 text-secondary-container text-2xl animate-pulse">auto_awesome</span>
+        <span class="material-symbols-outlined absolute -bottom-2 -left-6 text-primary-container text-xl animate-pulse">star</span>
+      </span>
+    </h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-10 z-20">
+      Masuk ke dunia lembut tempat sosial media bisnismu diurus dengan penuh perhatian — dari bot WhatsApp sampai interaksi Instagram. Plus, top up game instan, murah & aman.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 items-center z-20">
+      <a href="/topup" class="bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
+        <span class="relative z-10">Portal Top Up Game</span>
+        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">sports_esports</span>
+      </a>
+      <a href="/layanan" class="bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
+        <span class="relative z-10">Jelajahi Layanan AI</span>
+        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </a>
     </div>
   </section>
 
@@ -142,7 +148,7 @@
   // Logo toko jadi gambar hero + banner upload dari dashboard (override default)
   fetch("/api/settings").then((r) => r.json()).then((d) => {
     const set = d.settings || {};
-    if (set.logo) { const bg = document.getElementById("heroBg"); if (bg) bg.style.background = `center/cover no-repeat url("${set.logo}")`; }
+    if (set.logo) { const a = document.getElementById("heroArt"); if (a) a.innerHTML = `<img alt="Logo Anshel Store" class="w-full h-full object-contain drop-shadow-xl" src="${set.logo}"/>`; }
     const banners = Array.isArray(set.banners) ? set.banners.filter(Boolean) : [];
     if (banners.length) {
       mountBanners(banners.map((src, i) => `<img src="${src}" alt="Banner ${i + 1}" class="mb-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700" style="opacity:${i === 0 ? 1 : 0}"/>`));

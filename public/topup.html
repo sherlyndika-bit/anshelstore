@@ -16,9 +16,12 @@
 <!-- ============ VIEW: KATALOG (browse game) ============ -->
 <div id="catalogView" class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg space-y-[60px]">
 
-  <!-- Hero Banner Promo -->
-  <section class="relative w-full rounded-[24px] overflow-hidden marshmallow-shadow border-2 border-white/60 min-h-[280px] md:min-h-[360px] flex items-center group" style="background:linear-gradient(120deg,#f9d9d6 0%,#fce9e2 45%,#f6e4cf 100%)">
-    <div class="absolute -right-6 -bottom-8 text-[10rem] md:text-[14rem] opacity-25 select-none pointer-events-none">🎮</div>
+  <!-- Hero Banner: LOGO jadi background penuh, teks overlay di kiri -->
+  <section class="relative w-full rounded-[24px] overflow-hidden marshmallow-shadow border-2 border-white/60 min-h-[300px] md:min-h-[400px] flex items-center group">
+    <!-- Background penuh: diisi LOGO TOKO (cover) bila ada, fallback gradient -->
+    <div id="topupHeroBg" class="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-105" style="background:linear-gradient(120deg,#f9d9d6 0%,#fce9e2 45%,#f6e4cf 100%);background-size:cover;background-position:center"></div>
+    <!-- Overlay supaya teks kiri kebaca -->
+    <div class="absolute inset-0 z-[1] bg-gradient-to-r from-surface/95 via-surface/75 to-transparent"></div>
     <div class="relative z-10 w-full px-md md:px-xl py-lg flex flex-col items-start gap-md max-w-2xl">
       <div class="inline-flex items-center gap-2 bg-white/70 text-primary font-label-md text-label-md px-4 py-2 rounded-full shadow-sm">
         <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Penawaran Spesial
