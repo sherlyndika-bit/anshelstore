@@ -1,4 +1,5 @@
 // Konfigurasi tema Tailwind Anshel Store — gaya marshmallow (dipakai semua halaman publik)
+window.tailwind = window.tailwind || {};
 tailwind.config = {
   darkMode: "class",
   theme: { extend: {
@@ -62,5 +63,29 @@ tailwind.config = {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); });
     }
+
+    // Tombol "Pasang App" — muncul saat browser menyatakan situs bisa di-install
+    var deferred = null;
+    function showInstallBtn() {
+      if (document.getElementById("pwaInstallBtn") || !document.body) return;
+      var b = document.createElement("button");
+      b.id = "pwaInstallBtn"; b.type = "button";
+      b.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px;line-height:1">install_mobile</span> Pasang App';
+      b.style.cssText = "position:fixed;right:16px;bottom:88px;z-index:9999;background:#8c4c52;color:#fff;border:0;border-radius:9999px;padding:12px 18px;font-weight:700;font-family:'Be Vietnam Pro',system-ui,sans-serif;font-size:14px;box-shadow:0 10px 28px rgba(140,76,82,.45);cursor:pointer;display:inline-flex;align-items:center;gap:6px";
+      b.addEventListener("click", function () {
+        if (!deferred) return;
+        deferred.prompt();
+        var done = function () { deferred = null; b.remove(); };
+        if (deferred.userChoice && deferred.userChoice.then) deferred.userChoice.then(done, done);
+        else done();
+      });
+      document.body.appendChild(b);
+    }
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault(); deferred = e;
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", showInstallBtn);
+      else showInstallBtn();
+    });
+    window.addEventListener("appinstalled", function () { var b = document.getElementById("pwaInstallBtn"); if (b) b.remove(); deferred = null; });
   } catch (e) {}
 })();
