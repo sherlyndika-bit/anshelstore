@@ -120,7 +120,6 @@ $("logoutBtn").addEventListener("click", logout);
 // NAVIGATION (hash routing)
 // ============================================================
 const sidebar = $("sidebar"), backdrop = $("backdrop");
-$("menuBtn").addEventListener("click", () => { sidebar.classList.toggle("open"); backdrop.classList.toggle("show"); });
 backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
 
 const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses" };

@@ -36,3 +36,31 @@ tailwind.config = {
     }
   } }
 };
+
+
+// ── PWA: manifest, theme-color, ikon aplikasi, & service worker (berlaku di semua halaman) ──
+(function () {
+  try {
+    var head = document.head || document.getElementsByTagName("head")[0];
+    function addLink(rel, href, attrs) {
+      if (document.querySelector('link[rel="' + rel + '"]')) return;
+      var l = document.createElement("link"); l.rel = rel; l.href = href;
+      if (attrs) Object.keys(attrs).forEach(function (k) { l.setAttribute(k, attrs[k]); });
+      head.appendChild(l);
+    }
+    function addMeta(name, content) {
+      if (document.querySelector('meta[name="' + name + '"]')) return;
+      var m = document.createElement("meta"); m.name = name; m.content = content; head.appendChild(m);
+    }
+    addLink("manifest", "/manifest.json");
+    addLink("apple-touch-icon", "/icon-192.png");
+    addLink("icon", "/icon-192.png", { type: "image/png", sizes: "192x192" });
+    addMeta("theme-color", "#8c4c52");
+    addMeta("apple-mobile-web-app-capable", "yes");
+    addMeta("apple-mobile-web-app-status-bar-style", "default");
+    addMeta("apple-mobile-web-app-title", "Anshel Store");
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); });
+    }
+  } catch (e) {}
+})();
