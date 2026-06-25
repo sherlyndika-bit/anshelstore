@@ -19,7 +19,7 @@
   <section class="relative w-full max-w-6xl mx-auto px-4 lg:px-container-margin flex flex-col items-center text-center z-10 mb-20">
     <div class="relative w-full max-w-3xl aspect-[16/9] md:aspect-[21/9] flex items-center justify-center animate-float mb-10">
       <div class="absolute inset-0 floating-island opacity-80 z-0"></div>
-      <img alt="Maskot Anshel Store" class="relative z-10 w-full h-full object-contain drop-shadow-xl p-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-K0K56BL2XjJrbyf4r8N8c6AZ9pN0nOMvx0TuCdCMUUOpngcbrBNM6MLBlXzfyBMS2WYsHCulAUx4NHPSzm6gMsSrDSKW57oTMTmgly4lj6uXxf3kTgJxkAxpJRCy3jlrdNq-8F848XAcmFDRJapwaVCz2RQGhyEbBESQqGZzyW30Q9jrU5htqOZbHAVkcuUhAfCEblIVbUBbk8T1TQcZex9sAgV3EyGs9n5hUsUJrT_mVvLmSSEfsDz25_-Jha-p-ZETZwvfGvOR"/>
+      <img id="heroImg" alt="Logo Anshel Store" class="relative z-10 w-full h-full object-contain drop-shadow-xl p-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-K0K56BL2XjJrbyf4r8N8c6AZ9pN0nOMvx0TuCdCMUUOpngcbrBNM6MLBlXzfyBMS2WYsHCulAUx4NHPSzm6gMsSrDSKW57oTMTmgly4lj6uXxf3kTgJxkAxpJRCy3jlrdNq-8F848XAcmFDRJapwaVCz2RQGhyEbBESQqGZzyW30Q9jrU5htqOZbHAVkcuUhAfCEblIVbUBbk8T1TQcZex9sAgV3EyGs9n5hUsUJrT_mVvLmSSEfsDz25_-Jha-p-ZETZwvfGvOR"/>
     </div>
     <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-6 max-w-4xl relative z-20">
       Sosial Media-mu, <span class="text-primary relative inline-block">Otomatis &amp; Naik Level
@@ -42,6 +42,11 @@
         <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
       </a>
     </div>
+  </section>
+
+  <!-- Banner promo (dikelola dari dashboard) -->
+  <section id="bannerSection" class="hidden w-full max-w-5xl mx-auto px-4 lg:px-container-margin mb-12 relative z-10">
+    <div id="mainBanner" class="relative rounded-[24px] overflow-hidden aspect-[16/9] marshmallow-shadow border-2 border-dashed border-outline-variant bg-surface-container"></div>
   </section>
 
   <!-- Wavy Divider -->
@@ -98,5 +103,26 @@
     }).join("");
   }).catch(() => {});
   if (typeof initChatWidget === "function") initChatWidget();
+
+  // Logo toko jadi gambar hero + banner dari dashboard
+  fetch("/api/settings").then((r) => r.json()).then((d) => {
+    const set = d.settings || {};
+    if (set.logo) { const h = document.getElementById("heroImg"); if (h) h.src = set.logo; }
+    const banners = Array.isArray(set.banners) ? set.banners.filter(Boolean) : [];
+    const bs = document.getElementById("bannerSection"), mb = document.getElementById("mainBanner");
+    if (banners.length && mb) {
+      bs.classList.remove("hidden");
+      mb.innerHTML = banners.map((src, i) => `<img src="${src}" alt="Banner ${i + 1}" class="mb-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700" style="opacity:${i === 0 ? 1 : 0}"/>`).join("") + (banners.length > 1 ? '<div id="mbDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"></div>' : "");
+      const slides = mb.querySelectorAll(".mb-slide");
+      if (slides.length > 1) {
+        const dotsW = mb.querySelector("#mbDots");
+        dotsW.innerHTML = [...slides].map((_, n) => `<button data-n="${n}" class="w-2.5 h-2.5 rounded-full ${n === 0 ? "bg-primary" : "bg-white/70"}"></button>`).join("");
+        const dots = dotsW.querySelectorAll("button"); let i = 0;
+        const show = (n) => { slides.forEach((s, k) => (s.style.opacity = k === n ? "1" : "0")); dots.forEach((dd, k) => (dd.className = `w-2.5 h-2.5 rounded-full ${k === n ? "bg-primary" : "bg-white/70"}`)); i = n; };
+        dots.forEach((dd) => dd.addEventListener("click", () => show(Number(dd.dataset.n))));
+        setInterval(() => show((i + 1) % slides.length), 4500);
+      }
+    }
+  }).catch(() => {});
 </script>
 </body></html>

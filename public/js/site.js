@@ -19,8 +19,8 @@
     <header class="bg-surface/80 backdrop-blur-md border-b-2 border-dashed border-outline-variant shadow-[0_10px_30px_-10px_rgba(139,111,91,0.15)] sticky top-0 z-50 px-margin-mobile md:px-margin-desktop py-md">
       <div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
         <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
-          <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[18px] group-hover:scale-110 transition-transform">A</span>
-          <span class="text-headline-md text-primary font-extrabold drop-shadow-sm">Anshel <span class="text-on-primary-container">Store</span></span>
+          <span class="w-12 h-12 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[24px] group-hover:scale-110 transition-transform shadow-sm">A</span>
+          <span class="text-2xl text-primary font-extrabold drop-shadow-sm">Anshel <span class="text-on-primary-container">Store</span></span>
         </a>
         <nav class="hidden md:flex items-center gap-1">
           ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-4 py-2 rounded-t-lg font-label-md transition-all hover:bg-secondary-container/30 hover:scale-105 ${n.key === active ? "text-primary font-bold border-b-4 border-primary-container" : "text-on-surface-variant hover:text-primary"}">${n.label}</a>`).join("")}
@@ -85,7 +85,7 @@
     const s = d.store || {}, set = d.settings || {}, soc = set.social || {};
     if (set.logo) {
       const b = document.getElementById("siteBrand");
-      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-10 w-auto group-hover:scale-105 transition-transform"/>`;
+      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-12 md:h-14 w-auto group-hover:scale-105 transition-transform"/>`;
       const fb = document.getElementById("footBrand");
       if (fb) fb.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-2.5 py-1.5 shadow-md"><img src="${set.logo}" alt="Anshel Store" class="h-7 w-auto"/></span>`;
     }
