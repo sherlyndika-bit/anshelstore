@@ -80,9 +80,9 @@ function renderGameHeaderBg(game) {
 function renderGameShots(game) {
   const el = $("gameShots"); if (!el) return;
   const shots = (game.screenshots || []).filter(Boolean);
-  el.innerHTML = shots.length
-    ? shots.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener" class="thumb !w-32 !h-20"><img src="${esc(s)}" alt="${esc(game.name)}"/></a>`).join("")
-    : "";
+  el.classList.toggle("hidden", shots.length === 0);
+  if (shots.length) el.classList.add("flex");
+  el.innerHTML = shots.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener" class="shrink-0 w-40 h-24 rounded-xl overflow-hidden border-[1.5px] border-outline-variant block"><img src="${esc(s)}" alt="${esc(game.name)}" class="w-full h-full object-cover"/></a>`).join("");
 }
 function renderGameInfo(game) {
   $("gameDescName").textContent = game.name;

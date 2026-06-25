@@ -97,9 +97,14 @@
         </div>
       </div>
       <p id="gameDescName" class="hidden"></p>
-      <div id="gameDesc" class="hidden"></div>
-      <div id="gameNeeds" class="hidden"></div>
-      <div id="gameShots" class="hidden"></div>
+      <!-- Screenshots (dari dashboard) -->
+      <div id="gameShots" class="hidden gap-3 overflow-x-auto pb-2 mt-md"></div>
+      <!-- Tentang game: deskripsi + kebutuhan (dari dashboard) -->
+      <div class="mt-md pt-md border-t-[1.5px] border-dashed border-outline-variant">
+        <h3 class="font-bold text-on-surface flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-secondary text-[20px]">info</span> Tentang Game</h3>
+        <div id="gameDesc" class="font-body-md text-on-surface-variant text-[15px] leading-relaxed flex flex-col gap-2"></div>
+        <div id="gameNeeds" class="flex flex-wrap gap-2 mt-3"></div>
+      </div>
     </section>
 
     <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
