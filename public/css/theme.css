@@ -116,6 +116,8 @@
   /* geser gelembung chat agar tidak menutupi bottom nav */
   .cw-bubble { bottom: 92px !important; }
   .cw-panel { bottom: 162px !important; max-height: 62vh !important; }
+  /* Di halaman CHECKOUT topup (detail), sembunyikan bottom-nav supaya tombol "Beli Sekarang" tidak tertutup */
+  body[data-view="detail"] .site-bottom-nav { display: none; }
 }
 
 
