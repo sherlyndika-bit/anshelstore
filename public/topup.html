@@ -17,21 +17,20 @@
 <div id="catalogView" class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg space-y-[60px]">
 
   <!-- Hero Banner Promo -->
-  <section class="relative w-full rounded-lg overflow-hidden marshmallow-shadow bg-surface-container border-2 border-dashed border-outline-variant min-h-[300px] md:min-h-[380px] flex items-center group">
-    <div class="absolute inset-0 bg-gradient-to-br from-primary-container/40 via-secondary-container/30 to-tertiary-container/40"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20px_20px,#8c4c52_2px,transparent_0)] [background-size:40px_40px] opacity-10"></div>
+  <section class="relative w-full rounded-[24px] overflow-hidden marshmallow-shadow border-2 border-white/60 min-h-[280px] md:min-h-[360px] flex items-center group" style="background:linear-gradient(120deg,#f9d9d6 0%,#fce9e2 45%,#f6e4cf 100%)">
+    <div class="absolute -right-6 -bottom-8 text-[10rem] md:text-[14rem] opacity-25 select-none pointer-events-none">🎮</div>
     <div class="relative z-10 w-full px-md md:px-xl py-lg flex flex-col items-start gap-md max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container font-label-md text-label-md px-4 py-2 rounded-full">
+      <div class="inline-flex items-center gap-2 bg-white/70 text-primary font-label-md text-label-md px-4 py-2 rounded-full shadow-sm">
         <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Penawaran Spesial
       </div>
       <h1 class="font-display-lg text-3xl md:text-display-lg text-on-surface leading-tight">Top Up <span class="text-primary">Game Favoritmu</span><br/>cepat, aman, &amp; ramah!</h1>
       <p class="font-body-lg text-on-surface-variant max-w-md">Pilih game di bawah, masukkan ID, bayar — diamond meluncur dalam hitungan menit. ✨</p>
-      <a href="#daftarGame" class="mt-2 bg-primary text-on-primary font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow squish-btn inline-flex items-center gap-2 hover:scale-105 transition-transform">
+      <button type="button" onclick="document.getElementById('daftarGame').scrollIntoView({behavior:'smooth'})" class="mt-2 bg-primary text-on-primary font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow squish-btn inline-flex items-center gap-2 hover:scale-105 transition-transform">
         Mulai Top Up <span class="material-symbols-outlined">arrow_forward</span>
-      </a>
+      </button>
     </div>
-    <span class="material-symbols-outlined absolute top-10 right-20 text-primary-container text-[48px] opacity-60 animate-pulse hidden md:block">favorite</span>
-    <span class="material-symbols-outlined absolute bottom-20 right-40 text-tertiary-container text-[32px] opacity-60 hidden md:block">star</span>
+    <span class="material-symbols-outlined absolute top-10 right-20 text-primary text-[48px] opacity-40 animate-pulse hidden md:block">favorite</span>
+    <span class="material-symbols-outlined absolute bottom-20 right-40 text-secondary text-[32px] opacity-40 hidden md:block">star</span>
   </section>
 
   <!-- Search & Discovery -->
