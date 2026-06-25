@@ -101,8 +101,10 @@ function showDetail(game) {
 
   // Akun
   $("accountFields").innerHTML = game.needs.map((n) => `
-    <label class="block"><span class="font-label-md text-label-md text-on-surface-variant">${esc(n)}</span>
-      <input class="acc-field mt-xs w-full rounded-xl border-outline-variant bg-surface focus:border-secondary focus:ring-secondary" data-key="${esc(n)}" type="text" placeholder="Masukkan ${esc(n)}"/></label>`).join("");
+    <div class="relative">
+      <label class="absolute -top-2 left-3 px-1 bg-surface-container-lowest font-label-md text-on-surface-variant z-10 text-[12px]">${esc(n)}</label>
+      <input class="acc-field w-full recessed-input rounded-t-lg rounded-b-md px-4 pt-5 pb-3 font-body-md text-on-surface placeholder:text-outline focus:ring-0" data-key="${esc(n)}" type="text" placeholder="Masukkan ${esc(n)}"/>
+    </div>`).join("");
   $("accountFields").querySelectorAll(".acc-field").forEach((f) => f.addEventListener("input", () => { update(); checkId(); }));
 
   // Nominal
