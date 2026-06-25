@@ -291,6 +291,7 @@ const CLEAN_ROUTES = {
   "/faq": "faq.html", "/tentang": "tentang.html", "/chat": "chat.html",
   "/masuk": "masuk.html", "/login": "masuk.html", "/daftar": "masuk.html",
   "/akun": "akun.html", "/profil": "akun.html",
+  "/layanan": "layanan.html", "/automation": "layanan.html", "/ai": "layanan.html",
 };
 async function saveImageUpload(dataUrl) {
   const m = /^data:(image\/(png|jpe?g|gif|webp|svg\+xml));base64,(.+)$/.exec(String(dataUrl || ""));

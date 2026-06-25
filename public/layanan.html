@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Layanan AI Automation — Anshel Store</title>
+<meta name="description" content="Otomasi WhatsApp, Telegram, Instagram, dan workflow bisnismu dengan AI. Dibuat hangat & lucu, dirancang dengan teliti."/>
+<link rel="canonical" href="https://www.anshelstore.biz.id/layanan"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = { darkMode: "class", theme: { extend: {
+    colors: {
+      "secondary-fixed":"#ffdcc4","on-surface-variant":"#524344","surface":"#fef8f4","on-primary-container":"#71363d",
+      "tertiary":"#75593e","surface-container-lowest":"#ffffff","tertiary-container":"#d4b191","secondary-fixed-dim":"#e2c0a9",
+      "surface-container-highest":"#e7e1de","background":"#fef8f4","tertiary-fixed":"#ffdcbe","surface-container-high":"#ede7e3",
+      "outline-variant":"#d7c1c2","on-error-container":"#93000a","secondary":"#735946","primary-container":"#f2a2a9",
+      "inverse-primary":"#ffb2b9","on-tertiary":"#ffffff","surface-dim":"#ded9d5","on-tertiary-fixed-variant":"#5b4229",
+      "on-primary-fixed-variant":"#6f353c","on-tertiary-fixed":"#2a1703","error-container":"#ffdad6","on-background":"#1d1b19",
+      "surface-variant":"#e7e1de","error":"#ba1a1a","on-secondary-fixed-variant":"#594230","secondary-container":"#fcd9c1",
+      "primary":"#8c4c52","primary-fixed":"#ffdadb","surface-container-low":"#f8f2ef","on-error":"#ffffff","on-secondary":"#ffffff",
+      "surface-container":"#f3ede9","primary-fixed-dim":"#ffb2b9","outline":"#857374","tertiary-fixed-dim":"#e4c09f",
+      "surface-bright":"#fef8f4","on-tertiary-container":"#5c432a","on-secondary-fixed":"#291709","inverse-on-surface":"#f5f0ec",
+      "on-primary-fixed":"#390a12","on-surface":"#1d1b19","on-secondary-container":"#785d4a","on-primary":"#ffffff",
+      "surface-tint":"#8c4c52","inverse-surface":"#32302e"
+    },
+    borderRadius: { "DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px" },
+    spacing: { "xs":"4px","lg":"24px","sm":"8px","md":"16px","xl":"48px","unit":"4px","container-margin":"24px","gutter":"20px" },
+    fontFamily: {
+      "headline-lg-mobile":["Plus Jakarta Sans"],"body-md":["Be Vietnam Pro"],"headline-md":["Plus Jakarta Sans"],
+      "headline-lg":["Plus Jakarta Sans"],"display-lg":["Plus Jakarta Sans"],"body-lg":["Be Vietnam Pro"],"label-md":["Be Vietnam Pro"]
+    },
+    fontSize: {
+      "headline-lg-mobile":["28px",{lineHeight:"1.2",fontWeight:"700"}],
+      "body-md":["16px",{lineHeight:"1.5",fontWeight:"400"}],
+      "headline-md":["24px",{lineHeight:"1.3",fontWeight:"700"}],
+      "headline-lg":["32px",{lineHeight:"1.2",fontWeight:"700"}],
+      "display-lg":["48px",{lineHeight:"1.1",letterSpacing:"-0.02em",fontWeight:"800"}],
+      "body-lg":["18px",{lineHeight:"1.6",fontWeight:"500"}],
+      "label-md":["14px",{lineHeight:"1.2",letterSpacing:"0.05em",fontWeight:"600"}]
+    }
+  } } }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .shadow-marshmallow { box-shadow: 0 10px 30px -10px rgba(139,111,91,0.15); }
+  .btn-inner-glow { box-shadow: inset 0 4px 0px 0px rgba(255,255,255,0.3); }
+</style>
+</head>
+<body class="bg-background min-h-screen flex flex-col font-body-md text-body-md text-on-background">
+
+<!-- Top Nav -->
+<header class="bg-surface/80 backdrop-blur-md border-b-2 border-dashed border-outline-variant shadow-[0_10px_30px_-10px_rgba(139,111,91,0.15)] fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-margin py-md">
+  <a class="flex items-center gap-2 group" href="/">
+    <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-display-lg text-lg group-hover:scale-110 transition-transform">A</span>
+    <span class="font-headline-lg text-headline-lg-mobile text-primary drop-shadow-sm">Anshel Store</span>
+  </a>
+  <nav class="hidden md:flex items-center gap-lg">
+    <a class="font-headline-md text-on-surface-variant hover:text-primary transition-colors px-4 py-2 rounded-t-lg" href="/topup">Top Up Game</a>
+    <a class="font-headline-md text-primary font-bold border-b-4 border-primary-container rounded-t-lg pb-1 px-4 py-2" href="/layanan">Layanan AI</a>
+    <a class="font-headline-md text-on-surface-variant hover:text-primary transition-colors px-4 py-2 rounded-t-lg" href="/blog">Komunitas</a>
+  </nav>
+  <div class="flex items-center gap-sm">
+    <a href="/topup" title="Top Up" class="p-2 text-primary hover:scale-105 hover:bg-secondary-container/30 transition-all rounded-full"><span class="material-symbols-outlined">shopping_cart</span></a>
+    <a href="/akun" title="Akun" class="p-2 text-primary hover:scale-105 hover:bg-secondary-container/30 transition-all rounded-full"><span class="material-symbols-outlined">account_circle</span></a>
+  </div>
+</header>
+
+<main class="flex-grow pt-[100px] pb-xl px-container-margin md:px-xl max-w-7xl mx-auto w-full flex flex-col gap-xl">
+
+  <!-- Banner Header -->
+  <section class="relative w-full rounded-[32px] bg-secondary-container overflow-hidden shadow-marshmallow border-2 border-dashed border-secondary border-opacity-30">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 20px 20px, #8c4c52 2px, transparent 0); background-size: 40px 40px;"></div>
+    <div class="flex flex-col md:flex-row items-center p-8 md:p-12 relative z-10 gap-lg">
+      <div class="flex-1 flex flex-col gap-sm">
+        <div class="inline-flex items-center gap-2 bg-surface rounded-full px-4 py-1 w-max border-2 border-dashed border-primary-container text-primary font-label-md text-label-md mb-2 shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Otomasi Bisnismu
+        </div>
+        <h1 class="font-display-lg text-display-lg text-on-secondary-container">Layanan AI Automation</h1>
+        <p class="font-body-lg text-body-lg text-on-secondary-container/80 max-w-lg mt-2">
+          Solusi otomasi WhatsApp, Telegram, Instagram, dan workflow — dirancang dengan teliti, dibungkus hangat. Pilih layanan, langsung konsultasi.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-3">
+          <a id="ctaWa" href="/tentang" class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-full btn-inner-glow shadow-marshmallow hover:-translate-y-0.5 transition-transform inline-flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">chat</span> Konsultasi Gratis</a>
+          <a href="#daftar-layanan" class="bg-surface text-primary font-label-md text-label-md px-6 py-3 rounded-full border-2 border-dashed border-primary-container hover:bg-primary-container/30 transition-colors inline-flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">grid_view</span> Lihat Layanan</a>
+        </div>
+      </div>
+      <div class="w-full md:w-1/3 h-48 md:h-64 rounded-2xl overflow-hidden border-4 border-surface shadow-md relative bg-surface-container-highest">
+        <img alt="Maskot Anshel Store" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOGYCtgjZBuozFPf440WkAX0xPMtJqHHs7cZvjhIwUL5cMm9L5ZjaMEqUVrkM80S2q_KKZUW2KqIPvb4-d4IufKZDj4GTJe7tpCXB6aMdgXyKfJlld7xqoRZGrr00fvYHctlSrb9TZBLxHB_l0xywjLqR5XdFS8_DekRqjuWoIPy3ijaec4EFNocQLlLThHHpQMSekadJ3neOhVpMwBjgdefAZCLeKU16LFLt90A0tE_gb-_grLuAr3A56Ax6P1pBlD-sZ0261UT2n"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Daftar Layanan -->
+  <section id="daftar-layanan" class="flex flex-col gap-lg scroll-mt-32">
+    <div class="flex justify-between items-end mb-2">
+      <div>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-3">Pilih Layanan <span class="material-symbols-outlined text-primary text-[32px]">science</span></h2>
+        <p class="font-body-md text-on-surface-variant mt-1">Otomasi yang aman, ramah, dan langsung jalan untuk bisnismu.</p>
+      </div>
+    </div>
+    <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    <p id="servicesEmpty" class="hidden text-center text-on-surface-variant py-xl">Layanan akan segera muncul ✨</p>
+  </section>
+
+  <!-- Cara Kerja -->
+  <section class="bg-surface-container-lowest rounded-[32px] border-2 border-dashed border-outline-variant p-8 md:p-12 shadow-marshmallow">
+    <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6 text-center">Cara Kerjanya</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-primary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-primary-container">forum</span></div><h3 class="font-headline-md mb-1">1. Konsultasi</h3><p class="text-on-surface-variant text-sm">Cerita kebutuhanmu lewat WhatsApp.</p></div>
+      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-secondary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-secondary-container">build</span></div><h3 class="font-headline-md mb-1">2. Setup</h3><p class="text-on-surface-variant text-sm">Tim kami racik &amp; pasang otomasinya.</p></div>
+      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-tertiary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-tertiary-container">rocket_launch</span></div><h3 class="font-headline-md mb-1">3. Jalan</h3><p class="text-on-surface-variant text-sm">Bisnismu otomatis 24/7, kamu santai.</p></div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t-2 border-dashed border-outline-variant w-full py-xl px-container-margin flex flex-col md:flex-row justify-between items-center gap-md mt-auto">
+  <a href="/" class="font-headline-md text-headline-md text-secondary">Anshel Store</a>
+  <div class="flex flex-wrap justify-center gap-md">
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/topup">Top Up</a>
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/blog">Komunitas</a>
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/tentang">Tentang</a>
+    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/faq">FAQ</a>
+  </div>
+  <div class="text-on-surface-variant text-center md:text-right">© <span id="yr"></span> Anshel Store</div>
+</footer>
+
+<div id="chatWidget"></div>
+<script src="/js/widget.js"></script>
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const COLORS = [
+    { bg: "bg-secondary-container/20", border: "border-primary-container/50", chip: "bg-tertiary-container/40 text-tertiary" },
+    { bg: "bg-primary-container/10", border: "border-secondary-container", chip: "bg-primary-container/40 text-primary" },
+    { bg: "bg-tertiary-fixed/30", border: "border-tertiary-container", chip: "bg-secondary-fixed/50 text-secondary" }
+  ];
+
+  Promise.all([fetch("/api/services").then(r=>r.json()), fetch("/api/settings").then(r=>r.json())]).then(([services, set]) => {
+    // CTA WhatsApp dari setting toko
+    const wa = set && set.store && set.store.whatsapp;
+    if (wa) document.getElementById("ctaWa").href = `https://wa.me/${wa}?text=${encodeURIComponent("Halo Anshel Store, saya mau konsultasi jasa AI Automation.")}`;
+
+    const grid = document.getElementById("servicesGrid"), empty = document.getElementById("servicesEmpty");
+    if (!Array.isArray(services) || !services.length) { empty.classList.remove("hidden"); return; }
+    grid.innerHTML = services.map((s, i) => {
+      const c = COLORS[i % COLORS.length];
+      const visual = s.image
+        ? `<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="${esc(s.image)}" alt="${esc(s.title)}"/>`
+        : `<span class="material-symbols-outlined text-[64px] text-primary group-hover:scale-110 transition-transform duration-500">${esc(s.icon || "auto_awesome")}</span>`;
+      const waText = encodeURIComponent("Halo Anshel Store, saya tertarik layanan: " + (s.title || ""));
+      const cta = wa ? `https://wa.me/${wa}?text=${waText}` : "/tentang";
+      return `<article class="bg-surface-container-lowest rounded-[24px] border-[1.5px] border-outline-variant shadow-marshmallow p-6 relative flex flex-col gap-4 group hover:translate-y-[-4px] hover:shadow-[0_15px_40px_-10px_rgba(139,111,91,0.2)] transition-all duration-300">
+        <div class="h-40 rounded-xl overflow-hidden ${c.bg} border-2 border-dashed ${c.border} flex items-center justify-center">${visual}</div>
+        <div class="flex flex-col gap-2">
+          <div class="flex gap-2"><span class="${c.chip} px-3 py-1 rounded-full font-label-md text-[12px] uppercase tracking-wider">${esc((s.category || "Otomasi"))}</span></div>
+          <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${esc(s.title || "Layanan")}</h3>
+          <p class="font-body-md text-on-surface-variant line-clamp-3">${esc(s.desc || "")}</p>
+        </div>
+        <div class="mt-auto pt-4 border-t-2 border-dashed border-surface-container flex items-center justify-between gap-2">
+          <div class="font-headline-md text-secondary">${s.priceFrom ? "Mulai " + rupiah(s.priceFrom) : "Hubungi kami"}</div>
+          <a href="${cta}" target="_blank" rel="noopener" class="bg-primary-container text-on-primary-container font-label-md px-5 py-3 rounded-full btn-inner-glow hover:bg-primary hover:text-white transition-colors active:scale-95 flex items-center gap-2">Konsultasi <span class="material-symbols-outlined text-[18px]">arrow_outward</span></a>
+        </div>
+      </article>`;
+    }).join("");
+  }).catch(() => { document.getElementById("servicesEmpty").classList.remove("hidden"); });
+
+  if (typeof initChatWidget === "function") initChatWidget();
+</script>
+</body></html>

@@ -5,6 +5,7 @@
 
   const NAV = [
     { href: "/topup", label: "Top Up", key: "topup", icon: "stadia_controller" },
+    { href: "/layanan", label: "Layanan AI", key: "layanan", icon: "smart_toy" },
     { href: "/blog", label: "Komunitas", key: "blog", icon: "forum" },
     { href: "/faq", label: "FAQ", key: "faq", icon: "help" },
     { href: "/tentang", label: "Tentang", key: "tentang", icon: "info" },
