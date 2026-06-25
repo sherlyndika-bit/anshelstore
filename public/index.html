@@ -19,7 +19,11 @@
   <section class="relative w-full max-w-6xl mx-auto px-4 lg:px-container-margin flex flex-col items-center text-center z-10 mb-20">
     <div class="relative w-full max-w-3xl aspect-[16/9] md:aspect-[21/9] flex items-center justify-center animate-float mb-10">
       <div class="absolute inset-0 floating-island opacity-80 z-0"></div>
-      <img id="heroImg" alt="Logo Anshel Store" class="relative z-10 w-full h-full object-contain drop-shadow-xl p-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-K0K56BL2XjJrbyf4r8N8c6AZ9pN0nOMvx0TuCdCMUUOpngcbrBNM6MLBlXzfyBMS2WYsHCulAUx4NHPSzm6gMsSrDSKW57oTMTmgly4lj6uXxf3kTgJxkAxpJRCy3jlrdNq-8F848XAcmFDRJapwaVCz2RQGhyEbBESQqGZzyW30Q9jrU5htqOZbHAVkcuUhAfCEblIVbUBbk8T1TQcZex9sAgV3EyGs9n5hUsUJrT_mVvLmSSEfsDz25_-Jha-p-ZETZwvfGvOR"/>
+      <!-- Default brand mark (diganti otomatis dgn LOGO TOKO bila sudah diupload di dashboard) -->
+      <div id="heroArt" class="relative z-10 w-full h-full flex flex-col items-center justify-center gap-3 p-8 drop-shadow-xl">
+        <span class="text-7xl md:text-8xl animate-float">🍡</span>
+        <span class="font-display-lg text-3xl md:text-5xl text-primary">Anshel Store</span>
+      </div>
     </div>
     <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-6 max-w-4xl relative z-20">
       Sosial Media-mu, <span class="text-primary relative inline-block">Otomatis &amp; Naik Level
@@ -44,9 +48,9 @@
     </div>
   </section>
 
-  <!-- Banner promo (dikelola dari dashboard) -->
-  <section id="bannerSection" class="hidden w-full max-w-5xl mx-auto px-4 lg:px-container-margin mb-12 relative z-10">
-    <div id="mainBanner" class="relative rounded-[24px] overflow-hidden aspect-[16/9] marshmallow-shadow border-2 border-dashed border-outline-variant bg-surface-container"></div>
+  <!-- Banner promo (default cantik; otomatis diganti banner upload dari dashboard) -->
+  <section id="bannerSection" class="w-full max-w-5xl mx-auto px-4 lg:px-container-margin mb-12 relative z-10">
+    <div id="mainBanner" class="relative rounded-[24px] overflow-hidden aspect-[16/9] sm:aspect-[21/9] marshmallow-shadow border-2 border-white/60"></div>
   </section>
 
   <!-- Wavy Divider -->
@@ -104,24 +108,50 @@
   }).catch(() => {});
   if (typeof initChatWidget === "function") initChatWidget();
 
-  // Logo toko jadi gambar hero + banner dari dashboard
+  // ── Banner carousel: default cantik, diganti banner upload bila ada ──
+  const DEFAULT_BANNERS = [
+    `<div class="mb-slide absolute inset-0 w-full h-full transition-opacity duration-700 flex items-center px-8 sm:px-14" style="opacity:1;background:linear-gradient(120deg,#f9d9d6 0%,#fce9e2 45%,#f6e4cf 100%)">
+       <div class="absolute -right-6 -bottom-6 text-[8rem] sm:text-[11rem] opacity-30 select-none">🎮</div>
+       <div class="relative z-10 max-w-md text-left">
+         <span class="inline-block bg-white/70 text-primary font-label-md text-xs px-3 py-1 rounded-full mb-3">⚡ Proses Instan</span>
+         <h3 class="font-display-lg text-2xl sm:text-4xl text-on-surface leading-tight">Top Up Game<br>Murah &amp; Aman</h3>
+         <p class="font-body-md text-sm sm:text-base text-on-surface-variant mt-2">Diamond, voucher & UC meluncur seketika.</p>
+         <a href="/topup" class="inline-flex items-center gap-1 mt-4 bg-primary text-on-primary font-label-md px-5 py-2.5 rounded-full marshmallow-shadow hover:-translate-y-0.5 transition-transform">Top Up Sekarang <span class="material-symbols-outlined text-base">arrow_forward</span></a>
+       </div>
+     </div>`,
+    `<div class="mb-slide absolute inset-0 w-full h-full transition-opacity duration-700 flex items-center px-8 sm:px-14" style="opacity:0;background:linear-gradient(120deg,#e7ddcf 0%,#f6e9da 45%,#f6dcd9 100%)">
+       <div class="absolute -right-6 -bottom-8 text-[8rem] sm:text-[11rem] opacity-30 select-none">🤖</div>
+       <div class="relative z-10 max-w-md text-left">
+         <span class="inline-block bg-white/70 text-secondary font-label-md text-xs px-3 py-1 rounded-full mb-3">✨ Otomatis 24 Jam</span>
+         <h3 class="font-display-lg text-2xl sm:text-4xl text-on-surface leading-tight">Layanan AI<br>Automation</h3>
+         <p class="font-body-md text-sm sm:text-base text-on-surface-variant mt-2">Bot WhatsApp, Telegram & Instagram untuk bisnismu.</p>
+         <a href="/layanan" class="inline-flex items-center gap-1 mt-4 bg-secondary text-on-secondary font-label-md px-5 py-2.5 rounded-full marshmallow-shadow hover:-translate-y-0.5 transition-transform">Lihat Layanan <span class="material-symbols-outlined text-base">arrow_forward</span></a>
+       </div>
+     </div>`,
+  ];
+
+  function mountBanners(slidesHTML) {
+    const mb = document.getElementById("mainBanner"); if (!mb) return;
+    const multi = slidesHTML.length > 1;
+    mb.innerHTML = slidesHTML.join("") + (multi ? '<div id="mbDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20"></div>' : "");
+    const slides = mb.querySelectorAll(".mb-slide");
+    if (slides.length <= 1) return;
+    const dotsW = mb.querySelector("#mbDots");
+    dotsW.innerHTML = [...slides].map((_, n) => `<button data-n="${n}" class="w-2.5 h-2.5 rounded-full ${n === 0 ? "bg-primary" : "bg-white/70"}"></button>`).join("");
+    const dots = dotsW.querySelectorAll("button"); let i = 0;
+    const show = (n) => { slides.forEach((s, k) => (s.style.opacity = k === n ? "1" : "0")); dots.forEach((dd, k) => (dd.className = `w-2.5 h-2.5 rounded-full ${k === n ? "bg-primary" : "bg-white/70"}`)); i = n; };
+    dots.forEach((dd) => dd.addEventListener("click", () => show(Number(dd.dataset.n))));
+    setInterval(() => show((i + 1) % slides.length), 4500);
+  }
+  mountBanners(DEFAULT_BANNERS);
+
+  // Logo toko jadi gambar hero + banner upload dari dashboard (override default)
   fetch("/api/settings").then((r) => r.json()).then((d) => {
     const set = d.settings || {};
-    if (set.logo) { const h = document.getElementById("heroImg"); if (h) h.src = set.logo; }
+    if (set.logo) { const a = document.getElementById("heroArt"); if (a) a.innerHTML = `<img alt="Logo Anshel Store" class="w-full h-full object-contain drop-shadow-xl" src="${set.logo}"/>`; }
     const banners = Array.isArray(set.banners) ? set.banners.filter(Boolean) : [];
-    const bs = document.getElementById("bannerSection"), mb = document.getElementById("mainBanner");
-    if (banners.length && mb) {
-      bs.classList.remove("hidden");
-      mb.innerHTML = banners.map((src, i) => `<img src="${src}" alt="Banner ${i + 1}" class="mb-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700" style="opacity:${i === 0 ? 1 : 0}"/>`).join("") + (banners.length > 1 ? '<div id="mbDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"></div>' : "");
-      const slides = mb.querySelectorAll(".mb-slide");
-      if (slides.length > 1) {
-        const dotsW = mb.querySelector("#mbDots");
-        dotsW.innerHTML = [...slides].map((_, n) => `<button data-n="${n}" class="w-2.5 h-2.5 rounded-full ${n === 0 ? "bg-primary" : "bg-white/70"}"></button>`).join("");
-        const dots = dotsW.querySelectorAll("button"); let i = 0;
-        const show = (n) => { slides.forEach((s, k) => (s.style.opacity = k === n ? "1" : "0")); dots.forEach((dd, k) => (dd.className = `w-2.5 h-2.5 rounded-full ${k === n ? "bg-primary" : "bg-white/70"}`)); i = n; };
-        dots.forEach((dd) => dd.addEventListener("click", () => show(Number(dd.dataset.n))));
-        setInterval(() => show((i + 1) % slides.length), 4500);
-      }
+    if (banners.length) {
+      mountBanners(banners.map((src, i) => `<img src="${src}" alt="Banner ${i + 1}" class="mb-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700" style="opacity:${i === 0 ? 1 : 0}"/>`));
     }
   }).catch(() => {});
 </script>
