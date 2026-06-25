@@ -84,7 +84,7 @@
             <p style="color:var(--text-soft);font-size:.85rem;margin-bottom:14px">Klik salah satu di bawah ini — semua pengaturan toko ada di sini.</p>
             <div class="qa-grid">
               <button class="qa-btn" data-page="produk"><span class="qa-ic">🎮</span><b>Produk &amp; Harga</b><small>Game, item, harga, gambar</small></button>
-              <button class="qa-btn" data-page="settings"><span class="qa-ic">🎨</span><b>Tampilan &amp; Banner</b><small>Logo, banner, promo, teks</small></button>
+              <button class="qa-btn" data-page="settings"><span class="qa-ic">🎨</span><b>Tampilan &amp; Konten</b><small>Logo, info toko, sosial, jasa</small></button>
               <button class="qa-btn" data-page="orders"><span class="qa-ic">🧾</span><b>Pesanan</b><small>Lihat &amp; proses order</small></button>
               <button class="qa-btn" data-page="inbox"><span class="qa-ic">💬</span><b>Inbox Chat</b><small>Balas pelanggan</small></button>
               <button class="qa-btn" data-page="articles"><span class="qa-ic">📝</span><b>Artikel</b><small>Tips/blog (SEO)</small></button>
@@ -132,7 +132,7 @@
             <div class="field"><label>Judul</label><input class="input" id="artTitle" placeholder="Judul artikel" /></div>
             <div class="field"><label>Slug URL (opsional)</label><input class="input" id="artSlug" placeholder="otomatis-dari-judul" /></div>
             <div class="field"><label>Ringkasan (excerpt)</label><input class="input" id="artExcerpt" placeholder="Deskripsi singkat untuk SEO & kartu" /></div>
-            <div class="field"><label>URL Gambar Cover</label><input class="input" id="artCover" placeholder="https://..." /><button type="button" class="btn btn-light btn-sm upload-btn" data-target="artCover" style="margin-top:6px">📷 Upload gambar</button></div>
+            <div class="field up-wrap"><label>Gambar Cover</label><input type="hidden" id="artCover" /><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn" data-target="artCover">📷 Upload Cover</button><button type="button" class="btn btn-light btn-sm img-clear" data-target="artCover" style="color:var(--red)">Hapus</button></div></div>
             <div class="field"><label>Tags (pisah koma)</label><input class="input" id="artTags" placeholder="Top Up, Tips" /></div>
             <div class="field"><label>Penulis</label><input class="input" id="artAuthor" placeholder="Tim Anshel Store" /></div>
             <div class="field"><label>Konten (Markdown: ## judul, **tebal**, - list, [teks](url))</label><textarea class="input" id="artContent" rows="10" placeholder="Tulis isi artikel di sini..."></textarea></div>
@@ -152,18 +152,9 @@
               <div class="field"><label>Tagline</label><input class="input" id="setTagline" /></div>
               <div class="field"><label>WhatsApp (628...)</label><input class="input" id="setWa" /></div>
               <div class="field"><label>Email</label><input class="input" id="setEmail" /></div>
-              <div class="field"><label>URL Logo (gambar, kosong = teks)</label><input class="input" id="setLogo" placeholder="https://..." /><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setLogo" style="margin-top:6px">📷 Upload logo</button></div>
+              <div class="field up-wrap"><label>Logo Toko (gambar)</label><input type="hidden" id="setLogo" /><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setLogo">📷 Upload Logo</button><button type="button" class="btn btn-light btn-sm img-clear" data-target="setLogo" style="color:var(--red)">Hapus</button></div></div>
             </div>
             <div class="field"><label>Meta Description (SEO)</label><textarea class="input" id="setMeta" rows="2"></textarea></div>
-            <div class="field"><label>Banner Utama / besar (URL gambar, 1 per baris — geser otomatis bila lebih dari 1)</label><textarea class="input" id="setBanners" rows="3" placeholder="https://contoh.com/banner1.jpg&#10;https://contoh.com/banner2.jpg"></textarea><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setBanners" data-mode="append" style="margin-top:6px">📷 Upload & tambah banner</button></div>
-            <h4 style="margin:14px 0 6px;font-size:.9rem;color:var(--text-soft);font-weight:700">✏️ Teks Halaman Depan (bisa diubah)</h4>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
-              <div class="field"><label>Judul "Layanan"</label><input class="input" id="setLayananTitle" /></div>
-              <div class="field"><label>Judul "Top Up"</label><input class="input" id="setTopupTitle" /></div>
-            </div>
-            <div class="field"><label>Deskripsi "Layanan"</label><input class="input" id="setLayananDesc" /></div>
-            <div class="field"><label>Deskripsi "Top Up"</label><input class="input" id="setTopupDesc" /></div>
-            <div class="field"><label>Judul "Artikel"</label><input class="input" id="setArtikelTitle" /></div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="set-grid">
               <div class="field"><label>Instagram URL</label><input class="input" id="setIg" /></div>
               <div class="field"><label>TikTok URL</label><input class="input" id="setTt" /></div>
@@ -171,14 +162,6 @@
             </div>
             <button class="btn btn-primary" id="saveSettings">Simpan Info Toko</button>
             <span class="auth-msg" id="setMsg" style="margin-left:10px"></span>
-          </div>
-
-          <div class="panel-card" style="margin-bottom:18px">
-            <h3>🎟️ Promo (banner kedua — kartu bergeser di halaman depan)</h3>
-            <p style="color:var(--text-soft);font-size:.85rem;margin:-4px 0 12px">Tambahkan promo/diskon. Tampil sebagai kartu bergeser dengan hitung mundur & sisa kuota. Kosongkan = banner kedua disembunyikan.</p>
-            <div id="promoEditor"></div>
-            <button class="btn" id="addPromo" type="button" style="margin-top:4px">+ Tambah Promo</button>
-            <div style="margin-top:12px"><button class="btn btn-primary" id="savePromos">Simpan Promo</button> <span class="auth-msg" id="promoMsg" style="margin-left:10px"></span></div>
           </div>
 
           <div class="panel-card" style="margin-bottom:18px">

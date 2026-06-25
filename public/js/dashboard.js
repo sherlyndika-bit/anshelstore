@@ -43,6 +43,13 @@ document.addEventListener("click", (e) => {
   if (!el) { const w = b.closest(".up-wrap"); if (w) el = w.querySelector("input, textarea"); }
   if (el) pickAndUpload(el, b.dataset.mode || "set");
 });
+// Tombol "Hapus" gambar: kosongkan nilai & hilangkan preview
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".img-clear"); if (!b) return; e.preventDefault();
+  let el = b.dataset.target ? document.getElementById(b.dataset.target) : null;
+  if (!el) { const w = b.closest(".up-wrap, .field"); if (w) el = w.querySelector("input, textarea"); }
+  if (el) { el.value = ""; el.dispatchEvent(new Event("input", { bubbles: true })); }
+});
 
 // Preview gambar untuk tiap field yang punya tombol upload
 function previewFor(el) {
@@ -123,7 +130,7 @@ const DESC = {
   inbox: "Balas chat pelanggan. Bisa ambil alih dari AI kapan saja.",
   produk: "Atur game, item, harga, gambar, video, dan deskripsi.",
   articles: "Tulis tips/blog biar muncul di Google (SEO).",
-  settings: "Atur logo, banner, promo, dan teks halaman depan.",
+  settings: "Atur logo, info toko, sosial media, & harga/foto jasa.",
   integrasi: "Sambungkan provider top-up & API (pembayaran, AI, dll).",
   finance: "Catat uang masuk & keluar toko.",
   team: "Tambah/hapus admin & staff dan atur aksesnya.",
@@ -388,12 +395,6 @@ async function loadSettings() {
   $("setMeta").value = s.metaDescription || "";
   $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
   $("setLogo").value = s.logo || "";
-  $("setBanners").value = Array.isArray(s.banners) ? s.banners.join("\n") : "";
-  promoList = Array.isArray(s.promos) ? s.promos.map((p) => ({ ...p })) : [];
-  renderPromoEditor();
-  $("setLayananTitle").value = s.layananTitle || ""; $("setLayananDesc").value = s.layananDesc || "";
-  $("setTopupTitle").value = s.topupTitle || ""; $("setTopupDesc").value = s.topupDesc || "";
-  $("setArtikelTitle").value = s.articlesTitle || "";
 
   loadedServices = await fetch("/api/services").then((r) => r.json());
   $("servicesEditor").innerHTML = loadedServices.map((sv, i) => `
@@ -401,9 +402,10 @@ async function loadSettings() {
       <div style="font-weight:700;margin-bottom:8px">${escapeHtml(sv.title)}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="set-grid">
         <div class="field" style="margin:0"><label>Harga Mulai (Rp)</label><input class="input svc-price" data-i="${i}" type="number" value="${sv.priceFrom || 0}" /></div>
-        <div class="field" style="margin:0"><label>URL Gambar</label><input class="input svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" placeholder="https://..." /></div>
+        <div class="field up-wrap" style="margin:0"><label>Foto Jasa</label><input type="hidden" class="svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" /><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn">📷 Upload foto</button><button type="button" class="btn btn-light btn-sm img-clear" style="color:var(--red)">Hapus</button></div></div>
       </div>
     </div>`).join("");
+  setTimeout(refreshAllPreviews, 60);
 }
 async function loadIntegrasi() {
   const d = await api("/api/admin/settings");
@@ -439,47 +441,10 @@ $("syncGames").addEventListener("click", async () => {
     m.textContent = "Gagal sync: " + (e.message || "cek URL/format provider"); m.className = "auth-msg err";
   }
 });
-let promoList = [];
-function toLocalInput(iso) { const d = new Date(iso); if (isNaN(d)) return ""; const p = (n) => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
-function collectPromos() {
-  document.querySelectorAll(".promo-row").forEach((row, i) => {
-    const g = (c) => row.querySelector("." + c);
-    promoList[i] = {
-      category: g("pr-cat").value.trim(), title: g("pr-title").value.trim(), info: g("pr-info").value.trim(),
-      image: g("pr-img").value.trim(), deadline: g("pr-deadline").value ? new Date(g("pr-deadline").value).toISOString() : "",
-      quotaLabel: g("pr-qlabel").value.trim() || "Sisa Kuota", quota: g("pr-quota").value !== "" ? Number(g("pr-quota").value) : null,
-      link: g("pr-link").value.trim(),
-    };
-  });
-}
-function renderPromoEditor() {
-  const wrap = $("promoEditor"); if (!wrap) return;
-  wrap.innerHTML = promoList.map((p, i) => `
-    <div class="promo-row" style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="set-grid">
-        <div class="field" style="margin:0"><label>Kategori (mis. Mobile Legends)</label><input class="input pr-cat" value="${escapeHtml(p.category || "")}" /></div>
-        <div class="field" style="margin:0"><label>Judul Promo</label><input class="input pr-title" value="${escapeHtml(p.title || "")}" placeholder="Bonus Spesial" /></div>
-        <div class="field" style="margin:0"><label>Info (mis. 210000 Diamond)</label><input class="input pr-info" value="${escapeHtml(p.info || "")}" /></div>
-        <div class="field up-wrap" style="margin:0"><label>URL Gambar</label><input class="input pr-img" value="${escapeHtml(p.image || "")}" placeholder="https://..." /><button type="button" class="btn btn-light btn-sm upload-btn" style="margin-top:6px">📷 Upload gambar</button></div>
-        <div class="field" style="margin:0"><label>Batas Waktu (hitung mundur)</label><input class="input pr-deadline" type="datetime-local" value="${p.deadline ? toLocalInput(p.deadline) : ""}" /></div>
-        <div class="field" style="margin:0"><label>Label Kuota</label><input class="input pr-qlabel" value="${escapeHtml(p.quotaLabel || "Sisa Kuota")}" /></div>
-        <div class="field" style="margin:0"><label>Jumlah Kuota (kosong = sembunyi)</label><input class="input pr-quota" type="number" value="${p.quota != null ? p.quota : ""}" /></div>
-        <div class="field" style="margin:0"><label>Link saat diklik (opsional)</label><input class="input pr-link" value="${escapeHtml(p.link || "")}" placeholder="/topup?game=ml" /></div>
-      </div>
-      <button class="btn btn-light btn-sm pr-del" data-i="${i}" type="button" style="margin-top:8px;color:var(--red)">Hapus promo ini</button>
-    </div>`).join("") || '<p style="color:var(--text-soft);font-size:.85rem">Belum ada promo. Klik "Tambah Promo".</p>';
-  wrap.querySelectorAll(".pr-del").forEach((b) => b.addEventListener("click", () => { collectPromos(); promoList.splice(Number(b.dataset.i), 1); renderPromoEditor(); }));
-}
-$("addPromo").addEventListener("click", () => { collectPromos(); promoList.push({ quotaLabel: "Sisa Kuota" }); renderPromoEditor(); });
-$("savePromos").addEventListener("click", async () => {
-  collectPromos();
-  const promos = promoList.filter((p) => p.title || p.image);
-  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { promos } }) }); const e = $("promoMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("promoMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
-});
 $("saveSettings").addEventListener("click", async () => {
   const body = {
     store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
-    settings: { metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), banners: $("setBanners").value.split("\n").map((x) => x.trim()).filter(Boolean), layananTitle: $("setLayananTitle").value.trim(), layananDesc: $("setLayananDesc").value.trim(), topupTitle: $("setTopupTitle").value.trim(), topupDesc: $("setTopupDesc").value.trim(), articlesTitle: $("setArtikelTitle").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
+    settings: { metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
   };
   try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); const e = $("setMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("setMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
 });
@@ -506,11 +471,11 @@ function renderProduk() {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="set-grid">
         <div class="field" style="margin:0"><label>Nama</label><input class="input pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
         <div class="field" style="margin:0"><label>Publisher</label><input class="input pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
-        <div class="field up-wrap" style="margin:0"><label>URL Gambar (cover)</label><input class="input pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/><button type="button" class="btn btn-light btn-sm upload-btn" style="margin-top:6px">📷 Upload cover</button></div>
+        <div class="field up-wrap" style="margin:0"><label>Gambar (cover)</label><input type="hidden" class="pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn">📷 Upload cover</button><button type="button" class="btn btn-light btn-sm img-clear" style="color:var(--red)">Hapus</button></div></div>
         <div class="field" style="margin:0"><label>Field diminta (koma)</label><input class="input pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
         <div class="field" style="margin:0;grid-column:1/-1"><label>Deskripsi / penjelasan game (tampil di kiri halaman detail)</label><textarea class="input pg-desc" data-g="${gi}" rows="3" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
         <div class="field" style="margin:0"><label>URL Video (YouTube / .mp4)</label><input class="input pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
-        <div class="field up-wrap" style="margin:0"><label>Screenshots (URL gambar, 1 per baris)</label><textarea class="input pg-shots" data-g="${gi}" rows="2" placeholder="https://.../ss1.jpg">${escapeHtml((g.screenshots || []).join("\n"))}</textarea><button type="button" class="btn btn-light btn-sm upload-btn" data-mode="append" style="margin-top:6px">📷 Upload & tambah screenshot</button></div>
+        <div class="field up-wrap" style="margin:0"><label>Screenshots (beberapa gambar)</label><input type="hidden" class="pg-shots" data-g="${gi}" value="${escapeHtml((g.screenshots || []).join("\n"))}"/><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn" data-mode="append">📷 Upload &amp; tambah</button><button type="button" class="btn btn-light btn-sm img-clear" style="color:var(--red)">Hapus semua</button></div></div>
       </div>
       <div style="margin:10px 0 4px;font-weight:600;font-size:.82rem;color:var(--text-soft)">Item / Nominal (label · harga · stok)</div>
       ${g.items.map((it, ii) => `<div class="gitem">
@@ -522,6 +487,7 @@ function renderProduk() {
       <button class="btn btn-light btn-sm pg-additem" data-g="${gi}" style="margin-top:6px">+ Tambah Item</button>
     </div>`).join("") || '<p style="color:var(--text-muted)">Belum ada game. Tambah di atas, lalu Simpan.</p>';
   bindProduk();
+  setTimeout(refreshAllPreviews, 40);
 }
 function syncProduk() {
   document.querySelectorAll(".pg-name").forEach((el) => (loadedGames[el.dataset.g].name = el.value));
