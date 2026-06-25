@@ -68,17 +68,19 @@
 
 <!-- ============ VIEW: CHECKOUT (per game) ============ -->
 <div id="detailView" class="hidden flex-grow w-full max-w-7xl mx-auto">
-  <header class="w-full px-margin-mobile md:px-margin-desktop py-md flex items-center justify-between sticky top-0 z-40 bg-background/90 backdrop-blur-md">
-    <button id="backToCatalog" class="flex items-center justify-center w-12 h-12 rounded-full bg-surface-container hover:bg-secondary-container/50 transition-colors squish-btn group text-secondary">
-      <span class="material-symbols-outlined text-[28px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
-    </button>
-    <div class="text-center">
-      <h1 class="font-headline-md text-on-surface">Top Up Checkout</h1>
-      <p class="font-label-md text-on-surface-variant flex items-center justify-center gap-1">
+  <header class="w-full sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b-[1.5px] border-dashed border-outline-variant">
+    <div class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-md flex items-center gap-3">
+      <button id="backToCatalog" class="flex items-center justify-center w-11 h-11 rounded-full bg-surface-container hover:bg-secondary-container/50 transition-colors squish-btn group text-secondary shrink-0">
+        <span class="material-symbols-outlined text-[26px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      </button>
+      <div class="flex-1 min-w-0">
+        <h1 class="font-headline-md text-on-surface leading-tight">Top Up Checkout</h1>
+        <p class="font-label-md text-on-surface-variant text-[12px]">Selesaikan pesananmu dengan aman 💖</p>
+      </div>
+      <span class="hidden sm:inline-flex items-center gap-1 bg-secondary-fixed text-secondary font-label-md text-[12px] px-3 py-1.5 rounded-full shrink-0">
         <span class="material-symbols-outlined text-[16px]">lock</span> Aman &amp; Terenkripsi
-      </p>
+      </span>
     </div>
-    <div class="w-12"></div>
   </header>
 
   <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pb-xl pt-sm flex flex-col gap-md">
