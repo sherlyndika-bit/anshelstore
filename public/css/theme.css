@@ -26,6 +26,15 @@
 .payment-radio input[type="radio"]:checked + .payment-card .check-icon { opacity: 1; transform: scale(1); }
 .payment-radio input[type="radio"]:focus-visible + .payment-card { outline: 2px solid #7d9b78; outline-offset: 2px; }
 
+/* Kartu pilih nominal top up + state TERPILIH */
+.nom-card { position: relative; display: flex; flex-direction: column; gap: 4px; width: 100%; text-align: left; padding: 14px 16px; border: 1.5px solid #d7c1c2; border-radius: 16px; background: #fff; cursor: pointer; transition: all .2s cubic-bezier(.22,1,.36,1); box-shadow: 0 6px 16px rgba(139,111,91,0.06); }
+.nom-card:hover { border-color: #f2a2a9; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(139,111,91,0.12); }
+.nom-card .nom-amt { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #1d1b19; font-size: 14px; line-height: 1.2; }
+.nom-card .nom-price { font-weight: 700; color: #8c4c52; font-size: 13px; }
+.nom-card.sel { border: 2px solid #8c4c52; background: #ffe9ea; box-shadow: 0 10px 26px rgba(140,76,82,0.20); }
+.nom-card.sel .nom-price { color: #71363d; }
+.nom-card.sel::after { content: "check"; font-family: "Material Symbols Outlined"; font-variation-settings: 'FILL' 1; position: absolute; top: -10px; right: -10px; width: 24px; height: 24px; background: #8c4c52; color: #fff; border-radius: 9999px; display: grid; place-items: center; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+
 
 
 /* Artikel premium: tipografi nyaman dibaca */
