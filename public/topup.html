@@ -6,50 +6,67 @@
 <title>Top Up Game — Anshel Store</title>
 <meta name="description" content="Top up diamond Mobile Legends, Free Fire, Genshin, Valorant, PUBG. Instan, murah, aman."/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-
-
 <script src="/js/theme.js"></script>
 <link href="/css/theme.css" rel="stylesheet"/>
 </head>
-<body data-page="topup" class="text-on-background min-h-screen overflow-x-hidden font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="topup" class="text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
 
 <div id="siteNav"></div>
 
-<!-- ============ VIEW: KATALOG ============ -->
-<div id="catalogView">
-  <main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-lg md:pt-xl pb-xl">
-    <section class="text-center mb-md">
-      <h1 class="font-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Top Up <span class="text-primary">Game Favoritmu</span></h1>
-      <p class="font-body-lg text-on-surface-variant">Pilih game → masukkan ID → bayar. Diamond meluncur seketika. ✨</p>
-    </section>
-    <div class="max-w-xl mx-auto relative mb-md">
-      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
-      <input id="gameSearch" type="text" placeholder="Cari game (Mobile Legends, Free Fire, Genshin...)" class="w-full rounded-full border-transparent bg-surface-container-lowest pl-12 pr-4 py-3.5 marshmallow-shadow focus:border-primary focus:ring-primary"/>
-    </div>
-    <div id="catChips" class="flex flex-wrap justify-center gap-2 mb-lg"></div>
+<!-- ============ VIEW: KATALOG (browse game) ============ -->
+<div id="catalogView" class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg space-y-[60px]">
 
-    <div class="flex items-center justify-between mb-md">
-      <h2 class="font-headline-md text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary">stadia_controller</span> Semua Game</h2>
-      <a href="/cek-transaksi" class="inline-flex items-center gap-1.5 text-label-md font-bold text-primary hover:underline"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Cek Transaksi</a>
+  <!-- Hero Banner Promo -->
+  <section class="relative w-full rounded-lg overflow-hidden marshmallow-shadow bg-surface-container border-2 border-dashed border-outline-variant min-h-[300px] md:min-h-[380px] flex items-center group">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-container/40 via-secondary-container/30 to-tertiary-container/40"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20px_20px,#8c4c52_2px,transparent_0)] [background-size:40px_40px] opacity-10"></div>
+    <div class="relative z-10 w-full px-md md:px-xl py-lg flex flex-col items-start gap-md max-w-2xl">
+      <div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container font-label-md text-label-md px-4 py-2 rounded-full">
+        <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Penawaran Spesial
+      </div>
+      <h1 class="font-display-lg text-3xl md:text-display-lg text-on-surface leading-tight">Top Up <span class="text-primary">Game Favoritmu</span><br/>cepat, aman, &amp; ramah!</h1>
+      <p class="font-body-lg text-on-surface-variant max-w-md">Pilih game di bawah, masukkan ID, bayar — diamond meluncur dalam hitungan menit. ✨</p>
+      <a href="#daftarGame" class="mt-2 bg-primary text-on-primary font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow squish-btn inline-flex items-center gap-2 hover:scale-105 transition-transform">
+        Mulai Top Up <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
     </div>
-    <div id="games" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4"></div>
+    <span class="material-symbols-outlined absolute top-10 right-20 text-primary-container text-[48px] opacity-60 animate-pulse hidden md:block">favorite</span>
+    <span class="material-symbols-outlined absolute bottom-20 right-40 text-tertiary-container text-[32px] opacity-60 hidden md:block">star</span>
+  </section>
+
+  <!-- Search & Discovery -->
+  <section class="flex flex-col items-center gap-md max-w-3xl mx-auto w-full">
+    <div class="relative w-full">
+      <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-outline">search</span>
+      <input id="gameSearch" class="w-full bg-[#F5EDE6] border-0 border-b-2 border-outline focus:border-primary focus:ring-0 rounded-lg py-5 pl-[60px] pr-6 font-body-lg text-on-surface placeholder-on-surface-variant/60 shadow-inner transition-colors duration-300" placeholder="Cari game (Mobile Legends, Free Fire, Genshin...)" type="text"/>
+    </div>
+    <div id="catChips" class="flex flex-wrap justify-center gap-2"></div>
+  </section>
+
+  <!-- Daftar Game (Bento Grid) -->
+  <section id="daftarGame" class="space-y-md scroll-mt-24">
+    <div class="flex items-center justify-between px-sm">
+      <h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">local_fire_department</span> Game Populer
+      </h2>
+      <a href="/cek-transaksi" class="font-label-md text-primary hover:underline inline-flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Cek Transaksi</a>
+    </div>
+    <div id="games" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-md"></div>
     <p id="noGame" class="hidden text-center text-on-surface-variant py-xl">Yah, game-nya nggak ketemu 😢 Coba kata kunci lain ya~</p>
+  </section>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-xl">
-      <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-tertiary-container/60"><div class="text-2xl">⚡</div><div class="font-bold text-on-surface mt-1">Proses Instan</div><div class="text-label-sm text-on-surface-variant">Otomatis &amp; cepat</div></div>
-      <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-tertiary-container/60"><div class="text-2xl">🛡️</div><div class="font-bold text-on-surface mt-1">100% Aman</div><div class="text-label-sm text-on-surface-variant">Data terlindungi</div></div>
-      <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-tertiary-container/60"><div class="text-2xl">💸</div><div class="font-bold text-on-surface mt-1">Termurah</div><div class="text-label-sm text-on-surface-variant">Banyak promo</div></div>
-      <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-tertiary-container/60"><div class="text-2xl">💬</div><div class="font-bold text-on-surface mt-1">CS 24/7</div><div class="text-label-sm text-on-surface-variant">Siap bantu kamu</div></div>
-    </div>
-  </main>
+  <!-- Trust strip -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">⚡</div><div class="font-bold text-on-surface mt-1">Proses Instan</div><div class="text-label-md text-on-surface-variant text-xs">Otomatis &amp; cepat</div></div>
+    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">🛡️</div><div class="font-bold text-on-surface mt-1">100% Aman</div><div class="text-label-md text-on-surface-variant text-xs">Data terlindungi</div></div>
+    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">💸</div><div class="font-bold text-on-surface mt-1">Termurah</div><div class="text-label-md text-on-surface-variant text-xs">Banyak promo</div></div>
+    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">💬</div><div class="font-bold text-on-surface mt-1">CS 24/7</div><div class="text-label-md text-on-surface-variant text-xs">Siap bantu kamu</div></div>
+  </section>
 </div>
 
 <!-- ============ VIEW: CHECKOUT (per game) ============ -->
-<div id="detailView" class="hidden">
-  <!-- Transactional Header -->
-  <header class="w-full px-container-margin py-md flex items-center justify-between sticky top-0 z-40 bg-background/90 backdrop-blur-md">
+<div id="detailView" class="hidden flex-grow w-full max-w-7xl mx-auto">
+  <header class="w-full px-margin-mobile md:px-margin-desktop py-md flex items-center justify-between sticky top-0 z-40 bg-background/90 backdrop-blur-md">
     <button id="backToCatalog" class="flex items-center justify-center w-12 h-12 rounded-full bg-surface-container hover:bg-secondary-container/50 transition-colors squish-btn group text-secondary">
       <span class="material-symbols-outlined text-[28px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
     </button>
@@ -62,12 +79,10 @@
     <div class="w-12"></div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-container-margin pb-xl pt-sm flex flex-col gap-lg">
-    <!-- Hidden header bg (untuk dukung kode lama yg meng-set background) -->
+  <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pb-xl pt-sm flex flex-col gap-md">
     <div id="gameHeaderBg" class="hidden"></div>
 
-    <!-- Order Summary Card (game cover + nama) -->
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container relative pt-8 p-lg mt-6">
+    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container relative pt-8 p-md mt-6">
       <h2 class="font-headline-md text-on-surface mb-md border-b-[1.5px] border-dashed border-outline-variant pb-sm">Game Pilihanmu</h2>
       <div class="flex items-center gap-md">
         <div id="ghCover" class="w-20 h-20 rounded-lg bg-surface-container overflow-hidden border-[1.5px] border-outline-variant shadow-inner relative flex items-center justify-center text-[36px]"></div>
@@ -83,32 +98,20 @@
       <div id="gameShots" class="hidden"></div>
     </section>
 
-    <!-- Player Details Card -->
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-lg">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">person</span> Data Akun Game
-      </h2>
+    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
+      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">person</span> Data Akun Game</h2>
       <div id="accountFields" class="grid grid-cols-1 sm:grid-cols-2 gap-md"></div>
       <div id="idPreview" class="hidden mt-sm rounded-xl px-md py-sm font-label-md text-label-md bg-secondary-container text-on-secondary-container"></div>
-      <p class="font-body-md text-on-surface-variant mt-3 text-[13px] flex items-start gap-1">
-        <span class="material-symbols-outlined text-[14px] mt-[2px]">info</span>
-        Pastikan ID &amp; server benar. Kami nggak pernah minta password. 💖
-      </p>
+      <p class="font-body-md text-on-surface-variant mt-3 text-[13px] flex items-start gap-1"><span class="material-symbols-outlined text-[14px] mt-[2px]">info</span> Pastikan ID & server benar. Kami nggak pernah minta password. 💖</p>
     </section>
 
-    <!-- Pilih Nominal -->
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-lg">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">diamond</span> Pilih Nominal
-      </h2>
+    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
+      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">diamond</span> Pilih Nominal</h2>
       <div id="items" class="grid grid-cols-2 md:grid-cols-3 gap-sm"></div>
     </section>
 
-    <!-- Data Pembeli -->
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-lg">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">contact_mail</span> Data Kamu
-      </h2>
+    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
+      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">contact_mail</span> Data Kamu</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
         <div class="relative">
           <label class="absolute -top-2 left-3 px-1 bg-surface-container-lowest font-label-md text-on-surface-variant z-10 text-[12px]" for="custName">Nama</label>
@@ -121,26 +124,21 @@
       </div>
     </section>
 
-    <!-- Pembayaran -->
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-lg">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">wallet</span> Metode Pembayaran
-      </h2>
+    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
+      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">wallet</span> Metode Pembayaran</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-sm" id="payMethods">
         <label class="payment-radio cursor-pointer block relative">
           <input checked name="pay" type="radio" value="E-Wallet" class="sr-only"/>
           <div class="payment-card p-md rounded-lg border-2 border-dashed border-outline-variant bg-surface flex items-center gap-md transition-all">
             <div class="w-11 h-11 rounded-full bg-primary-container/40 grid place-items-center text-primary"><span class="material-symbols-outlined">account_balance_wallet</span></div>
             <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">E-Wallet</h4><p class="text-[12px] text-on-surface-variant">DANA / OVO / GoPay</p></div>
-            <span class="material-symbols-outlined text-outline-variant"></span>
           </div>
         </label>
         <label class="payment-radio cursor-pointer block relative">
           <input name="pay" type="radio" value="QRIS" class="sr-only"/>
           <div class="payment-card p-md rounded-lg border-2 border-dashed border-outline-variant bg-surface flex items-center gap-md transition-all">
             <div class="w-11 h-11 rounded-full bg-secondary-container grid place-items-center text-on-secondary-container"><span class="material-symbols-outlined">qr_code_scanner</span></div>
-            <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">QRIS</h4><p class="text-[12px] text-on-surface-variant">Scan &amp; bayar</p></div>
-            <span class="material-symbols-outlined text-outline-variant"></span>
+            <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">QRIS</h4><p class="text-[12px] text-on-surface-variant">Scan & bayar</p></div>
           </div>
         </label>
         <label class="payment-radio cursor-pointer block relative">
@@ -148,22 +146,17 @@
           <div class="payment-card p-md rounded-lg border-2 border-dashed border-outline-variant bg-surface flex items-center gap-md transition-all">
             <div class="w-11 h-11 rounded-full bg-tertiary-container/60 grid place-items-center text-on-tertiary-container"><span class="material-symbols-outlined">account_balance</span></div>
             <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">Bank</h4><p class="text-[12px] text-on-surface-variant">BCA/Mandiri/BRI</p></div>
-            <span class="material-symbols-outlined text-outline-variant"></span>
           </div>
         </label>
       </div>
     </section>
 
-    <!-- Ringkasan -->
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-lg">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">receipt_long</span> Ringkasan
-      </h2>
+    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
+      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">receipt_long</span> Ringkasan</h2>
       <div id="summaryItems" class="flex flex-col gap-sm font-body-md text-on-surface-variant"><p class="text-center py-md">Pilih nominal dulu ya 🎮</p></div>
       <div id="invoice" class="hidden mt-md"></div>
     </section>
 
-    <!-- Game Lain -->
     <section>
       <h3 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-primary">grid_view</span> Game Lainnya</h3>
       <div id="otherGames" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
@@ -172,12 +165,11 @@
     <div class="h-24"></div>
   </main>
 
-  <!-- Fixed Checkout Action Bar -->
   <div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest/90 backdrop-blur-lg border-t-[1.5px] border-dashed border-outline-variant p-4 z-40 rounded-t-xl marshmallow-shadow">
     <div class="max-w-3xl mx-auto flex items-center justify-between gap-md">
       <div class="flex flex-col">
         <span class="font-label-md text-on-surface-variant">Total Pembayaran</span>
-        <span id="grandTotal" class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary drop-shadow-sm">Rp0</span>
+        <span id="grandTotal" class="font-headline-lg text-2xl md:text-headline-lg text-primary drop-shadow-sm">Rp0</span>
       </div>
       <button id="submitOrder" class="bg-primary hover:bg-primary-fixed-dim text-on-primary hover:text-on-primary-fixed-variant font-headline-md px-8 py-4 rounded-full shadow-[0_8px_20px_-6px_rgba(140,76,82,0.4)] squish-btn transition-all duration-200 flex items-center gap-2 overflow-hidden relative group min-w-[180px] justify-center disabled:opacity-50 disabled:cursor-not-allowed" disabled>
         <div class="absolute inset-0 candy-stripe opacity-0 group-hover:opacity-100 transition-opacity"></div>

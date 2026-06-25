@@ -21,23 +21,26 @@ fetch("/api/settings").then((r) => r.json()).then((d) => { if (d.store && d.stor
 
 /* ---------------- KATALOG ---------------- */
 function coverCard(g) {
-  const art = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}"/>` : (EMOJI[g.id] || "🎮");
-  const style = g.image ? "" : `style="background:${gradOf(g)}"`;
-  return `<div class="cover-card" data-id="${esc(g.id)}">
-    <div class="cover-art" ${style}>${art}</div>
-    <div class="cover-grad"></div>
-    <span class="cover-cta">Top Up →</span>
-    <div class="ring"></div>
-    <div class="cover-meta">
-      <div class="font-label-md text-label-md font-extrabold leading-tight">${esc(g.name)}</div>
-      <div class="text-[11px] opacity-80">${esc(g.publisher || "")}</div>
+  const art = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-full h-full object-cover"/>` : `<span class="text-[44px]">${EMOJI[g.id] || "🎮"}</span>`;
+  const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
+  return `<div class="game-card bg-surface-container-lowest rounded-lg border-[1.5px] border-outline-variant p-md marshmallow-shadow squish-btn relative flex flex-col group hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(139,111,91,0.18)] transition-all duration-300 cursor-pointer" data-id="${esc(g.id)}">
+    <div class="w-24 h-24 rounded-full mx-auto mb-md overflow-hidden border-4 border-surface-container shadow-inner flex items-center justify-center" style="background:${gradOf(g)}">${art}</div>
+    <div class="text-center flex-grow flex flex-col">
+      <h3 class="font-headline-md text-on-surface mb-xs leading-tight truncate">${esc(g.name)}</h3>
+      <p class="font-body-md text-on-surface-variant text-sm mb-md">${esc(catOf(g))}</p>
+      <div class="mt-auto pt-sm border-t border-dashed border-outline-variant">
+        ${min ? `<div class="text-xs text-on-surface-variant mb-2">Mulai <b class="text-primary">Rp${min.toLocaleString("id-ID")}</b></div>` : ""}
+        <span class="w-full bg-surface-container text-on-surface font-label-md text-label-md py-2.5 rounded-full border border-dashed border-outline group-hover:bg-primary-container group-hover:text-on-primary-container group-hover:border-solid group-hover:border-primary-container transition-all duration-300 flex justify-center items-center gap-1">
+          Top Up <span class="material-symbols-outlined text-[18px]">add_circle</span>
+        </span>
+      </div>
     </div>
   </div>`;
 }
 
 function renderChips() {
   const cats = ["Semua", ...Array.from(new Set(games.map(catOf)))];
-  $("catChips").innerHTML = cats.map((c) => `<button type="button" data-cat="${esc(c)}" class="cat-chip rounded-full border-2 border-outline-variant/50 bg-white px-4 py-1.5 text-label-md font-bold text-on-surface-variant transition ${c === activeCat ? "active" : ""}">${esc(c)}</button>`).join("");
+  $("catChips").innerHTML = cats.map((c) => `<button type="button" data-cat="${esc(c)}" class="cat-chip font-label-md text-label-md px-5 py-2 rounded-full border transition-colors ${c === activeCat ? "bg-primary-container text-on-primary-container border-primary-fixed border-opacity-50" : "bg-surface-container-high text-on-surface border-dashed border-outline-variant hover:bg-secondary-container"}">${esc(c)}</button>`).join("");
   $("catChips").querySelectorAll(".cat-chip").forEach((b) => b.addEventListener("click", () => { activeCat = b.dataset.cat; renderChips(); renderGames(); }));
 }
 
@@ -45,7 +48,7 @@ function renderGames() {
   const list = games.filter((g) => (activeCat === "Semua" || catOf(g) === activeCat) && (g.name.toLowerCase().includes(searchQ) || (g.publisher || "").toLowerCase().includes(searchQ)));
   $("games").innerHTML = list.map(coverCard).join("");
   $("noGame").classList.toggle("hidden", list.length > 0);
-  $("games").querySelectorAll(".cover-card").forEach((c) => c.addEventListener("click", () => navTo(c.dataset.id, true)));
+  $("games").querySelectorAll(".game-card").forEach((c) => c.addEventListener("click", () => navTo(c.dataset.id, true)));
 }
 
 $("gameSearch").addEventListener("input", (e) => { searchQ = e.target.value.toLowerCase().trim(); renderGames(); });

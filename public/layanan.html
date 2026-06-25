@@ -13,26 +13,11 @@
 <script src="/js/theme.js"></script>
 <link href="/css/theme.css" rel="stylesheet"/>
 </head>
-<body class="bg-background min-h-screen flex flex-col font-body-md text-body-md text-on-background">
+<body data-page="layanan" class="text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
 
-<!-- Top Nav -->
-<header class="bg-surface/80 backdrop-blur-md border-b-2 border-dashed border-outline-variant shadow-[0_10px_30px_-10px_rgba(139,111,91,0.15)] fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-margin py-md">
-  <a class="flex items-center gap-2 group" href="/">
-    <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-display-lg text-lg group-hover:scale-110 transition-transform">A</span>
-    <span class="font-headline-lg text-headline-lg-mobile text-primary drop-shadow-sm">Anshel Store</span>
-  </a>
-  <nav class="hidden md:flex items-center gap-lg">
-    <a class="font-headline-md text-on-surface-variant hover:text-primary transition-colors px-4 py-2 rounded-t-lg" href="/topup">Top Up Game</a>
-    <a class="font-headline-md text-primary font-bold border-b-4 border-primary-container rounded-t-lg pb-1 px-4 py-2" href="/layanan">Layanan AI</a>
-    <a class="font-headline-md text-on-surface-variant hover:text-primary transition-colors px-4 py-2 rounded-t-lg" href="/blog">Komunitas</a>
-  </nav>
-  <div class="flex items-center gap-sm">
-    <a href="/topup" title="Top Up" class="p-2 text-primary hover:scale-105 hover:bg-secondary-container/30 transition-all rounded-full"><span class="material-symbols-outlined">shopping_cart</span></a>
-    <a href="/akun" title="Akun" class="p-2 text-primary hover:scale-105 hover:bg-secondary-container/30 transition-all rounded-full"><span class="material-symbols-outlined">account_circle</span></a>
-  </div>
-</header>
+<div id="siteNav"></div>
 
-<main class="flex-grow pt-[100px] pb-xl px-container-margin md:px-xl max-w-7xl mx-auto w-full flex flex-col gap-xl">
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl flex flex-col gap-md">
 
   <!-- Banner Header -->
   <section class="relative w-full rounded-[32px] bg-secondary-container overflow-hidden shadow-marshmallow border-2 border-dashed border-secondary border-opacity-30">
@@ -80,20 +65,11 @@
   </section>
 </main>
 
-<!-- Footer -->
-<footer class="bg-surface-container-low border-t-2 border-dashed border-outline-variant w-full py-xl px-container-margin flex flex-col md:flex-row justify-between items-center gap-md mt-auto">
-  <a href="/" class="font-headline-md text-headline-md text-secondary">Anshel Store</a>
-  <div class="flex flex-wrap justify-center gap-md">
-    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/topup">Top Up</a>
-    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/blog">Komunitas</a>
-    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/tentang">Tentang</a>
-    <a class="text-on-surface-variant hover:text-primary transition-colors" href="/faq">FAQ</a>
-  </div>
-  <div class="text-on-surface-variant text-center md:text-right">© <span id="yr"></span> Anshel Store</div>
-</footer>
+<div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
 <script src="/js/widget.js"></script>
+<script src="/js/site.js"></script>
 <script>
   document.getElementById("yr").textContent = new Date().getFullYear();
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
