@@ -8,59 +8,10 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: { extend: {
-      colors: {
-        "surface-container-low": "#f8f2ef", "on-secondary-container": "#785d4a", "inverse-primary": "#ffb2b9",
-        "surface-container": "#f3ede9", "surface-container-high": "#ede7e3", "on-surface-variant": "#524344",
-        "on-secondary-fixed-variant": "#594230", "primary-container": "#f2a2a9", "error-container": "#ffdad6",
-        "on-error-container": "#93000a", "background": "#fef8f4", "surface": "#fef8f4", "surface-variant": "#e7e1de",
-        "on-primary-fixed-variant": "#6f353c", "on-tertiary-container": "#5c432a", "tertiary": "#75593e",
-        "inverse-surface": "#32302e", "surface-container-lowest": "#ffffff", "secondary-container": "#fcd9c1",
-        "primary-fixed": "#ffdadb", "tertiary-fixed": "#ffdcbe", "inverse-on-surface": "#f5f0ec", "primary": "#8c4c52",
-        "on-secondary-fixed": "#291709", "surface-bright": "#fef8f4", "tertiary-container": "#d4b191",
-        "on-primary-fixed": "#390a12", "on-primary": "#ffffff", "on-background": "#1d1b19", "error": "#ba1a1a",
-        "outline": "#857374", "on-tertiary-fixed": "#2a1703", "outline-variant": "#d7c1c2",
-        "surface-container-highest": "#e7e1de", "secondary-fixed": "#ffdcc4", "on-error": "#ffffff",
-        "tertiary-fixed-dim": "#e4c09f", "primary-fixed-dim": "#ffb2b9", "on-primary-container": "#71363d",
-        "secondary": "#735946", "surface-dim": "#ded9d5", "on-surface": "#1d1b19",
-        "on-tertiary-fixed-variant": "#5b4229", "on-tertiary": "#ffffff", "on-secondary": "#ffffff",
-        "surface-tint": "#8c4c52", "secondary-fixed-dim": "#e2c0a9"
-      },
-      borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
-      spacing: { "sm": "8px", "unit": "4px", "xs": "4px", "container-margin": "24px", "xl": "48px", "md": "16px", "gutter": "20px", "lg": "24px" },
-      fontFamily: {
-        "body-md": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"],
-        "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"]
-      },
-      fontSize: {
-        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
-        "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "600" }],
-        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "500" }],
-        "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "700" }],
-        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
-        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "800" }],
-        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "700" }]
-      },
-      animation: { 'float': 'float 6s ease-in-out infinite', 'blob': 'blob 7s infinite' },
-      keyframes: {
-        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
-        blob: { '0%': { transform: 'translate(0,0) scale(1)' }, '33%': { transform: 'translate(30px,-50px) scale(1.1)' }, '66%': { transform: 'translate(-20px,20px) scale(0.9)' }, '100%': { transform: 'translate(0,0) scale(1)' } }
-      }
-    } }
-  }
-</script>
-<style>
-  body { background-color: #fef8f4; overflow-x: hidden; }
-  .marshmallow-shadow { box-shadow: 0 20px 40px rgba(139, 111, 91, 0.15); }
-  .sticker-border { border: 2px dashed #d7c1c2; }
-  .floating-island { background: linear-gradient(135deg, #ffffff 0%, #fef8f4 100%); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; animation: blob 10s infinite alternate; box-shadow: 0 30px 60px rgba(242, 162, 169, 0.2); }
-  .glass-bubble { background: rgba(255,255,255,.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.5); box-shadow: 0 8px 32px 0 rgba(139,111,91,.1); }
-  .bg-gradient-animated { background: linear-gradient(-45deg, #f8f2ef, #fcd9c1, #f2a2a9, #fef8f4); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
-  @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-</style>
+
+
+<script src="/js/theme.js"></script>
+<link href="/css/theme.css" rel="stylesheet"/>
 </head>
 <body data-page="home" class="font-body-md text-on-surface bg-gradient-animated min-h-screen flex flex-col">
 
