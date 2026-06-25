@@ -413,13 +413,14 @@ async function loadIntegrasi() {
   $("intAiProvider").value = integ.aiProvider || ""; $("intAiKey").value = integ.aiKey || "";
   $("intGcUrl").value = integ.gameCheckUrl || ""; $("intGcKey").value = integ.gameCheckKey || "";
   $("intGpName").value = integ.gameProvider || ""; $("intGpUrl").value = integ.gameProviderUrl || ""; $("intGpKey").value = integ.gameProviderKey || "";
+  $("intGpUser").value = integ.gameProviderUser || "";
 }
 function buildIntegrations() {
   return {
     paymentProvider: $("intPayProvider").value.trim(), paymentKey: $("intPayKey").value.trim(),
     aiProvider: $("intAiProvider").value.trim(), aiKey: $("intAiKey").value.trim(),
     gameCheckUrl: $("intGcUrl").value.trim(), gameCheckKey: $("intGcKey").value.trim(),
-    gameProvider: $("intGpName").value.trim(), gameProviderUrl: $("intGpUrl").value.trim(), gameProviderKey: $("intGpKey").value.trim(),
+    gameProvider: $("intGpName").value.trim(), gameProviderUrl: $("intGpUrl").value.trim(), gameProviderKey: $("intGpKey").value.trim(), gameProviderUser: $("intGpUser").value.trim(),
   };
 }
 async function saveIntegAll(msgId) {

@@ -912,15 +912,28 @@ async function handleApi(req, res, pathname, query) {
   if (pathname === "/api/admin/sync-games" && method === "POST") {
     if (!authed) return needAuth();
     const integ = db.settings.integrations || {};
-    if (!integ.gameProviderUrl) return sendJSON(res, 400, { error: "Isi dulu URL API provider di Integrasi & API." });
+    const provider = (integ.gameProvider || "").toLowerCase();
+    const isDigiflazz = provider.includes("digiflazz");
+    if (!isDigiflazz && !integ.gameProviderUrl) return sendJSON(res, 400, { error: "Isi dulu URL API provider (atau set Nama Provider = digiflazz) di Integrasi & API." });
     try {
-      const headers = integ.gameProviderKey ? { "Authorization": "Bearer " + integ.gameProviderKey, "X-API-Key": integ.gameProviderKey } : {};
-      const raw = await httpsRequest("GET", integ.gameProviderUrl, { headers });
+      let raw;
+      if (isDigiflazz) {
+        const username = (integ.gameProviderUser || "").trim();
+        const key = (integ.gameProviderKey || "").trim();
+        if (!username || !key) return sendJSON(res, 400, { error: "Digiflazz butuh Username + API Key. Isi keduanya di Integrasi." });
+        const sign = crypto.createHash("md5").update(username + key + "pricelist").digest("hex");
+        const url = (integ.gameProviderUrl || "").trim() || "https://api.digiflazz.com/v1/price-list";
+        const payload = JSON.stringify({ cmd: "prepaid", username, sign });
+        raw = await httpsRequest("POST", url, { headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(payload) }, body: payload });
+      } else {
+        const headers = integ.gameProviderKey ? { "Authorization": "Bearer " + integ.gameProviderKey, "X-API-Key": integ.gameProviderKey } : {};
+        raw = await httpsRequest("GET", integ.gameProviderUrl, { headers });
+      }
       const list = Array.isArray(raw) ? raw
         : Array.isArray(raw && raw.data) ? raw.data
         : Array.isArray(raw && raw.products) ? raw.products
         : Array.isArray(raw && raw.pricelist) ? raw.pricelist : null;
-      if (!list) return sendJSON(res, 502, { error: "Format respons provider tidak dikenali (perlu array produk atau {data:[...]})." });
+      if (!list) return sendJSON(res, 502, { error: (raw && (raw.message || (raw.data && raw.data.message))) || "Format respons provider tidak dikenali (perlu array produk atau {data:[...]})." });
       const byGame = {};
       list.forEach((p, i) => {
         const gname = String(p.brand || p.game || p.category || p.kategori || "Lainnya").trim();

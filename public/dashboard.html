@@ -190,12 +190,13 @@
           </div>
 
           <div class="panel-card">
-            <h3>🎮 Provider Game (H2H) — ambil produk otomatis</h3>
-            <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Sambungkan ke provider top-up (mis. Digiflazz, VIP Reseller, dll). Endpoint harus mengembalikan daftar produk JSON (array atau {data:[...]}). Klik <b>Sync</b> untuk menarik & memperbarui daftar game beserta harganya secara otomatis.</p>
+            <h3>🎮 Provider Game (H2H) — ambil produk & HARGA REAL otomatis</h3>
+            <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Sambungkan ke provider top-up untuk menarik daftar game + harga real otomatis. <b>Digiflazz</b> didukung langsung: cukup isi <b>Nama Provider = digiflazz</b>, <b>Username</b>, & <b>API Key</b> (Dev/Prod) — URL boleh dikosongkan. Provider lain: isi URL API yang mengembalikan JSON array/{data:[...]}. Lalu klik <b>Sync</b>.</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
-              <div class="field"><label>Nama Provider</label><input class="input" id="intGpName" placeholder="digiflazz / vip-reseller" /></div>
-              <div class="field"><label>URL API Price-list (GET)</label><input class="input" id="intGpUrl" placeholder="https://provider.com/api/price-list" /></div>
-              <div class="field" style="grid-column:1/-1"><label>API Key / Token</label><input class="input" id="intGpKey" type="password" placeholder="••••••" /></div>
+              <div class="field"><label>Nama Provider</label><input class="input" id="intGpName" placeholder="digiflazz" /></div>
+              <div class="field"><label>Username / ID Member</label><input class="input" id="intGpUser" placeholder="username Digiflazz" /></div>
+              <div class="field" style="grid-column:1/-1"><label>API Key / Token (Dev atau Prod)</label><input class="input" id="intGpKey" type="password" placeholder="••••••" /></div>
+              <div class="field" style="grid-column:1/-1"><label>URL API Price-list (opsional — kosongkan untuk Digiflazz)</label><input class="input" id="intGpUrl" placeholder="otomatis untuk Digiflazz" /></div>
             </div>
             <div style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <button class="btn btn-primary" id="saveProvider">Simpan Provider</button>
