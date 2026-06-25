@@ -1,196 +1,229 @@
 <!DOCTYPE html>
-<html class="light" lang="id">
-<head>
+<html class="light" lang="id"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Anshel Store — Top Up Game Termurah, Instan & Aman</title>
-<meta name="description" content="Top up diamond Mobile Legends, Free Fire, Genshin, Valorant, PUBG & lainnya — instan, murah, aman. Plus jasa AI chatbot & automation untuk bisnismu." />
+<title>Anshel Store — Otomasi Sosial Media & Top Up Game</title>
+<meta name="description" content="Anshel Store: jasa AI automation (WhatsApp, Telegram, Instagram) dan top up game instan, murah & aman. Dibungkus hangat, lucu, dan terpercaya."/>
+<link rel="canonical" href="https://www.anshelstore.biz.id/"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      colors: {
+        "surface-container-low": "#f8f2ef", "on-secondary-container": "#785d4a", "inverse-primary": "#ffb2b9",
+        "surface-container": "#f3ede9", "surface-container-high": "#ede7e3", "on-surface-variant": "#524344",
+        "on-secondary-fixed-variant": "#594230", "primary-container": "#f2a2a9", "error-container": "#ffdad6",
+        "on-error-container": "#93000a", "background": "#fef8f4", "surface": "#fef8f4", "surface-variant": "#e7e1de",
+        "on-primary-fixed-variant": "#6f353c", "on-tertiary-container": "#5c432a", "tertiary": "#75593e",
+        "inverse-surface": "#32302e", "surface-container-lowest": "#ffffff", "secondary-container": "#fcd9c1",
+        "primary-fixed": "#ffdadb", "tertiary-fixed": "#ffdcbe", "inverse-on-surface": "#f5f0ec", "primary": "#8c4c52",
+        "on-secondary-fixed": "#291709", "surface-bright": "#fef8f4", "tertiary-container": "#d4b191",
+        "on-primary-fixed": "#390a12", "on-primary": "#ffffff", "on-background": "#1d1b19", "error": "#ba1a1a",
+        "outline": "#857374", "on-tertiary-fixed": "#2a1703", "outline-variant": "#d7c1c2",
+        "surface-container-highest": "#e7e1de", "secondary-fixed": "#ffdcc4", "on-error": "#ffffff",
+        "tertiary-fixed-dim": "#e4c09f", "primary-fixed-dim": "#ffb2b9", "on-primary-container": "#71363d",
+        "secondary": "#735946", "surface-dim": "#ded9d5", "on-surface": "#1d1b19",
+        "on-tertiary-fixed-variant": "#5b4229", "on-tertiary": "#ffffff", "on-secondary": "#ffffff",
+        "surface-tint": "#8c4c52", "secondary-fixed-dim": "#e2c0a9"
+      },
+      borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+      spacing: { "sm": "8px", "unit": "4px", "xs": "4px", "container-margin": "24px", "xl": "48px", "md": "16px", "gutter": "20px", "lg": "24px" },
+      fontFamily: {
+        "body-md": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"],
+        "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"]
+      },
+      fontSize: {
+        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+        "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "600" }],
+        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "500" }],
+        "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "700" }],
+        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "800" }],
+        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "700" }]
+      },
+      animation: { 'float': 'float 6s ease-in-out infinite', 'blob': 'blob 7s infinite' },
+      keyframes: {
+        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+        blob: { '0%': { transform: 'translate(0,0) scale(1)' }, '33%': { transform: 'translate(30px,-50px) scale(1.1)' }, '66%': { transform: 'translate(-20px,20px) scale(0.9)' }, '100%': { transform: 'translate(0,0) scale(1)' } }
+      }
+    } }
+  }
+</script>
+<style>
+  body { background-color: #fef8f4; overflow-x: hidden; }
+  .marshmallow-shadow { box-shadow: 0 20px 40px rgba(139, 111, 91, 0.15); }
+  .sticker-border { border: 2px dashed #d7c1c2; }
+  .floating-island { background: linear-gradient(135deg, #ffffff 0%, #fef8f4 100%); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; animation: blob 10s infinite alternate; box-shadow: 0 30px 60px rgba(242, 162, 169, 0.2); }
+  .glass-bubble { background: rgba(255,255,255,.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.5); box-shadow: 0 8px 32px 0 rgba(139,111,91,.1); }
+  .bg-gradient-animated { background: linear-gradient(-45deg, #f8f2ef, #fcd9c1, #f2a2a9, #fef8f4); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+  @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+</style>
 </head>
-<body data-page="home" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-pink-soft selection:text-on-pink">
+<body class="font-body-md text-on-surface bg-gradient-animated min-h-screen flex flex-col">
 
-<div id="siteNav"></div>
+<!-- Top Navigation (Web) -->
+<header class="hidden md:flex bg-surface/80 sticky top-0 px-6 py-4 backdrop-blur-md shadow-sm border-b-2 border-dashed border-outline-variant z-50">
+  <div class="flex justify-between items-center w-full max-w-7xl mx-auto">
+    <a href="/" class="flex items-center gap-2 group">
+      <span class="w-10 h-10 rounded-full bg-primary text-on-primary grid place-items-center font-display-lg text-xl group-hover:scale-110 transition-transform">A</span>
+      <span class="font-display-lg text-headline-md text-primary drop-shadow-sm">Anshel Store</span>
+    </a>
+    <nav class="flex gap-8 items-center">
+      <button data-scroll="services" class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300">Layanan AI</button>
+      <a class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300" href="/topup">Top Up Game</a>
+      <a class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300" href="/blog">Komunitas</a>
+      <a class="text-on-surface-variant font-medium hover:scale-105 hover:text-primary transition-all duration-300" href="/tentang">Tentang</a>
+    </nav>
+    <div class="flex items-center gap-5">
+      <a href="/topup" title="Top Up" class="text-primary hover:scale-110 transition-transform"><span class="material-symbols-outlined">shopping_cart</span></a>
+      <a href="/masuk" class="text-on-surface-variant font-medium hover:text-primary">Masuk</a>
+      <a href="/akun" title="Akun" class="w-10 h-10 rounded-full bg-primary-container grid place-items-center text-on-primary-container hover:scale-110 transition-transform"><span class="material-symbols-outlined">person</span></a>
+    </div>
+  </div>
+</header>
 
-<main>
-  <!-- BANNER UTAMA: satu banner bersih, 16:9, di tengah -->
-  <section class="px-margin-mobile md:px-margin-desktop pt-md">
-    <div class="max-w-5xl mx-auto">
-      <div id="mainBanner" class="relative rounded-xl md:rounded-2xl overflow-hidden aspect-[16/9] shadow-[0_16px_40px_-18px_rgba(125,155,120,0.4)]"></div>
+<main class="flex-grow w-full relative overflow-hidden flex flex-col items-center justify-start pt-12 md:pt-20 pb-32">
+  <!-- Hero -->
+  <section class="relative w-full max-w-6xl mx-auto px-4 lg:px-container-margin flex flex-col items-center text-center z-10 mb-20">
+    <div class="relative w-full max-w-3xl aspect-[16/9] md:aspect-[21/9] flex items-center justify-center animate-float mb-10">
+      <div class="absolute inset-0 floating-island opacity-80 z-0"></div>
+      <img alt="Maskot Anshel Store" class="relative z-10 w-full h-full object-contain drop-shadow-xl p-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-K0K56BL2XjJrbyf4r8N8c6AZ9pN0nOMvx0TuCdCMUUOpngcbrBNM6MLBlXzfyBMS2WYsHCulAUx4NHPSzm6gMsSrDSKW57oTMTmgly4lj6uXxf3kTgJxkAxpJRCy3jlrdNq-8F848XAcmFDRJapwaVCz2RQGhyEbBESQqGZzyW30Q9jrU5htqOZbHAVkcuUhAfCEblIVbUBbk8T1TQcZex9sAgV3EyGs9n5hUsUJrT_mVvLmSSEfsDz25_-Jha-p-ZETZwvfGvOR"/>
+    </div>
+    <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-6 max-w-4xl relative z-20">
+      Sosial Media-mu, <span class="text-primary relative inline-block">Otomatis &amp; Naik Level
+        <span class="material-symbols-outlined absolute -top-4 -right-6 text-secondary-container text-2xl animate-pulse">auto_awesome</span>
+        <span class="material-symbols-outlined absolute -bottom-2 -left-6 text-primary-container text-xl animate-pulse">star</span>
+      </span>
+    </h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-10 z-20">
+      Masuk ke dunia lembut tempat sosial media bisnismu diurus dengan penuh perhatian — dari bot WhatsApp sampai interaksi Instagram. Plus, top up game instan, murah & aman.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 items-center z-20">
+      <button data-scroll="services" class="bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
+        <span class="relative z-10">Jelajahi Layanan AI</span>
+        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </button>
+      <a href="/topup" class="bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-label-md text-label-md px-8 py-4 rounded-full marshmallow-shadow transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-2 group border-2 border-white/50 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1/3 bg-white/20 rounded-t-full"></div>
+        <span class="relative z-10">Portal Top Up Game</span>
+        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">sports_esports</span>
+      </a>
     </div>
   </section>
 
-  <!-- BANNER KEDUA: kartu promo bergeser (ala upoint), dikelola dari dashboard -->
-  <section class="px-margin-mobile md:px-margin-desktop pt-lg">
-    <div class="max-w-7xl mx-auto">
-      <div id="promoBanner"></div>
-    </div>
-  </section>
-
-  <!-- SEARCH + KATEGORI -->
-  <section class="px-margin-mobile md:px-margin-desktop pt-md">
-    <div class="max-w-7xl mx-auto">
-      <div class="relative mb-md">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-        <input id="catalogSearch" type="text" placeholder="Cari game (Mobile Legends, Free Fire...)" class="w-full rounded-full border-pink-soft bg-surface-container-lowest pl-12 pr-4 py-3.5 shadow-sm focus:border-pink focus:ring-pink"/>
-      </div>
-      <div class="flex gap-xs overflow-x-auto pb-2" id="catTabs">
-        <button class="cat-tab active shrink-0" data-cat="game"><span class="material-symbols-outlined text-[18px]">sports_esports</span> Game</button>
-        <button class="cat-tab shrink-0" data-cat="voucher"><span class="material-symbols-outlined text-[18px]">card_giftcard</span> Voucher</button>
-        <button class="cat-tab shrink-0" data-cat="pulsa"><span class="material-symbols-outlined text-[18px]">sim_card</span> Pulsa & Data</button>
-        <button class="cat-tab shrink-0" data-cat="streaming"><span class="material-symbols-outlined text-[18px]">play_circle</span> Streaming</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- KATALOG GAME -->
-  <section id="katalog" class="px-margin-mobile md:px-margin-desktop py-md scroll-mt-24">
-    <div class="max-w-7xl mx-auto">
-      <div class="flex items-center justify-between mb-md">
-        <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-xs" id="txtTopupTitle"><span class="material-symbols-outlined text-pink">local_fire_department</span> Game Populer</h2>
-        <a href="/cek-transaksi" class="font-label-md text-label-md text-pink inline-flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Cek Transaksi</a>
-      </div>
-      <div id="gameCatalog" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-sm md:gap-gutter">
-        <div class="col-span-full text-center text-on-surface-variant py-md">Memuat game…</div>
-      </div>
-      <p id="noGameHome" class="hidden text-center text-on-surface-variant py-md">Belum ada produk di kategori ini. 🙏</p>
-    </div>
-  </section>
-
-  <!-- CARA TOP UP -->
-  <section class="px-margin-mobile md:px-margin-desktop py-md">
-    <div class="max-w-7xl mx-auto bg-surface-container-lowest rounded-lg p-md md:p-lg shadow-sm">
-      <h2 class="font-headline-md text-headline-md text-on-surface text-center mb-md">Cara Top Up — 3 Langkah ⚡</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
-        <div class="flex items-center gap-sm"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold">1</div><div><b class="text-on-surface font-label-md">Pilih Game & Nominal</b><p class="font-label-sm text-label-sm text-on-surface-variant">Cari game, pilih item.</p></div></div>
-        <div class="flex items-center gap-sm"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold">2</div><div><b class="text-on-surface font-label-md">Masukkan ID & Bayar</b><p class="font-label-sm text-label-sm text-on-surface-variant">Isi User ID, pilih metode bayar.</p></div></div>
-        <div class="flex items-center gap-sm"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-extrabold">3</div><div><b class="text-on-surface font-label-md">Pesanan Diproses</b><p class="font-label-sm text-label-sm text-on-surface-variant">Item masuk dalam menit.</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Trust -->
-  <section class="px-margin-mobile md:px-margin-desktop py-md">
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-sm">
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-pink">1.000+</div><div class="font-label-sm text-label-sm text-on-surface-variant">Transaksi sukses</div></div>
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-secondary">24/7</div><div class="font-label-sm text-label-sm text-on-surface-variant">Layanan & CS</div></div>
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-primary">Instan</div><div class="font-label-sm text-label-sm text-on-surface-variant">Proses cepat</div></div>
-      <div class="bg-surface-container-lowest rounded-lg p-md text-center shadow-sm"><div class="text-[26px] font-display-lg-mobile font-extrabold text-pink">4.9★</div><div class="font-label-sm text-label-sm text-on-surface-variant">Rating pembeli</div></div>
-    </div>
-  </section>
+  <!-- Wavy Divider -->
+  <svg class="w-full h-24 md:h-32 text-surface-container-lowest fill-current" preserveAspectRatio="none" viewBox="0 0 1440 320"><path d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,165.3C960,149,1056,171,1152,186.7C1248,203,1344,213,1392,218.7L1440,224L1440,320L0,320Z"></path></svg>
 
   <!-- Layanan AI -->
-  <section id="layanan" class="px-margin-mobile md:px-margin-desktop py-lg bg-surface">
-    <div class="max-w-7xl mx-auto text-center mb-md reveal">
-      <span class="font-label-md text-label-md text-secondary font-bold">UNTUK BISNIS</span>
-      <h2 class="font-headline-lg text-headline-lg text-on-surface mt-xs" id="txtLayananTitle">Jasa AI Automation</h2>
-      <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto" id="txtLayananDesc">Chatbot AI 24/7, dashboard human takeover, dan otomasi workflow untuk bisnismu.</p>
-    </div>
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter reveal">
-      <div class="rounded-xl p-md border border-pink-soft/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"><div class="w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center mb-md"><span class="material-symbols-outlined text-pink text-[28px]" style="font-variation-settings:'FILL' 1;">smart_toy</span></div><h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Chatbot Pintar</h3><p class="font-body-md text-body-md text-on-surface-variant">AI yang paham konteks bisnismu & bicara dengan gaya brand-mu.</p></div>
-      <div class="rounded-xl p-md border border-secondary-fixed/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"><div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center mb-md"><span class="material-symbols-outlined text-secondary text-[28px]" style="font-variation-settings:'FILL' 1;">support_agent</span></div><h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Support 24/7 + Takeover</h3><p class="font-body-md text-body-md text-on-surface-variant">Otomatis sepanjang waktu; agent bisa ambil alih kapan saja.</p></div>
-      <div class="rounded-xl p-md border border-primary-fixed/60 bg-surface-container-lowest shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"><div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center mb-md"><span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings:'FILL' 1;">bolt</span></div><h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Workflow Automation</h3><p class="font-body-md text-body-md text-on-surface-variant">Sambungkan semua tools; robot urus tugas berulang.</p></div>
-    </div>
-    <div class="max-w-7xl mx-auto text-center mt-md"><a id="ctaBuild" href="/tentang" rel="noopener" class="inline-flex items-center gap-xs bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md px-gutter py-md rounded-full hover:scale-105 transition-transform">💬 Konsultasi Gratis</a></div>
-  </section>
-
-  <!-- Metode pembayaran -->
-  <section class="px-margin-mobile md:px-margin-desktop py-lg">
-    <div class="max-w-7xl mx-auto text-center">
-      <p class="font-label-md text-label-md text-on-surface-variant mb-sm">Metode Pembayaran Didukung</p>
-      <div class="flex flex-wrap justify-center gap-xs">
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">QRIS</span>
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">DANA</span>
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">OVO</span>
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">GoPay</span>
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">ShopeePay</span>
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">BCA</span>
-        <span class="bg-surface-container-lowest border border-outline-variant/40 rounded-DEFAULT px-md py-sm font-label-md text-label-md text-on-surface shadow-sm">Mandiri</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Artikel -->
-  <section id="articlesSection" class="px-margin-mobile md:px-margin-desktop py-lg hidden">
+  <section id="services" class="w-full bg-surface-container-lowest py-24 px-4 lg:px-container-margin relative z-10 scroll-mt-20">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-md reveal"><h2 class="font-headline-lg text-headline-lg text-on-surface" id="txtArtikelTitle">Artikel & Tips</h2></div>
-      <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter"></div>
-      <div class="text-center mt-md"><a href="/blog" class="inline-flex items-center gap-xs font-label-md text-label-md text-secondary font-bold">Lihat semua <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+      <div class="text-center mb-16">
+        <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">Layanan AI Automation</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-xl mx-auto">Semua yang kamu butuh untuk otomasi platform-mu, dibungkus hangat & lucu.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative">
+        <div class="absolute top-1/4 -left-10 w-24 h-24 bg-primary-container/30 rounded-full blur-xl animate-float"></div>
+        <div class="absolute bottom-1/4 -right-10 w-32 h-32 bg-secondary-container/30 rounded-full blur-xl animate-float" style="animation-delay:2s;"></div>
+        <div class="glass-bubble rounded-[3rem] p-8 flex flex-col items-center text-center transform hover:-translate-y-2 transition-transform duration-500 relative group sticker-border hover:border-primary-container">
+          <div class="w-24 h-24 rounded-full bg-secondary-container flex items-center justify-center mb-6 marshmallow-shadow animate-float"><span class="material-symbols-outlined text-4xl text-on-secondary-container" style="font-variation-settings:'FILL' 1;">chat</span></div>
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-3">Bot WhatsApp Otomatis</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">Balasan otomatis & engagement 24/7 untuk WhatsApp bisnismu.</p>
+          <div class="mt-6"><span class="inline-block px-3 py-1 bg-secondary-container/50 text-tertiary text-xs rounded-full font-label-md uppercase tracking-wider">24/7</span></div>
+        </div>
+        <div class="glass-bubble rounded-[3rem] p-8 flex flex-col items-center text-center transform hover:-translate-y-2 transition-transform duration-500 relative group sticker-border hover:border-primary-container mt-0 md:mt-12">
+          <div class="w-24 h-24 rounded-full bg-primary-container flex items-center justify-center mb-6 marshmallow-shadow animate-float" style="animation-delay:1s;"><span class="material-symbols-outlined text-4xl text-on-primary-container" style="font-variation-settings:'FILL' 1;">send</span></div>
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-3">Manajemen Telegram</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">Kontrol grup pintar, command kustom, & moderasi komunitas Telegram.</p>
+          <div class="mt-6"><span class="inline-block px-3 py-1 bg-primary-container/50 text-on-primary-container text-xs rounded-full font-label-md uppercase tracking-wider">Smart</span></div>
+        </div>
+        <div class="glass-bubble rounded-[3rem] p-8 flex flex-col items-center text-center transform hover:-translate-y-2 transition-transform duration-500 relative group sticker-border hover:border-primary-container">
+          <div class="w-24 h-24 rounded-full bg-tertiary-container flex items-center justify-center mb-6 marshmallow-shadow animate-float" style="animation-delay:2s;"><span class="material-symbols-outlined text-4xl text-on-tertiary-container" style="font-variation-settings:'FILL' 1;">favorite</span></div>
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-3">Interaksi Instagram</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">Auto-reply DM & komentar untuk dongkrak leads tanpa ribet.</p>
+          <div class="mt-6"><span class="inline-block px-3 py-1 bg-tertiary-container/50 text-on-tertiary-container text-xs rounded-full font-label-md uppercase tracking-wider">Leads</span></div>
+        </div>
+      </div>
+      <div class="text-center mt-12"><a href="/tentang" class="inline-flex items-center gap-2 text-primary font-label-md hover:gap-3 transition-all">Pelajari semua layanan <span class="material-symbols-outlined">arrow_forward</span></a></div>
     </div>
   </section>
 
-  <!-- Testimoni -->
-  <section class="px-margin-mobile md:px-margin-desktop py-lg">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-md reveal">
-        <span class="font-label-md text-label-md text-secondary font-bold">KATA MEREKA</span>
-        <h2 class="font-headline-lg text-headline-lg text-on-surface mt-xs">Dipercaya ribuan pelanggan</h2>
+  <!-- Etalase Game (dinamis) -->
+  <section class="w-full max-w-7xl mx-auto py-20 px-4 lg:px-container-margin relative z-10">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Top Up Game Favorit 🎮</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Diamond & voucher meluncur seketika.</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter reveal">
-        <div class="bg-surface-container-lowest rounded-2xl p-md shadow-sm border border-outline-variant/20">
-          <div class="text-secondary text-[18px] mb-xs">★★★★★</div>
-          <p class="font-body-md text-body-md text-on-surface-variant">"Top up ML masuk cuma 30 detik. Harganya juga paling murah. Langganan sini terus!"</p>
-          <div class="flex items-center gap-2 mt-md"><span class="w-9 h-9 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary grid place-items-center font-bold">R</span><div><b class="font-label-md text-label-md text-on-surface block">Rizky P.</b><span class="font-label-sm text-label-sm text-on-surface-variant">Gamer ML</span></div></div>
-        </div>
-        <div class="bg-surface-container-lowest rounded-2xl p-md shadow-sm border border-outline-variant/20">
-          <div class="text-secondary text-[18px] mb-xs">★★★★★</div>
-          <p class="font-body-md text-body-md text-on-surface-variant">"Chatbot AI-nya beneran ngebantu CS toko online aku. Bisa di-takeover juga kalau ada yang rumit."</p>
-          <div class="flex items-center gap-2 mt-md"><span class="w-9 h-9 rounded-full bg-gradient-to-br from-secondary to-pink text-on-primary grid place-items-center font-bold">D</span><div><b class="font-label-md text-label-md text-on-surface block">Dewi A.</b><span class="font-label-sm text-label-sm text-on-surface-variant">Pemilik UMKM</span></div></div>
-        </div>
-        <div class="bg-surface-container-lowest rounded-2xl p-md shadow-sm border border-outline-variant/20">
-          <div class="text-secondary text-[18px] mb-xs">★★★★★</div>
-          <p class="font-body-md text-body-md text-on-surface-variant">"Pelayanan ramah, CS fast respon, dan komunitasnya seru buat nanya-nanya promo. Recommended!"</p>
-          <div class="flex items-center gap-2 mt-md"><span class="w-9 h-9 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary grid place-items-center font-bold">B</span><div><b class="font-label-md text-label-md text-on-surface block">Bayu S.</b><span class="font-label-sm text-label-sm text-on-surface-variant">Gamer FF</span></div></div>
-        </div>
-      </div>
+      <a href="/topup" class="hidden sm:inline-flex items-center gap-1 text-primary font-label-md hover:gap-2 transition-all">Lihat semua <span class="material-symbols-outlined">arrow_forward</span></a>
     </div>
+    <div id="popGames" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"></div>
   </section>
 
   <!-- Ajakan komunitas -->
-  <section class="px-margin-mobile md:px-margin-desktop py-md">
-    <div class="max-w-7xl mx-auto rounded-2xl overflow-hidden relative shadow-lg">
-      <div class="absolute inset-0 bg-gradient-to-r from-secondary to-pink"></div>
-      <div class="relative p-lg md:p-xl flex flex-col md:flex-row items-center gap-md text-on-primary">
-        <div class="text-5xl">💬</div>
-        <div class="flex-grow text-center md:text-left">
-          <h2 class="font-headline-lg text-headline-lg">Gabung Komunitas Anshel Store</h2>
-          <p class="font-body-md text-body-md opacity-90">Ngobrol langsung di live chat, tanya promo, dan baca tips terbaru bareng gamer lain.</p>
-        </div>
-        <a href="/blog" class="shrink-0 bg-surface text-secondary font-label-lg text-label-lg font-bold px-gutter py-md rounded-full hover:scale-105 transition-transform inline-flex items-center gap-2"><span class="material-symbols-outlined">forum</span> Masuk Komunitas</a>
+  <section class="w-full max-w-7xl mx-auto px-4 lg:px-container-margin relative z-10">
+    <div class="glass-bubble rounded-[3rem] p-10 md:p-12 flex flex-col md:flex-row items-center gap-6 text-center md:text-left sticker-border">
+      <span class="text-6xl animate-float">💬</span>
+      <div class="flex-grow">
+        <h2 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface">Gabung Komunitas Anshel Store</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Ngobrol langsung di live chat, tanya promo, & baca tips bareng gamer lain.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- FAQ ringkas -->
-  <section class="px-margin-mobile md:px-margin-desktop py-lg">
-    <div class="max-w-3xl mx-auto">
-      <div class="text-center mb-md reveal"><h2 class="font-headline-lg text-headline-lg text-on-surface">Pertanyaan Umum</h2></div>
-      <div class="flex flex-col gap-sm">
-        <details class="group bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant/20">
-          <summary class="flex items-center justify-between cursor-pointer font-label-lg text-label-lg font-bold text-on-surface list-none">Berapa lama proses top up?<span class="material-symbols-outlined text-secondary transition-transform group-open:rotate-180">expand_more</span></summary>
-          <p class="font-body-md text-body-md text-on-surface-variant mt-sm">Mayoritas pesanan diproses otomatis dan masuk dalam hitungan menit setelah pembayaran terkonfirmasi.</p>
-        </details>
-        <details class="group bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant/20">
-          <summary class="flex items-center justify-between cursor-pointer font-label-lg text-label-lg font-bold text-on-surface list-none">Apakah aman? Perlu password akun?<span class="material-symbols-outlined text-secondary transition-transform group-open:rotate-180">expand_more</span></summary>
-          <p class="font-body-md text-body-md text-on-surface-variant mt-sm">Sangat aman. Kami <b>tidak pernah meminta password</b> — cukup User ID dan Server/Zone ID kamu.</p>
-        </details>
-        <details class="group bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant/20">
-          <summary class="flex items-center justify-between cursor-pointer font-label-lg text-label-lg font-bold text-on-surface list-none">Metode pembayaran apa saja yang didukung?<span class="material-symbols-outlined text-secondary transition-transform group-open:rotate-180">expand_more</span></summary>
-          <p class="font-body-md text-body-md text-on-surface-variant mt-sm">QRIS, e-wallet (DANA/OVO/GoPay/ShopeePay), dan transfer bank (BCA/Mandiri/BRI).</p>
-        </details>
-      </div>
-      <div class="text-center mt-md"><a href="/faq" class="inline-flex items-center gap-xs font-label-md text-label-md text-secondary font-bold">Lihat semua FAQ <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+      <a href="/blog" class="shrink-0 bg-primary text-on-primary font-label-md px-7 py-4 rounded-full marshmallow-shadow hover:-translate-y-1 transition-transform flex items-center gap-2"><span class="material-symbols-outlined">forum</span> Masuk Komunitas</a>
     </div>
   </section>
 </main>
 
-<div id="siteFooter"></div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t-2 border-dashed border-outline-variant py-10 px-4 relative z-10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
+    <div>
+      <div class="font-display-lg text-headline-md text-primary">Anshel Store</div>
+      <p class="text-on-surface-variant text-sm mt-1 max-w-xs">Top up game & otomasi sosial media, dibungkus hangat, lucu & terpercaya.</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-5 text-on-surface-variant font-medium">
+      <a href="/topup" class="hover:text-primary transition-colors">Top Up</a>
+      <a href="/blog" class="hover:text-primary transition-colors">Komunitas</a>
+      <a href="/tentang" class="hover:text-primary transition-colors">Tentang</a>
+      <a href="/faq" class="hover:text-primary transition-colors">FAQ</a>
+      <a href="/akun" class="hover:text-primary transition-colors">Akun</a>
+    </div>
+  </div>
+  <div class="text-center text-xs text-on-surface-variant mt-6">© <span id="yr"></span> Anshel Store. Seluruh hak cipta dilindungi.</div>
+</footer>
+
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md rounded-full px-4 py-3 border-2 border-primary/20 bg-surface-container-lowest shadow-[0_20px_40px_rgba(139,111,91,0.25)] z-50 flex justify-around items-center">
+  <a href="/" class="flex flex-col items-center justify-center text-on-secondary-container/70 rounded-full w-16 h-14"><span class="material-symbols-outlined">cottage</span><span class="font-label-md text-[10px] mt-0.5">Beranda</span></a>
+  <a href="/topup" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 scale-110 shadow-md"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">sports_esports</span><span class="font-label-md text-[10px] mt-0.5">Top Up</span></a>
+  <a href="/blog" class="flex flex-col items-center justify-center text-on-secondary-container/70 rounded-full w-16 h-14"><span class="material-symbols-outlined">forum</span><span class="font-label-md text-[10px] mt-0.5">Komunitas</span></a>
+  <a href="/akun" class="flex flex-col items-center justify-center text-on-secondary-container/70 rounded-full w-16 h-14"><span class="material-symbols-outlined">person</span><span class="font-label-md text-[10px] mt-0.5">Akun</span></a>
+</nav>
+
 <div id="chatWidget"></div>
 <script src="/js/widget.js"></script>
-<script src="/js/site.js"></script>
-<script src="/js/landing.js"></script>
-</body>
-</html>
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  // Smooth scroll untuk tombol data-scroll
+  document.addEventListener("click", (e) => { const a = e.target.closest("[data-scroll]"); if (a) { e.preventDefault(); const t = document.getElementById(a.dataset.scroll); if (t) t.scrollIntoView({ behavior: "smooth" }); } });
+  // Etalase game dinamis dari database
+  const EMOJI = { ml: "⚔️", ff: "🔥", genshin: "🌟", valorant: "🎯", pubgm: "🪂" };
+  const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
+  fetch("/api/games").then((r) => r.json()).then((games) => {
+    const el = document.getElementById("popGames"); if (!el) return;
+    if (!games.length) { el.innerHTML = '<p class="col-span-full text-center text-on-surface-variant">Game segera hadir ✨</p>'; return; }
+    el.innerHTML = games.slice(0, 10).map((g) => {
+      const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
+      const art = g.image ? `<img src="${g.image}" alt="${g.name}" class="w-full h-full object-cover"/>` : `<span class="text-4xl">${EMOJI[g.id] || "🎮"}</span>`;
+      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group glass-bubble rounded-[2rem] p-3 flex flex-col items-center text-center hover:-translate-y-2 transition-transform duration-300 sticker-border hover:border-primary-container">
+        <div class="w-full aspect-square rounded-[1.5rem] bg-secondary-container/40 flex items-center justify-center overflow-hidden mb-3 group-hover:scale-105 transition-transform">${art}</div>
+        <div class="font-bold text-on-surface text-sm truncate w-full">${g.name}</div>
+        <div class="text-xs text-primary font-semibold mt-0.5">Mulai ${rupiah(min)}</div>
+      </a>`;
+    }).join("");
+  }).catch(() => {});
+  if (typeof initChatWidget === "function") initChatWidget();
+</script>
+</body></html>
