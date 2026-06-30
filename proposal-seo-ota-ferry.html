@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal Strategi SEO — Platform OTA Ferry Internasional Batam</title>
+<style>
+  :root{
+    --navy:#0b2a4a;
+    --navy-2:#103b66;
+    --teal:#0d9488;
+    --teal-light:#14b8a6;
+    --accent:#f59e0b;
+    --ink:#1f2937;
+    --muted:#5b6b7b;
+    --line:#e3e8ee;
+    --bg-soft:#f6f9fc;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    line-height:1.6;
+    background:#eef2f6;
+    font-size:15px;
+  }
+  .page{
+    background:var(--card);
+    max-width:920px;
+    margin:24px auto;
+    padding:56px 64px;
+    box-shadow:0 6px 30px rgba(11,42,74,.10);
+    border-radius:4px;
+  }
+  h1,h2,h3,h4{color:var(--navy);line-height:1.25;margin:0;}
+  h2{
+    font-size:22px;
+    margin:46px 0 14px;
+    padding-bottom:8px;
+    border-bottom:3px solid var(--teal);
+  }
+  h2 .num{color:var(--teal);font-weight:800;margin-right:10px;}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--navy-2);}
+  p{margin:10px 0;color:var(--ink);}
+  ul,ol{margin:10px 0 10px 0;padding-left:22px;}
+  li{margin:6px 0;}
+  small,.muted{color:var(--muted);}
+  a{color:var(--teal);}
+  strong{color:var(--navy-2);}
+
+  /* COVER */
+  .cover{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 55%,#0e4a73 100%);
+    color:#fff;
+    padding:70px 64px 60px;
+    border-radius:4px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cover:after{
+    content:"";
+    position:absolute;right:-80px;bottom:-80px;
+    width:320px;height:320px;border-radius:50%;
+    background:radial-gradient(circle at center, rgba(20,184,166,.35), transparent 70%);
+  }
+  .cover .eyebrow{
+    letter-spacing:3px;text-transform:uppercase;font-size:12px;
+    color:var(--teal-light);font-weight:700;margin-bottom:18px;
+  }
+  .cover h1{color:#fff;font-size:38px;letter-spacing:-.5px;}
+  .cover .sub{color:#c9dbec;font-size:18px;margin-top:14px;max-width:620px;}
+  .cover .meta{margin-top:36px;display:flex;flex-wrap:wrap;gap:28px;font-size:14px;}
+  .cover .meta div span{display:block;color:#8fb2d0;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;}
+  .cover .meta div b{color:#fff;font-weight:600;}
+  .badge-wave{position:absolute;left:0;bottom:0;width:100%;height:6px;background:linear-gradient(90deg,var(--teal),var(--accent));}
+
+  /* CALLOUTS */
+  .callout{
+    background:var(--bg-soft);
+    border-left:4px solid var(--teal);
+    padding:16px 20px;border-radius:0 6px 6px 0;margin:18px 0;
+  }
+  .callout.warn{border-left-color:var(--accent);background:#fff8ec;}
+  .callout.navy{border-left-color:var(--navy);background:#eef3f8;}
+
+  /* STAT CARDS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0;}
+  .stat{
+    background:linear-gradient(160deg,#ffffff,#f3f8fb);
+    border:1px solid var(--line);border-radius:10px;padding:18px 16px;text-align:center;
+  }
+  .stat .big{font-size:26px;font-weight:800;color:var(--teal);line-height:1.1;}
+  .stat .lbl{font-size:12px;color:var(--muted);margin-top:6px;}
+  .stats.three{grid-template-columns:repeat(3,1fr);}
+
+  /* CHART CARD */
+  .chart-card{
+    border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:20px 0;background:#fff;
+  }
+  .chart-card .ctitle{font-weight:700;color:var(--navy);font-size:15px;margin-bottom:2px;}
+  .chart-card .csub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+  .src{font-size:11px;color:var(--muted);margin-top:10px;font-style:italic;}
+  svg{display:block;width:100%;height:auto;}
+
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--navy);color:#fff;font-weight:600;font-size:13px;}
+  tr:nth-child(even) td{background:var(--bg-soft);}
+  td.num,th.num{text-align:right;}
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+  .pill.hi{background:#dcfce7;color:#15803d;}
+  .pill.mid{background:#fef9c3;color:#a16207;}
+  .pill.low{background:#fee2e2;color:#b91c1c;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12px;color:var(--muted);margin-top:8px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+
+  .toc{columns:2;column-gap:40px;font-size:14px;}
+  .toc a{color:var(--navy-2);text-decoration:none;}
+  .toc li{margin:5px 0;}
+
+  .timeline{border-left:2px solid var(--line);margin:18px 0;padding-left:24px;}
+  .tl-item{position:relative;margin-bottom:22px;}
+  .tl-item:before{content:"";position:absolute;left:-31px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--teal);border:3px solid #fff;box-shadow:0 0 0 2px var(--teal);}
+  .tl-item h4{color:var(--navy);font-size:15px;}
+  .tl-item .ph{font-size:12px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+
+  .footer{margin-top:50px;border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--muted);text-align:center;}
+  .sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px;}
+  .sign .box{border-top:1px solid var(--ink);padding-top:8px;font-size:13px;}
+
+  @media print{
+    body{background:#fff;font-size:11.5px;}
+    .page{box-shadow:none;margin:0;max-width:100%;padding:0 14mm;border-radius:0;}
+    .cover{border-radius:0;margin:0 -14mm;padding:60px 14mm;}
+    h2{page-break-after:avoid;}
+    .chart-card,.stat,table,.tl-item,.callout{page-break-inside:avoid;}
+    .no-print{display:none;}
+    a{color:var(--ink);text-decoration:none;}
+  }
+  @media (max-width:680px){
+    .page{padding:28px 20px;}
+    .cover{padding:48px 22px;}
+    .stats,.stats.three{grid-template-columns:repeat(2,1fr);}
+    .two-col{grid-template-columns:1fr;}
+    .toc{columns:1;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="page" style="padding:0;overflow:hidden;">
+  <div class="cover">
+    <div class="eyebrow">Proposal Digital Marketing &middot; Search Engine Optimization</div>
+    <h1>Strategi SEO untuk Platform OTA<br>Ferry Internasional Batam</h1>
+    <p class="sub">Rencana optimasi mesin pencari untuk memenangkan trafik organik rute ferry Batam&ndash;Singapura&ndash;Malaysia sejak hari pertama website diluncurkan.</p>
+    <div class="meta">
+      <div><span>Disusun untuk</span><b>Direksi &mdash; [Nama Perusahaan]</b></div>
+      <div><span>Disusun oleh</span><b>[Nama Anda] &mdash; [Divisi]</b></div>
+      <div><span>Tanggal</span><b>30 Juni 2026</b></div>
+      <div><span>Status Produk</span><b>Pra-Peluncuran (belum deploy)</b></div>
+    </div>
+    <div class="badge-wave"></div>
+  </div>
+</div>
+
+<!-- ============ BODY ============ -->
+<div class="page">
+
+  <div class="callout navy">
+    <strong>Catatan untuk presenter:</strong> Bagian yang ditandai <code>[ ]</code> (mis. nama perusahaan, URL, anggaran) silakan disesuaikan sebelum dipresentasikan. Seluruh angka pasar &amp; statistik SEO bersumber dari data publik yang dapat diverifikasi (lihat catatan kaki tiap grafik &amp; Lampiran Sumber). Angka bertanda <em>"proyeksi/estimasi"</em> adalah target internal, bukan klaim faktual.
+  </div>
+
+  <h3 style="margin-top:8px;">Daftar Isi</h3>
+  <ol class="toc">
+    <li><a href="#ringkasan">Ringkasan Eksekutif</a></li>
+    <li><a href="#latar">Latar Belakang &amp; Konteks</a></li>
+    <li><a href="#pasar">Peluang Pasar (Data Real)</a></li>
+    <li><a href="#mengapa">Mengapa SEO, Mengapa Sekarang</a></li>
+    <li><a href="#masalah">Tantangan &amp; Kondisi Saat Ini</a></li>
+    <li><a href="#kompetitor">Analisis Kompetitor</a></li>
+    <li><a href="#strategi">Strategi &amp; Pilar Pekerjaan</a></li>
+    <li><a href="#keyword">Riset Kata Kunci Prioritas</a></li>
+    <li><a href="#roadmap">Roadmap &amp; Timeline 6 Bulan</a></li>
+    <li><a href="#kpi">KPI, Target &amp; Proyeksi Trafik</a></li>
+    <li><a href="#roi">Proyeksi ROI &amp; Nilai Bisnis</a></li>
+    <li><a href="#anggaran">Estimasi Anggaran &amp; Kebutuhan</a></li>
+    <li><a href="#risiko">Risiko &amp; Mitigasi</a></li>
+    <li><a href="#langkah">Langkah Selanjutnya</a></li>
+    <li><a href="#sumber">Lampiran: Sumber Data</a></li>
+  </ol>
+
+  <!-- 1. RINGKASAN -->
+  <h2 id="ringkasan"><span class="num">1</span>Ringkasan Eksekutif</h2>
+  <p>Perusahaan sedang menyiapkan peluncuran platform <strong>Online Travel Agency (OTA) untuk ferry internasional</strong> yang melayani rute lintas Selat Singapura dari Batam. Pasar ini sangat besar dan sedang pulih kuat: <strong>Pelabuhan Batam melayani 4,2 juta penumpang hanya pada paruh pertama 2024</strong>, dengan 2,3 juta di antaranya melalui terminal internasional.<sup>[1]</sup></p>
+  <p>Namun, calon penumpang mencari tiket dan jadwal ferry <strong>melalui Google</strong> jauh sebelum mereka tahu nama brand kita. Pada industri travel, pencarian organik menyumbang rata-rata <strong>~35% dari total trafik website</strong>, dan sejumlah brand travel besar memperoleh <strong>lebih dari 73% trafiknya dari mesin pencari.</strong><sup>[5][6]</sup> Tanpa fondasi SEO yang dibangun sejak awal, website baru kita berisiko tidak terlihat ketika permintaan justru paling tinggi.</p>
+  <p>Karena website <strong>belum di-deploy</strong>, kita berada di posisi ideal: SEO dapat ditanam sejak fondasi (technical SEO, struktur URL, kecepatan, schema) tanpa biaya perbaikan ulang yang mahal. Proposal ini mengusulkan program SEO terstruktur selama <strong>6 bulan</strong> dengan target wajar dan terukur.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="big">4,2 jt</div><div class="lbl">Penumpang Pelabuhan Batam, semester I-2024<sup>[1]</sup></div></div>
+    <div class="stat"><div class="big">~35%</div><div class="lbl">Rata-rata trafik organik industri travel<sup>[6]</sup></div></div>
+    <div class="stat"><div class="big">39,8%</div><div class="lbl">CTR rata-rata peringkat #1 Google<sup>[7]</sup></div></div>
+    <div class="stat"><div class="big">Rp 0</div><div class="lbl">Biaya per klik trafik organik (vs iklan)</div></div>
+  </div>
+
+  <!-- 2. LATAR -->
+  <h2 id="latar"><span class="num">2</span>Latar Belakang &amp; Konteks</h2>
+  <p>Batam adalah salah satu pintu masuk laut tersibuk di Indonesia. Rute Batam&ndash;Singapura ditempuh hanya <strong>45&ndash;60 menit</strong> dengan ferry cepat, dengan jadwal yang sangat padat &mdash; Pelabuhan Batam Centre saja memiliki <strong>hingga 362 pelayaran per minggu</strong> ke Singapura dan Johor, dan total terdapat sekitar <strong>65 keberangkatan harian</strong> dari Batam menuju Singapura.<sup>[3][4]</sup></p>
+  <p>Perjalanan pelanggan (<em>customer journey</em>) untuk produk ini hampir selalu dimulai dengan pencarian: "<em>ferry Batam Singapura</em>", "<em>jadwal ferry Batam</em>", "<em>harga tiket ferry Batam Centre</em>". Siapa yang muncul di halaman pertama Google saat momen itu, dialah yang memenangkan transaksi. Inilah inti dari mengapa SEO adalah prioritas strategis untuk OTA ferry.</p>
+
+  <!-- 3. PASAR -->
+  <h2 id="pasar"><span class="num">3</span>Peluang Pasar (Data Real)</h2>
+  <p>Volume penumpang menunjukkan ukuran pasar yang dapat kita raih. Berikut komposisi penumpang Pelabuhan Batam pada semester I-2024:</p>
+
+  <div class="chart-card">
+    <div class="ctitle">Penumpang Pelabuhan Batam &mdash; Semester I 2024 (Januari&ndash;Juni)</div>
+    <div class="csub">Total 4,2 juta penumpang. Dalam jutaan penumpang.</div>
+    <!-- Horizontal bar chart -->
+    <svg viewBox="0 0 720 260" role="img" aria-label="Grafik batang penumpang Pelabuhan Batam semester I 2024">
+      <!-- axis -->
+      <line x1="220" y1="20" x2="220" y2="220" stroke="#cbd5e1" stroke-width="1"/>
+      <!-- gridlines -->
+      <g font-size="11" fill="#94a3b8" text-anchor="middle">
+        <line x1="220" y1="20" x2="220" y2="220" stroke="#eef2f6"/>
+        <line x1="345" y1="20" x2="345" y2="220" stroke="#eef2f6"/><text x="345" y="238">0,8</text>
+        <line x1="470" y1="20" x2="470" y2="220" stroke="#eef2f6"/><text x="470" y="238">1,6</text>
+        <line x1="595" y1="20" x2="595" y2="220" stroke="#eef2f6"/><text x="595" y="238">2,4</text>
+        <text x="220" y="238">0</text>
+      </g>
+      <!-- bars: scale 156.25 px per 1 juta (since 2.4jt -> 595-220=375 => 156.25/jt) -->
+      <g font-size="13" fill="#1f2937">
+        <!-- Internasional 2.3 -->
+        <rect x="220" y="35" width="359" height="34" rx="4" fill="#0d9488"/>
+        <text x="210" y="57" text-anchor="end" font-weight="600">Terminal Internasional</text>
+        <text x="589" y="57" fill="#0d9488" font-weight="700">2,3 jt</text>
+        <!-- Domestik 1.9 -->
+        <rect x="220" y="83" width="297" height="34" rx="4" fill="#103b66"/>
+        <text x="210" y="105" text-anchor="end" font-weight="600">Terminal Domestik</text>
+        <text x="527" y="105" fill="#103b66" font-weight="700">1,9 jt</text>
+        <!-- to/from SG 1.75 -->
+        <rect x="220" y="131" width="273" height="34" rx="4" fill="#14b8a6"/>
+        <text x="210" y="153" text-anchor="end">&bull; ke/dari Singapura</text>
+        <text x="503" y="153" fill="#0d9488" font-weight="700">1,75 jt</text>
+        <!-- to/from MY 0.55 -->
+        <rect x="220" y="179" width="86" height="34" rx="4" fill="#f59e0b"/>
+        <text x="210" y="201" text-anchor="end">&bull; ke/dari Malaysia</text>
+        <text x="316" y="201" fill="#b45309" font-weight="700">0,55 jt</text>
+      </g>
+    </svg>
+    <div class="src">Sumber: The Jakarta Post, "4.2 million passengers served at Batam Port in first half" (30 Jul 2024). Konten dirangkum ulang untuk kepatuhan lisensi.</div>
+  </div>
+
+  <p>Pasar ini juga belum sepenuhnya kembali ke puncaknya. Sebelum pandemi, rute Batam&ndash;Singapura melayani <strong>3,9 juta penumpang per tahun</strong>, termasuk 1,9 juta turis asing.<sup>[2]</sup> Dengan capaian 4,2 juta hanya dalam 6 bulan di 2024, tren pemulihan dan pertumbuhan sangat jelas &mdash; momentum yang ideal untuk meluncurkan produk OTA baru.</p>
+
+  <div class="stats three">
+    <div class="stat"><div class="big">3,9 jt/th</div><div class="lbl">Penumpang rute Batam&ndash;SG pra-pandemi<sup>[2]</sup></div></div>
+    <div class="stat"><div class="big">45.000/bln</div><div class="lbl">Pengunjung dari SG via Harbour Bay<sup>[3]</sup></div></div>
+    <div class="stat"><div class="big">+14,6%</div><div class="lbl">Pertumbuhan volume pencarian travel (YoY 2024)<sup>[10]</sup></div></div>
+  </div>
+
+  <!-- 4. MENGAPA SEO -->
+  <h2 id="mengapa"><span class="num">4</span>Mengapa SEO, Mengapa Sekarang</h2>
+  <p>Di industri travel, pencarian organik adalah sumber trafik terbesar dan paling efisien biaya. Perbandingan kontribusi trafik organik:</p>
+
+  <div class="two-col">
+    <div class="chart-card">
+      <div class="ctitle">Kontribusi Trafik Organik di Industri Travel</div>
+      <div class="csub">% dari total trafik website</div>
+      <svg viewBox="0 0 360 230" role="img" aria-label="Grafik batang kontribusi trafik organik">
+        <g font-size="11" fill="#94a3b8">
+          <line x1="50" y1="10" x2="50" y2="180" stroke="#cbd5e1"/>
+          <line x1="50" y1="180" x2="340" y2="180" stroke="#cbd5e1"/>
+        </g>
+        <!-- scale: 180px height for 0-80%. y = 180 - val*2 -->
+        <g font-size="12" text-anchor="middle">
+          <rect x="80" y="118.6" width="58" height="61.4" rx="4" fill="#94a3b8"/>
+          <text x="109" y="110" fill="#64748b" font-weight="700">30,7%</text>
+          <text x="109" y="198" fill="#475569">Rata-rata<tspan x="109" dy="14">semua industri</tspan></text>
+
+          <rect x="160" y="110" width="58" height="70" rx="4" fill="#0d9488"/>
+          <text x="189" y="102" fill="#0d9488" font-weight="700">35%</text>
+          <text x="189" y="198" fill="#475569">Rata-rata<tspan x="189" dy="14">travel</tspan></text>
+
+          <rect x="240" y="34" width="58" height="146" rx="4" fill="#103b66"/>
+          <text x="269" y="26" fill="#103b66" font-weight="700">73%+</text>
+          <text x="269" y="198" fill="#475569">Brand travel<tspan x="269" dy="14">terbaik</tspan></text>
+        </g>
+      </svg>
+      <div class="src">Sumber: Ruler Analytics (30,7%); Promodo Travel Benchmarks (35%); Screaming Frog Travel SEO Report 2024 (73%+).</div>
+    </div>
+
+    <div class="chart-card">
+      <div class="ctitle">CTR Organik Berdasarkan Peringkat Google</div>
+      <div class="csub">% klik yang diterima tiap posisi di hasil pencarian</div>
+      <svg viewBox="0 0 360 230" role="img" aria-label="Grafik batang CTR berdasarkan posisi Google">
+        <line x1="40" y1="10" x2="40" y2="180" stroke="#cbd5e1"/>
+        <line x1="40" y1="180" x2="350" y2="180" stroke="#cbd5e1"/>
+        <!-- scale: 0-40% over 170px => 4.25px per % ; y=180 - val*4.25 -->
+        <g font-size="12" text-anchor="middle">
+          <rect x="60" y="11" width="40" height="169" rx="4" fill="#0d9488"/>
+          <text x="80" y="173" fill="#fff" font-weight="700" font-size="11">39,8</text>
+          <text x="80" y="196" fill="#475569">#1</text>
+
+          <rect x="118" y="100.5" width="40" height="79.5" rx="4" fill="#14b8a6"/>
+          <text x="138" y="92" fill="#0d9488" font-weight="700" font-size="11">18,7</text>
+          <text x="138" y="196" fill="#475569">#2</text>
+
+          <rect x="176" y="136.7" width="40" height="43.3" rx="4" fill="#5eafac"/>
+          <text x="196" y="128" fill="#0d9488" font-weight="700" font-size="11">10,2</text>
+          <text x="196" y="196" fill="#475569">#3</text>
+
+          <rect x="234" y="151.6" width="40" height="28.4" rx="4" fill="#94c5c3"/>
+          <text x="254" y="143" fill="#475569" font-weight="700" font-size="11">6,7</text>
+          <text x="254" y="196" fill="#475569">#4</text>
+
+          <rect x="292" y="161.8" width="40" height="18.2" rx="4" fill="#b9d9d8"/>
+          <text x="312" y="153" fill="#475569" font-weight="700" font-size="11">3,3</text>
+          <text x="312" y="196" fill="#475569">#5</text>
+        </g>
+      </svg>
+      <div class="src">Sumber: First Page Sage, "Google CTR by Ranking Position" (2024/2025).</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Insight kunci:</strong> Peringkat #1 menerima <strong>lebih dari 2x lipat</strong> klik dibanding peringkat #2, dan hampir <strong>4x</strong> peringkat #3. Selisih antara halaman 1 dan halaman 2 Google nyaris berarti "ada vs tidak ada". Inilah mengapa target kita bukan sekadar "masuk Google", tetapi <strong>masuk 3 besar</strong> untuk kata kunci bernilai tinggi.
+  </div>
+
+  <div class="callout warn">
+    <strong>Faktor 2025&ndash;2026 yang perlu diantisipasi:</strong> kemunculan <em>AI Overviews</em> dan <em>zero-click search</em> menekan CTR (CTR posisi teratas dilaporkan turun ~32% pasca peluncuran AI Overview, dan pencarian tanpa klik mencapai 58&ndash;60% di pasar Barat).<sup>[8][9]</sup> Strategi kita merespons ini dengan konten yang menjawab pertanyaan secara langsung, structured data, dan optimasi untuk muncul sebagai sumber kutipan AI.
+  </div>
+
+  <!-- 5. MASALAH -->
+  <h2 id="masalah"><span class="num">5</span>Tantangan &amp; Kondisi Saat Ini</h2>
+  <table>
+    <tr><th style="width:34%">Kondisi</th><th>Implikasi &amp; Peluang</th></tr>
+    <tr><td>Website <strong>belum di-deploy</strong></td><td>Belum ada otoritas domain, backlink, maupun indeks Google. <em>Peluang:</em> SEO dapat dirancang sejak fondasi tanpa biaya migrasi/perbaikan ulang.</td></tr>
+    <tr><td>Domain baru</td><td>Membutuhkan waktu membangun kepercayaan mesin pencari (umumnya 3&ndash;6 bulan untuk hasil signifikan). Perlu dimulai sekarang.</td></tr>
+    <tr><td>Kompetitor mapan (Batam Fast, Sindo, Majestic)</td><td>Sudah memiliki otoritas &amp; ranking. <em>Peluang:</em> banyak dari mereka lemah di konten informatif lokal berbahasa Indonesia &amp; long-tail.</td></tr>
+    <tr><td>Pasar dua bahasa (ID &amp; EN)</td><td>Wisatawan Singapura/asing mencari dalam bahasa Inggris; pasar domestik dalam bahasa Indonesia. Perlu strategi konten bilingual + hreflang.</td></tr>
+    <tr><td>Produk transaksional (tiket)</td><td>Membutuhkan technical SEO kuat: kecepatan, mobile-first, schema produk/harga/jadwal.</td></tr>
+  </table>
+
+  <!-- 6. KOMPETITOR -->
+  <h2 id="kompetitor"><span class="num">6</span>Analisis Kompetitor</h2>
+  <p>Pemain utama di rute ini sudah memiliki kehadiran online yang kuat. Sebagai gambaran, situs <strong>batamfast.com</strong> diperkirakan menerima sekitar <strong>25.000 kunjungan dari Singapura saja</strong>, dengan <strong>76,9%</strong> trafiknya berasal dari pencarian.<sup>[11]</sup> Ini membuktikan bahwa SEO adalah kanal akuisisi utama di niche ini &mdash; dan menjadi peluang yang dapat kita rebut.</p>
+  <table>
+    <tr><th>Kompetitor</th><th>Kekuatan</th><th>Celah yang Bisa Kita Rebut</th></tr>
+    <tr><td>Batam Fast</td><td>Brand kuat, trafik organik dominan, banyak rute</td><td>Konten informatif/blog lemah; pengalaman booking mobile bisa diungguli</td></tr>
+    <tr><td>Sindo Ferry</td><td>Operator besar, jaringan rute luas</td><td>SEO konten long-tail &amp; jadwal terstruktur (schema) belum optimal</td></tr>
+    <tr><td>Majestic / Horizon</td><td>Kehadiran di agregator</td><td>Otoritas konten lokal berbahasa Indonesia rendah</td></tr>
+    <tr><td>Agregator (DirectFerries, Ferryhopper)</td><td>Otoritas domain tinggi, multi-bahasa</td><td>Kurang spesifik/lokal Batam; tidak fokus harga &amp; promo lokal</td></tr>
+  </table>
+  <p><strong>Posisi strategis kita:</strong> menjadi otoritas <em>lokal Batam</em> nomor satu &mdash; konten terlengkap soal jadwal, harga, terminal, tips lintas batas, dan booking yang paling mudah, dalam dua bahasa.</p>
+
+  <!-- 7. STRATEGI -->
+  <h2 id="strategi"><span class="num">7</span>Strategi &amp; Pilar Pekerjaan</h2>
+  <h3>Pilar 1 &mdash; Technical SEO (fondasi sebelum &amp; saat deploy)</h3>
+  <ul>
+    <li>Struktur URL bersih &amp; logis (mis. <code>/ferry/batam-centre-harbourfront</code>)</li>
+    <li>Mobile-first, Core Web Vitals (LCP, INP, CLS) hijau sejak rilis</li>
+    <li>Schema markup: <code>Product</code>, <code>Offer</code>, <code>Trip/Ferry schedule</code>, <code>FAQPage</code>, <code>BreadcrumbList</code></li>
+    <li>Sitemap XML, robots.txt, canonical, hreflang (id/en), HTTPS, rendering SSR/SSG agar mudah di-crawl</li>
+    <li>Setup Google Search Console, Bing Webmaster, Google Analytics 4, dan Google Business Profile</li>
+  </ul>
+  <h3>Pilar 2 &mdash; On-Page &amp; Arsitektur Konten</h3>
+  <ul>
+    <li>Landing page per rute &amp; per terminal (Batam Centre, Harbour Bay, Sekupang, Nongsapura)</li>
+    <li>Halaman "jadwal" &amp; "harga tiket" yang selalu terbarui (konten yang paling dicari)</li>
+    <li>Optimasi title, meta description, heading, internal linking</li>
+  </ul>
+  <h3>Pilar 3 &mdash; Konten &amp; Topical Authority</h3>
+  <ul>
+    <li>Blog/panduan: cara naik ferry, imigrasi, tips bagasi, wisata Batam, perbandingan terminal</li>
+    <li>Konten bilingual (ID untuk domestik, EN untuk wisatawan SG/asing)</li>
+    <li>FAQ menyasar pertanyaan bervolume tinggi &amp; pencarian suara</li>
+  </ul>
+  <h3>Pilar 4 &mdash; Off-Page &amp; Local SEO</h3>
+  <ul>
+    <li>Backlink dari portal travel, media lokal Kepri, blog wisata, direktori</li>
+    <li>Google Business Profile + ulasan; konsistensi NAP</li>
+    <li>Kemitraan konten dengan hotel/agen wisata Batam</li>
+  </ul>
+
+  <!-- 8. KEYWORD -->
+  <h2 id="keyword"><span class="num">8</span>Riset Kata Kunci Prioritas</h2>
+  <p>Daftar kata kunci target awal beserta <em>estimasi</em> volume pencarian bulanan. Volume bersifat estimasi dan akan divalidasi dengan tools (Google Keyword Planner, Ahrefs) pada fase audit.</p>
+
+  <div class="chart-card">
+    <div class="ctitle">Estimasi Volume Pencarian Bulanan &mdash; Kata Kunci Prioritas</div>
+    <div class="csub">Estimasi (bukan angka final) &middot; pencarian/bulan, gabungan ID + EN</div>
+    <svg viewBox="0 0 720 300" role="img" aria-label="Grafik estimasi volume pencarian kata kunci">
+      <line x1="250" y1="10" x2="250" y2="276" stroke="#cbd5e1"/>
+      <!-- max ~40000 -> width 430px (250..680). scale 0.01075 px per search -->
+      <g font-size="11" fill="#94a3b8" text-anchor="middle">
+        <text x="250" y="293">0</text>
+        <line x1="357.5" y1="10" x2="357.5" y2="276" stroke="#eef2f6"/><text x="357.5" y="293">10rb</text>
+        <line x1="465" y1="10" x2="465" y2="276" stroke="#eef2f6"/><text x="465" y="293">20rb</text>
+        <line x1="572.5" y1="10" x2="572.5" y2="276" stroke="#eef2f6"/><text x="572.5" y="293">30rb</text>
+        <line x1="680" y1="10" x2="680" y2="276" stroke="#eef2f6"/><text x="680" y="293">40rb</text>
+      </g>
+      <g font-size="12.5" fill="#1f2937">
+        <!-- rows -->
+        <text x="240" y="35" text-anchor="end">ferry batam singapore (EN)</text>
+        <rect x="250" y="22" width="408" height="20" rx="3" fill="#103b66"/><text x="664" y="37" font-size="11" fill="#103b66" font-weight="700">~38rb</text>
+
+        <text x="240" y="65" text-anchor="end">tiket ferry batam</text>
+        <rect x="250" y="52" width="290" height="20" rx="3" fill="#0d9488"/><text x="546" y="67" font-size="11" fill="#0d9488" font-weight="700">~27rb</text>
+
+        <text x="240" y="95" text-anchor="end">jadwal ferry batam singapura</text>
+        <rect x="250" y="82" width="215" height="20" rx="3" fill="#0d9488"/><text x="471" y="97" font-size="11" fill="#0d9488" font-weight="700">~20rb</text>
+
+        <text x="240" y="125" text-anchor="end">batam to singapore ferry (EN)</text>
+        <rect x="250" y="112" width="194" height="20" rx="3" fill="#14b8a6"/><text x="450" y="127" font-size="11" fill="#0d9488" font-weight="700">~18rb</text>
+
+        <text x="240" y="155" text-anchor="end">harga tiket ferry batam</text>
+        <rect x="250" y="142" width="129" height="20" rx="3" fill="#14b8a6"/><text x="385" y="157" font-size="11" fill="#0d9488" font-weight="700">~12rb</text>
+
+        <text x="240" y="185" text-anchor="end">ferry batam centre</text>
+        <rect x="250" y="172" width="97" height="20" rx="3" fill="#5eafac"/><text x="353" y="187" font-size="11" fill="#0d9488" font-weight="700">~9rb</text>
+
+        <text x="240" y="215" text-anchor="end">ferry batam bintan</text>
+        <rect x="250" y="202" width="65" height="20" rx="3" fill="#5eafac"/><text x="321" y="217" font-size="11" fill="#0d9488" font-weight="700">~6rb</text>
+
+        <text x="240" y="245" text-anchor="end">booking ferry batam online</text>
+        <rect x="250" y="232" width="43" height="20" rx="3" fill="#94c5c3"/><text x="299" y="247" font-size="11" fill="#0d9488" font-weight="700">~4rb</text>
+      </g>
+    </svg>
+    <div class="src">Estimasi internal berdasarkan tren &amp; tema pencarian publik; angka final akan divalidasi dengan Google Keyword Planner / Ahrefs pada fase audit. Bukan angka resmi.</div>
+  </div>
+
+  <table>
+    <tr><th>Klaster Kata Kunci</th><th>Maksud Pencarian</th><th>Prioritas</th><th>Tingkat Kesulitan</th></tr>
+    <tr><td>Tiket &amp; harga ferry</td><td>Transaksional (siap beli)</td><td><span class="pill hi">Sangat tinggi</span></td><td>Sedang&ndash;Tinggi</td></tr>
+    <tr><td>Jadwal ferry per rute</td><td>Transaksional/informasi</td><td><span class="pill hi">Sangat tinggi</span></td><td>Sedang</td></tr>
+    <tr><td>Per terminal (Batam Centre, Harbour Bay, dll.)</td><td>Navigasional/lokal</td><td><span class="pill mid">Tinggi</span></td><td>Rendah&ndash;Sedang</td></tr>
+    <tr><td>Panduan &amp; tips perjalanan</td><td>Informasi (top funnel)</td><td><span class="pill mid">Menengah</span></td><td>Rendah</td></tr>
+    <tr><td>Rute sekunder (Bintan, Tanjung Pinang, Johor)</td><td>Transaksional</td><td><span class="pill mid">Menengah</span></td><td>Rendah</td></tr>
+  </table>
+
+  <!-- 9. ROADMAP -->
+  <h2 id="roadmap"><span class="num">9</span>Roadmap &amp; Timeline 6 Bulan</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="ph">Bulan 1 &mdash; Fondasi</div>
+      <h4>Audit, Riset &amp; Technical Setup Pra-Deploy</h4>
+      <p>Riset kata kunci final, analisis kompetitor, arsitektur situs &amp; URL, checklist technical SEO, schema, setup GSC/GA4. Tujuan: website lahir dalam kondisi "SEO-ready".</p>
+    </div>
+    <div class="tl-item">
+      <div class="ph">Bulan 2 &mdash; Peluncuran</div>
+      <h4>Deploy + On-Page Optimization</h4>
+      <p>Optimasi seluruh landing page rute/terminal, meta tags, internal linking, submit sitemap, indexing, validasi Core Web Vitals.</p>
+    </div>
+    <div class="tl-item">
+      <div class="ph">Bulan 2&ndash;4 &mdash; Konten</div>
+      <h4>Produksi Konten &amp; Topical Authority</h4>
+      <p>Penerbitan panduan, FAQ, halaman jadwal/harga bilingual secara konsisten (mis. 6&ndash;8 konten/bulan). Mulai membangun otoritas topik.</p>
+    </div>
+    <div class="tl-item">
+      <div class="ph">Bulan 3&ndash;6 &mdash; Otoritas</div>
+      <h4>Link Building &amp; Local SEO</h4>
+      <p>Outreach backlink, Google Business Profile, kemitraan konten, manajemen ulasan, digital PR media lokal Kepri.</p>
+    </div>
+    <div class="tl-item">
+      <div class="ph">Berkelanjutan</div>
+      <h4>Monitoring, Iterasi &amp; Pelaporan</h4>
+      <p>Laporan bulanan (ranking, trafik, konversi), audit berkala, optimasi berbasis data dari Search Console &amp; GA4.</p>
+    </div>
+  </div>
+
+  <!-- 10. KPI -->
+  <h2 id="kpi"><span class="num">10</span>KPI, Target &amp; Proyeksi Trafik</h2>
+  <p>Karena ini domain baru, hasil SEO bersifat bertahap. Berikut <strong>proyeksi/target</strong> trafik organik bulanan (sesi/bulan). Angka ini adalah target internal yang konservatif, bukan jaminan.</p>
+
+  <div class="chart-card">
+    <div class="ctitle">Proyeksi Trafik Organik Bulanan (Target)</div>
+    <div class="csub">Sesi organik per bulan &middot; domain baru, kurva pertumbuhan tipikal SEO</div>
+    <svg viewBox="0 0 720 300" role="img" aria-label="Grafik garis proyeksi trafik organik">
+      <!-- axes -->
+      <line x1="60" y1="20" x2="60" y2="250" stroke="#cbd5e1"/>
+      <line x1="60" y1="250" x2="690" y2="250" stroke="#cbd5e1"/>
+      <!-- y labels: 0..18000 over 230px -->
+      <g font-size="11" fill="#94a3b8" text-anchor="end">
+        <text x="52" y="254">0</text>
+        <line x1="60" y1="192.5" x2="690" y2="192.5" stroke="#f1f5f9"/><text x="52" y="196">4.500</text>
+        <line x1="60" y1="135" x2="690" y2="135" stroke="#f1f5f9"/><text x="52" y="139">9.000</text>
+        <line x1="60" y1="77.5" x2="690" y2="77.5" stroke="#f1f5f9"/><text x="52" y="81">13.500</text>
+        <line x1="60" y1="20" x2="690" y2="20" stroke="#f1f5f9"/><text x="52" y="24">18.000</text>
+      </g>
+      <!-- x labels (months 1-6) at x = 60 + i*105 ; values: 150,600,1800,4200,8000,14000 -->
+      <!-- y = 250 - val/18000*230 -->
+      <!-- M1=150->248.1 M2=600->242.3 M3=1800->227.0 M4=4200->196.3 M5=8000->147.8 M6=14000->71.1 -->
+      <polyline fill="none" stroke="#0d9488" stroke-width="3"
+        points="60,248.1 186,242.3 312,227 438,196.3 564,147.8 690,71.1"/>
+      <!-- area -->
+      <polygon fill="#0d948822" points="60,248.1 186,242.3 312,227 438,196.3 564,147.8 690,71.1 690,250 60,250"/>
+      <g font-size="11" fill="#0d9488" text-anchor="middle" font-weight="700">
+        <circle cx="60" cy="248.1" r="4" fill="#0d9488"/><text x="60" y="270" fill="#475569">Bln 1</text>
+        <circle cx="186" cy="242.3" r="4" fill="#0d9488"/><text x="186" y="270" fill="#475569">Bln 2</text><text x="186" y="236">600</text>
+        <circle cx="312" cy="227" r="4" fill="#0d9488"/><text x="312" y="270" fill="#475569">Bln 3</text><text x="312" y="220">1.800</text>
+        <circle cx="438" cy="196.3" r="4" fill="#0d9488"/><text x="438" y="270" fill="#475569">Bln 4</text><text x="438" y="189">4.200</text>
+        <circle cx="564" cy="147.8" r="4" fill="#0d9488"/><text x="564" y="270" fill="#475569">Bln 5</text><text x="564" y="140">8.000</text>
+        <circle cx="690" cy="71.1" r="5" fill="#f59e0b"/><text x="678" y="64" fill="#b45309">14.000</text><text x="690" y="270" fill="#475569">Bln 6</text>
+      </g>
+    </svg>
+    <div class="src">Proyeksi/target internal (ilustratif) berdasarkan kurva pertumbuhan tipikal SEO domain baru. Bukan jaminan hasil; akan dikalibrasi ulang setelah baseline tersedia.</div>
+  </div>
+
+  <table>
+    <tr><th>Metrik (KPI)</th><th class="num">Target Bln 3</th><th class="num">Target Bln 6</th></tr>
+    <tr><td>Kata kunci masuk halaman 1 (top 10)</td><td class="num">10&ndash;15</td><td class="num">35&ndash;50</td></tr>
+    <tr><td>Kata kunci di 3 besar (top 3)</td><td class="num">2&ndash;4</td><td class="num">10&ndash;15</td></tr>
+    <tr><td>Sesi organik / bulan</td><td class="num">~1.800</td><td class="num">~14.000</td></tr>
+    <tr><td>Halaman terindeks</td><td class="num">40+</td><td class="num">120+</td></tr>
+    <tr><td>Domain Rating / Authority</td><td class="num">naik bertahap</td><td class="num">fondasi backlink solid</td></tr>
+    <tr><td>Konversi (booking/lead) dari organik</td><td class="num">mulai terukur</td><td class="num">kanal akuisisi aktif</td></tr>
+  </table>
+
+  <!-- 11. ROI -->
+  <h2 id="roi"><span class="num">11</span>Proyeksi ROI &amp; Nilai Bisnis</h2>
+  <p>Nilai utama SEO adalah <strong>trafik tanpa biaya per klik</strong>. Sebagai ilustrasi sederhana: jika pada bulan ke-6 kita meraih ~14.000 sesi organik/bulan dengan asumsi tingkat konversi 2% dan margin rata-rata Rp 25.000 per tiket:</p>
+  <table>
+    <tr><th>Asumsi (ilustratif)</th><th class="num">Nilai</th></tr>
+    <tr><td>Sesi organik / bulan (target Bln 6)</td><td class="num">14.000</td></tr>
+    <tr><td>Tingkat konversi (asumsi konservatif)</td><td class="num">2%</td></tr>
+    <tr><td>Transaksi / bulan dari organik</td><td class="num">280</td></tr>
+    <tr><td>Margin rata-rata per tiket (asumsi)</td><td class="num">Rp 25.000</td></tr>
+    <tr><td><strong>Estimasi kontribusi margin / bulan</strong></td><td class="num"><strong>Rp 7.000.000</strong></td></tr>
+    <tr><td>Setara biaya iklan dihemat (jika via Ads, asumsi CPC Rp 3.000)</td><td class="num">~Rp 42.000.000 / bln</td></tr>
+  </table>
+  <div class="callout">
+    <strong>Inti ROI:</strong> berbeda dengan iklan yang berhenti menghasilkan saat anggaran habis, aset SEO (peringkat &amp; konten) terus mendatangkan trafik secara <em>compounding</em>. Angka di atas hanyalah ilustrasi &mdash; silakan ganti asumsi konversi &amp; margin dengan data internal perusahaan.
+  </div>
+
+  <!-- 12. ANGGARAN -->
+  <h2 id="anggaran"><span class="num">12</span>Estimasi Anggaran &amp; Kebutuhan</h2>
+  <p>Estimasi kebutuhan untuk program 6 bulan (silakan sesuaikan dengan kebijakan &amp; sumber daya internal):</p>
+  <table>
+    <tr><th>Komponen</th><th>Keterangan</th><th class="num">Estimasi / bln</th></tr>
+    <tr><td>Tools SEO</td><td>Ahrefs/Semrush, plugin teknis, rank tracker</td><td class="num">Rp 2&ndash;4 jt</td></tr>
+    <tr><td>Produksi konten</td><td>6&ndash;8 artikel/landing page bilingual</td><td class="num">Rp 4&ndash;8 jt</td></tr>
+    <tr><td>Link building / Digital PR</td><td>Outreach, guest post, direktori</td><td class="num">Rp 3&ndash;6 jt</td></tr>
+    <tr><td>SDM / spesialis SEO</td><td>In-house (sudah ada) atau konsultan</td><td class="num">sesuai struktur</td></tr>
+    <tr><td><strong>Subtotal operasional</strong></td><td>di luar gaji tim internal</td><td class="num"><strong>Rp 9&ndash;18 jt</strong></td></tr>
+  </table>
+  <p class="muted">Catatan: karena dikerjakan <em>in-house</em>, sebagian besar biaya adalah waktu tim yang sudah ada + langganan tools. Opsi agensi eksternal dapat disiapkan sebagai perbandingan bila diperlukan.</p>
+
+  <!-- 13. RISIKO -->
+  <h2 id="risiko"><span class="num">13</span>Risiko &amp; Mitigasi</h2>
+  <table>
+    <tr><th>Risiko</th><th>Mitigasi</th></tr>
+    <tr><td>Hasil SEO lambat (3&ndash;6 bln)</td><td>Kombinasikan dengan Google Ads jangka pendek selama SEO matang; fokus quick-win long-tail dulu.</td></tr>
+    <tr><td>Perubahan algoritma Google / AI Overviews</td><td>Konten berkualitas, E-E-A-T, structured data; diversifikasi kanal.</td></tr>
+    <tr><td>Kompetitor mapan</td><td>Fokus niche lokal Batam &amp; long-tail yang belum digarap; keunggulan UX booking.</td></tr>
+    <tr><td>Technical debt jika SEO diabaikan saat deploy</td><td>Justru alasan memulai sekarang &mdash; tanam SEO sejak fondasi.</td></tr>
+  </table>
+
+  <!-- 14. LANGKAH -->
+  <h2 id="langkah"><span class="num">14</span>Langkah Selanjutnya</h2>
+  <ol>
+    <li>Persetujuan direksi atas arah &amp; cakupan program SEO 6 bulan ini.</li>
+    <li>Penetapan PIC &amp; alokasi sumber daya (tim + tools).</li>
+    <li><strong>Audit technical SEO pra-deploy</strong> sebelum website dirilis (paling kritikal &mdash; mencegah perbaikan ulang yang mahal).</li>
+    <li>Finalisasi riset kata kunci &amp; arsitektur konten.</li>
+    <li>Penetapan baseline KPI &amp; jadwal pelaporan bulanan.</li>
+  </ol>
+  <div class="callout navy">
+    <strong>Rekomendasi:</strong> mengingat website belum di-deploy, momentum terbaik untuk memulai adalah <strong>sekarang</strong>, agar SEO tertanam sejak fondasi dan kita mulai membangun otoritas domain lebih awal dari kompetitor di celah pasar yang ada.
+  </div>
+
+  <div class="sign">
+    <div class="box">Diajukan oleh,<br><br><br><strong>[Nama Anda]</strong><br>[Jabatan / Divisi]</div>
+    <div class="box">Disetujui oleh,<br><br><br><strong>[Nama Direktur]</strong><br>Direktur</div>
+  </div>
+
+  <!-- 15. SUMBER -->
+  <h2 id="sumber"><span class="num">15</span>Lampiran: Sumber Data</h2>
+  <ol style="font-size:13px;color:var(--muted);">
+    <li>The Jakarta Post — "4.2 million passengers served at Batam Port in first half" (30 Jul 2024).</li>
+    <li>The Straits Times — laporan layanan ferry Batam&ndash;Singapura pra-pandemi (Jun 2024).</li>
+    <li>Wikipedia — Batam Harbour Bay Ferry Terminal; Direct Ferries — Batam Centre ferry.</li>
+    <li>traveling.com — jadwal &amp; frekuensi keberangkatan Batam&ndash;Singapura.</li>
+    <li>Screaming Frog — Travel SEO Industry Report 2024.</li>
+    <li>Promodo — Travel Industry Benchmarks; Ruler Analytics — Travel Marketing Statistics.</li>
+    <li>First Page Sage — Google Click-Through Rates by Ranking Position (2024/2025).</li>
+    <li>Search Engine Journal — dampak AI Overview terhadap CTR (2025).</li>
+    <li>Remarkable Global — tren zero-click search di travel (2025).</li>
+    <li>Adido Digital — 2024 Travel Search Stats Review.</li>
+    <li>Ahrefs — estimasi trafik &amp; sumber trafik batamfast.com.</li>
+  </ol>
+  <p class="src">Seluruh konten dari sumber publik telah dirangkum/diparafrasakan ulang untuk kepatuhan lisensi. Statistik dapat berubah; verifikasi ulang sebelum publikasi eksternal disarankan.</p>
+
+  <div class="footer">
+    Dokumen ini bersifat internal &amp; rahasia &middot; [Nama Perusahaan] &middot; 30 Juni 2026<br>
+    <span class="no-print">Tip: buka file ini di browser, lalu tekan <strong>Ctrl/Cmd + P</strong> &rarr; "Save as PDF" untuk versi presentasi.</span>
+  </div>
+
+</div>
+</body>
+</html>
