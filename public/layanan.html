@@ -6,9 +6,9 @@
 <meta name="description" content="Otomasi WhatsApp, Telegram, Instagram, dan workflow bisnismu dengan AI. Dibuat hangat & lucu, dirancang dengan teliti."/>
 <link rel="canonical" href="https://www.anshelstore.biz.id/layanan"/>
 <meta name="theme-color" content="#6c5ce7"/>
-<link href="/css/styles.css?v=4.0" rel="stylesheet"/>
-<link href="/css/theme.css?v=4.0" rel="stylesheet"/>
-<script src="/js/theme.js?v=4.0"></script>
+<link href="/css/styles.css?v=5.0" rel="stylesheet"/>
+<link href="/css/theme.css?v=5.0" rel="stylesheet"/>
+<script src="/js/theme.js?v=5.0"></script>
 </head>
 <body data-page="layanan" class="min-h-screen">
 
@@ -17,10 +17,10 @@
 <main class="container" style="padding-top:var(--sp-lg);padding-bottom:var(--sp-xl);display:flex;flex-direction:column;gap:var(--sp-lg)">
 
   <!-- Banner Header -->
-  <section class="relative overflow-hidden" style="border-radius:var(--radius-lg);background:var(--grad-primary);padding:0">
+  <section class="relative overflow-hidden" style="border-radius:var(--radius-lg);background:var(--primary);padding:0">
     <div style="display:flex;flex-wrap:wrap;align-items:center;padding:var(--sp-xl);gap:var(--sp-lg);position:relative;z-index:1">
       <div class="flex-1" style="display:flex;flex-direction:column;gap:var(--sp-sm);min-width:280px">
-        <div class="badge badge-ai" style="width:fit-content;background:rgba(255,255,255,.2);color:#fff;border:none"><span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span> Otomasi Bisnismu</div>
+        <div class="badge badge-processing" style="width:fit-content;background:rgba(255,255,255,.2);color:#fff;border:none"><span class="material-symbols-outlined" style="font-size:18px">bolt</span> Otomasi Bisnismu</div>
         <h1 style="color:#fff">Layanan AI Automation</h1>
         <p style="color:rgba(255,255,255,.85);max-width:480px;margin-top:8px">
           Solusi otomasi WhatsApp, Telegram, Instagram, dan workflow — dirancang dengan teliti, dibungkus hangat. Pilih layanan, langsung konsultasi.
@@ -75,13 +75,13 @@
 <div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
-<script src="/js/widget.js?v=4.0"></script>
-<script src="/js/site.js?v=4.0"></script>
+<script src="/js/widget.js?v=5.0"></script>
+<script src="/js/site.js?v=5.0"></script>
 <script>
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
   const COLORS = [
-    { chip: "badge badge-ai" },
+    { chip: "badge badge-processing" },
     { chip: "badge badge-processing" },
     { chip: "badge badge-paid" }
   ];
@@ -100,7 +100,7 @@
       const c = COLORS[i % COLORS.length];
       const visual = s.image
         ? `<img style="width:100%;height:100%;object-fit:cover;transition:transform .5s" src="${esc(s.image)}" alt="${esc(s.title)}"/>`
-        : `<span class="material-symbols-outlined text-primary" style="font-size:64px;transition:transform .5s">${esc(s.icon || "auto_awesome")}</span>`;
+        : `<span class="material-symbols-outlined text-primary" style="font-size:64px;transition:transform .5s">${esc(s.icon || "bolt")}</span>`;
       const waText = encodeURIComponent("Halo Anshel Store, saya tertarik layanan: " + (s.title || ""));
       const cta = wa ? `https://wa.me/${wa}?text=${waText}` : "/tentang";
       return `<article class="card hover-lift" style="display:flex;flex-direction:column;gap:var(--sp-md)">
@@ -121,3 +121,5 @@
   if (typeof initChatWidget === "function") initChatWidget();
 </script>
 </body></html>
+
+

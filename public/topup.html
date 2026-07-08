@@ -6,9 +6,9 @@
 <title>Top Up Game — Anshel Store</title>
 <meta name="description" content="Top up diamond Mobile Legends, Free Fire, Genshin, Valorant, PUBG. Instan, murah, aman."/>
 <meta name="theme-color" content="#6c5ce7"/>
-<link href="/css/styles.css?v=4.0" rel="stylesheet"/>
-<link href="/css/theme.css?v=4.0" rel="stylesheet"/>
-<script src="/js/theme.js?v=4.0"></script>
+<link href="/css/styles.css?v=5.0" rel="stylesheet"/>
+<link href="/css/theme.css?v=5.0" rel="stylesheet"/>
+<script src="/js/theme.js?v=5.0"></script>
 </head>
 <body data-page="topup" class="min-h-screen">
 
@@ -24,7 +24,7 @@
     <!-- Overlay -->
     <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(0,0,0,.55),rgba(0,0,0,.25),transparent)"></div>
     <div class="relative" style="z-index:10;width:100%;padding:var(--sp-lg) var(--sp-xl);display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-md);max-width:640px">
-      <div class="badge badge-ai"><span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span> Penawaran Spesial</div>
+      <div class="badge badge-processing"><span class="material-symbols-outlined" style="font-size:18px">bolt</span> Penawaran Spesial</div>
       <h1 style="color:#fff;line-height:1.15">Top Up <span style="color:var(--accent-light)">Game Favoritmu</span><br/>cepat, aman, &amp; ramah!</h1>
       <p style="color:rgba(255,255,255,.85);max-width:420px">Pilih game di bawah, masukkan ID, bayar — diamond meluncur dalam hitungan menit. ✨</p>
       <button type="button" onclick="document.getElementById('daftarGame').scrollIntoView({behavior:'smooth'})" class="btn btn-primary btn-lg" style="margin-top:4px">
@@ -74,7 +74,7 @@
         <h1 style="font-size:1.1rem;margin:0">Top Up Checkout</h1>
         <p class="text-muted" style="font-size:.75rem;margin:0">Selesaikan pesananmu dengan aman 💖</p>
       </div>
-      <span class="badge badge-ai shrink-0" style="display:none">
+      <span class="badge badge-processing shrink-0" style="display:none">
         <span class="material-symbols-outlined" style="font-size:16px">lock</span> Aman &amp; Terenkripsi
       </span>
     </div>
@@ -89,7 +89,7 @@
       <div style="display:flex;align-items:center;gap:var(--sp-md)">
         <div id="ghCover" style="width:80px;height:80px;border-radius:var(--radius-sm);background:var(--surface-alt);overflow:hidden;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0"></div>
         <div class="flex-1" style="min-width:0">
-          <span class="badge badge-ai" style="font-size:.65rem;margin-bottom:4px">Game</span>
+          <span class="badge badge-processing" style="font-size:.65rem;margin-bottom:4px">Game</span>
           <h3 id="ghName" class="truncate" style="line-height:1.25"></h3>
           <p id="ghPub" class="text-muted" style="font-size:.85rem"></p>
         </div>
@@ -180,7 +180,7 @@
         <span id="grandTotal" class="mono text-primary" style="font-size:1.5rem;font-weight:700">Rp0</span>
       </div>
       <button id="submitOrder" class="btn btn-primary btn-lg" style="min-width:180px;justify-content:center" disabled>
-        Beli Sekarang <span class="material-symbols-outlined" style="font-size:20px">auto_awesome</span>
+        Beli Sekarang <span class="material-symbols-outlined" style="font-size:20px">bolt</span>
       </button>
     </div>
   </div>
@@ -188,8 +188,10 @@
 
 <div id="siteFooter"></div>
 <div id="chatWidget"></div>
-<script src="/js/widget.js?v=4.0"></script>
-<script src="/js/site.js?v=4.0"></script>
-<script src="/js/topup.js?v=4.0"></script>
+<script src="/js/widget.js?v=5.0"></script>
+<script src="/js/site.js?v=5.0"></script>
+<script src="/js/topup.js?v=5.0"></script>
 </body>
 </html>
+
+

@@ -46,6 +46,15 @@
   --red: #ef4444;
   --red-bg: #fee2e2;
 
+  /* Layout & Spacing (added to fix missing vars in HTML) */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --container-max: 1200px;
+  --text-soft: var(--text-secondary);
+
   /* Effects (Flat Professional) */
   --radius: 8px;
   --radius-lg: 12px;
