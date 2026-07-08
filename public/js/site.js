@@ -108,7 +108,9 @@
     if (set.logo) {
       let icon = document.querySelector("link[rel='icon']");
       if (!icon) { icon = document.createElement("link"); icon.rel = "icon"; document.head.appendChild(icon); }
-      icon.href = set.logo;
+      // Gunakan trik SVG untuk memotong (crop) bagian bawah logo agar teksnya hilang dan lambang A menjadi besar
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><image href="${set.logo}" width="100" height="150" x="0" y="-10" preserveAspectRatio="xMidYMin slice"/></svg>`;
+      icon.href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 
       const b = document.getElementById("siteBrand");
       if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 md:h-24 w-auto -my-3 md:-my-6 transition-transform"/>`;
