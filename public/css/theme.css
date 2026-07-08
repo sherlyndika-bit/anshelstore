@@ -157,10 +157,6 @@ body.dash { background: #f1f5f9; animation: none; }
 .bento-card:hover { transform: translateY(-3px) scale(1.005); box-shadow: 0 16px 36px -6px rgba(225, 29, 72, 0.08); }
 
 /* ==== Global Page Transition ==== */
-body {
-  opacity: 0; /* Hidden by default until JS reveals it */
-  background-color: #0f172a; /* Dark slate during load to prevent flash */
-}
 #global-preloader {
   position: fixed;
   inset: 0;
