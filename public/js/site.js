@@ -59,25 +59,24 @@
   const footMount = document.getElementById("siteFooter");
   if (footMount) {
     footMount.innerHTML = `
-    <footer class="bg-white border-t border-slate-200 w-full py-10 px-4 md:px-8 mt-12">
-      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div class="md:col-span-1 flex flex-col gap-4">
-          <a href="/" id="footBrand" class="flex items-center gap-2">
-            <span class="w-8 h-8 rounded bg-primary text-white grid place-items-center font-bold text-lg">A</span>
-            <span class="text-xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>
+    <footer class="bg-white border-t border-slate-200 w-full py-8 px-4 md:px-8 mt-8">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="md:col-span-1 flex flex-col gap-3">
+          <a href="/" id="footBrand" class="flex items-center">
+            <span class="w-12 h-12 rounded bg-primary text-white grid place-items-center font-bold text-2xl">A</span>
           </a>
           <p class="text-slate-500 text-xs leading-relaxed">Platform E-Commerce Top Up Game dan Layanan Digital terpercaya, murah, dan instan di Indonesia.</p>
-          <div id="footSocial" class="flex gap-2 mt-2"></div>
+          <div id="footSocial" class="flex gap-2 mt-1"></div>
         </div>
         <div>
-          <h4 class="text-slate-800 font-bold mb-4 text-sm">Navigasi Utama</h4>
-          <div class="flex flex-col gap-2.5">
+          <h4 class="text-slate-800 font-bold mb-3 text-sm">Navigasi Utama</h4>
+          <div class="flex flex-col gap-2">
             ${NAV.map((n) => `<a class="text-slate-500 hover:text-primary transition-colors text-sm" href="${n.href}">${n.label}</a>`).join("")}
           </div>
         </div>
         <div>
-          <h4 class="text-slate-800 font-bold mb-4 text-sm">Bantuan & Legal</h4>
-          <div class="flex flex-col gap-2.5">
+          <h4 class="text-slate-800 font-bold mb-3 text-sm">Bantuan & Legal</h4>
+          <div class="flex flex-col gap-2">
             <a href="/syarat-dan-ketentuan" class="text-slate-500 hover:text-primary transition-colors text-sm">Syarat dan Ketentuan</a>
             <a href="/kebijakan-privasi" class="text-slate-500 hover:text-primary transition-colors text-sm">Kebijakan Privasi</a>
             <a href="/kebijakan-pengembalian" class="text-slate-500 hover:text-primary transition-colors text-sm">Kebijakan Pengembalian Dana</a>
@@ -86,18 +85,18 @@
           </div>
         </div>
         <div>
-          <h4 class="text-slate-800 font-bold mb-4 text-sm">Kontak Kami</h4>
-          <div class="flex flex-col gap-2.5">
+          <h4 class="text-slate-800 font-bold mb-3 text-sm">Kontak Kami</h4>
+          <div class="flex flex-col gap-2">
             <a id="footWa" href="/kontak" target="_blank" rel="noopener" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">chat</span> WhatsApp CS</a>
             <a id="footMail" href="/kontak" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">mail</span> Email Support</a>
-            <div class="mt-2 bg-slate-50 p-3 rounded border border-slate-100 flex items-center gap-2 w-max">
+            <div class="mt-2 bg-slate-50 p-2.5 rounded border border-slate-100 flex items-center gap-2 w-max">
               <span class="material-symbols-outlined text-green-500 text-xl">verified_user</span>
               <div class="text-[10px] text-slate-500 leading-tight">100% Aman &<br/>Terpercaya</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="max-w-7xl mx-auto mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
         <span class="text-xs text-slate-400">© ${new Date().getFullYear()} Anshel Store. All rights reserved.</span>
       </div>
     </footer>`;
@@ -110,7 +109,7 @@
       const b = document.getElementById("siteBrand");
       if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 md:h-24 w-auto -my-3 md:-my-6 transition-transform"/>`;
       const fb = document.getElementById("footBrand");
-      if (fb) fb.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-8 w-auto mr-1"/><span class="text-xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>`;
+      if (fb) fb.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 w-auto -ml-2"/>`;
     }
     if (s.whatsapp) { const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo Anshel Store, saya mau tanya.")}`; const fw = document.getElementById("footWa"); if (fw) fw.href = wa; }
     const fm = document.getElementById("footMail"); if (fm && s.email) fm.href = "mailto:" + s.email;
