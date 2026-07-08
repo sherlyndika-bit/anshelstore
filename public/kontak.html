@@ -6,43 +6,71 @@
 <title>Hubungi Kami — Anshel Store</title>
 <meta name="description" content="Pusat bantuan dan layanan pelanggan Anshel Store." />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#0f172a',surface:'#ffffff'}}}}</script>
 <script src="/js/theme.js?v=2.0"></script>
 <link href="/css/theme.css?v=2.0" rel="stylesheet"/>
 </head>
-<body data-page="legal" class="bg-background text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden selection:bg-pink-100 selection:text-primary">
+<body data-page="legal" class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden selection:bg-blue-200 selection:text-blue-900">
 
 <div id="siteNav"></div>
 
-<main class="flex-grow max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20 w-full">
-  <div class="bg-surface rounded-2xl p-8 md:p-12 shadow-sm border border-slate-100 text-center">
-    <div class="w-16 h-16 bg-pink-100 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
-      <span class="material-symbols-outlined text-3xl">support_agent</span>
+<!-- Hero Banner Support Style -->
+<div class="relative w-full bg-slate-900 pt-28 pb-32 flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/40 to-slate-900 opacity-90"></div>
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+  <div class="relative z-10 text-center px-4 max-w-3xl mx-auto flex flex-col items-center">
+    <div class="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mb-6 border border-blue-500/30 backdrop-blur-md shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+      <span class="material-symbols-outlined text-[40px] text-blue-400">support_agent</span>
     </div>
-    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Hubungi Kami</h1>
-    <p class="text-lg text-slate-500 mb-10 max-w-xl mx-auto">Tim Layanan Pelanggan kami siap membantu Anda menyelesaikan masalah transaksi atau menjawab pertanyaan seputar layanan Anshel Store.</p>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">Hubungi Kami</h1>
+    <p class="text-blue-200/80 text-lg">Pusat bantuan siap melayani Anda. Cepat, tanggap, dan solutif.</p>
+  </div>
+</div>
+
+<main class="flex-grow max-w-5xl mx-auto px-4 md:px-8 w-full -mt-20 relative z-20 pb-20">
+  <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden flex flex-col md:flex-row">
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto text-left">
-      <div class="p-6 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-md transition-shadow">
-        <h3 class="font-bold text-slate-800 text-xl mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-green-500">forum</span> Live Chat
-        </h3>
-        <p class="text-slate-600 mb-4">Cara tercepat! Gunakan widget chat di pojok kanan bawah layar Anda untuk terhubung dengan AI cerdas kami atau Agent manusia secara langsung.</p>
-        <button onclick="document.getElementById('cwToggle')?.click()" class="text-primary font-bold hover:underline">Buka Live Chat</button>
+    <!-- Sidebar Mascot Support -->
+    <div class="md:w-1/3 bg-slate-900 relative overflow-hidden flex flex-col min-h-[300px]">
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-900/30 to-slate-900 z-10"></div>
+      <img src="/images/mascot_support.jpg" alt="Support Mascot" class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-screen scale-105 hover:scale-100 transition-transform duration-700"/>
+      <div class="relative z-20 p-8 mt-auto text-left">
+        <h4 class="text-white font-bold text-xl drop-shadow-md">Agent Tersedia</h4>
+        <p class="text-blue-200 text-sm drop-shadow-md">Setiap Hari, 09:00 - 22:00 WIB</p>
+      </div>
+    </div>
+
+    <!-- Content Contact Options -->
+    <div class="md:w-2/3 p-8 md:p-12">
+      <p class="text-slate-600 text-lg mb-10 leading-relaxed">Tim Layanan Pelanggan kami siap membantu Anda menyelesaikan masalah transaksi atau menjawab pertanyaan seputar layanan Anshel Store.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Live Chat Card -->
+        <button type="button" onclick="document.getElementById('cwToggle')?.click()" class="text-left group relative p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/10 transition-all overflow-hidden flex flex-col">
+          <div class="absolute right-0 top-0 w-24 h-24 bg-blue-500/5 rounded-bl-full group-hover:bg-blue-500/10 transition-colors"></div>
+          <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[28px]">forum</span></div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Live Chat</h3>
+          <p class="text-slate-500 text-sm mb-6 flex-grow">Cara tercepat! Gunakan widget chat untuk terhubung dengan Agent manusia atau AI kami secara langsung.</p>
+          <span class="text-blue-600 font-bold group-hover:underline">Buka Obrolan &rarr;</span>
+        </button>
+
+        <!-- Email Card -->
+        <a href="mailto:support@anshelstore.biz.id" class="text-left group relative p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary-hover hover:shadow-lg hover:shadow-primary/10 transition-all overflow-hidden flex flex-col">
+          <div class="absolute right-0 top-0 w-24 h-24 bg-rose-500/5 rounded-bl-full group-hover:bg-rose-500/10 transition-colors"></div>
+          <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-[28px]">mail</span></div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Email Support</h3>
+          <p class="text-slate-500 text-sm mb-6 flex-grow">Untuk kerja sama bisnis, keluhan panjang, atau permohonan data. Kami membalas dalam 1x24 jam.</p>
+          <span class="text-primary font-bold group-hover:underline">Kirim Email &rarr;</span>
+        </a>
+
+      </div>
+      
+      <div class="mt-12 bg-blue-50/50 border border-blue-100 p-6 rounded-2xl flex gap-4 items-center">
+        <span class="material-symbols-outlined text-blue-500 text-3xl">smart_toy</span>
+        <p class="text-sm text-slate-600 m-0">Di luar jam kerja manusia, <strong>AI Chatbot</strong> dan sistem otomatisasi Top Up kami tetap beroperasi 24 Jam Non-Stop.</p>
       </div>
 
-      <div class="p-6 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-md transition-shadow">
-        <h3 class="font-bold text-slate-800 text-xl mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-blue-500">mail</span> Email
-        </h3>
-        <p class="text-slate-600 mb-4">Untuk keperluan kerja sama bisnis, keluhan panjang, atau permohonan penghapusan data, kirimkan pesan Anda melalui Email resmi kami.</p>
-        <a href="mailto:support@anshelstore.biz.id" class="text-primary font-bold hover:underline">support@anshelstore.biz.id</a>
-      </div>
-    </div>
-    
-    <div class="mt-12 text-slate-500 text-sm">
-      <p>Jam Operasional Pelayanan Manusia (CS):<br/><strong>Setiap Hari, 09:00 - 22:00 WIB</strong></p>
-      <p class="mt-2">Transaksi sistem dan bot (AI) tetap beroperasi 24 Jam.</p>
     </div>
   </div>
 </main>

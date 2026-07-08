@@ -6,46 +6,66 @@
 <title>Kebijakan Pengembalian Dana — Anshel Store</title>
 <meta name="description" content="Kebijakan Pengembalian Dana (Refund Policy) di Anshel Store." />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#0f172a',surface:'#ffffff'}}}}</script>
 <script src="/js/theme.js?v=2.0"></script>
 <link href="/css/theme.css?v=2.0" rel="stylesheet"/>
 </head>
-<body data-page="legal" class="bg-background text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden selection:bg-pink-100 selection:text-primary">
+<body data-page="legal" class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden selection:bg-rose-200 selection:text-rose-900">
 
 <div id="siteNav"></div>
 
-<main class="flex-grow max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20 w-full">
-  <div class="bg-surface rounded-2xl p-8 md:p-12 shadow-sm border border-slate-100">
-    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-8">Kebijakan Pengembalian Dana</h1>
-    <div class="prose prose-slate max-w-none prose-headings:text-slate-800 prose-a:text-primary hover:prose-a:text-primary-hover">
-      <p>Anshel Store memiliki komitmen untuk memberikan layanan terbaik. Namun, sebagai penyedia produk digital, kami menerapkan pedoman yang ketat terkait pengembalian dana (<em>Refund</em>) untuk melindungi integritas sistem kami.</p>
+<!-- Hero Banner Refund Style -->
+<div class="relative w-full bg-slate-900 pt-28 pb-32 flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-rose-900/60 to-slate-900 opacity-90"></div>
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+  <div class="relative z-10 text-center px-4 max-w-3xl mx-auto flex flex-col items-center">
+    <div class="w-20 h-20 bg-rose-500/20 rounded-full flex items-center justify-center mb-6 border border-rose-500/30 backdrop-blur-md shadow-[0_0_30px_rgba(225,29,72,0.4)]">
+      <span class="material-symbols-outlined text-[40px] text-rose-400">currency_exchange</span>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">Kebijakan Pengembalian Dana</h1>
+    <p class="text-rose-200/80 text-lg">Pedoman tegas mengenai proses <em>refund</em> produk digital.</p>
+  </div>
+</div>
+
+<main class="flex-grow max-w-4xl mx-auto px-4 md:px-8 w-full -mt-20 relative z-20 pb-20">
+  <div class="bg-white rounded-2xl shadow-xl shadow-rose-900/10 border border-slate-100 overflow-hidden">
+    
+    <div class="p-8 md:p-12">
+      <div class="bg-rose-50 border-l-4 border-rose-500 p-4 mb-10 rounded-r-xl">
+        <p class="text-rose-800 font-medium">Sebagai penyedia produk digital yang terkirim secara instan, Anshel Store menerapkan aturan pengembalian dana yang sangat ketat untuk mencegah penyalahgunaan sistem.</p>
+      </div>
       
-      <h3>1. Ketentuan Umum Pengembalian Dana</h3>
-      <p>Pengembalian dana <strong>HANYA</strong> dapat dilakukan apabila memenuhi salah satu kondisi berikut:</p>
-      <ul>
-        <li>Produk digital (Top Up) gagal dikirim atau diproses karena gangguan permanen dari pihak server/publisher.</li>
-        <li>Sistem kami mendeteksi kegagalan transaksi setelah Anda berhasil menyelesaikan pembayaran.</li>
-        <li>Terdapat kelebihan pembayaran yang dikonfirmasi oleh sistem mutasi rekening kami.</li>
-      </ul>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <!-- Boleh Refund -->
+        <div class="bg-green-50/50 rounded-2xl p-6 border border-green-100">
+          <div class="flex items-center gap-2 text-green-600 font-bold text-lg mb-4">
+            <span class="material-symbols-outlined">check_circle</span> Memenuhi Syarat Refund
+          </div>
+          <ul class="space-y-3 text-slate-600 text-sm">
+            <li class="flex items-start gap-2"><span class="text-green-500 font-bold">•</span> Produk gagal dikirim karena gangguan permanen dari publisher.</li>
+            <li class="flex items-start gap-2"><span class="text-green-500 font-bold">•</span> Sistem mendeteksi kegagalan transaksi setelah Anda membayar.</li>
+            <li class="flex items-start gap-2"><span class="text-green-500 font-bold">•</span> Terdapat kelebihan pembayaran yang dikonfirmasi oleh sistem.</li>
+          </ul>
+        </div>
 
-      <h3>2. Kondisi yang TIDAK Memenuhi Syarat Refund</h3>
-      <p>Kami <strong>TIDAK</strong> melayani pengembalian dana untuk kasus-kasus berikut:</p>
-      <ul>
-        <li><strong>Kesalahan Input Pengguna:</strong> Anda salah memasukkan ID Game, Server, atau data lainnya yang mengakibatkan produk masuk ke akun orang lain. Pesanan yang sudah sukses diproses tidak dapat ditarik kembali.</li>
-        <li><strong>Berubah Pikiran:</strong> Transaksi untuk produk digital bersifat final. Jika pesanan sudah masuk antrean dan berhasil diproses, pembatalan sepihak tidak diperbolehkan.</li>
-        <li><strong>Masalah Internal Game:</strong> Produk telah sukses dikirimkan ke akun Anda (dibuktikan dengan log sistem), namun Anda mengalami masalah login, <em>banned</em> akun oleh publisher, atau bug in-game.</li>
-      </ul>
+        <!-- Tidak Boleh Refund -->
+        <div class="bg-red-50/50 rounded-2xl p-6 border border-red-100">
+          <div class="flex items-center gap-2 text-red-600 font-bold text-lg mb-4">
+            <span class="material-symbols-outlined">cancel</span> Ditolak (Tidak Bisa Refund)
+          </div>
+          <ul class="space-y-3 text-slate-600 text-sm">
+            <li class="flex items-start gap-2"><span class="text-red-500 font-bold">•</span> <strong>Kesalahan Input:</strong> Anda salah memasukkan ID Game atau Server.</li>
+            <li class="flex items-start gap-2"><span class="text-red-500 font-bold">•</span> <strong>Berubah Pikiran:</strong> Pesanan yang sudah masuk antrean tidak dapat dibatalkan.</li>
+            <li class="flex items-start gap-2"><span class="text-red-500 font-bold">•</span> <strong>Masalah Internal Game:</strong> Bug game, akun di-banned, atau masalah login.</li>
+          </ul>
+        </div>
+      </div>
 
-      <h3>3. Prosedur Klaim Pengembalian Dana</h3>
-      <p>Jika Anda merasa pesanan Anda memenuhi syarat untuk pengembalian dana, ikuti langkah berikut:</p>
-      <ol>
-        <li>Hubungi Layanan Pelanggan (CS) kami via WhatsApp atau fitur Chat selambat-lambatnya 24 jam setelah transaksi dilakukan.</li>
-        <li>Sertakan bukti struk pembayaran, Nomor Pesanan (Invoice), dan kronologi kendala.</li>
-        <li>Tim kami akan melakukan pengecekan ke sistem mutasi dan server pusat. Proses investigasi ini biasanya memakan waktu 1x24 jam kerja.</li>
-      </ol>
+      <div class="border-t border-slate-100 pt-8">
+        <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-slate-400">receipt_long</span> Prosedur Klaim</h3>
+        <p class="text-slate-600 leading-relaxed">Hubungi CS kami via WhatsApp/Live Chat selambatnya 24 jam setelah transaksi. Sertakan bukti struk dan Nomor Invoice. Dana akan dikembalikan dalam waktu 1-3 hari kerja tergantung bank Anda.</p>
+      </div>
 
-      <h3>4. Metode dan Waktu Pengembalian</h3>
-      <p>Dana akan dikembalikan (<em>refund</em>) dalam bentuk saldo akun Anshel Store atau dikembalikan ke rekening/e-wallet asli yang Anda gunakan saat membayar. Proses transfer pengembalian dana memakan waktu maksimal 1-3 hari kerja tergantung dari kebijakan masing-masing bank/layanan pembayaran.</p>
     </div>
   </div>
 </main>
