@@ -27,15 +27,15 @@ fetch("/api/settings").then((r) => r.json()).then((d) => {
 function coverCard(g) {
   const art = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-full h-full object-cover"/>` : `<span class="text-[44px]">${EMOJI[g.id] || "🎮"}</span>`;
   const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
-  return `<div class="game-card bg-surface-container-lowest rounded-lg border-[1.5px] border-outline-variant p-md marshmallow-shadow squish-btn relative flex flex-col group hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(139,111,91,0.18)] transition-all duration-300 cursor-pointer" data-id="${esc(g.id)}">
-    <div class="w-24 h-24 rounded-full mx-auto mb-md overflow-hidden border-4 border-surface-container shadow-inner flex items-center justify-center" style="background:${gradOf(g)}">${art}</div>
+  return `<div class="game-card bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:shadow-md hover:border-primary/50 relative flex flex-col group transition-all duration-300 cursor-pointer hover:-translate-y-1" data-id="${esc(g.id)}">
+    <div class="w-20 h-20 rounded-2xl mx-auto mb-4 overflow-hidden border border-slate-100 shadow-sm flex items-center justify-center text-4xl" style="background:${gradOf(g)}">${art}</div>
     <div class="text-center flex-grow flex flex-col">
-      <h3 class="font-headline-md text-on-surface mb-xs leading-tight truncate">${esc(g.name)}</h3>
-      <p class="font-body-md text-on-surface-variant text-sm mb-md">${esc(catOf(g))}</p>
-      <div class="mt-auto pt-sm border-t border-dashed border-outline-variant">
-        ${min ? `<div class="text-xs text-on-surface-variant mb-2">Mulai <b class="text-primary">Rp${min.toLocaleString("id-ID")}</b></div>` : ""}
-        <span class="w-full bg-surface-container text-on-surface font-label-md text-label-md py-2.5 rounded-full border border-dashed border-outline group-hover:bg-primary-container group-hover:text-on-primary-container group-hover:border-solid group-hover:border-primary-container transition-all duration-300 flex justify-center items-center gap-1">
-          Top Up <span class="material-symbols-outlined text-[18px]">add_circle</span>
+      <h3 class="font-bold text-slate-800 mb-1 leading-tight truncate">${esc(g.name)}</h3>
+      <p class="text-xs text-slate-500 mb-4">${esc(catOf(g))}</p>
+      <div class="mt-auto pt-3 border-t border-slate-100 flex flex-col gap-2">
+        ${min ? `<div class="text-xs text-slate-500">Mulai <b class="text-primary">Rp${min.toLocaleString("id-ID")}</b></div>` : ""}
+        <span class="w-full bg-slate-50 text-slate-700 font-semibold py-2 rounded-lg border border-slate-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors flex justify-center items-center gap-1 text-sm">
+          Top Up <span class="material-symbols-outlined text-[16px]">add_circle</span>
         </span>
       </div>
     </div>
@@ -44,7 +44,7 @@ function coverCard(g) {
 
 function renderChips() {
   const cats = ["Semua", ...Array.from(new Set(games.map(catOf)))];
-  $("catChips").innerHTML = cats.map((c) => `<button type="button" data-cat="${esc(c)}" class="cat-chip font-label-md text-label-md px-5 py-2 rounded-full border transition-colors ${c === activeCat ? "bg-primary-container text-on-primary-container border-primary-fixed border-opacity-50" : "bg-surface-container-high text-on-surface border-dashed border-outline-variant hover:bg-secondary-container"}">${esc(c)}</button>`).join("");
+  $("catChips").innerHTML = cats.map((c) => `<button type="button" data-cat="${esc(c)}" class="cat-chip text-sm font-semibold px-5 py-2 rounded-full border transition-colors ${c === activeCat ? "bg-primary text-white border-primary shadow-sm" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"}">${esc(c)}</button>`).join("");
   $("catChips").querySelectorAll(".cat-chip").forEach((b) => b.addEventListener("click", () => { activeCat = b.dataset.cat; renderChips(); renderGames(); }));
 }
 
@@ -87,8 +87,8 @@ function renderGameShots(game) {
 function renderGameInfo(game) {
   $("gameDescName").textContent = game.name;
   const desc = game.description || `${game.name}${game.publisher ? ` dari ${game.publisher}` : ""} — top up resmi dengan proses instan & aman di Anshel Store. Pilih nominal di panel sebelah kanan, masukkan ID akunmu dengan benar, lalu lakukan pembayaran. Item/diamond akan langsung masuk ke akunmu dalam hitungan menit. Tersedia berbagai pilihan nominal mulai dari yang termurah, plus promo menarik setiap minggu.`;
-  $("gameDesc").innerHTML = desc.split(/\n{2,}|\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
-  $("gameNeeds").innerHTML = game.needs.map((n) => `<span class="inline-flex items-center gap-1 bg-secondary-fixed text-secondary font-label-sm text-label-sm px-3 py-1 rounded-full"><span class="material-symbols-outlined text-[15px]">badge</span> Butuh: ${esc(n)}</span>`).join("");
+  $("gameDesc").innerHTML = desc.split(/\n{2,}|\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p class="mb-2 text-slate-600 text-sm leading-relaxed">${esc(p)}</p>`).join("");
+  $("gameNeeds").innerHTML = game.needs.map((n) => `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 font-semibold text-xs px-3 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">badge</span> Butuh: ${esc(n)}</span>`).join("");
 }
 function showDetail(game) {
   selGame = game; selItem = null;
@@ -109,16 +109,16 @@ function showDetail(game) {
   // Akun
   $("accountFields").innerHTML = game.needs.map((n) => `
     <div class="relative">
-      <label class="absolute -top-2 left-3 px-1 bg-surface-container-lowest font-label-md text-on-surface-variant z-10 text-[12px]">${esc(n)}</label>
-      <input class="acc-field w-full recessed-input rounded-t-lg rounded-b-md px-4 pt-5 pb-3 font-body-md text-on-surface placeholder:text-outline focus:ring-0" data-key="${esc(n)}" type="text" placeholder="Masukkan ${esc(n)}"/>
+      <label class="absolute top-2 left-4 text-[10px] font-bold text-slate-500 uppercase tracking-wide z-10">${esc(n)}</label>
+      <input class="acc-field w-full bg-slate-50 border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 pt-6 pb-2 text-slate-800 placeholder:text-slate-400 transition-all" data-key="${esc(n)}" type="text" placeholder="Masukkan ${esc(n)}"/>
     </div>`).join("");
   $("accountFields").querySelectorAll(".acc-field").forEach((f) => f.addEventListener("input", () => { update(); checkId(); }));
 
   // Nominal
   $("items").innerHTML = game.items.map((i) => `
-    <button type="button" data-id="${esc(i.id)}" class="nom-card">
-      <div class="nom-amt"><span>💎</span><span class="leading-tight">${esc(i.label)}</span></div>
-      <div class="nom-price">${rupiah(i.price)}</div>
+    <button type="button" data-id="${esc(i.id)}" class="nom-card w-full flex flex-col items-center justify-center border-2 border-slate-200 bg-white rounded-xl p-4 cursor-pointer hover:border-primary/50 hover:bg-rose-50/30 transition-all text-center [&.sel]:border-primary [&.sel]:bg-rose-50/50">
+      <div class="font-bold text-slate-800 text-sm flex items-center gap-1"><span class="material-symbols-outlined text-rose-500 text-sm">diamond</span><span class="leading-tight">${esc(i.label)}</span></div>
+      <div class="text-sm font-semibold text-primary mt-1">${rupiah(i.price)}</div>
     </button>`).join("");
   $("items").querySelectorAll(".nom-card").forEach((b) => b.addEventListener("click", () => {
     selItem = selGame.items.find((x) => x.id === b.dataset.id);
@@ -137,7 +137,7 @@ function showDetail(game) {
   $("otherGames").innerHTML = games.filter((g) => g.id !== game.id).map((g) => {
     const art = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" class="w-full h-full object-cover"/>` : (EMOJI[g.id] || "🎮");
     const style = g.image ? "" : `style="background:${gradOf(g)}"`;
-    return `<button type="button" data-id="${esc(g.id)}" class="og-card group rounded-xl overflow-hidden aspect-square flex items-center justify-center text-[34px] shadow-sm hover:-translate-y-1 transition" ${style}>${art}</button>`;
+    return `<button type="button" data-id="${esc(g.id)}" class="og-card group rounded-xl overflow-hidden aspect-square flex items-center justify-center text-3xl shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/50 hover:-translate-y-1 transition-all" ${style}>${art}</button>`;
   }).join("");
   $("otherGames").querySelectorAll(".og-card").forEach((b) => b.addEventListener("click", () => navTo(b.dataset.id, true)));
 
@@ -181,8 +181,8 @@ function checkId() {
       const q = new URLSearchParams({ gameId: selGame.id, userId: userId || "", zoneId: acc[selGame.needs[1]] || "" });
       const r = await fetch("/api/game/check?" + q.toString()).then((x) => x.json());
       if (r.supported && r.username) {
-        prev.className = "mt-sm rounded-xl px-md py-sm font-label-md text-label-md bg-primary-fixed/60 text-on-primary-fixed-variant";
-        prev.innerHTML = `<span class="material-symbols-outlined text-[18px] align-middle">verified</span> Username: <b>${esc(r.username)}</b>`;
+        prev.className = "mt-3 rounded-lg px-4 py-3 text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-2";
+        prev.innerHTML = `<span class="material-symbols-outlined text-[18px]">verified</span> Username: <b>${esc(r.username)}</b>`;
         prev.classList.remove("hidden");
       } else { prev.classList.add("hidden"); }
     } catch (e) { prev.classList.add("hidden"); }
@@ -192,9 +192,9 @@ function checkId() {
 function update() {
   if (!selGame) return;
   const acc = getAccount();
-  const rows = [`<div class="flex justify-between"><span>Game</span><b class="text-on-surface">${esc(selGame.name)}</b></div>`];
-  if (selItem) rows.push(`<div class="flex justify-between"><span>Item</span><b class="text-on-surface">${esc(selItem.label)}</b></div>`);
-  selGame.needs.forEach((n) => { if (acc[n]) rows.push(`<div class="flex justify-between"><span>${esc(n)}</span><b class="text-on-surface">${esc(acc[n])}</b></div>`); });
+  const rows = [`<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Game</span><b class="text-slate-900">${esc(selGame.name)}</b></div>`];
+  if (selItem) rows.push(`<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Item</span><b class="text-slate-900">${esc(selItem.label)}</b></div>`);
+  selGame.needs.forEach((n) => { if (acc[n]) rows.push(`<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">${esc(n)}</span><b class="text-slate-900">${esc(acc[n])}</b></div>`); });
   $("summaryItems").innerHTML = rows.join("");
   $("grandTotal").textContent = selItem ? rupiah(selItem.price) : "Rp0";
   $("submitOrder").disabled = !(selItem && selGame.needs.every((n) => acc[n]));
@@ -214,21 +214,21 @@ $("submitOrder").addEventListener("click", async () => {
 });
 
 function showInvoice(order) {
-  const accRows = Object.entries(order.account).map(([k, v]) => `<div class="flex justify-between"><span>${esc(k)}</span><b class="text-on-surface">${esc(v)}</b></div>`).join("");
+  const accRows = Object.entries(order.account).map(([k, v]) => `<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">${esc(k)}</span><b class="text-slate-900">${esc(v)}</b></div>`).join("");
   const waText = encodeURIComponent(`Halo Anshel Store, konfirmasi pesanan:\nInvoice: ${order.code}\nGame: ${order.gameName}\nItem: ${order.itemLabel}\nTotal: ${rupiah(order.price)}\nBayar: ${order.paymentMethod}`);
-  const waBtn = WA ? `<a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener" class="mt-sm w-full block text-center bg-gradient-to-r from-secondary to-pink text-on-primary rounded-full py-3 font-label-md text-label-md font-bold hover:scale-[1.02] transition-transform">💬 Konfirmasi via WhatsApp</a>` : "";
+  const waBtn = WA ? `<a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener" class="mt-4 w-full flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-3 text-sm font-bold transition-all shadow-sm shadow-emerald-500/20"><span class="material-symbols-outlined text-[20px]">chat</span> Konfirmasi via WhatsApp</a>` : "";
   $("invoice").classList.remove("hidden");
   $("invoice").innerHTML = `
-    <div class="rounded-xl bg-primary-fixed/60 border border-primary-container/40 p-md text-body-md font-body-md text-on-surface-variant flex flex-col gap-xs">
-      <div class="flex items-center gap-xs text-primary font-bold mb-xs"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span> Pesanan berhasil dibuat!</div>
-      <div class="flex justify-between"><span>Invoice</span><b class="text-on-surface">${esc(order.code)}</b></div>
-      <div class="flex justify-between"><span>Game</span><b class="text-on-surface">${esc(order.gameName)}</b></div>
-      <div class="flex justify-between"><span>Item</span><b class="text-on-surface">${esc(order.itemLabel)}</b></div>
+    <div class="rounded-xl bg-white border border-slate-200 shadow-sm p-6 flex flex-col gap-1">
+      <div class="flex items-center gap-2 text-emerald-600 font-bold mb-4 text-base"><span class="material-symbols-outlined">check_circle</span> Pesanan berhasil dibuat!</div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Invoice</span><b class="text-slate-900">${esc(order.code)}</b></div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Game</span><b class="text-slate-900">${esc(order.gameName)}</b></div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Item</span><b class="text-slate-900">${esc(order.itemLabel)}</b></div>
       ${accRows}
-      <div class="flex justify-between"><span>Bayar via</span><b class="text-on-surface">${esc(order.paymentMethod)}</b></div>
-      <div class="flex justify-between"><span>Total</span><b class="text-secondary">${rupiah(order.price)}</b></div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Bayar via</span><b class="text-slate-900">${esc(order.paymentMethod)}</b></div>
+      <div class="flex justify-between items-center pt-4 pb-2"><span class="text-slate-500 text-sm">Total</span><b class="text-primary text-xl">${rupiah(order.price)}</b></div>
       ${waBtn}
-      <a href="/cek-transaksi?code=${esc(order.code)}" class="text-center font-label-md text-label-md text-primary mt-xs">Lacak status pesanan →</a>
+      <a href="/cek-transaksi?code=${esc(order.code)}" class="text-center text-sm font-semibold text-primary hover:text-primary-hover mt-4 block">Lacak status pesanan →</a>
     </div>`;
   $("invoice").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
