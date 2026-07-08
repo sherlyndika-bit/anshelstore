@@ -180,9 +180,8 @@ body.dash { background: #f1f5f9; animation: none; }
 }
 .preloader-logo {
   height: auto;
-  max-height: 120px;
-  width: auto;
-  max-width: 80vw;
+  width: 50vw;
+  max-width: 250px;
   object-fit: contain;
   animation: logoPulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
