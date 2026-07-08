@@ -108,7 +108,11 @@ function initChatWidget(options = {}) {
     .cw-input{display:flex;gap:8px;padding:12px;border-top:1px solid #e6e8ee;background:#fff}
     .cw-input input{flex:1;padding:11px 14px;border-radius:999px;border:1px solid #e6e8ee;font-size:.9rem;font-family:inherit;color:#0f172a}
     .cw-input input:focus{outline:none;border-color:#a9c4a4;box-shadow:0 0 0 3px rgba(125,155,120,.15)}
-    .cw-send{border:0;background:linear-gradient(135deg,#bf5d7e,#7d9b78);color:#fff;width:42px;border-radius:50%;cursor:pointer;font-size:1rem}`;
+    .cw-send{border:0;background:linear-gradient(135deg,#bf5d7e,#7d9b78);color:#fff;width:42px;border-radius:50%;cursor:pointer;font-size:1rem}
+    @media (max-width: 768px) {
+      .cw-bubble { bottom: 84px !important; }
+      .cw-panel { bottom: 154px !important; }
+    }`;
     const tag = document.createElement("style");
     tag.id = "cwStyles"; tag.textContent = css;
     document.head.appendChild(tag);

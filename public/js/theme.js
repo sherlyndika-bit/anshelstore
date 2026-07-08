@@ -71,7 +71,7 @@ tailwind.config = {
       var b = document.createElement("button");
       b.id = "pwaInstallBtn"; b.type = "button";
       b.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px;line-height:1">install_mobile</span> Pasang App';
-      b.style.cssText = "position:fixed;right:16px;bottom:110px;z-index:9999;background:#e11d48;color:#fff;border:0;border-radius:9999px;padding:12px 18px;font-weight:700;font-family:'Be Vietnam Pro',system-ui,sans-serif;font-size:14px;box-shadow:0 10px 28px rgba(225,29,72,.45);cursor:pointer;display:inline-flex;align-items:center;gap:6px";
+      b.style.cssText = "position:fixed;left:16px;bottom:110px;z-index:9999;background:#e11d48;color:#fff;border:0;border-radius:9999px;padding:12px 18px;font-weight:700;font-family:'Be Vietnam Pro',system-ui,sans-serif;font-size:14px;box-shadow:0 10px 28px rgba(225,29,72,.45);cursor:pointer;display:inline-flex;align-items:center;gap:6px";
       b.addEventListener("click", function () {
         if (!deferred) return;
         deferred.prompt();
