@@ -16,18 +16,18 @@
 <!-- ============ VIEW: KATALOG (browse game) ============ -->
 <div id="catalogView" class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg space-y-[60px]">
   <!-- Hero Banner: LOGO jadi background penuh, teks overlay di kiri -->
-  <section class="relative w-full rounded-2xl overflow-hidden border border-slate-200 shadow-sm min-h-[300px] md:min-h-[400px] flex items-center group">
+  <section class="relative w-full rounded-2xl overflow-hidden border-2 border-white shadow-md min-h-[300px] md:min-h-[400px] flex items-center group">
     <!-- Background penuh: diisi LOGO TOKO (cover) bila ada, fallback gradient -->
-    <div id="topupHeroBg" class="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-105" style="background:linear-gradient(120deg,#fdf2f5 0%,#f8fafc 100%);background-size:cover;background-position:center"></div>
+    <div id="topupHeroBg" class="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-105 bg-gradient-animated"></div>
     <!-- Overlay supaya teks kiri kebaca -->
-    <div class="absolute inset-0 z-[1] bg-gradient-to-r from-white/95 via-white/80 to-transparent"></div>
+    <div class="absolute inset-0 z-[1] bg-gradient-to-r from-white/95 via-white/70 to-transparent"></div>
     <div class="relative z-10 w-full px-md md:px-xl md:pl-20 lg:pl-32 py-lg flex flex-col items-start text-left gap-md max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-pink-50 text-pink-700 font-medium text-sm px-4 py-2 rounded-full shadow-sm">
+      <div class="inline-flex items-center gap-2 bg-white/90 text-primary font-medium text-sm px-4 py-2 rounded-full shadow-sm">
         <span class="material-symbols-outlined text-[18px]">verified</span> Layanan Resmi
       </div>
       <h1 class="font-display-lg text-3xl md:text-display-lg text-slate-900 leading-tight">Top Up <span class="text-primary">Game Favoritmu</span><br/>Cepat &amp; Aman</h1>
-      <p class="font-body-lg text-slate-600 max-w-md">Pilih game di bawah, masukkan ID, bayar — diamond meluncur dalam hitungan detik.</p>
-      <button type="button" onclick="document.getElementById('daftarGame').scrollIntoView({behavior:'smooth'})" class="mt-2 bg-primary text-white font-medium px-8 py-4 rounded-full shadow-sm inline-flex items-center gap-2 hover:bg-pink-600 transition-colors">
+      <p class="font-body-lg text-slate-700 max-w-md">Pilih game di bawah, masukkan ID, bayar — diamond meluncur dalam hitungan detik. 🚀</p>
+      <button type="button" onclick="document.getElementById('daftarGame').scrollIntoView({behavior:'smooth'})" class="mt-2 bg-primary text-white font-medium px-8 py-4 rounded-full shadow-md inline-flex items-center gap-2 hover:-translate-y-1 transition-transform">
         Mulai Top Up <span class="material-symbols-outlined">arrow_forward</span>
       </button>
     </div>
