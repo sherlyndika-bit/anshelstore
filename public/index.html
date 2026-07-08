@@ -9,9 +9,9 @@
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#6c5ce7"/>
 <link rel="apple-touch-icon" href="/icon-192.png"/>
-<link href="/css/styles.css?v=2.0" rel="stylesheet"/>
-<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
-<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/styles.css?v=3.0" rel="stylesheet"/>
+<link href="/css/theme.css?v=3.0" rel="stylesheet"/>
+<script src="/js/theme.js?v=3.0"></script>
 </head>
 <body data-page="home" class="min-h-screen">
 
@@ -22,34 +22,17 @@
   <section class="hero">
     <div class="hero-grid container">
       <div> <!-- left -->
-        <div class="hero-badge"><span class="material-symbols-outlined">auto_awesome</span> Otomatis & Menyenangkan</div>
-        <h1>Sosial Media-mu, <br/><span class="text-gradient">Otomatis & Naik Level</span></h1>
-        <p class="lead">Masuk ke dunia hangat tempat sosial media bisnismu diurus penuh perhatian — dari bot WhatsApp sampai interaksi Instagram.</p>
+        <div class="hero-badge">Terpercaya &amp; Tercepat</div>
+        <h1>Top Up Game &amp; <br/><span class="text-primary">Sosial Media</span></h1>
+        <p class="lead">Platform top up diamond game favorit dan otomatisasi sosial media termurah, instan, dan aman 100%. Proses hitungan detik!</p>
         <div class="hero-cta">
-          <a href="/layanan" class="btn btn-primary btn-lg">Jelajahi Layanan AI <span class="material-symbols-outlined">arrow_forward</span></a>
-          <a href="/topup" class="btn btn-outline btn-lg">Top Up Game 🎮</a>
-        </div>
-        <div class="hero-stats">
-          <div><strong class="mono">1.000+</strong><span>Transaksi</span></div>
-          <div><strong class="mono">24/7</strong><span>AI Online</span></div>
-          <div><strong class="mono">4.9★</strong><span>Rating</span></div>
+          <a href="/topup" class="btn btn-primary btn-lg">Top Up Sekarang</a>
+          <a href="/layanan" class="btn btn-outline btn-lg">Layanan Sosial Media</a>
         </div>
       </div>
       <div class="hero-visual"> <!-- right -->
-        <div class="hero-card">
-          <!-- chat preview mockup -->
-          <div style="display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--border)">
-            <div style="width:38px;height:38px;border-radius:50%;background:var(--grad-primary);display:grid;place-items:center;color:#fff"><span class="material-symbols-outlined" style="font-size:20px">smart_toy</span></div>
-            <div><strong>Anshel AI</strong><br/><small class="text-muted">Online • Siap membantu</small></div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
-            <div style="align-self:flex-start;background:var(--surface-alt);padding:10px 14px;border-radius:14px 14px 14px 4px;font-size:.9rem">Halo! 👋 Ada yang bisa dibantu?</div>
-            <div style="align-self:flex-end;background:var(--grad-primary);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:.9rem">Mau top up ML dong</div>
-            <div style="align-self:flex-start;background:var(--surface-alt);padding:10px 14px;border-radius:14px 14px 14px 4px;font-size:.9rem">Siap! Pilih nominal diamond, masukkan ID-mu, dan kami proses instan ⚡</div>
-            <span style="align-self:flex-start;font-size:.72rem;font-weight:700;color:var(--green);background:var(--green-bg);padding:3px 10px;border-radius:999px">✓ AI membalas dalam 2 detik</span>
-          </div>
-        </div>
-        <img id="heroBrandImg" alt="" class="hidden" style="position:absolute;bottom:8px;right:8px;width:180px;height:auto;object-fit:contain;opacity:.7;pointer-events:none"/>
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop" alt="Esports Gaming Banner" class="hero-img" style="object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; height: 350px;" />
+        <img id="heroBrandImg" alt="" class="hidden" style="position:absolute;bottom:-20px;right:-20px;width:140px;height:auto;object-fit:contain;opacity:0.9;pointer-events:none;background:var(--surface);border-radius:var(--radius-lg);padding:10px;box-shadow:var(--shadow)"/>
       </div>
     </div>
   </section>
@@ -83,8 +66,8 @@
 <div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
-<script src="/js/site.js?v=2.0"></script>
-<script src="/js/widget.js?v=2.0"></script>
+<script src="/js/site.js?v=3.0"></script>
+<script src="/js/widget.js?v=3.0"></script>
 <script>
   // Smooth scroll untuk tombol data-scroll
   document.addEventListener("click", (e) => { const a = e.target.closest("[data-scroll]"); if (a) { e.preventDefault(); const t = document.getElementById(a.dataset.scroll); if (t) t.scrollIntoView({ behavior: "smooth" }); } });
@@ -96,11 +79,11 @@
     if (!games.length) { el.innerHTML = '<p class="text-center text-muted" style="grid-column:1/-1">Game segera hadir ✨</p>'; return; }
     el.innerHTML = games.slice(0, 10).map((g) => {
       const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
-      const art = g.image ? `<img src="${g.image}" alt="${g.name}" style="width:100%;height:100%;object-fit:cover"/>` : `<span style="font-size:2rem">${EMOJI[g.id] || "🎮"}</span>`;
-      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="card shine" style="padding:12px;text-align:center;cursor:pointer">
-        <div style="width:100%;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--surface-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px">${art}</div>
-        <div style="font-weight:700;font-size:.9rem">${g.name}</div>
-        <div class="mono text-primary" style="font-size:.82rem;margin-top:2px">Mulai ${rupiah(min)}</div>
+      const art = g.image ? `<img src="${g.image}" alt="${g.name}" />` : `<span style="font-size:2rem">${EMOJI[g.id] || "🎮"}</span>`;
+      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="game-card">
+        <div class="thumb">${art}</div>
+        <div class="title">${g.name}</div>
+        <div class="price">Mulai ${rupiah(min)}</div>
       </a>`;
     }).join("");
   }).catch(() => {});
