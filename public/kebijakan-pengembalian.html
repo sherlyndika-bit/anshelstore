@@ -37,33 +37,48 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <!-- Boleh Refund -->
-        <div class="bg-green-50/50 rounded-2xl p-6 border border-green-100">
+        <div class="bg-green-50/50 rounded-2xl p-6 border border-green-100 flex flex-col">
           <div class="flex items-center gap-2 text-green-600 font-bold text-lg mb-4">
             <span class="material-symbols-outlined">check_circle</span> Memenuhi Syarat Refund
           </div>
-          <ul class="space-y-3 text-slate-600 text-sm">
-            <li class="flex items-start gap-2"><span class="text-green-500 font-bold">•</span> Produk gagal dikirim karena gangguan permanen dari publisher.</li>
-            <li class="flex items-start gap-2"><span class="text-green-500 font-bold">•</span> Sistem mendeteksi kegagalan transaksi setelah Anda membayar.</li>
-            <li class="flex items-start gap-2"><span class="text-green-500 font-bold">•</span> Terdapat kelebihan pembayaran yang dikonfirmasi oleh sistem.</li>
+          <p class="text-slate-600 text-sm mb-4 leading-relaxed">Pengembalian dana mutlak (*Full Refund*) hanya akan disetujui apabila terbukti terjadi kegagalan sistematis di pihak kami, yang mencakup:</p>
+          <ul class="space-y-4 text-slate-600 text-sm flex-grow">
+            <li class="flex items-start gap-3"><span class="text-green-500 font-bold mt-0.5">•</span> <div><strong>Kegagalan API Publisher:</strong> Produk digital gagal dikirim ke akun Anda karena *server game* sedang dalam masa pemeliharaan darurat atau API *publisher* mengalami *downtime* permanen selama lebih dari 24 jam.</div></li>
+            <li class="flex items-start gap-3"><span class="text-green-500 font-bold mt-0.5">•</span> <div><strong>Kelebihan Pembayaran (Overpayment):</strong> Anda secara tidak sengaja melakukan transfer dengan nominal yang jauh lebih besar dari total tagihan (dibuktikan dengan mutasi rekening mutlak).</div></li>
+            <li class="flex items-start gap-3"><span class="text-green-500 font-bold mt-0.5">•</span> <div><strong>Stok Habis (Out of Stock):</strong> Anda telah membayar pesanan layanan otomatisasi atau *voucher* khusus yang ternyata stoknya telah habis di *database* kami tanpa ada peringatan sistem.</div></li>
           </ul>
         </div>
 
         <!-- Tidak Boleh Refund -->
-        <div class="bg-red-50/50 rounded-2xl p-6 border border-red-100">
+        <div class="bg-red-50/50 rounded-2xl p-6 border border-red-100 flex flex-col">
           <div class="flex items-center gap-2 text-red-600 font-bold text-lg mb-4">
             <span class="material-symbols-outlined">cancel</span> Ditolak (Tidak Bisa Refund)
           </div>
-          <ul class="space-y-3 text-slate-600 text-sm">
-            <li class="flex items-start gap-2"><span class="text-red-500 font-bold">•</span> <strong>Kesalahan Input:</strong> Anda salah memasukkan ID Game atau Server.</li>
-            <li class="flex items-start gap-2"><span class="text-red-500 font-bold">•</span> <strong>Berubah Pikiran:</strong> Pesanan yang sudah masuk antrean tidak dapat dibatalkan.</li>
-            <li class="flex items-start gap-2"><span class="text-red-500 font-bold">•</span> <strong>Masalah Internal Game:</strong> Bug game, akun di-banned, atau masalah login.</li>
+          <p class="text-slate-600 text-sm mb-4 leading-relaxed">Kami **MENOLAK** seluruh permintaan pengembalian dana apabila pesanan sudah diproses atau masuk antrean karena kelalaian pembeli, termasuk:</p>
+          <ul class="space-y-4 text-slate-600 text-sm flex-grow">
+            <li class="flex items-start gap-3"><span class="text-red-500 font-bold mt-0.5">•</span> <div><strong>Kesalahan Input (Human Error):</strong> Kesalahan mengetik ID Game, Zone ID, atau memilih Server. Produk yang telah dikirim ke ID yang salah akibat kelalaian Anda tidak dapat ditarik kembali.</div></li>
+            <li class="flex items-start gap-3"><span class="text-red-500 font-bold mt-0.5">•</span> <div><strong>Pembatalan Sepihak (Change of Mind):</strong> Produk digital bersifat instan dan final. Anda tidak dapat membatalkan pesanan yang sudah berstatus <em>Processing</em> atau <em>Success</em> hanya karena Anda berubah pikiran.</div></li>
+            <li class="flex items-start gap-3"><span class="text-red-500 font-bold mt-0.5">•</span> <div><strong>Masalah In-Game:</strong> Item telah sukses dikirim, namun Anda tidak bisa menggunakannya karena HP tidak mendukung, bug di dalam game, atau akun game Anda terkena hukuman (<em>banned</em>) oleh developer game tersebut.</div></li>
           </ul>
         </div>
       </div>
 
-      <div class="border-t border-slate-100 pt-8">
-        <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-slate-400">receipt_long</span> Prosedur Klaim</h3>
-        <p class="text-slate-600 leading-relaxed">Hubungi CS kami via WhatsApp/Live Chat selambatnya 24 jam setelah transaksi. Sertakan bukti struk dan Nomor Invoice. Dana akan dikembalikan dalam waktu 1-3 hari kerja tergantung bank Anda.</p>
+      <div class="space-y-8">
+        <div class="border-t border-slate-100 pt-8">
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-slate-400">receipt_long</span> Prosedur Klaim Pengembalian</h3>
+          <p class="text-slate-600 leading-relaxed mb-3">Jika Anda yakin pesanan Anda memenuhi kriteria *Refund*, Anda wajib mengajukan klaim secara tertulis mengikuti prosedur berikut:</p>
+          <ol class="list-decimal pl-5 text-slate-600 leading-relaxed space-y-2">
+            <li><strong>Batas Waktu Pelaporan:</strong> Maksimal 2x24 Jam sejak status transaksi dinyatakan Gagal atau sejak Anda melakukan pembayaran. Klaim yang melewati batas waktu ini akan diabaikan.</li>
+            <li><strong>Lampiran Bukti:</strong> Hubungi Customer Service (CS) melalui Live Chat / WhatsApp. Anda <strong>WAJIB</strong> melampirkan: (1) Nomor Invoice Anshel Store, (2) Tangkapan layar bukti transfer asli dari aplikasi Bank/E-Wallet Anda, (3) Tangkapan layar profil in-game (menunjukkan ID Game).</li>
+            <li><strong>Investigasi:</strong> Tim CS dan Teknisi kami akan melakukan pencocokan data dengan log mutasi *Payment Gateway* dan API *Publisher*. Proses ini memakan waktu maksimal 1-2 hari kerja.</li>
+            <li><strong>Pencairan Dana:</strong> Jika disetujui, dana akan dikembalikan penuh (dipotong biaya admin transfer antar bank jika ada) ke rekening/e-wallet pengirim asli dalam rentang waktu 3-7 hari kerja operasional perbankan.</li>
+          </ol>
+        </div>
+
+        <div class="border-t border-slate-100 pt-8">
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-slate-400">warning</span> Force Majeure</h3>
+          <p class="text-slate-600 leading-relaxed">Dalam kondisi kahar (*Force Majeure*) seperti bencana alam, pemadaman internet nasional, peretasan massal pada jaringan Payment Gateway, atau kebangkrutan pihak Publisher Game, Anshel Store dibebaskan dari kewajiban memproses pesanan dan/atau pengembalian dana seketika, dan penyelesaian akan ditunda hingga kondisi pulih sesuai dengan regulasi yang berlaku.</p>
+        </div>
       </div>
 
     </div>

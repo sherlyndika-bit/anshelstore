@@ -48,22 +48,35 @@
       
       <div class="space-y-8">
         <div class="border-b border-slate-100 pb-8">
-          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">dataset</span> 1. Pengumpulan Data</h3>
-          <p class="text-slate-600 mb-3">Kami hanya mengumpulkan informasi yang relevan untuk operasional:</p>
-          <ul class="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Email dan Nomor WhatsApp untuk notifikasi dan OTP.</li>
-            <li>ID Game & Server untuk penyelesaian pesanan.</li>
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">dataset</span> 1. Pengumpulan Data Informasi</h3>
+          <p class="text-slate-600 mb-3 leading-relaxed">Dalam rangka menyediakan layanan yang presisi dan mencegah penipuan, Anshel Store mengumpulkan berbagai titik data dari Anda saat menggunakan platform kami, yang meliputi namun tidak terbatas pada:</p>
+          <ul class="list-disc pl-5 text-slate-600 space-y-2 leading-relaxed">
+            <li><strong>Informasi Personal Terbatas:</strong> Nomor WhatsApp (sebagai Primary ID untuk login dan notifikasi via WhatsApp API) dan/atau Alamat Email (untuk pengiriman bukti transaksi formal).</li>
+            <li><strong>Informasi Transaksional:</strong> Data ID Game (UID, Zone ID, Server), nama karakter in-game (apabila sistem kami melakukan *fetching* API), daftar pesanan, riwayat pembelian, serta status mutasi dari Payment Gateway.</li>
+            <li><strong>Data Analitik & Teknis:</strong> Alamat IP, jenis peramban (browser), sistem operasi, *User-Agent*, *Cookies*, serta metrik performa interaksi (Waktu Kunjungan, Halaman yang Dilihat) guna mengukur kualitas dan stabilitas infrastruktur server kami.</li>
           </ul>
         </div>
 
         <div class="border-b border-slate-100 pb-8">
-          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">manage_accounts</span> 2. Penggunaan Data</h3>
-          <p class="text-slate-600 leading-relaxed">Data Anda murni digunakan untuk memproses pesanan, menghubungi Anda jika ada kendala, dan mencegah aktivitas penipuan. Kami tidak akan melakukan spam promosi tanpa persetujuan Anda.</p>
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">manage_accounts</span> 2. Tata Cara Penggunaan Data</h3>
+          <p class="text-slate-600 leading-relaxed mb-3">Seluruh data yang terhimpun secara eksklusif kami kelola secara internal. Data Anda akan digunakan secara proporsional untuk hal-hal berikut:</p>
+          <ul class="list-disc pl-5 text-slate-600 space-y-2 leading-relaxed">
+            <li><strong>Pemrosesan Order:</strong> Mengirimkan instruksi injeksi produk (Diamond/UC) ke API publisher pihak ketiga berdasarkan nomor ID Game yang diberikan.</li>
+            <li><strong>Komunikasi Kritis:</strong> Mengirimkan peringatan keamanan, kode One-Time Password (OTP), konfirmasi pembayaran sukses, dan eskalasi apabila produk gagal dikirim.</li>
+            <li><strong>Pencegahan *Fraud*:</strong> Menganalisis pola anomali transaksi (misal: *Carding*, pesanan spam massal) yang berpotensi merugikan kami maupun ekosistem digital.</li>
+          </ul>
+          <p class="text-slate-600 leading-relaxed mt-3">Anshel Store menegaskan komitmen **Anti-Spam**. Nomor WhatsApp Anda tidak akan pernah kami berikan kepada mitra periklanan pihak ketiga tanpa izin tertulis yang eksplisit.</p>
         </div>
 
         <div class="border-b border-slate-100 pb-8">
-          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">shield_lock</span> 3. Perlindungan & Pihak Ketiga</h3>
-          <p class="text-slate-600 leading-relaxed">Kami menerapkan enkripsi SSL/TLS. Data hanya dibagikan secara sangat terbatas ke mitra <em>Payment Gateway</em> dan <em>Publisher Game</em> untuk keperluan penyelesaian pembayaran semata.</p>
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">shield_lock</span> 3. Proteksi & Berbagi dengan Pihak Ketiga</h3>
+          <p class="text-slate-600 leading-relaxed mb-3">Kami mengimplementasikan metode keamanan *Transport Layer Security* (TLS) / SSL dan penyimpanan *Database* terenkripsi guna meminimalisir risiko peretasan, kebocoran, maupun modifikasi ilegal terhadap data Anda.</p>
+          <p class="text-slate-600 leading-relaxed">Namun, proses penyelesaian transaksi digital mutlak membutuhkan sinergi dengan entitas lain. Oleh karena itu, data parsial (Nomor Invoice, Nominal Tagihan) akan diteruskan hanya kepada Mitra *Payment Gateway* bersertifikasi PCI-DSS, serta *ID Game* diteruskan ke *Server Publisher* terkait. Anshel Store juga tunduk pada Hukum Republik Indonesia dan bersedia bekerjasama dengan aparat penegak hukum yang sah atas instruksi/surat perintah pengadilan yang valid terkait investigasi penipuan siber.</p>
+        </div>
+
+        <div class="pb-2">
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500">policy</span> 4. Hak Akses (Right to be Forgotten)</h3>
+          <p class="text-slate-600 leading-relaxed">Sebagai pengguna, Anda senantiasa memegang kuasa atas data pribadi Anda. Apabila Anda tidak lagi ingin menggunakan layanan kami dan menginginkan seluruh histori pesanan, nomor kontak, serta *cookies* dihapus dari *server* Anshel Store secara permanen, silakan layangkan permintaan *Account Deletion* melalui Email *Support* kami. Pemusnahan data akan dilakukan selambat-lambatnya dalam kurun waktu 7x24 jam kerja.</p>
         </div>
       </div>
     </div>
