@@ -67,9 +67,9 @@ function renderGameHeaderBg(game) {
     // video jadi SAMPUL background di belakang nama/publisher/kategori — autoplay, mute, loop
     bg.style.inset = "0"; bg.style.filter = "none"; bg.style.transform = "none"; bg.style.opacity = "1";
     bg.innerHTML = id
-      ? `<div class="absolute inset-0 overflow-hidden z-0">
-           <iframe class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.3] md:scale-150" style="width:100%;aspect-ratio:16/9;min-height:100%;min-width:100%;pointer-events:none;" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0&disablekb=1&fs=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-           <div class="absolute inset-0 z-10 w-full h-full bg-transparent" style="cursor:default;"></div>
+      ? `<div class="absolute inset-0 overflow-hidden z-0" style="background: ${game.image ? `url('${esc(game.image)}') center/cover` : gradOf(game)}">
+           <iframe class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.3] md:scale-150" style="width:100%;aspect-ratio:16/9;min-height:100%;min-width:100%;pointer-events:none;opacity:0;animation: ytReveal 1s ease 3s forwards;" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&playsinline=1&showinfo=0&disablekb=1&fs=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+           <div class="absolute inset-0 z-10 w-full h-full bg-slate-900/40" style="cursor:default;"></div>
          </div>`
       : `<video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0" src="${esc(game.video)}" autoplay muted loop playsinline></video>`;
   } else if (game.image) {
