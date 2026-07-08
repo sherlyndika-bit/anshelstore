@@ -258,20 +258,20 @@
 
         <!-- ================= INBOX ================= -->
         <section class="page h-[calc(100vh-120px)]" id="page-inbox">
-          <div class="flex h-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="flex flex-col lg:flex-row h-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <!-- List -->
-            <div class="w-1/3 min-w-[250px] border-r border-slate-200 flex flex-col bg-slate-50">
+            <div class="w-full lg:w-1/3 min-w-[250px] h-64 lg:h-auto border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col bg-slate-50 shrink-0">
               <div class="p-4 border-b border-slate-200 bg-white">
                 <h3 class="font-bold text-slate-800">Percakapan</h3>
               </div>
               <div class="flex-1 overflow-y-auto p-2" id="convList"></div>
             </div>
             <!-- Chat Pane -->
-            <div class="flex-1 flex flex-col bg-white" id="chatPane">
+            <div class="flex-1 flex flex-col bg-white min-h-[300px]" id="chatPane">
               <div class="flex-1 flex items-center justify-center p-8 text-center text-slate-500" id="chatEmpty">
                 <div class="max-w-sm">
                   <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">forum</span>
-                  <p>Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</p>
+                  <p>Pilih percakapan di atas untuk mulai membantu pelanggan.</p>
                 </div>
               </div>
             </div>

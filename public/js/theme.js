@@ -67,6 +67,7 @@ tailwind.config = {
     // Tombol "Pasang App" — muncul saat browser menyatakan situs bisa di-install
     var deferred = null;
     function showInstallBtn() {
+      if (window.location.pathname.startsWith('/dashboard')) return;
       if (document.getElementById("pwaInstallBtn") || !document.body) return;
       var b = document.createElement("button");
       b.id = "pwaInstallBtn"; b.type = "button";

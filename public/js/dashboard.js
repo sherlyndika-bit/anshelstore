@@ -554,11 +554,13 @@ function renderProduk() {
       </div>
       <div class="space-y-3 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
       ${g.items.map((it, ii) => `
-        <div class="flex items-center gap-3">
-          <input class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm font-semibold text-slate-800 bg-white shadow-sm pg-ilabel" data-g="${gi}" data-i="${ii}" value="${escapeHtml(it.label)}" placeholder="Label"/>
-          <input class="w-40 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm font-bold text-primary bg-white shadow-sm pg-iprice" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" placeholder="Harga"/>
-          <input class="w-24 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm text-slate-600 bg-white shadow-sm pg-istock" data-g="${gi}" data-i="${ii}" type="number" value="${typeof it.stock === "number" ? it.stock : ""}" placeholder="∞"/>
-          <button class="w-10 h-10 flex items-center justify-center bg-white border border-red-200 hover:bg-red-50 text-red-500 hover:text-red-600 rounded-lg transition-colors shadow-sm pg-delitem" data-g="${gi}" data-i="${ii}"><span class="material-symbols-outlined text-[18px]">close</span></button>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+          <input class="w-full sm:flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm font-semibold text-slate-800 bg-white shadow-sm pg-ilabel" data-g="${gi}" data-i="${ii}" value="${escapeHtml(it.label)}" placeholder="Label"/>
+          <div class="flex w-full sm:w-auto gap-2">
+            <input class="flex-1 sm:w-32 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm font-bold text-primary bg-white shadow-sm pg-iprice" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" placeholder="Harga"/>
+            <input class="w-20 sm:w-24 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm text-slate-600 bg-white shadow-sm pg-istock" data-g="${gi}" data-i="${ii}" type="number" value="${typeof it.stock === "number" ? it.stock : ""}" placeholder="Stok"/>
+            <button class="w-10 h-10 shrink-0 flex items-center justify-center bg-white border border-red-200 hover:bg-red-50 text-red-500 hover:text-red-600 rounded-lg transition-colors shadow-sm pg-delitem" data-g="${gi}" data-i="${ii}"><span class="material-symbols-outlined text-[18px]">close</span></button>
+          </div>
         </div>`).join("")}
       </div>
       <button class="px-5 py-2.5 bg-white border-2 border-dashed border-slate-300 hover:border-primary hover:text-primary text-slate-600 font-bold rounded-xl text-sm w-full transition-colors shadow-sm pg-additem" data-g="${gi}">+ Tambah Item</button>
