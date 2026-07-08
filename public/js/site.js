@@ -27,9 +27,8 @@
       <!-- Navbar Utama -->
       <div class="px-4 md:px-8 py-3">
         <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
-          <a href="/" id="siteBrand" class="flex items-center gap-3 shrink-0">
-            <span class="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-2xl shadow-sm">A</span>
-            <span class="text-2xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>
+          <a href="/" id="siteBrand" class="flex items-center shrink-0">
+            <img src="/logo.png" alt="Anshel Store" class="h-12 md:h-14 w-auto object-contain"/>
           </a>
           <nav class="hidden md:flex items-center gap-2">
             ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-5 py-2.5 rounded-full font-medium transition-colors ${n.key === active ? "bg-pink-50 text-primary" : "text-slate-600 hover:text-primary hover:bg-slate-50"}">${n.label}</a>`).join("")}
