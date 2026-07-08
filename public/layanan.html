@@ -5,69 +5,60 @@
 <title>Layanan AI Automation — Anshel Store</title>
 <meta name="description" content="Otomasi WhatsApp, Telegram, Instagram, dan workflow bisnismu dengan AI. Dibuat hangat & lucu, dirancang dengan teliti."/>
 <link rel="canonical" href="https://www.anshelstore.biz.id/layanan"/>
-<meta name="theme-color" content="#6c5ce7"/>
-<link href="/css/main.css?v=6.0" rel="stylesheet"/>
-<link href="/css/theme.css?v=6.0" rel="stylesheet"/>
-<script src="/js/theme.js?v=6.0"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<script src="/js/theme.js"></script>
+<link href="/css/theme.css" rel="stylesheet"/>
 </head>
-<body data-page="layanan" class="min-h-screen">
+<body data-page="layanan" class="text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
 
 <div id="siteNav"></div>
 
-<main class="container" style="padding-top:var(--sp-lg);padding-bottom:var(--sp-xl);display:flex;flex-direction:column;gap:var(--sp-lg)">
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl flex flex-col gap-md">
 
   <!-- Banner Header -->
-  <section class="relative overflow-hidden" style="border-radius:var(--radius-lg);background:var(--primary);padding:0">
-    <div style="display:flex;flex-wrap:wrap;align-items:center;padding:var(--sp-xl);gap:var(--sp-lg);position:relative;z-index:1">
-      <div class="flex-1" style="display:flex;flex-direction:column;gap:var(--sp-sm);min-width:280px">
-        <div class="badge badge-processing" style="width:fit-content;background:rgba(255,255,255,.2);color:#fff;border:none"><span class="material-symbols-outlined" style="font-size:18px">bolt</span> Otomasi Bisnismu</div>
-        <h1 style="color:#fff">Layanan AI Automation</h1>
-        <p style="color:rgba(255,255,255,.85);max-width:480px;margin-top:8px">
+  <section class="relative w-full rounded-[32px] bg-secondary-container overflow-hidden shadow-marshmallow border-2 border-dashed border-secondary border-opacity-30">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 20px 20px, #8c4c52 2px, transparent 0); background-size: 40px 40px;"></div>
+    <div class="flex flex-col md:flex-row items-center p-8 md:p-12 relative z-10 gap-lg">
+      <div class="flex-1 flex flex-col gap-sm">
+        <div class="inline-flex items-center gap-2 bg-surface rounded-full px-4 py-1 w-max border-2 border-dashed border-primary-container text-primary font-label-md text-label-md mb-2 shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Otomasi Bisnismu
+        </div>
+        <h1 class="font-display-lg text-display-lg text-on-secondary-container">Layanan AI Automation</h1>
+        <p class="font-body-lg text-body-lg text-on-secondary-container/80 max-w-lg mt-2">
           Solusi otomasi WhatsApp, Telegram, Instagram, dan workflow — dirancang dengan teliti, dibungkus hangat. Pilih layanan, langsung konsultasi.
         </p>
-        <div class="flex-wrap gap-sm" style="display:flex;margin-top:12px">
-          <a id="ctaWa" href="/tentang" class="btn btn-primary btn-lg" style="background:#fff;color:var(--primary)"><span class="material-symbols-outlined" style="font-size:20px">chat</span> Konsultasi Gratis</a>
-          <button type="button" onclick="document.getElementById('daftar-layanan').scrollIntoView({behavior:'smooth'})" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.4);color:#fff"><span class="material-symbols-outlined" style="font-size:20px">grid_view</span> Lihat Layanan</button>
+        <div class="flex flex-wrap gap-3 mt-3">
+          <a id="ctaWa" href="/tentang" class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-full btn-inner-glow shadow-marshmallow hover:-translate-y-0.5 transition-transform inline-flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">chat</span> Konsultasi Gratis</a>
+          <button type="button" onclick="document.getElementById('daftar-layanan').scrollIntoView({behavior:'smooth'})" class="bg-surface text-primary font-label-md text-label-md px-6 py-3 rounded-full border-2 border-dashed border-primary-container hover:bg-primary-container/30 transition-colors inline-flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">grid_view</span> Lihat Layanan</button>
         </div>
       </div>
-      <div id="layananArt" class="relative overflow-hidden" style="width:260px;height:220px;border-radius:var(--radius);background:rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex-shrink:0">
-        <span style="font-size:4rem">🤖</span>
-        <span style="font-size:1.3rem;font-weight:700;color:#fff">Anshel Store</span>
+      <div id="layananArt" class="w-full md:w-1/3 h-48 md:h-64 rounded-2xl overflow-hidden border-4 border-surface shadow-md relative bg-gradient-to-br from-primary-container/50 to-secondary-container/50 flex flex-col items-center justify-center gap-2">
+        <span class="text-6xl md:text-7xl">🤖</span>
+        <span class="font-display-lg text-xl md:text-2xl text-primary">Anshel Store</span>
       </div>
     </div>
   </section>
 
   <!-- Daftar Layanan -->
-  <section id="daftar-layanan" style="scroll-margin-top:128px;display:flex;flex-direction:column;gap:var(--sp-lg)">
-    <div class="flex-between" style="margin-bottom:8px">
+  <section id="daftar-layanan" class="flex flex-col gap-lg scroll-mt-32">
+    <div class="flex justify-between items-end mb-2">
       <div>
-        <h2 style="display:flex;align-items:center;gap:12px">Pilih Layanan <span class="material-symbols-outlined text-primary" style="font-size:28px">science</span></h2>
-        <p class="text-sub" style="margin-top:4px">Otomasi yang aman, ramah, dan langsung jalan untuk bisnismu.</p>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-3">Pilih Layanan <span class="material-symbols-outlined text-primary text-[32px]">science</span></h2>
+        <p class="font-body-md text-on-surface-variant mt-1">Otomasi yang aman, ramah, dan langsung jalan untuk bisnismu.</p>
       </div>
     </div>
-    <div id="servicesGrid" class="grid grid-3 gap-lg"></div>
-    <p id="servicesEmpty" class="hidden text-center text-muted" style="padding:var(--sp-xl) 0">Layanan akan segera muncul ✨</p>
+    <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    <p id="servicesEmpty" class="hidden text-center text-on-surface-variant py-xl">Layanan akan segera muncul ✨</p>
   </section>
 
   <!-- Cara Kerja -->
-  <section class="card" style="padding:var(--sp-xl)">
-    <h2 class="text-center" style="margin-bottom:var(--sp-lg)">Cara Kerjanya</h2>
-    <div class="steps">
-      <div class="step text-center">
-        <div class="step-num">1</div>
-        <h3 style="margin:12px 0 4px">Konsultasi</h3>
-        <p class="text-sub" style="font-size:.9rem">Cerita kebutuhanmu lewat WhatsApp.</p>
-      </div>
-      <div class="step text-center">
-        <div class="step-num" style="background:var(--secondary)">2</div>
-        <h3 style="margin:12px 0 4px">Setup</h3>
-        <p class="text-sub" style="font-size:.9rem">Tim kami racik &amp; pasang otomasinya.</p>
-      </div>
-      <div class="step text-center">
-        <div class="step-num" style="background:var(--accent)">3</div>
-        <h3 style="margin:12px 0 4px">Jalan</h3>
-        <p class="text-sub" style="font-size:.9rem">Bisnismu otomatis 24/7, kamu santai.</p>
-      </div>
+  <section class="bg-surface-container-lowest rounded-[32px] border-2 border-dashed border-outline-variant p-8 md:p-12 shadow-marshmallow">
+    <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6 text-center">Cara Kerjanya</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-primary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-primary-container">forum</span></div><h3 class="font-headline-md mb-1">1. Konsultasi</h3><p class="text-on-surface-variant text-sm">Cerita kebutuhanmu lewat WhatsApp.</p></div>
+      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-secondary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-secondary-container">build</span></div><h3 class="font-headline-md mb-1">2. Setup</h3><p class="text-on-surface-variant text-sm">Tim kami racik &amp; pasang otomasinya.</p></div>
+      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-tertiary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-tertiary-container">rocket_launch</span></div><h3 class="font-headline-md mb-1">3. Jalan</h3><p class="text-on-surface-variant text-sm">Bisnismu otomatis 24/7, kamu santai.</p></div>
     </div>
   </section>
 </main>
@@ -75,15 +66,15 @@
 <div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
-<script src="/js/widget.js?v=6.0"></script>
-<script src="/js/site.js?v=6.0"></script>
+<script src="/js/widget.js"></script>
+<script src="/js/site.js"></script>
 <script>
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
   const COLORS = [
-    { chip: "badge badge-processing" },
-    { chip: "badge badge-processing" },
-    { chip: "badge badge-paid" }
+    { bg: "bg-secondary-container/20", border: "border-primary-container/50", chip: "bg-tertiary-container/40 text-tertiary" },
+    { bg: "bg-primary-container/10", border: "border-secondary-container", chip: "bg-primary-container/40 text-primary" },
+    { bg: "bg-tertiary-fixed/30", border: "border-tertiary-container", chip: "bg-secondary-fixed/50 text-secondary" }
   ];
 
   Promise.all([fetch("/api/services").then(r=>r.json()), fetch("/api/settings").then(r=>r.json())]).then(([services, set]) => {
@@ -92,27 +83,27 @@
     if (wa) document.getElementById("ctaWa").href = `https://wa.me/${wa}?text=${encodeURIComponent("Halo Anshel Store, saya mau konsultasi jasa AI Automation.")}`;
     // Logo toko di banner header (bila sudah diupload)
     const logo = set && set.settings && set.settings.logo;
-    if (logo) { const a = document.getElementById("layananArt"); if (a) a.innerHTML = `<img alt="Anshel Store" style="width:100%;height:100%;object-fit:contain;padding:16px" src="${logo}"/>`; }
+    if (logo) { const a = document.getElementById("layananArt"); if (a) a.innerHTML = `<img alt="Anshel Store" class="w-full h-full object-contain p-4" src="${logo}"/>`; }
 
     const grid = document.getElementById("servicesGrid"), empty = document.getElementById("servicesEmpty");
     if (!Array.isArray(services) || !services.length) { empty.classList.remove("hidden"); return; }
     grid.innerHTML = services.map((s, i) => {
       const c = COLORS[i % COLORS.length];
       const visual = s.image
-        ? `<img style="width:100%;height:100%;object-fit:cover;transition:transform .5s" src="${esc(s.image)}" alt="${esc(s.title)}"/>`
-        : `<span class="material-symbols-outlined text-primary" style="font-size:64px;transition:transform .5s">${esc(s.icon || "bolt")}</span>`;
+        ? `<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="${esc(s.image)}" alt="${esc(s.title)}"/>`
+        : `<span class="material-symbols-outlined text-[64px] text-primary group-hover:scale-110 transition-transform duration-500">${esc(s.icon || "auto_awesome")}</span>`;
       const waText = encodeURIComponent("Halo Anshel Store, saya tertarik layanan: " + (s.title || ""));
       const cta = wa ? `https://wa.me/${wa}?text=${waText}` : "/tentang";
-      return `<article class="card hover-lift" style="display:flex;flex-direction:column;gap:var(--sp-md)">
-        <div class="overflow-hidden" style="height:160px;border-radius:var(--radius-sm);background:var(--surface-alt);display:flex;align-items:center;justify-content:center">${visual}</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div><span class="${c.chip}" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em">${esc((s.category || "Otomasi"))}</span></div>
-          <h3 style="line-height:1.25">${esc(s.title || "Layanan")}</h3>
-          <p class="text-sub" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(s.desc || "")}</p>
+      return `<article class="bg-surface-container-lowest rounded-[24px] border-[1.5px] border-outline-variant shadow-marshmallow p-6 relative flex flex-col gap-4 group hover:translate-y-[-4px] hover:shadow-[0_15px_40px_-10px_rgba(139,111,91,0.2)] transition-all duration-300">
+        <div class="h-40 rounded-xl overflow-hidden ${c.bg} border-2 border-dashed ${c.border} flex items-center justify-center">${visual}</div>
+        <div class="flex flex-col gap-2">
+          <div class="flex gap-2"><span class="${c.chip} px-3 py-1 rounded-full font-label-md text-[12px] uppercase tracking-wider">${esc((s.category || "Otomasi"))}</span></div>
+          <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${esc(s.title || "Layanan")}</h3>
+          <p class="font-body-md text-on-surface-variant line-clamp-3">${esc(s.desc || "")}</p>
         </div>
-        <div style="margin-top:auto;padding-top:var(--sp-md);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <div class="mono text-accent" style="font-weight:700">${s.priceFrom ? "Mulai " + rupiah(s.priceFrom) : "Hubungi kami"}</div>
-          <a href="${cta}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Konsultasi <span class="material-symbols-outlined" style="font-size:18px">arrow_outward</span></a>
+        <div class="mt-auto pt-4 border-t-2 border-dashed border-surface-container flex items-center justify-between gap-2">
+          <div class="font-headline-md text-secondary">${s.priceFrom ? "Mulai " + rupiah(s.priceFrom) : "Hubungi kami"}</div>
+          <a href="${cta}" target="_blank" rel="noopener" class="bg-primary-container text-on-primary-container font-label-md px-5 py-3 rounded-full btn-inner-glow hover:bg-primary hover:text-white transition-colors active:scale-95 flex items-center gap-2">Konsultasi <span class="material-symbols-outlined text-[18px]">arrow_outward</span></a>
         </div>
       </article>`;
     }).join("");
@@ -121,7 +112,4 @@
   if (typeof initChatWidget === "function") initChatWidget();
 </script>
 </body></html>
-
-
-
 

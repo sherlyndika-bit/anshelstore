@@ -7,72 +7,96 @@
 <meta name="facebook-domain-verification" content="g0cgrlw961bph8btu8w2244z2dsa92"/>
 <link rel="canonical" href="https://www.anshelstore.biz.id/"/>
 <link rel="manifest" href="/manifest.json"/>
-<meta name="theme-color" content="#6c5ce7"/>
+<meta name="theme-color" content="#e84393"/>
 <link rel="apple-touch-icon" href="/icon-192.png"/>
-<link href="/css/main.css?v=6.0" rel="stylesheet"/>
-<link href="/css/theme.css?v=6.0" rel="stylesheet"/>
-<script src="/js/theme.js?v=6.0"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<script src="/js/theme.js"></script>
+<link href="/css/theme.css" rel="stylesheet"/>
 </head>
-<body data-page="home" class="min-h-screen">
+<body data-page="home" class="font-body-md text-on-surface bg-gradient-animated min-h-screen flex flex-col">
 
 <div id="siteNav"></div>
 
-<main>
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-grid container">
-      <div> <!-- left -->
-        <div class="hero-badge">Aman & Terpercaya 100%</div>
-        <h1>Top Up Game <br/><span class="text-gradient">Tercepat &amp; Termurah</span></h1>
-        <p class="lead">Platform top up diamond game favorit dan termurah. Aman 100% dan instan masuk hitungan detik!</p>
-        <div class="hero-cta">
-          <a href="/topup" class="btn btn-primary btn-lg">Top Up Game Sekarang <span class="material-symbols-outlined">arrow_forward</span></a>
-          <a href="/layanan" class="btn btn-outline btn-lg">Layanan Sosial Media</a>
+<main class="flex-grow w-full relative overflow-hidden flex flex-col items-center justify-start pt-12 md:pt-20 pb-32">
+  <!-- Hero: banner terstruktur (1 besar + 2 kecil) -->
+  <section class="relative w-full max-w-7xl mx-auto px-4 lg:px-container-margin z-10 mb-16 mt-2">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Banner utama: Layanan AI -->
+      <div class="lg:col-span-2 bg-primary-container rounded-[2rem] p-8 md:p-12 relative overflow-hidden flex flex-col justify-center min-h-[360px] md:min-h-[400px] marshmallow-shadow">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+        <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-primary-container mb-4 relative z-10 max-w-lg leading-tight">
+          Top Up Game, <br/><span class="text-on-surface">Instan &amp; Termurah</span>
+        </h1>
+        <p class="font-body-lg text-body-lg text-on-primary-container/90 max-w-md mb-8 relative z-10">
+          Platform top up diamond game favorit dan termurah. Aman 100% dan instan masuk dalam hitungan detik!
+        </p>
+        <div class="relative z-10">
+          <a href="/topup" class="bg-surface hover:bg-surface-bright text-primary font-label-md text-label-md px-8 py-4 rounded-full shadow-sm transition-all duration-300 transform hover:-translate-y-1 inline-flex items-center gap-2 w-fit group">
+            <span>Top Up Sekarang</span>
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
         </div>
-        <div class="hero-stats">
-          <div><strong class="mono">1.000+</strong><span>Transaksi</span></div>
-          <div><strong class="mono">24/7</strong><span>Online System</span></div>
-          <div><strong class="mono">4.9★</strong><span>Rating</span></div>
-        </div>
+        <img id="heroBrandImg" alt="" class="hidden absolute bottom-4 right-4 w-56 md:w-72 h-auto object-contain opacity-80 pointer-events-none drop-shadow-lg"/>
       </div>
-      <div class="hero-visual"> <!-- right -->
-        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop" alt="Esports Gaming Banner" class="hero-img" style="object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; height: 350px;" />
-        <img id="heroBrandImg" alt="" class="hidden" style="position:absolute;bottom:-20px;right:-20px;width:140px;height:auto;object-fit:contain;opacity:0.9;pointer-events:none;background:var(--surface);border-radius:var(--radius-lg);padding:10px;box-shadow:var(--shadow)"/>
+      <!-- Banner kecil -->
+      <div class="flex flex-col gap-6">
+        <a href="/layanan" class="flex-1 bg-secondary-container rounded-[2rem] p-8 relative overflow-hidden flex flex-col justify-center marshmallow-shadow group transition-transform hover:-translate-y-1 duration-300">
+          <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="flex items-center gap-4 mb-3 relative z-10">
+            <div class="w-12 h-12 rounded-full bg-surface/60 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-secondary-container">smart_toy</span></div>
+            <h2 class="font-headline-md text-headline-md text-on-secondary-container">Layanan Otomasi</h2>
+          </div>
+          <p class="font-body-md text-body-md text-on-secondary-container/90 mb-4 relative z-10">Otomasi WhatsApp & Instagram untuk bantu bisnismu.</p>
+          <span class="font-label-md text-on-secondary-container text-sm flex items-center gap-1 relative z-10 group-hover:underline">Cek Layanan <span class="material-symbols-outlined text-sm">chevron_right</span></span>
+        </a>
+        <a href="/blog" class="flex-1 bg-tertiary-container rounded-[2rem] p-8 relative overflow-hidden flex flex-col justify-center marshmallow-shadow group transition-transform hover:-translate-y-1 duration-300">
+          <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="flex items-center gap-4 mb-3 relative z-10">
+            <div class="w-12 h-12 rounded-full bg-surface/60 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-tertiary-container">forum</span></div>
+            <h2 class="font-headline-md text-headline-md text-on-tertiary-container">Komunitas Anshel</h2>
+          </div>
+          <p class="font-body-md text-body-md text-on-tertiary-container/90 mb-4 relative z-10">Ngobrol di live chat, tanya promo &amp; tips bareng gamer lain.</p>
+          <span class="font-label-md text-on-tertiary-container text-sm flex items-center gap-1 relative z-10 group-hover:underline">Masuk Komunitas <span class="material-symbols-outlined text-sm">chevron_right</span></span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Games showcase -->
-  <section class="section">
-    <div class="container">
-      <div class="flex-between" style="margin-bottom:32px">
-        <div>
-          <h2>Top Up Game Favorit 🎮</h2>
-          <p class="text-sub" style="margin-top:4px">Diamond & voucher meluncur seketika.</p>
-        </div>
-        <a href="/topup" class="btn btn-outline btn-sm">Lihat semua <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span></a>
+  <!-- Wavy Divider -->
+  <svg class="w-full h-24 md:h-32 text-surface-container-lowest fill-current" preserveAspectRatio="none" viewBox="0 0 1440 320"><path d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,165.3C960,149,1056,171,1152,186.7C1248,203,1344,213,1392,218.7L1440,224L1440,320L0,320Z"></path></svg>
+
+  <!-- Etalase Game (dinamis) -->
+  <section class="w-full max-w-7xl mx-auto py-20 px-4 lg:px-container-margin relative z-10">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Top Up Game Favorit 🎮</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Diamond & voucher meluncur seketika.</p>
       </div>
-      <div id="popGames" class="grid grid-5"></div>
+      <a href="/topup" class="hidden sm:inline-flex items-center gap-1 text-primary font-label-md hover:gap-2 transition-all">Lihat semua <span class="material-symbols-outlined">arrow_forward</span></a>
     </div>
+    <div id="popGames" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"></div>
   </section>
 
-  <!-- Community CTA -->
-  <section class="section">
-    <div class="container">
-      <div class="cta-band">
-        <h2 style="position:relative">💬 Gabung Komunitas Anshel Store</h2>
-        <p style="position:relative">Ngobrol langsung di live chat, tanya promo, & baca tips bareng gamer lain.</p>
-        <a href="/blog" class="btn btn-outline" style="position:relative"><span class="material-symbols-outlined">forum</span> Masuk Komunitas</a>
+  <!-- Ajakan komunitas -->
+  <section class="w-full max-w-7xl mx-auto px-4 lg:px-container-margin relative z-10">
+    <div class="glass-bubble rounded-[3rem] p-10 md:p-12 flex flex-col md:flex-row items-center gap-6 text-center md:text-left sticker-border">
+      <span class="text-6xl animate-float">💬</span>
+      <div class="flex-grow">
+        <h2 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface">Gabung Komunitas Anshel Store</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Ngobrol langsung di live chat, tanya promo, & baca tips bareng gamer lain.</p>
       </div>
+      <a href="/blog" class="shrink-0 bg-primary text-on-primary font-label-md px-7 py-4 rounded-full marshmallow-shadow hover:-translate-y-1 transition-transform flex items-center gap-2"><span class="material-symbols-outlined">forum</span> Masuk Komunitas</a>
     </div>
   </section>
 </main>
 
+<!-- Footer & bottom nav site-wide -->
 <div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
-<script src="/js/site.js?v=6.0"></script>
-<script src="/js/widget.js?v=6.0"></script>
+<script src="/js/site.js"></script>
+<script src="/js/widget.js"></script>
 <script>
   // Smooth scroll untuk tombol data-scroll
   document.addEventListener("click", (e) => { const a = e.target.closest("[data-scroll]"); if (a) { e.preventDefault(); const t = document.getElementById(a.dataset.scroll); if (t) t.scrollIntoView({ behavior: "smooth" }); } });
@@ -81,14 +105,14 @@
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   fetch("/api/games").then((r) => r.json()).then((games) => {
     const el = document.getElementById("popGames"); if (!el) return;
-    if (!games.length) { el.innerHTML = '<p class="text-center text-muted" style="grid-column:1/-1">Game segera hadir ✨</p>'; return; }
+    if (!games.length) { el.innerHTML = '<p class="col-span-full text-center text-on-surface-variant">Game segera hadir ✨</p>'; return; }
     el.innerHTML = games.slice(0, 10).map((g) => {
       const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
-      const art = g.image ? `<img src="${g.image}" alt="${g.name}" style="width:100%;height:100%;object-fit:cover"/>` : `<span style="font-size:2rem">${EMOJI[g.id] || "🎮"}</span>`;
-      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="card shine" style="padding:12px;text-align:center;cursor:pointer">
-        <div style="width:100%;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--surface-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px">${art}</div>
-        <div style="font-weight:700;font-size:.9rem">${g.name}</div>
-        <div class="mono text-primary" style="font-size:.82rem;margin-top:2px">Mulai ${rupiah(min)}</div>
+      const art = g.image ? `<img src="${g.image}" alt="${g.name}" class="w-full h-full object-cover"/>` : `<span class="text-4xl">${EMOJI[g.id] || "🎮"}</span>`;
+      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group glass-bubble rounded-[2rem] p-3 flex flex-col items-center text-center hover:-translate-y-2 transition-transform duration-300 sticker-border hover:border-primary-container">
+        <div class="w-full aspect-square rounded-[1.5rem] bg-secondary-container/40 flex items-center justify-center overflow-hidden mb-3 group-hover:scale-105 transition-transform">${art}</div>
+        <div class="font-bold text-on-surface text-sm truncate w-full">${g.name}</div>
+        <div class="text-xs text-primary font-semibold mt-0.5">Mulai ${rupiah(min)}</div>
       </a>`;
     }).join("");
   }).catch(() => {});
@@ -101,7 +125,4 @@
   }).catch(() => {});
 </script>
 </body></html>
-
-
-
 
