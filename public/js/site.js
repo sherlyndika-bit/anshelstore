@@ -16,19 +16,29 @@
   const navMount = document.getElementById("siteNav");
   if (navMount) {
     navMount.innerHTML = `
-    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50 px-4 md:px-8 py-3">
-      <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
-        <a href="/" id="siteBrand" class="flex items-center gap-3 shrink-0">
-          <span class="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-2xl shadow-sm">A</span>
-          <span class="text-2xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>
-        </a>
-        <nav class="hidden md:flex items-center gap-2">
-          ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-5 py-2.5 rounded-full font-medium transition-colors ${n.key === active ? "bg-pink-50 text-primary" : "text-slate-600 hover:text-primary hover:bg-slate-50"}">${n.label}</a>`).join("")}
-        </nav>
-        <div class="flex items-center gap-3 shrink-0" id="siteAuth">
-          <a href="/cek-transaksi" title="Cek Transaksi" class="hidden md:flex items-center gap-2 text-slate-600 hover:text-primary font-medium transition-colors"><span class="material-symbols-outlined text-[20px]">receipt_long</span> Lacak Pesanan</a>
-          <a href="/masuk" class="bg-primary hover:bg-pink-700 text-white font-medium px-6 py-2.5 rounded-full shadow-sm transition-colors hidden sm:block">Masuk / Daftar</a>
-          <a href="/masuk" class="sm:hidden text-slate-600"><span class="material-symbols-outlined text-2xl">account_circle</span></a>
+    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
+      <!-- Teks Berjalan (Announcement Bar) -->
+      <div class="bg-primary text-white text-xs font-medium py-1.5 px-4">
+        <div class="max-w-7xl mx-auto flex items-center">
+          <span class="material-symbols-outlined text-[14px] mr-2">campaign</span>
+          <marquee scrollamount="5" class="flex-1">Selamat datang di Anshel Store! Nikmati layanan top up game instan, termurah, dan terpercaya 24/7. Promo spesial diskon untuk member baru!</marquee>
+        </div>
+      </div>
+      <!-- Navbar Utama -->
+      <div class="px-4 md:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
+          <a href="/" id="siteBrand" class="flex items-center gap-3 shrink-0">
+            <span class="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-2xl shadow-sm">A</span>
+            <span class="text-2xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>
+          </a>
+          <nav class="hidden md:flex items-center gap-2">
+            ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-5 py-2.5 rounded-full font-medium transition-colors ${n.key === active ? "bg-pink-50 text-primary" : "text-slate-600 hover:text-primary hover:bg-slate-50"}">${n.label}</a>`).join("")}
+          </nav>
+          <div class="flex items-center gap-3 shrink-0" id="siteAuth">
+            <a href="/cek-transaksi" title="Cek Transaksi" class="hidden md:flex items-center gap-2 text-slate-600 hover:text-primary font-medium transition-colors"><span class="material-symbols-outlined text-[20px]">receipt_long</span> Lacak Pesanan</a>
+            <a href="/masuk" class="bg-primary hover:bg-pink-700 text-white font-medium px-6 py-2.5 rounded-full shadow-sm transition-colors hidden sm:block">Masuk / Daftar</a>
+            <a href="/masuk" class="sm:hidden text-slate-600"><span class="material-symbols-outlined text-2xl">account_circle</span></a>
+          </div>
         </div>
       </div>
     </header>`;
@@ -98,9 +108,9 @@
     const s = d.store || {}, set = d.settings || {}, soc = set.social || {};
     if (set.logo) {
       const b = document.getElementById("siteBrand");
-      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-10 md:h-12 w-auto transition-transform"/><span class="text-xl text-slate-800 font-extrabold tracking-tight ml-2 hidden sm:block">Anshel<span class="text-primary">Store</span></span>`;
+      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 md:h-20 w-auto transition-transform"/>`;
       const fb = document.getElementById("footBrand");
-      if (fb) fb.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-3 py-2 shadow-md border border-slate-100"><img src="${set.logo}" alt="Anshel Store" class="h-10 w-auto"/></span><span class="text-xl text-slate-800 font-extrabold tracking-tight ml-2">Anshel<span class="text-primary">Store</span></span>`;
+      if (fb) fb.innerHTML = `<span class="inline-flex items-center bg-white rounded-xl px-3 py-2 shadow-md border border-slate-100"><img src="${set.logo}" alt="Anshel Store" class="h-12 w-auto"/></span>`;
     }
     if (s.whatsapp) { const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo Anshel Store, saya mau tanya.")}`; const fw = document.getElementById("footWa"); if (fw) fw.href = wa; }
     const fm = document.getElementById("footMail"); if (fm && s.email) fm.href = "mailto:" + s.email;
