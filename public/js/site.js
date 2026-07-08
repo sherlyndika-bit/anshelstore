@@ -123,7 +123,7 @@
       img.src = set.logo;
 
       const b = document.getElementById("siteBrand");
-      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 md:h-24 w-auto -my-3 md:-my-6 transition-transform"/>`;
+      if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-20 md:h-24 w-auto -my-5 md:-my-6 transition-transform"/>`;
       const fb = document.getElementById("footBrand");
       if (fb) fb.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 w-auto -ml-2"/>`;
     }
