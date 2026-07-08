@@ -52,8 +52,8 @@
     { href: "/akun", label: "Akun", icon: "person", key: "akun" },
   ];
   const bnav = document.createElement("div");
-  bnav.className = "site-bottom-nav";
-  bnav.innerHTML = BOTTOM.map((n) => `<a href="${n.href}" class="${n.key === active ? "active" : ""}"><span class="material-symbols-outlined">${n.icon}</span>${n.label}</a>`).join("");
+  bnav.className = "fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-between items-center px-1 pb-[env(safe-area-inset-bottom)] sm:hidden z-50 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)]";
+  bnav.innerHTML = BOTTOM.map((n) => `<a href="${n.href}" class="flex flex-col items-center justify-center w-full py-2 px-1 text-[10px] font-medium transition-colors ${n.key === active ? "text-primary" : "text-slate-400 hover:text-slate-600"}"><span class="material-symbols-outlined text-[24px] mb-0.5" ${n.key === active ? 'style="font-variation-settings:\'FILL\' 1"' : ""}>${n.icon}</span><span class="truncate w-full text-center">${n.label}</span></a>`).join("");
   document.body.appendChild(bnav);
 
   const footMount = document.getElementById("siteFooter");
