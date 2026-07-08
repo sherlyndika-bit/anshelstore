@@ -1,62 +1,105 @@
 <!DOCTYPE html>
-<html class="light" lang="id"><head>
+<html lang="id">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Layanan AI Automation — Anshel Store</title>
-<meta name="description" content="Otomasi WhatsApp, Telegram, Instagram, dan workflow bisnismu dengan AI. Dibuat hangat & lucu, dirancang dengan teliti."/>
+<title>Enterprise Solutions — Anshel Store</title>
+<meta name="description" content="Professional AI automation, WhatsApp integration, and digital workflow solutions for business."/>
 <link rel="canonical" href="https://www.anshelstore.biz.id/layanan"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-<script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#e11d48',
+          'primary-hover': '#be123c'
+        }
+      }
+    }
+  }
+</script>
 </head>
-<body data-page="layanan" class="text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="layanan" class="text-slate-800 bg-slate-50 min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
 
 <div id="siteNav"></div>
 
-<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl flex flex-col gap-md">
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-16">
 
   <!-- Banner Header -->
-  <section class="relative w-full rounded-2xl bg-gradient-animated overflow-hidden shadow-sm border border-pink-100">
-    <div class="flex flex-col md:flex-row items-center p-8 md:p-12 relative z-10 gap-lg">
-      <div class="flex-1 flex flex-col gap-sm">
-        <div class="inline-flex items-center gap-2 bg-white/80 text-primary rounded-full px-4 py-1 w-max font-medium text-sm mb-2 shadow-sm">
-          <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Layanan Digital
+  <section class="relative w-full rounded-2xl bg-slate-900 overflow-hidden shadow-lg border border-slate-800">
+    <!-- Abstract tech background -->
+    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-700 via-slate-900 to-slate-900"></div>
+    
+    <div class="flex flex-col md:flex-row items-center p-8 md:p-16 relative z-10 gap-12">
+      <div class="flex-1 flex flex-col gap-4">
+        <div class="inline-flex items-center gap-2 bg-rose-600/20 text-rose-400 border border-rose-500/30 rounded px-3 py-1 w-max font-semibold text-xs tracking-wider uppercase mb-2">
+          B2B Solutions
         </div>
-        <h1 class="font-display-lg text-display-lg text-slate-900">Layanan Digital & Otomasi</h1>
-        <p class="font-body-lg text-body-lg text-slate-600 max-w-lg mt-2">
-          Solusi otomasi WhatsApp, Telegram, Instagram, dan kebutuhan digital lainnya. Didesain untuk mempercepat bisnis Anda.
+        <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight">Digital Services &<br/><span class="text-rose-500">Automation</span></h1>
+        <p class="text-lg text-slate-300 max-w-xl mt-2">
+          Empower your business with cutting-edge AI automation for WhatsApp, Telegram, and Instagram. Scalable, secure, and built for growth.
         </p>
-        <div class="flex flex-wrap gap-3 mt-3">
-          <a id="ctaWa" href="/tentang" class="bg-primary text-white font-medium px-6 py-3 rounded-full shadow-md hover:-translate-y-1 transition-transform inline-flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">chat</span> Konsultasi Gratis</a>
-          <button type="button" onclick="document.getElementById('daftar-layanan').scrollIntoView({behavior:'smooth'})" class="bg-white/80 backdrop-blur text-primary font-medium px-6 py-3 rounded-full shadow-sm hover:bg-white transition-colors inline-flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">grid_view</span> Lihat Layanan</button>
+        <div class="flex flex-wrap gap-4 mt-6">
+          <a id="ctaWa" href="/tentang" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-8 py-3.5 rounded-lg shadow-md transition-colors inline-flex items-center gap-2">
+            Book Consultation
+          </a>
+          <button type="button" onclick="document.getElementById('daftar-layanan').scrollIntoView({behavior:'smooth'})" class="bg-transparent border border-slate-600 text-white hover:bg-slate-800 font-semibold px-8 py-3.5 rounded-lg transition-colors inline-flex items-center gap-2">
+            View Services
+          </button>
         </div>
       </div>
-      <div id="layananArt" class="w-full md:w-1/3 h-48 md:h-64 rounded-xl overflow-hidden border-2 border-white shadow-md relative bg-white/50 backdrop-blur flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
-        <span class="material-symbols-outlined text-6xl text-primary animate-pulse">support_agent</span>
+      <div id="layananArt" class="hidden md:flex w-full md:w-1/3 h-64 rounded-xl border border-slate-700 bg-slate-800/50 backdrop-blur items-center justify-center text-slate-600">
+        <span class="material-symbols-outlined text-[80px] text-slate-700">lan</span>
       </div>
     </div>
   </section>
 
   <!-- Daftar Layanan -->
-  <section id="daftar-layanan" class="flex flex-col gap-lg scroll-mt-32">
-    <div class="flex justify-between items-end mb-2">
+  <section id="daftar-layanan" class="flex flex-col gap-8 scroll-mt-24">
+    <div class="flex justify-between items-end border-b border-slate-200 pb-4">
       <div>
-        <h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-3">Pilih Layanan <span class="material-symbols-outlined text-primary text-[32px]">science</span></h2>
-        <p class="font-body-md text-on-surface-variant mt-1">Otomasi yang aman, ramah, dan langsung jalan untuk bisnismu.</p>
+        <h2 class="text-3xl font-bold text-slate-900">Our Services</h2>
+        <p class="text-slate-500 mt-2">Professional tools designed to optimize your workflow.</p>
       </div>
     </div>
-    <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    <p id="servicesEmpty" class="hidden text-center text-on-surface-variant py-xl">Layanan akan segera muncul ✨</p>
+    <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
+    <p id="servicesEmpty" class="hidden text-center text-slate-500 py-16 bg-white rounded-xl border border-slate-200 shadow-sm">Services catalog is currently being updated.</p>
   </section>
 
   <!-- Cara Kerja -->
-  <section class="bg-surface-container-lowest rounded-[32px] border-2 border-dashed border-outline-variant p-8 md:p-12 shadow-marshmallow">
-    <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6 text-center">Cara Kerjanya</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-primary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-primary-container">forum</span></div><h3 class="font-headline-md mb-1">1. Konsultasi</h3><p class="text-on-surface-variant text-sm">Cerita kebutuhanmu lewat WhatsApp.</p></div>
-      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-secondary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-secondary-container">build</span></div><h3 class="font-headline-md mb-1">2. Setup</h3><p class="text-on-surface-variant text-sm">Tim kami racik &amp; pasang otomasinya.</p></div>
-      <div class="text-center"><div class="w-16 h-16 mx-auto rounded-full bg-tertiary-container grid place-items-center mb-3"><span class="material-symbols-outlined text-2xl text-on-tertiary-container">rocket_launch</span></div><h3 class="font-headline-md mb-1">3. Jalan</h3><p class="text-on-surface-variant text-sm">Bisnismu otomatis 24/7, kamu santai.</p></div>
+  <section class="bg-white rounded-2xl border border-slate-200 p-8 md:p-16 shadow-sm mb-12">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-slate-900">How We Work</h2>
+      <p class="text-slate-500 mt-3">A streamlined process to get your automation up and running.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+      <!-- Connecting line for desktop -->
+      <div class="hidden md:block absolute top-10 left-[16%] right-[16%] h-[2px] bg-slate-100 z-0"></div>
+      
+      <div class="text-center relative z-10">
+        <div class="w-20 h-20 mx-auto rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 shadow-sm">
+          <span class="material-symbols-outlined text-3xl text-rose-600">forum</span>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">1. Discovery</h3>
+        <p class="text-slate-600 text-sm px-4">We analyze your business needs and design a custom automation workflow.</p>
+      </div>
+      <div class="text-center relative z-10">
+        <div class="w-20 h-20 mx-auto rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 shadow-sm">
+          <span class="material-symbols-outlined text-3xl text-rose-600">integration_instructions</span>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">2. Implementation</h3>
+        <p class="text-slate-600 text-sm px-4">Our engineers build, test, and deploy the solution seamlessly.</p>
+      </div>
+      <div class="text-center relative z-10">
+        <div class="w-20 h-20 mx-auto rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 shadow-sm">
+          <span class="material-symbols-outlined text-3xl text-rose-600">monitoring</span>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">3. Scale</h3>
+        <p class="text-slate-600 text-sm px-4">Your systems run 24/7. Monitor performance and scale as you grow.</p>
+      </div>
     </div>
   </section>
 </main>
@@ -64,44 +107,43 @@
 <div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
-<script src="/js/widget.js"></script>
-<script src="/js/site.js"></script>
+<script src="/js/widget.js?v=2.0"></script>
+<script src="/js/site.js?v=2.0"></script>
 <script>
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-  const COLORS = [
-    { bg: "bg-secondary-container/20", border: "border-primary-container/50", chip: "bg-tertiary-container/40 text-tertiary" },
-    { bg: "bg-primary-container/10", border: "border-secondary-container", chip: "bg-primary-container/40 text-primary" },
-    { bg: "bg-tertiary-fixed/30", border: "border-tertiary-container", chip: "bg-secondary-fixed/50 text-secondary" }
-  ];
 
   Promise.all([fetch("/api/services").then(r=>r.json()), fetch("/api/settings").then(r=>r.json())]).then(([services, set]) => {
-    // CTA WhatsApp dari setting toko
     const wa = set && set.store && set.store.whatsapp;
-    if (wa) document.getElementById("ctaWa").href = `https://wa.me/${wa}?text=${encodeURIComponent("Halo Anshel Store, saya mau konsultasi jasa AI Automation.")}`;
-    // Logo toko di banner header (bila sudah diupload)
+    if (wa) document.getElementById("ctaWa").href = `https://wa.me/${wa}?text=${encodeURIComponent("Hello Anshel Store, I would like to consult about B2B AI Automation solutions.")}`;
+    
     const logo = set && set.settings && set.settings.logo;
-    if (logo) { const a = document.getElementById("layananArt"); if (a) a.innerHTML = `<img alt="Anshel Store" class="w-full h-full object-contain p-4" src="${logo}"/>`; }
+    if (logo) { const a = document.getElementById("layananArt"); if (a) { a.innerHTML = `<img alt="Anshel Store" class="w-4/5 h-4/5 object-contain" src="${logo}"/>`; a.classList.remove('hidden'); } }
 
     const grid = document.getElementById("servicesGrid"), empty = document.getElementById("servicesEmpty");
     if (!Array.isArray(services) || !services.length) { empty.classList.remove("hidden"); return; }
+    
     grid.innerHTML = services.map((s, i) => {
-      const c = COLORS[i % COLORS.length];
       const visual = s.image
-        ? `<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="${esc(s.image)}" alt="${esc(s.title)}"/>`
-        : `<span class="material-symbols-outlined text-[64px] text-primary group-hover:scale-110 transition-transform duration-500">${esc(s.icon || "auto_awesome")}</span>`;
-      const waText = encodeURIComponent("Halo Anshel Store, saya tertarik layanan: " + (s.title || ""));
+        ? `<img class="w-full h-full object-cover" src="${esc(s.image)}" alt="${esc(s.title)}"/>`
+        : `<div class="w-full h-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-5xl text-slate-400">${esc(s.icon || "memory")}</span></div>`;
+      
+      const waText = encodeURIComponent("Hello Anshel Store, I'm interested in the service: " + (s.title || ""));
       const cta = wa ? `https://wa.me/${wa}?text=${waText}` : "/tentang";
-      return `<article class="bg-surface-container-lowest rounded-[24px] border-[1.5px] border-outline-variant shadow-marshmallow p-6 relative flex flex-col gap-4 group hover:translate-y-[-4px] hover:shadow-[0_15px_40px_-10px_rgba(139,111,91,0.2)] transition-all duration-300">
-        <div class="h-40 rounded-xl overflow-hidden ${c.bg} border-2 border-dashed ${c.border} flex items-center justify-center">${visual}</div>
-        <div class="flex flex-col gap-2">
-          <div class="flex gap-2"><span class="${c.chip} px-3 py-1 rounded-full font-label-md text-[12px] uppercase tracking-wider">${esc((s.category || "Otomasi"))}</span></div>
-          <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">${esc(s.title || "Layanan")}</h3>
-          <p class="font-body-md text-on-surface-variant line-clamp-3">${esc(s.desc || "")}</p>
+      
+      return `<article class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col group hover:shadow-md transition-shadow">
+        <div class="h-48 w-full relative overflow-hidden border-b border-slate-100">
+          ${visual}
         </div>
-        <div class="mt-auto pt-4 border-t-2 border-dashed border-surface-container flex items-center justify-between gap-2">
-          <div class="font-headline-md text-secondary">${s.priceFrom ? "Mulai " + rupiah(s.priceFrom) : "Hubungi kami"}</div>
-          <a href="${cta}" target="_blank" rel="noopener" class="bg-primary-container text-on-primary-container font-label-md px-5 py-3 rounded-full btn-inner-glow hover:bg-primary hover:text-white transition-colors active:scale-95 flex items-center gap-2">Konsultasi <span class="material-symbols-outlined text-[18px]">arrow_outward</span></a>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="mb-3"><span class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-wider">${esc((s.category || "Automation"))}</span></div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">${esc(s.title || "Service")}</h3>
+          <p class="text-sm text-slate-600 line-clamp-3 mb-6">${esc(s.desc || "")}</p>
+          
+          <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div class="font-semibold text-slate-900">${s.priceFrom ? "From " + rupiah(s.priceFrom) : "Contact Sales"}</div>
+            <a href="${cta}" target="_blank" rel="noopener" class="text-rose-600 hover:text-rose-700 font-semibold text-sm flex items-center gap-1">Consult <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+          </div>
         </div>
       </article>`;
     }).join("");
@@ -109,5 +151,5 @@
 
   if (typeof initChatWidget === "function") initChatWidget();
 </script>
-</body></html>
-
+</body>
+</html>

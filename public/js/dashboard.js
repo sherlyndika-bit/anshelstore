@@ -47,35 +47,34 @@ document.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
   const b = e.target.closest(".img-clear"); if (!b) return; e.preventDefault();
   let el = b.dataset.target ? document.getElementById(b.dataset.target) : null;
-  if (!el) { const w = b.closest(".up-wrap, .field"); if (w) el = w.querySelector("input, textarea"); }
+  if (!el) { const w = b.closest(".up-wrap, .field, div"); if (w) el = w.querySelector("input[type=hidden], input[type=text], textarea"); }
   if (el) { el.value = ""; el.dispatchEvent(new Event("input", { bubbles: true })); }
 });
 
 // Preview gambar untuk tiap field yang punya tombol upload
 function previewFor(el) {
-  const wrap = el.closest(".up-wrap, .field"); if (!wrap) return;
+  const wrap = el.closest(".up-wrap") || el.parentElement; if (!wrap) return;
   let pv = wrap.querySelector(".img-preview");
   const urls = (el.value || "").split("\n").map((s) => s.trim()).filter(Boolean);
   if (!urls.length) { if (pv) pv.remove(); return; }
-  if (!pv) { pv = document.createElement("div"); pv.className = "img-preview"; wrap.appendChild(pv); }
-  pv.innerHTML = urls.slice(0, 6).map((u) => `<img src="${u}" alt="" loading="lazy"/>`).join("");
+  if (!pv) { pv = document.createElement("div"); pv.className = "img-preview flex gap-2 mt-2 overflow-x-auto pb-2"; wrap.appendChild(pv); }
+  pv.innerHTML = urls.slice(0, 6).map((u) => `<img src="${u}" alt="" class="h-16 w-16 object-cover rounded-lg border border-slate-200 shadow-sm shrink-0" loading="lazy"/>`).join("");
 }
 function refreshAllPreviews() {
-  document.querySelectorAll(".upload-btn").forEach((b) => { const w = b.closest(".up-wrap, .field"); if (w) { const f = w.querySelector("input, textarea"); if (f) previewFor(f); } });
+  document.querySelectorAll(".upload-btn").forEach((b) => { const w = b.closest(".up-wrap") || b.parentElement.parentElement; if (w) { const f = w.querySelector("input[type=hidden], input[type=text], textarea"); if (f) previewFor(f); } });
 }
 document.addEventListener("input", (e) => {
   const el = e.target;
-  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") { const w = el.closest(".up-wrap, .field"); if (w && w.querySelector(".upload-btn")) previewFor(el); }
+  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") { const w = el.closest(".up-wrap") || el.parentElement; if (w && w.querySelector(".upload-btn")) previewFor(el); }
 });
 
 // ============================================================
 // AUTH
 // ============================================================
 const authMsg = $("authMsg");
-function showMsg(text, type = "err") { authMsg.textContent = text; authMsg.className = "auth-msg " + type; }
-function clearMsg() { authMsg.textContent = ""; authMsg.className = "auth-msg"; }
+function showMsg(text, type = "err") { authMsg.textContent = text; authMsg.className = "mt-4 text-center text-sm font-medium empty:hidden " + (type === "err" ? "text-red-600" : "text-emerald-600"); }
+function clearMsg() { authMsg.textContent = ""; authMsg.className = "mt-4 text-center text-sm font-medium empty:hidden"; }
 
-// tab switching
 // login (password)
 $("paneLogin").addEventListener("submit", async (e) => {
   e.preventDefault(); clearMsg();
@@ -85,18 +84,14 @@ $("paneLogin").addEventListener("submit", async (e) => {
   authSuccess(d);
 });
 
-// (registrasi publik dinonaktifkan di dashboard — akun dibuat oleh owner di menu Tim & Akses)
-
-// (OTP & registrasi dinonaktifkan di dashboard — login cukup email+password)
-
 // Google
 $("googleBtn").addEventListener("click", () => { window.location.href = "/api/auth/google"; });
 
 function showSetup() {
-  $("paneLogin").classList.remove("active");
-  $("paneSetup").classList.add("active");
-  const h = document.querySelector(".login-card h1"); if (h) h.textContent = "Setup Awal 🎉";
-  const p = document.querySelector(".login-card p"); if (p) p.textContent = "Buat akun Owner pertama untuk mengelola toko.";
+  $("paneLogin").classList.add("hidden");
+  $("paneSetup").classList.remove("hidden");
+  const h = document.querySelector("#loginScreen h1"); if (h) h.textContent = "Setup Awal 🎉";
+  const p = document.querySelector("#loginScreen p"); if (p) p.textContent = "Buat akun Owner pertama untuk mengelola toko.";
 }
 $("paneSetup").addEventListener("submit", async (e) => {
   e.preventDefault(); clearMsg();
@@ -112,7 +107,7 @@ function authSuccess(d) {
 function logout() {
   if (TOKEN) fetch("/api/auth/logout", { method: "POST", headers: { "x-auth-token": TOKEN } }).catch(() => {});
   TOKEN = null; ME = null; localStorage.removeItem("anshel_token");
-  clearInterval(pollTimer); shell.style.display = "none"; loginScreen.style.display = "grid";
+  clearInterval(pollTimer); shell.style.display = "none"; loginScreen.style.display = "flex";
 }
 $("logoutBtn").addEventListener("click", logout);
 
@@ -120,7 +115,7 @@ $("logoutBtn").addEventListener("click", logout);
 // NAVIGATION (hash routing)
 // ============================================================
 const sidebar = $("sidebar"), backdrop = $("backdrop");
-backdrop.addEventListener("click", () => { sidebar.classList.remove("open"); backdrop.classList.remove("show"); });
+backdrop.addEventListener("click", () => { sidebar.classList.add("-translate-x-full"); backdrop.classList.add("hidden"); });
 
 const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses" };
 const DESC = {
@@ -145,14 +140,33 @@ function goto(page) {
 }
 function routeTo(page) {
   if (!PAGES.includes(page)) page = "overview";
-  document.querySelectorAll(".side-nav button").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
-  document.querySelectorAll(".bottom-nav button[data-page]").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
+  
+  // Update sidebar active states
+  document.querySelectorAll(".side-nav button").forEach((b) => {
+    if(b.dataset.page === page) {
+      b.classList.add("bg-rose-50", "text-primary", "font-bold");
+      b.classList.remove("text-slate-600", "font-medium");
+    } else {
+      b.classList.remove("bg-rose-50", "text-primary", "font-bold");
+      b.classList.add("text-slate-600", "font-medium");
+    }
+  });
+  
+  // Update bottom nav active states
+  document.querySelectorAll(".bottom-nav-btn").forEach((b) => {
+    if(b.dataset.page === page) {
+      b.classList.add("text-primary"); b.classList.remove("text-slate-500");
+    } else {
+      b.classList.remove("text-primary"); b.classList.add("text-slate-500");
+    }
+  });
+  
   document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
   $("page-" + page).classList.add("active");
   $("pageTitle").textContent = TITLES[page];
   { const pd = document.getElementById("pageDesc"); if (pd) pd.textContent = DESC[page] || ""; }
   setTimeout(refreshAllPreviews, 80);
-  sidebar.classList.remove("open"); backdrop.classList.remove("show");
+  sidebar.classList.add("-translate-x-full"); backdrop.classList.add("hidden");
   if (page === "overview") loadStats();
   if (page === "orders") loadOrders();
   if (page === "inbox") loadConversations();
@@ -174,14 +188,31 @@ async function loadStats() {
     { ic: "🧾", label: "Total Pesanan", value: s.totalOrders, sub: `${s.todayOrders} hari ini` },
     { ic: "⏳", label: "Menunggu", value: s.pendingOrders, sub: "perlu diproses" },
     { ic: "💬", label: "Percakapan", value: s.totalConversations, sub: `${s.humanActive} ditangani agent` },
-  ].map((c) => `<div class="stat"><div class="label"><span class="ic">${c.ic}</span> ${c.label}</div><div class="value">${c.value}</div><div class="sub">${c.sub}</div></div>`).join("");
+  ].map((c) => `<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+    <div class="text-sm font-semibold text-slate-500 flex items-center gap-2 mb-2"><span class="text-xl">${c.ic}</span> ${c.label}</div>
+    <div class="text-2xl font-extrabold text-slate-800 tracking-tight">${c.value}</div>
+    <div class="text-[11px] text-slate-400 mt-1 uppercase tracking-wider font-semibold">${c.sub}</div>
+  </div>`).join("");
 
   const max = Math.max(1, ...s.series.map((d) => d.count));
-  $("barsChart").innerHTML = s.series.map((d) => `<div class="bar-col"><div class="bar" style="height:${(d.count / max) * 100}%"><span>${d.count || ""}</span></div><div class="day">${d.label}</div></div>`).join("");
+  $("barsChart").innerHTML = s.series.map((d) => `<div class="flex flex-col items-center justify-end h-full gap-2 flex-1">
+    <div class="w-full max-w-[40px] bg-primary rounded-t-md relative flex items-end justify-center group hover:bg-rose-500 transition-colors cursor-pointer" style="height:${(d.count / max) * 100}%">
+      <span class="opacity-0 group-hover:opacity-100 absolute -top-8 text-xs font-bold bg-slate-800 text-white px-2 py-1 rounded transition-opacity shadow-lg">${d.count || 0}</span>
+    </div>
+    <div class="text-[10px] font-semibold text-slate-400 uppercase">${d.label}</div>
+  </div>`).join("");
 
   const tg = $("topGames");
-  if (!s.topGames.length) tg.innerHTML = '<p style="color:var(--text-muted);font-size:.9rem">Belum ada data.</p>';
-  else { const mg = Math.max(...s.topGames.map((g) => g.count)); tg.innerHTML = s.topGames.map((g, i) => `<div class="row"><span class="rank">${i + 1}</span><span class="nm">${g.name}</span><span class="bar-track"><span class="bar-fill" style="width:${(g.count / mg) * 100}%"></span></span><span class="ct">${g.count}x</span></div>`).join(""); }
+  if (!s.topGames.length) tg.innerHTML = '<p class="text-slate-500 text-sm text-center">Belum ada data.</p>';
+  else { const mg = Math.max(...s.topGames.map((g) => g.count)); tg.innerHTML = s.topGames.map((g, i) => `
+    <div class="flex items-center gap-3 mb-4 last:mb-0">
+      <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-xs font-bold shrink-0">${i + 1}</span>
+      <span class="text-sm font-semibold text-slate-700 w-28 truncate" title="${g.name}">${escapeHtml(g.name)}</span>
+      <span class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden flex">
+        <span class="block h-full bg-indigo-500 rounded-full" style="width:${(g.count / mg) * 100}%"></span>
+      </span>
+      <span class="text-xs font-bold text-slate-600 w-8 text-right">${g.count}x</span>
+    </div>`).join(""); }
 
   const orders = await api("/api/orders");
   renderOrderTable($("recentOrders"), orders.slice(0, 6), false);
@@ -194,8 +225,13 @@ async function loadStats() {
 let orderFilter = "all";
 document.querySelectorAll("#orderFilters .filter-chip").forEach((chip) =>
   chip.addEventListener("click", () => {
-    document.querySelectorAll("#orderFilters .filter-chip").forEach((c) => c.classList.remove("active"));
-    chip.classList.add("active"); orderFilter = chip.dataset.f; loadOrders();
+    document.querySelectorAll("#orderFilters .filter-chip").forEach((c) => {
+      c.classList.remove("bg-slate-800", "text-white", "border-slate-800");
+      c.classList.add("bg-white", "text-slate-600", "border-slate-200");
+    });
+    chip.classList.add("bg-slate-800", "text-white", "border-slate-800");
+    chip.classList.remove("bg-white", "text-slate-600", "border-slate-200");
+    orderFilter = chip.dataset.f; loadOrders();
   })
 );
 async function loadOrders() {
@@ -205,12 +241,22 @@ async function loadOrders() {
   updateBadges(orders, null);
 }
 function renderOrderTable(table, orders, editable) {
-  if (!orders.length) { table.innerHTML = `<tr><td style="text-align:center;color:var(--text-muted);padding:30px">Belum ada pesanan.</td></tr>`; return; }
-  const head = `<thead><tr><th>Invoice</th><th>Game</th><th>Item</th><th>Akun</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>`;
+  if (!orders.length) { table.innerHTML = `<tr><td class="px-6 py-8 text-center text-slate-500 text-sm">Belum ada pesanan.</td></tr>`; return; }
+  const head = `<thead class="bg-slate-50 border-b border-slate-200"><tr><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Invoice</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Game</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Item</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Akun</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th></tr></thead>`;
   const rows = orders.map((o) => {
     const acc = Object.entries(o.account || {}).map(([k, v]) => `${escapeHtml(k)}: ${escapeHtml(v)}`).join(", ");
-    const cell = editable ? `<select class="status-select" data-id="${o.id}">${STATUSES.map((s) => `<option value="${s}" ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select>` : `<span class="badge badge-${o.status}">${o.status}</span>`;
-    return `<tr><td><b>${escapeHtml(o.code)}</b></td><td>${escapeHtml(o.gameName)}</td><td>${escapeHtml(o.itemLabel)}</td><td style="color:var(--text-muted)">${acc || "-"}</td><td>${escapeHtml(o.customerName)}<br><span style="color:var(--text-muted);font-size:.82rem">${escapeHtml(o.customerContact || "-")}</span></td><td><b>${rupiah(o.price)}</b></td><td>${cell}</td></tr>`;
+    const stColors = { pending: "bg-amber-100 text-amber-700", paid: "bg-blue-100 text-blue-700", processing: "bg-indigo-100 text-indigo-700", done: "bg-emerald-100 text-emerald-700", cancelled: "bg-rose-100 text-rose-700" };
+    const stC = stColors[o.status] || "bg-slate-100 text-slate-700";
+    const cell = editable ? `<select class="status-select px-2.5 py-1.5 bg-slate-50 border border-slate-300 text-slate-800 font-medium text-xs rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" data-id="${o.id}">${STATUSES.map((s) => `<option value="${s}" ${s === o.status ? "selected" : ""}>${s.toUpperCase()}</option>`).join("")}</select>` : `<span class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded uppercase tracking-wider ${stC}">${o.status}</span>`;
+    return `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+      <td class="px-4 py-3 whitespace-nowrap text-sm font-bold text-slate-800">${escapeHtml(o.code)}</td>
+      <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600">${escapeHtml(o.gameName)}</td>
+      <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600">${escapeHtml(o.itemLabel)}</td>
+      <td class="px-4 py-3 text-sm text-slate-500">${acc || "-"}</td>
+      <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-800">${escapeHtml(o.customerName)}<br><span class="text-[11px] text-slate-400 font-normal">${escapeHtml(o.customerContact || "-")}</span></td>
+      <td class="px-4 py-3 whitespace-nowrap text-sm font-extrabold text-slate-800">${rupiah(o.price)}</td>
+      <td class="px-4 py-3 whitespace-nowrap">${cell}</td>
+    </tr>`;
   }).join("");
   table.innerHTML = head + "<tbody>" + rows + "</tbody>";
   if (editable) table.querySelectorAll(".status-select").forEach((sel) =>
@@ -230,12 +276,16 @@ async function loadConversations() {
   const list = await api("/api/conversations");
   updateBadges(null, list);
   const el = $("convList");
-  if (!list.length) { el.innerHTML = `<div class="chat-empty">Belum ada percakapan.<br>Buka <a href="/chat" target="_blank" style="color:var(--primary)">/chat</a> untuk simulasi.</div>`; return; }
+  if (!list.length) { el.innerHTML = `<div class="p-6 text-center text-sm text-slate-500">Belum ada percakapan.<br>Buka <a href="/chat" target="_blank" class="text-primary font-bold">/chat</a> untuk simulasi.</div>`; return; }
   el.innerHTML = list.map((c) => {
-    const tag = c.mode === "human" ? '<span class="badge badge-human">HUMAN</span>' : '<span class="badge badge-ai">AI</span>';
-    const esc = c.escalate ? '<span class="escalate-dot">● minta admin</span>' : "";
-    const unread = c.unread ? `<span class="unread">${c.unread}</span>` : "";
-    return `<div class="conv-item ${activeConv === c.id ? "sel" : ""}" data-id="${c.id}"><div class="top"><span class="nm">${escapeHtml(c.name)}</span>${unread}</div><div class="last">${escapeHtml((c.lastText || "").slice(0, 42))}</div><div class="meta">${tag}${esc}</div></div>`;
+    const tag = c.mode === "human" ? '<span class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-bold rounded uppercase tracking-wider">HUMAN</span>' : '<span class="px-1.5 py-0.5 bg-purple-100 text-purple-700 text-[9px] font-bold rounded uppercase tracking-wider">AI</span>';
+    const esc = c.escalate ? '<span class="text-[10px] text-red-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> minta admin</span>' : "";
+    const unread = c.unread ? `<span class="bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${c.unread}</span>` : "";
+    return `<div class="p-3 border-b border-slate-100 hover:bg-slate-100 cursor-pointer transition-colors conv-item ${activeConv === c.id ? "bg-indigo-50 border-indigo-100" : ""}" data-id="${c.id}">
+      <div class="flex justify-between items-center mb-1"><span class="font-bold text-slate-800 text-sm truncate pr-2">${escapeHtml(c.name)}</span>${unread}</div>
+      <div class="text-xs text-slate-500 truncate mb-2">${escapeHtml((c.lastText || "").slice(0, 42))}</div>
+      <div class="flex gap-2 items-center">${tag}${esc}</div>
+    </div>`;
   }).join("");
   el.querySelectorAll(".conv-item").forEach((it) => it.addEventListener("click", () => openConversation(Number(it.dataset.id))));
 }
@@ -252,12 +302,20 @@ async function renderChat(full) {
   if (full) {
     const isHuman = conv.mode === "human";
     pane.innerHTML = `
-      <div class="chat-head">
-        <div><strong>${escapeHtml(conv.name)}</strong><div style="font-size:.8rem;color:var(--text-muted)">${isHuman ? "🧑‍💼 Ditangani " + escapeHtml(conv.agentName || "Agent") : "🤖 Mode AI otomatis"}</div></div>
-        ${isHuman ? `<button class="btn btn-light btn-sm" id="btnRelease">↩︎ Kembalikan ke AI</button>` : `<button class="btn btn-primary btn-sm" id="btnTakeover">🙋 Take Over</button>`}
+      <div class="flex justify-between items-center p-4 border-b border-slate-200 bg-white shadow-sm z-10">
+        <div>
+          <strong class="text-slate-800 text-lg">${escapeHtml(conv.name)}</strong>
+          <div class="text-xs font-semibold text-slate-500 mt-0.5">${isHuman ? "🧑‍💼 Ditangani " + escapeHtml(conv.agentName || "Agent") : "🤖 Mode AI otomatis"}</div>
+        </div>
+        ${isHuman ? `<button class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg transition-colors shadow-sm" id="btnRelease">↩︎ Kembalikan ke AI</button>` : `<button class="px-4 py-2 bg-primary hover:bg-rose-700 text-white text-sm font-bold rounded-lg transition-colors shadow-sm" id="btnTakeover">🙋 Take Over</button>`}
       </div>
-      <div class="chat-msgs" id="chatMsgs"></div>
-      <div class="chat-foot"><form id="agentForm"><input class="input" id="agentText" type="text" placeholder="${isHuman ? "Balas sebagai agent…" : "Take over dulu untuk membalas manual"}" ${isHuman ? "" : "disabled"} autocomplete="off" /><button class="btn btn-primary" type="submit" ${isHuman ? "" : "disabled"}>Kirim</button></form></div>`;
+      <div class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 relative" id="chatMsgs"></div>
+      <div class="p-4 border-t border-slate-200 bg-white">
+        <form id="agentForm" class="flex gap-2">
+          <input class="flex-1 px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm shadow-sm" id="agentText" type="text" placeholder="${isHuman ? "Balas sebagai agent…" : "Take over dulu untuk membalas manual"}" ${isHuman ? "" : "disabled"} autocomplete="off" />
+          <button class="px-6 py-2.5 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg disabled:opacity-50 transition-colors shadow-sm" type="submit" ${isHuman ? "" : "disabled"}>Kirim</button>
+        </form>
+      </div>`;
     const tk = $("btnTakeover");
     if (tk) tk.addEventListener("click", async () => { await api(`/api/conversations/${activeConv}/takeover`, { method: "POST", body: JSON.stringify({}) }); await loadConversations(); renderChat(true); });
     const rl = $("btnRelease");
@@ -272,7 +330,16 @@ async function pollMessages() {
   if (!activeConv) return;
   const box = $("chatMsgs"); if (!box) return;
   const msgs = await api(`/api/conversations/${activeConv}/messages?since=${lastId}`);
-  msgs.forEach((m) => { const who = m.sender === "customer" ? "Customer" : m.sender === "agent" ? "🧑‍💼 Agent" : "🤖 AI"; const div = document.createElement("div"); div.className = "bubble b-" + m.sender; div.innerHTML = `<span class="who">${who}</span>${escapeHtml(m.text)}`; box.appendChild(div); box.scrollTop = box.scrollHeight; if (m.id > lastId) lastId = m.id; });
+  msgs.forEach((m) => { 
+    const who = m.sender === "customer" ? "Customer" : m.sender === "agent" ? "🧑‍💼 Agent" : "🤖 AI"; 
+    const isCust = m.sender === "customer";
+    const div = document.createElement("div"); 
+    div.className = "flex flex-col w-full " + (isCust ? "items-start" : "items-end"); 
+    div.innerHTML = `<span class="text-[10px] font-semibold text-slate-400 mb-1 px-1 uppercase tracking-wider">${who}</span><div class="px-4 py-2.5 rounded-2xl max-w-[85%] text-sm shadow-sm leading-relaxed ${isCust ? 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm' : 'bg-primary text-white rounded-tr-sm'}">${escapeHtml(m.text)}</div>`; 
+    box.appendChild(div); 
+    box.scrollTop = box.scrollHeight; 
+    if (m.id > lastId) lastId = m.id; 
+  });
 }
 function escapeHtml(s) { return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[c])); }
 
@@ -283,15 +350,15 @@ function applyUser() {
   if (!ME) return;
   $("userName").textContent = ME.name || ME.email;
   const av = $("userAvatar");
-  if (ME.picture) av.innerHTML = `<img src="${ME.picture}" alt="">`;
+  if (ME.picture) av.innerHTML = `<img src="${ME.picture}" class="w-full h-full rounded-full object-cover">`;
   else av.textContent = (ME.name || ME.email || "A").charAt(0).toUpperCase();
-  // Sembunyikan menu Tim & Akses untuk yang bukan owner/admin
+  
   const teamBtn = document.querySelector('.side-nav button[data-page="team"]');
   if (teamBtn) teamBtn.style.display = (ME.role === "owner" || ME.role === "admin") ? "" : "none";
 }
 function boot() {
   loginScreen.style.display = "none";
-  shell.style.display = "grid";
+  shell.style.display = "flex";
   applyUser();
   let startPage = "overview";
   try { startPage = localStorage.getItem("anshel_page") || "overview"; } catch (e) {}
@@ -306,18 +373,14 @@ function boot() {
 
 // ---------- Init: Google callback token + auto-login + google availability ----------
 (async function init() {
-  // Google redirect mengembalikan #token=...
   if (location.hash.includes("token=")) {
     const params = new URLSearchParams(location.hash.slice(1));
     const t = params.get("token");
     if (t) { TOKEN = t; localStorage.setItem("anshel_token", t); }
     history.replaceState(null, "", "/dashboard");
   }
-  // First-run: kalau belum ada akun dashboard, tampilkan setup owner
   try { const ns = await fetch("/api/auth/needs-setup").then((r) => r.json()); if (ns.needsSetup) { showSetup(); return; } } catch {}
-  // tampilkan tombol Google bila dikonfigurasi
   try { const cfg = await fetch("/api/auth/config").then((r) => r.json()); if (cfg.google) $("googleWrap").style.display = "block"; } catch {}
-  // auto-login bila token valid
   if (TOKEN) {
     try { const r = await fetch("/api/auth/me", { headers: { "x-auth-token": TOKEN } }); if (r.ok) { const u = (await r.json()).user; if (u && u.admin !== false) { ME = u; boot(); return; } } } catch {}
     TOKEN = null; localStorage.removeItem("anshel_token");
@@ -329,18 +392,24 @@ function boot() {
 // ============================================================
 // ARTIKEL (CMS)
 // ============================================================
-const artMsg = (t, type = "ok") => { const e = $("artMsg"); if (e) { e.textContent = t; e.className = "auth-msg " + type; } };
+const artMsg = (t, type = "ok") => { const e = $("artMsg"); if (e) { e.textContent = t; e.className = "text-sm font-medium empty:hidden " + (type==="ok" ? "text-emerald-600" : "text-red-600"); } };
 
 async function loadArticles() {
   const list = await api("/api/admin/articles");
   const table = $("articlesTable");
-  if (!list.length) { table.innerHTML = `<tr><td style="text-align:center;color:var(--text-muted);padding:30px">Belum ada artikel. Klik "Tulis Artikel".</td></tr>`; return; }
-  table.innerHTML = `<thead><tr><th>Judul</th><th>Status</th><th>Tags</th><th>Aksi</th></tr></thead><tbody>` +
-    list.map((a) => `<tr>
-      <td><b>${escapeHtml(a.title)}</b><br><span style="color:var(--text-muted);font-size:.8rem">/blog/${a.slug}</span></td>
-      <td>${a.published ? '<span class="badge badge-done">publish</span>' : '<span class="badge badge-pending">draft</span>'}</td>
-      <td style="color:var(--text-muted)">${(a.tags || []).join(", ")}</td>
-      <td style="white-space:nowrap"><button class="btn btn-light btn-sm art-edit" data-id="${a.id}">Edit</button> <button class="btn btn-light btn-sm art-del" data-id="${a.id}" style="color:var(--red)">Hapus</button></td>
+  if (!list.length) { table.innerHTML = `<tr><td class="px-6 py-8 text-center text-slate-500 text-sm">Belum ada artikel. Klik "Tulis Artikel".</td></tr>`; return; }
+  table.innerHTML = `<thead class="bg-slate-50 border-b border-slate-200"><tr><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Judul</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Tags</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Aksi</th></tr></thead><tbody>` +
+    list.map((a) => `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+      <td class="px-4 py-3">
+        <b class="text-sm font-bold text-slate-800">${escapeHtml(a.title)}</b><br>
+        <span class="text-xs text-slate-400">/blog/${a.slug}</span>
+      </td>
+      <td class="px-4 py-3">${a.published ? '<span class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded uppercase tracking-wider bg-emerald-100 text-emerald-700">publish</span>' : '<span class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded uppercase tracking-wider bg-slate-200 text-slate-700">draft</span>'}</td>
+      <td class="px-4 py-3 text-sm text-slate-500">${(a.tags || []).join(", ")}</td>
+      <td class="px-4 py-3 whitespace-nowrap">
+        <button class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm art-edit mr-2" data-id="${a.id}">Edit</button>
+        <button class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 transition-colors shadow-sm art-del" data-id="${a.id}">Hapus</button>
+      </td>
     </tr>`).join("") + "</tbody>";
   table.querySelectorAll(".art-edit").forEach((b) => b.addEventListener("click", () => openEditor(list.find((a) => a.id === Number(b.dataset.id)))));
   table.querySelectorAll(".art-del").forEach((b) => b.addEventListener("click", async () => {
@@ -349,7 +418,7 @@ async function loadArticles() {
   }));
 }
 function openEditor(a) {
-  $("articleEditor").style.display = "block";
+  $("articleEditor").classList.remove("hidden");
   $("editorTitle").textContent = a ? "Edit Artikel" : "Tulis Artikel";
   $("artId").value = a ? a.id : "";
   $("artTitle").value = a ? a.title : "";
@@ -364,7 +433,7 @@ function openEditor(a) {
   $("articleEditor").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 $("newArticleBtn").addEventListener("click", () => openEditor(null));
-$("cancelArticle").addEventListener("click", () => { $("articleEditor").style.display = "none"; });
+$("cancelArticle").addEventListener("click", () => { $("articleEditor").classList.add("hidden"); });
 $("saveArticle").addEventListener("click", async () => {
   const id = $("artId").value;
   const payload = {
@@ -377,7 +446,7 @@ $("saveArticle").addEventListener("click", async () => {
     if (id) await api(`/api/admin/articles/${id}`, { method: "PUT", body: JSON.stringify(payload) });
     else await api("/api/admin/articles", { method: "POST", body: JSON.stringify(payload) });
     artMsg("Tersimpan! ✅", "ok");
-    $("articleEditor").style.display = "none";
+    $("articleEditor").classList.add("hidden");
     loadArticles();
   } catch (e) { artMsg("Gagal menyimpan", "err"); }
 });
@@ -397,11 +466,11 @@ async function loadSettings() {
 
   loadedServices = await fetch("/api/services").then((r) => r.json());
   $("servicesEditor").innerHTML = loadedServices.map((sv, i) => `
-    <div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
-      <div style="font-weight:700;margin-bottom:8px">${escapeHtml(sv.title)}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="set-grid">
-        <div class="field" style="margin:0"><label>Harga Mulai (Rp)</label><input class="input svc-price" data-i="${i}" type="number" value="${sv.priceFrom || 0}" /></div>
-        <div class="field up-wrap" style="margin:0"><label>Foto Jasa</label><input type="hidden" class="svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" /><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn">📷 Upload foto</button><button type="button" class="btn btn-light btn-sm img-clear" style="color:var(--red)">Hapus</button></div></div>
+    <div class="border border-slate-200 rounded-xl p-5 bg-slate-50">
+      <div class="font-bold text-slate-800 text-base mb-4">${escapeHtml(sv.title)}</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Harga Mulai (Rp)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white svc-price shadow-sm" data-i="${i}" type="number" value="${sv.priceFrom || 0}" /></div>
+        <div class="up-wrap"><label class="block text-sm font-medium text-slate-700 mb-1">Foto Jasa</label><input type="hidden" class="svc-img" data-i="${i}" value="${escapeHtml(sv.image || "")}" /><div class="flex gap-2 flex-wrap"><button type="button" class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm rounded-lg font-bold transition-colors upload-btn shadow-sm">📷 Upload foto</button><button type="button" class="px-3 py-1.5 bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 text-sm rounded-lg font-bold transition-colors img-clear shadow-sm">Hapus</button></div></div>
       </div>
     </div>`).join("");
   setTimeout(refreshAllPreviews, 60);
@@ -423,22 +492,23 @@ function buildIntegrations() {
     gameProvider: $("intGpName").value.trim(), gameProviderUrl: $("intGpUrl").value.trim(), gameProviderKey: $("intGpKey").value.trim(), gameProviderUser: $("intGpUser").value.trim(),
   };
 }
+const integMsg = (id, text, type) => { const el = $(id); el.textContent = text; el.className = "text-sm font-bold empty:hidden " + (type === "err" ? "text-red-600" : "text-emerald-600"); };
 async function saveIntegAll(msgId) {
-  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { integrations: buildIntegrations() } }) }); const e = $(msgId); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; }
-  catch (e) { const x = $(msgId); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ settings: { integrations: buildIntegrations() } }) }); integMsg(msgId, "Tersimpan! ✅", "ok"); }
+  catch (e) { integMsg(msgId, "Gagal", "err"); }
 }
 $("saveIntegrations").addEventListener("click", () => saveIntegAll("intMsg"));
 $("saveProvider").addEventListener("click", () => saveIntegAll("gpMsg"));
 $("syncGames").addEventListener("click", async () => {
-  const m = $("gpMsg"); m.textContent = "Menyinkronkan…"; m.className = "auth-msg";
+  integMsg("gpMsg", "Menyinkronkan…", "ok");
   await saveIntegAll("gpMsg");
   try {
     const r = await api("/api/admin/sync-games", { method: "POST", body: "{}" });
     if (!r || r.error) throw new Error(r && r.error ? r.error : "gagal");
-    m.textContent = `Berhasil! ${r.games} game, ${r.items} item tersinkron. ✅`; m.className = "auth-msg ok";
+    integMsg("gpMsg", `Berhasil! ${r.games} game, ${r.items} item tersinkron. ✅`, "ok");
     if (typeof loadProduk === "function") loadProduk();
   } catch (e) {
-    m.textContent = "Gagal sync: " + (e.message || "cek URL/format provider"); m.className = "auth-msg err";
+    integMsg("gpMsg", "Gagal sync: " + (e.message || "cek URL/format provider"), "err");
   }
 });
 $("saveSettings").addEventListener("click", async () => {
@@ -446,13 +516,14 @@ $("saveSettings").addEventListener("click", async () => {
     store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
     settings: { metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
   };
-  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); const e = $("setMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("setMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+  try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); integMsg("setMsg", "Tersimpan! ✅", "ok"); } catch (e) { integMsg("setMsg", "Gagal", "err"); }
 });
 $("saveServices").addEventListener("click", async () => {
   document.querySelectorAll(".svc-price").forEach((el) => (loadedServices[el.dataset.i].priceFrom = Number(el.value) || 0));
   document.querySelectorAll(".svc-img").forEach((el) => (loadedServices[el.dataset.i].image = el.value.trim()));
-  try { await api("/api/admin/services", { method: "PUT", body: JSON.stringify({ services: loadedServices }) }); const e = $("svcMsg"); e.textContent = "Tersimpan! ✅"; e.className = "auth-msg ok"; } catch (e) { const x = $("svcMsg"); x.textContent = "Gagal"; x.className = "auth-msg err"; }
+  try { await api("/api/admin/services", { method: "PUT", body: JSON.stringify({ services: loadedServices }) }); integMsg("svcMsg", "Tersimpan! ✅", "ok"); } catch (e) { integMsg("svcMsg", "Gagal", "err"); }
 });
+
 // ============================================================
 // PRODUK & GAME (kelola lengkap: tambah/hapus game & item)
 // ============================================================
@@ -463,29 +534,35 @@ async function loadProduk() {
 function renderProduk() {
   const wrap = $("produkList");
   wrap.innerHTML = loadedGames.map((g, gi) => `
-    <div class="game-admin-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <b style="font-size:1.05rem">${escapeHtml(g.name || "(tanpa nama)")} <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">#${escapeHtml(g.id)}</span></b>
-        <button class="btn btn-light btn-sm pg-delgame" data-g="${gi}" style="color:var(--red)">Hapus</button>
+    <div class="bg-white border border-slate-200 rounded-xl p-6 relative overflow-visible shadow-sm">
+      <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+        <b class="text-xl font-bold text-slate-800">${escapeHtml(g.name || "(tanpa nama)")} <span class="text-sm font-medium text-slate-400 ml-3 bg-slate-100 px-2 py-1 rounded-md">#${escapeHtml(g.id)}</span></b>
+        <button class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-bold rounded-lg transition-colors pg-delgame shadow-sm" data-g="${gi}">Hapus</button>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="set-grid">
-        <div class="field" style="margin:0"><label>Nama</label><input class="input pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
-        <div class="field" style="margin:0"><label>Publisher</label><input class="input pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
-        <div class="field up-wrap" style="margin:0"><label>Gambar (cover)</label><input type="hidden" class="pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn">📷 Upload cover</button><button type="button" class="btn btn-light btn-sm img-clear" style="color:var(--red)">Hapus</button></div></div>
-        <div class="field" style="margin:0"><label>Field diminta (koma)</label><input class="input pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
-        <div class="field" style="margin:0;grid-column:1/-1"><label>Deskripsi / penjelasan game (tampil di kiri halaman detail)</label><textarea class="input pg-desc" data-g="${gi}" rows="3" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
-        <div class="field" style="margin:0"><label>URL Video (YouTube / .mp4)</label><input class="input pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
-        <div class="field up-wrap" style="margin:0"><label>Screenshots (beberapa gambar)</label><input type="hidden" class="pg-shots" data-g="${gi}" value="${escapeHtml((g.screenshots || []).join("\n"))}"/><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn" data-mode="append">📷 Upload &amp; tambah</button><button type="button" class="btn btn-light btn-sm img-clear" style="color:var(--red)">Hapus semua</button></div></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Publisher</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
+        <div class="up-wrap"><label class="block text-sm font-medium text-slate-700 mb-1">Gambar (cover)</label><input type="hidden" class="pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/><div class="flex gap-2 flex-wrap"><button type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm rounded-lg font-bold transition-colors upload-btn shadow-sm">📷 Upload cover</button><button type="button" class="px-3 py-1.5 bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 text-sm rounded-lg font-bold transition-colors img-clear shadow-sm">Hapus</button></div></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Field diminta (koma)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
+        <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi / penjelasan game</label><textarea class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-desc" data-g="${gi}" rows="2" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">URL Video (YouTube / .mp4)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
+        <div class="up-wrap"><label class="block text-sm font-medium text-slate-700 mb-1">Screenshots (beberapa gambar)</label><input type="hidden" class="pg-shots" data-g="${gi}" value="${escapeHtml((g.screenshots || []).join("\n"))}"/><div class="flex gap-2 flex-wrap"><button type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm rounded-lg font-bold transition-colors upload-btn shadow-sm" data-mode="append">📷 Upload &amp; tambah</button><button type="button" class="px-3 py-1.5 bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 text-sm rounded-lg font-bold transition-colors img-clear shadow-sm">Hapus semua</button></div></div>
       </div>
-      <div style="margin:10px 0 4px;font-weight:600;font-size:.82rem;color:var(--text-soft)">Item / Nominal (label · harga · stok)</div>
-      ${g.items.map((it, ii) => `<div class="gitem">
-        <input class="input pg-ilabel" data-g="${gi}" data-i="${ii}" value="${escapeHtml(it.label)}" placeholder="Label"/>
-        <input class="input pg-iprice" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" placeholder="Harga"/>
-        <input class="input pg-istock" data-g="${gi}" data-i="${ii}" type="number" value="${typeof it.stock === "number" ? it.stock : ""}" placeholder="∞"/>
-        <button class="btn btn-light btn-sm pg-delitem" data-g="${gi}" data-i="${ii}" style="color:var(--red)">✕</button>
-      </div>`).join("")}
-      <button class="btn btn-light btn-sm pg-additem" data-g="${gi}" style="margin-top:6px">+ Tambah Item</button>
-    </div>`).join("") || '<p style="color:var(--text-muted)">Belum ada game. Tambah di atas, lalu Simpan.</p>';
+      
+      <div class="mt-8 mb-4">
+        <h4 class="text-sm font-bold text-slate-800 bg-slate-100 px-3 py-2 rounded-lg inline-block border border-slate-200">Item / Nominal (label · harga · stok)</h4>
+      </div>
+      <div class="space-y-3 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+      ${g.items.map((it, ii) => `
+        <div class="flex items-center gap-3">
+          <input class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm font-semibold text-slate-800 bg-white shadow-sm pg-ilabel" data-g="${gi}" data-i="${ii}" value="${escapeHtml(it.label)}" placeholder="Label"/>
+          <input class="w-40 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm font-bold text-primary bg-white shadow-sm pg-iprice" data-g="${gi}" data-i="${ii}" type="number" value="${it.price}" placeholder="Harga"/>
+          <input class="w-24 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none text-sm text-slate-600 bg-white shadow-sm pg-istock" data-g="${gi}" data-i="${ii}" type="number" value="${typeof it.stock === "number" ? it.stock : ""}" placeholder="∞"/>
+          <button class="w-10 h-10 flex items-center justify-center bg-white border border-red-200 hover:bg-red-50 text-red-500 hover:text-red-600 rounded-lg transition-colors shadow-sm pg-delitem" data-g="${gi}" data-i="${ii}"><span class="material-symbols-outlined text-[18px]">close</span></button>
+        </div>`).join("")}
+      </div>
+      <button class="px-5 py-2.5 bg-white border-2 border-dashed border-slate-300 hover:border-primary hover:text-primary text-slate-600 font-bold rounded-xl text-sm w-full transition-colors shadow-sm pg-additem" data-g="${gi}">+ Tambah Item</button>
+    </div>`).join("") || '<div class="bg-white p-10 rounded-xl border border-slate-200 shadow-sm text-center"><p class="text-slate-500 font-medium">Belum ada game. Tambah di atas, lalu Simpan.</p></div>';
   bindProduk();
   setTimeout(refreshAllPreviews, 40);
 }
@@ -510,18 +587,18 @@ $("addGameBtn").addEventListener("click", () => {
   syncProduk();
   const id = $("ngId").value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
   const m = $("produkMsg");
-  if (!id || !$("ngName").value.trim()) { m.textContent = "ID & nama wajib"; m.className = "auth-msg err"; return; }
-  if (loadedGames.some((g) => g.id === id)) { m.textContent = "ID sudah dipakai"; m.className = "auth-msg err"; return; }
+  if (!id || !$("ngName").value.trim()) { m.textContent = "ID & nama wajib"; m.className = "text-sm font-bold text-red-600"; return; }
+  if (loadedGames.some((g) => g.id === id)) { m.textContent = "ID sudah dipakai"; m.className = "text-sm font-bold text-red-600"; return; }
   loadedGames.push({ id, name: $("ngName").value.trim(), publisher: $("ngPub").value.trim(), image: "", needs: $("ngNeeds").value.split(",").map((s) => s.trim()).filter(Boolean), items: [{ id: "i" + Date.now(), label: "Item baru", price: 0 }] });
   $("ngId").value = ""; $("ngName").value = ""; $("ngPub").value = ""; $("ngNeeds").value = "";
-  m.textContent = "Game ditambah — jangan lupa Simpan."; m.className = "auth-msg ok";
+  m.textContent = "Game ditambah — jangan lupa Simpan."; m.className = "text-sm font-bold text-emerald-600";
   renderProduk();
 });
 $("saveProduk").addEventListener("click", async () => {
   syncProduk();
   loadedGames.forEach((g) => g.items.forEach((it) => { if (!it.id) it.id = "i" + Math.random().toString(36).slice(2, 7); }));
-  const m = $("produkMsg");
-  try { await api("/api/admin/games", { method: "PUT", body: JSON.stringify({ games: loadedGames }) }); m.textContent = "Semua tersimpan! ✅"; m.className = "auth-msg ok"; } catch (e) { m.textContent = "Gagal menyimpan"; m.className = "auth-msg err"; }
+  // use modal or toast for production, but here we can just alert
+  try { await api("/api/admin/games", { method: "PUT", body: JSON.stringify({ games: loadedGames }) }); alert("Semua tersimpan! ✅"); } catch (e) { alert("Gagal menyimpan"); }
 });
 
 // ============================================================
@@ -535,16 +612,21 @@ async function loadFinance() {
     { ic: "📉", label: "Total Keluar", value: rupiah(s.totalOut), sub: "pengeluaran manual" },
     { ic: "💼", label: "Saldo Bersih", value: rupiah(s.balance), sub: "masuk - keluar" },
     { ic: "🧾", label: "Pendapatan Order", value: rupiah(s.orderIncome), sub: "paid/processing/done" },
-  ].map((c) => `<div class="stat"><div class="label"><span class="ic">${c.ic}</span> ${c.label}</div><div class="value">${c.value}</div><div class="sub">${c.sub}</div></div>`).join("");
+  ].map((c) => `<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+    <div class="text-sm font-semibold text-slate-500 flex items-center gap-2 mb-2"><span class="text-xl">${c.ic}</span> ${c.label}</div>
+    <div class="text-xl font-extrabold text-slate-800">${c.value}</div>
+    <div class="text-[11px] text-slate-400 mt-1 uppercase tracking-wider font-medium">${c.sub}</div>
+  </div>`).join("");
   const t = $("financeTable");
-  if (!d.entries.length) { t.innerHTML = `<tr><td style="text-align:center;color:var(--text-muted);padding:24px">Belum ada catatan manual.</td></tr>`; return; }
-  t.innerHTML = `<thead><tr><th>Tanggal</th><th>Tipe</th><th>Kategori</th><th>Catatan</th><th>Nominal</th><th></th></tr></thead><tbody>` +
-    d.entries.map((f) => `<tr>
-      <td>${new Date(f.createdAt).toLocaleDateString("id-ID")}</td>
-      <td><span class="badge ${f.type === "in" ? "badge-done" : "badge-cancelled"}">${f.type === "in" ? "masuk" : "keluar"}</span></td>
-      <td>${escapeHtml(f.category)}</td><td style="color:var(--text-muted)">${escapeHtml(f.note || "-")}</td>
-      <td><b>${rupiah(f.amount)}</b></td>
-      <td><button class="btn btn-light btn-sm fin-del" data-id="${f.id}" style="color:var(--red)">Hapus</button></td>
+  if (!d.entries.length) { t.innerHTML = `<tr><td class="px-6 py-8 text-center text-slate-500 text-sm">Belum ada catatan manual.</td></tr>`; return; }
+  t.innerHTML = `<thead class="bg-slate-50 border-b border-slate-200"><tr><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Tanggal</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Tipe</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Kategori</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Catatan</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nominal</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Aksi</th></tr></thead><tbody>` +
+    d.entries.map((f) => `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+      <td class="px-4 py-3 text-sm text-slate-600">${new Date(f.createdAt).toLocaleDateString("id-ID")}</td>
+      <td class="px-4 py-3">${f.type === "in" ? '<span class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded uppercase tracking-wider bg-emerald-100 text-emerald-700">masuk</span>' : '<span class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded uppercase tracking-wider bg-rose-100 text-rose-700">keluar</span>'}</td>
+      <td class="px-4 py-3 text-sm font-bold text-slate-800">${escapeHtml(f.category)}</td>
+      <td class="px-4 py-3 text-sm text-slate-500">${escapeHtml(f.note || "-")}</td>
+      <td class="px-4 py-3 text-sm font-extrabold text-slate-800">${rupiah(f.amount)}</td>
+      <td class="px-4 py-3"><button class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 transition-colors shadow-sm fin-del" data-id="${f.id}">Hapus</button></td>
     </tr>`).join("") + "</tbody>";
   t.querySelectorAll(".fin-del").forEach((b) => b.addEventListener("click", async () => { if (!confirm("Hapus catatan ini?")) return; await api(`/api/admin/finance/${b.dataset.id}`, { method: "DELETE" }); loadFinance(); }));
 }
@@ -565,15 +647,15 @@ async function loadTeam() {
   const ROLES = ["owner", "admin", "staff", "customer"];
   let users;
   try { users = await api("/api/admin/users"); } catch (e) { return; }
-  if (users.error) { $("usersTable").innerHTML = `<tr><td style="padding:24px;text-align:center;color:var(--text-muted)">${users.error}</td></tr>`; return; }
+  if (users.error) { $("usersTable").innerHTML = `<tr><td class="px-6 py-8 text-center text-red-500 text-sm font-medium">${users.error}</td></tr>`; return; }
   const t = $("usersTable");
-  t.innerHTML = `<thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Login</th><th>Aksi</th></tr></thead><tbody>` +
-    users.map((u) => `<tr>
-      <td><b>${escapeHtml(u.name || "-")}</b></td>
-      <td>${escapeHtml(u.email)}</td>
-      <td><select class="status-select role-sel" data-id="${u.id}">${ROLES.map((r) => `<option value="${r}" ${r === u.role ? "selected" : ""}>${r}</option>`).join("")}</select></td>
-      <td style="color:var(--text-muted)">${u.provider}</td>
-      <td><button class="btn btn-light btn-sm user-del" data-id="${u.id}" style="color:var(--red)">Hapus</button></td>
+  t.innerHTML = `<thead class="bg-slate-50 border-b border-slate-200"><tr><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nama</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Email</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Login</th><th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Aksi</th></tr></thead><tbody>` +
+    users.map((u) => `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+      <td class="px-4 py-3 text-sm font-bold text-slate-800">${escapeHtml(u.name || "-")}</td>
+      <td class="px-4 py-3 text-sm font-medium text-slate-600">${escapeHtml(u.email)}</td>
+      <td class="px-4 py-3"><select class="status-select role-sel px-2.5 py-1.5 bg-slate-50 border border-slate-300 text-slate-800 font-medium text-xs rounded-lg focus:ring-2 focus:ring-primary outline-none transition-shadow" data-id="${u.id}">${ROLES.map((r) => `<option value="${r}" ${r === u.role ? "selected" : ""}>${r.toUpperCase()}</option>`).join("")}</select></td>
+      <td class="px-4 py-3 text-sm font-semibold text-slate-500 capitalize">${u.provider}</td>
+      <td class="px-4 py-3"><button class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 transition-colors shadow-sm user-del" data-id="${u.id}">Hapus</button></td>
     </tr>`).join("") + "</tbody>";
   t.querySelectorAll(".role-sel").forEach((s) => s.addEventListener("change", async () => {
     const d = await api(`/api/admin/users/${s.dataset.id}`, { method: "PUT", body: JSON.stringify({ role: s.value }) });
@@ -590,23 +672,21 @@ async function loadTeam() {
 $("addUserBtn").addEventListener("click", async () => {
   const m = $("userMsg");
   const body = { name: $("newUserName").value.trim(), email: $("newUserEmail").value.trim(), password: $("newUserPass").value, role: $("newUserRole").value };
-  if (!body.email || !body.password) { m.textContent = "Email & password wajib"; m.className = "auth-msg err"; return; }
+  if (!body.email || !body.password) { m.textContent = "Email & password wajib"; m.className = "text-sm font-bold text-red-600"; return; }
   const d = await api("/api/admin/users", { method: "POST", body: JSON.stringify(body) });
-  if (d && d.error) { m.textContent = d.error; m.className = "auth-msg err"; return; }
-  m.textContent = "Akun dibuat ✅"; m.className = "auth-msg ok";
+  if (d && d.error) { m.textContent = d.error; m.className = "text-sm font-bold text-red-600"; return; }
+  m.textContent = "Akun dibuat ✅"; m.className = "text-sm font-bold text-emerald-600";
   $("newUserName").value = ""; $("newUserEmail").value = ""; $("newUserPass").value = "";
   loadTeam();
 });
 $("changePassBtn").addEventListener("click", async () => {
   const m = $("passMsg"); const newPass = $("newPass").value;
-  if (!newPass || newPass.length < 6) { m.textContent = "Min 6 karakter"; m.className = "auth-msg err"; return; }
+  if (!newPass || newPass.length < 6) { m.textContent = "Min 6 karakter"; m.className = "text-sm font-bold text-red-600"; return; }
   const d = await api("/api/auth/change-password", { method: "POST", body: JSON.stringify({ oldPassword: $("oldPass").value, newPassword: newPass }) });
-  if (d && d.error) { m.textContent = d.error; m.className = "auth-msg err"; return; }
-  m.textContent = "Password diganti ✅"; m.className = "auth-msg ok";
+  if (d && d.error) { m.textContent = d.error; m.className = "text-sm font-bold text-red-600"; return; }
+  m.textContent = "Password diganti ✅"; m.className = "text-sm font-bold text-emerald-600";
   $("oldPass").value = ""; $("newPass").value = "";
 });
-
-
 
 // ============================================================
 // Bottom tab bar (mobile) — rasa aplikasi
@@ -614,11 +694,11 @@ $("changePassBtn").addEventListener("click", async () => {
 (function () {
   const items = [["overview", "Home", "space_dashboard"], ["orders", "Pesanan", "receipt_long"], ["inbox", "Chat", "forum"], ["finance", "Uang", "payments"], ["__more", "Menu", "menu"]];
   const bn = document.createElement("div");
-  bn.className = "bottom-nav";
-  bn.innerHTML = items.map(([p, l, ic]) => `<button data-page="${p}"><span class="material-symbols-outlined">${ic}</span>${l}</button>`).join("");
+  bn.className = "lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 flex justify-around items-center h-16 z-[90] pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]";
+  bn.innerHTML = items.map(([p, l, ic]) => `<button class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-primary transition-colors bottom-nav-btn" data-page="${p}"><span class="material-symbols-outlined text-[24px] mb-0.5 leading-none">${ic}</span><span class="text-[10px] font-bold uppercase tracking-wider">${l}</span></button>`).join("");
   document.body.appendChild(bn);
   bn.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
-    if (b.dataset.page === "__more") { sidebar.classList.add("open"); backdrop.classList.add("show"); return; }
+    if (b.dataset.page === "__more") { sidebar.classList.remove("-translate-x-full"); backdrop.classList.remove("hidden"); return; }
     goto(b.dataset.page);
   }));
 })();

@@ -16,19 +16,19 @@
   const navMount = document.getElementById("siteNav");
   if (navMount) {
     navMount.innerHTML = `
-    <header class="bg-surface/80 backdrop-blur-md border-b-2 border-dashed border-outline-variant shadow-[0_10px_30px_-10px_rgba(139,111,91,0.15)] sticky top-0 z-50 px-margin-mobile md:px-margin-desktop py-md">
-      <div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
-        <a href="/" id="siteBrand" class="flex items-center gap-2 group shrink-0">
-          <span class="w-12 h-12 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[24px] group-hover:scale-110 transition-transform shadow-sm">A</span>
-          <span class="text-2xl text-primary font-extrabold drop-shadow-sm">Anshel <span class="text-on-primary-container">Store</span></span>
+    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50 px-4 md:px-8 py-3">
+      <div class="max-w-7xl mx-auto flex justify-between items-center gap-4">
+        <a href="/" id="siteBrand" class="flex items-center gap-3 shrink-0">
+          <span class="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-2xl shadow-sm">A</span>
+          <span class="text-2xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>
         </a>
-        <nav class="hidden md:flex items-center gap-1">
-          ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-4 py-2 rounded-t-lg font-label-md transition-all hover:bg-secondary-container/30 hover:scale-105 ${n.key === active ? "text-primary font-bold border-b-4 border-primary-container" : "text-on-surface-variant hover:text-primary"}">${n.label}</a>`).join("")}
+        <nav class="hidden md:flex items-center gap-2">
+          ${NAV.filter((n) => n.key !== "faq" && n.key !== "tentang" && n.key !== "cek").map((n) => `<a href="${n.href}" class="px-5 py-2.5 rounded-full font-medium transition-colors ${n.key === active ? "bg-pink-50 text-primary" : "text-slate-600 hover:text-primary hover:bg-slate-50"}">${n.label}</a>`).join("")}
         </nav>
-        <div class="flex items-center gap-1 shrink-0" id="siteAuth">
-          <a href="/topup" title="Cart" class="hidden sm:grid w-10 h-10 place-items-center rounded-full text-primary hover:bg-secondary-container/30 hover:scale-105 transition-all"><span class="material-symbols-outlined">shopping_cart</span></a>
-          <a href="/cek-transaksi" title="Cek Transaksi" class="hidden md:grid w-10 h-10 place-items-center rounded-full text-primary hover:bg-secondary-container/30 hover:scale-105 transition-all"><span class="material-symbols-outlined">receipt_long</span></a>
-          <a href="/akun" title="Akun" class="w-10 h-10 grid place-items-center rounded-full text-primary hover:bg-secondary-container/30 hover:scale-105 transition-all"><span class="material-symbols-outlined">account_circle</span></a>
+        <div class="flex items-center gap-3 shrink-0" id="siteAuth">
+          <a href="/cek-transaksi" title="Cek Transaksi" class="hidden md:flex items-center gap-2 text-slate-600 hover:text-primary font-medium transition-colors"><span class="material-symbols-outlined text-[20px]">receipt_long</span> Lacak Pesanan</a>
+          <a href="/masuk" class="bg-primary hover:bg-pink-700 text-white font-medium px-6 py-2.5 rounded-full shadow-sm transition-colors hidden sm:block">Masuk / Daftar</a>
+          <a href="/masuk" class="sm:hidden text-slate-600"><span class="material-symbols-outlined text-2xl">account_circle</span></a>
         </div>
       </div>
     </header>`;
@@ -49,33 +49,46 @@
   const footMount = document.getElementById("siteFooter");
   if (footMount) {
     footMount.innerHTML = `
-    <footer class="bg-surface-container-low border-t-2 border-dashed border-outline-variant w-full py-xl px-margin-mobile md:px-margin-desktop mt-2xl">
-      <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-12 gap-gutter">
-        <div class="col-span-2 md:col-span-5 flex flex-col gap-sm">
-          <div id="footBrand" class="flex items-center gap-2">
-            <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[18px]">A</span>
-            <span class="text-headline-md text-primary font-extrabold">Anshel <span class="text-on-primary-container">Store</span></span>
+    <footer class="bg-white border-t border-slate-200 w-full py-16 px-4 md:px-8 mt-24">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="md:col-span-1 flex flex-col gap-4">
+          <div id="footBrand" class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-lg bg-primary text-white grid place-items-center font-bold text-xl">A</span>
+            <span class="text-xl text-slate-800 font-extrabold tracking-tight">Anshel<span class="text-primary">Store</span></span>
           </div>
-          <p class="text-body-md text-on-surface-variant max-w-xs">Top up game instan, voucher murah, dan layanan digital terpercaya. Proses cepat & transaksi aman.</p>
-          <div id="footSocial" class="flex gap-2 mt-xs"></div>
+          <p class="text-slate-500 text-sm leading-relaxed mt-2">Platform E-Commerce Top Up Game dan Layanan Digital terpercaya, murah, dan instan di Indonesia.</p>
+          <div id="footSocial" class="flex gap-3 mt-4"></div>
         </div>
-        <div class="md:col-span-3">
-          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-on-surface-variant mb-sm">Jelajahi</h4>
-          <div class="flex flex-col gap-2.5">${NAV.map((n) => `<a class="text-body-md text-on-surface-variant hover:text-primary hover:translate-x-0.5 transition-all" href="${n.href}">${n.label}</a>`).join("")}</div>
+        <div>
+          <h4 class="text-slate-800 font-bold mb-6">Navigasi Utama</h4>
+          <div class="flex flex-col gap-4">
+            ${NAV.map((n) => `<a class="text-slate-500 hover:text-primary transition-colors text-sm" href="${n.href}">${n.label}</a>`).join("")}
+          </div>
         </div>
-        <div class="md:col-span-4">
-          <h4 class="text-[11px] font-extrabold uppercase tracking-widest text-on-surface-variant mb-sm">Akun &amp; Kontak</h4>
-          <div class="flex flex-col gap-2.5">
-            <a href="/masuk" class="text-body-md text-on-surface-variant hover:text-primary transition-colors">Masuk / Daftar</a>
-            <a href="/akun" class="text-body-md text-on-surface-variant hover:text-primary transition-colors">Akun Saya</a>
-            <a id="footWa" href="/tentang" target="_blank" rel="noopener" class="text-body-md text-on-surface-variant hover:text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp</a>
-            <a id="footMail" href="/tentang" class="text-body-md text-on-surface-variant hover:text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> Email</a>
+        <div>
+          <h4 class="text-slate-800 font-bold mb-6">Bantuan & Legal</h4>
+          <div class="flex flex-col gap-4">
+            <a href="/syarat-dan-ketentuan" class="text-slate-500 hover:text-primary transition-colors text-sm">Syarat dan Ketentuan</a>
+            <a href="/kebijakan-privasi" class="text-slate-500 hover:text-primary transition-colors text-sm">Kebijakan Privasi</a>
+            <a href="/kebijakan-pengembalian" class="text-slate-500 hover:text-primary transition-colors text-sm">Kebijakan Pengembalian Dana</a>
+            <a href="/cara-pembelian" class="text-slate-500 hover:text-primary transition-colors text-sm">Cara Pembelian</a>
+            <a href="/kontak" class="text-slate-500 hover:text-primary transition-colors text-sm">Hubungi Kami</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-slate-800 font-bold mb-6">Kontak Kami</h4>
+          <div class="flex flex-col gap-4">
+            <a id="footWa" href="/kontak" target="_blank" rel="noopener" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp CS</a>
+            <a id="footMail" href="/kontak" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> Email Support</a>
+            <div class="mt-4 bg-slate-50 p-4 rounded-lg border border-slate-100 flex items-center gap-3">
+              <span class="material-symbols-outlined text-green-500 text-3xl">verified_user</span>
+              <div class="text-xs text-slate-500 leading-tight">100% Aman &<br/>Terpercaya</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="max-w-7xl mx-auto mt-lg pt-md border-t border-outline-variant/40 flex flex-col sm:flex-row items-center justify-between gap-xs">
-        <span class="text-label-sm text-on-surface-variant">© ${new Date().getFullYear()} Anshel Store. Seluruh hak cipta dilindungi.</span>
-        <span class="text-label-sm text-on-surface-variant inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings:'FILL' 1;">verified_user</span> Pembayaran aman & terenkripsi</span>
+      <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span class="text-xs text-slate-400">© ${new Date().getFullYear()} Anshel Store. All rights reserved.</span>
       </div>
     </footer>`;
   }
@@ -103,9 +116,9 @@
       const nm = (d.user.name || d.user.email || "Akun").split(" ")[0];
       const av = d.user.picture ? `<img src="${d.user.picture}" class="w-8 h-8 rounded-full object-cover"/>` : `<span class="w-8 h-8 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-bold text-[14px]">${nm.charAt(0).toUpperCase()}</span>`;
       const auth = document.getElementById("siteAuth");
-      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs px-sm py-xs rounded-full hover:bg-pink-50 font-label-md text-label-md text-on-surface transition-colors">${av} ${nm}</a><a href="/topup" class="bg-primary text-white font-label-md text-label-md px-md py-sm rounded-full shadow-md hover:bg-pink-600 transition-colors">Top Up Sekarang</a>`;
+      if (auth) auth.innerHTML = `<a href="/cek-transaksi" class="hidden md:flex items-center gap-2 text-slate-600 hover:text-primary font-medium mr-2 transition-colors"><span class="material-symbols-outlined text-[20px]">receipt_long</span> Lacak Pesanan</a><a href="/akun" class="flex items-center gap-2 pr-4 pl-1 py-1 rounded-full border border-slate-200 hover:border-primary/30 hover:bg-pink-50 font-medium text-sm text-slate-700 transition-colors">${av} ${nm}</a><a href="/dashboard" class="hidden md:block bg-slate-800 text-white font-medium px-5 py-2 rounded-full hover:bg-slate-900 transition-colors text-sm">Dashboard</a>`;
       const authM = document.getElementById("siteAuthM");
-      if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-label-md text-label-md text-on-surface">👤 ${nm} (Akun Saya)</a><a href="/topup" class="text-center bg-primary text-white font-label-md text-label-md py-sm rounded-full">Top Up Sekarang</a>`;
+      if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-medium text-slate-700">👤 ${nm} (Akun Saya)</a><a href="/dashboard" class="text-center bg-slate-800 text-white font-medium py-sm rounded-full mt-2">Dashboard Admin</a>`;
     }).catch(() => {});
   }
 

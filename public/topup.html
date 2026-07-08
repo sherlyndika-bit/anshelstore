@@ -1,196 +1,213 @@
 <!DOCTYPE html>
-<html class="light" lang="id">
+<html lang="id">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Top Up Game — Anshel Store</title>
 <meta name="description" content="Top up diamond Mobile Legends, Free Fire, Genshin, Valorant, PUBG. Instan, murah, aman."/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#e11d48',
+          'primary-hover': '#be123c'
+        }
+      }
+    }
+  }
+</script>
 </head>
-<body data-page="topup" class="text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="topup" class="text-slate-800 bg-slate-50 min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
 
 <div id="siteNav"></div>
 
 <!-- ============ VIEW: KATALOG (browse game) ============ -->
-<div id="catalogView" class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg space-y-[60px]">
-  <!-- Hero Banner: LOGO jadi background penuh, teks overlay di kiri -->
-  <section class="relative w-full rounded-2xl overflow-hidden border-2 border-white shadow-md min-h-[300px] md:min-h-[400px] flex items-center group">
-    <!-- Background penuh: diisi LOGO TOKO (cover) bila ada, fallback gradient -->
-    <div id="topupHeroBg" class="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-105 bg-gradient-animated"></div>
-    <!-- Overlay supaya teks kiri kebaca -->
-    <div class="absolute inset-0 z-[1] bg-gradient-to-r from-white/95 via-white/70 to-transparent"></div>
-    <div class="relative z-10 w-full px-md md:px-xl md:pl-20 lg:pl-32 py-lg flex flex-col items-start text-left gap-md max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-white/90 text-primary font-medium text-sm px-4 py-2 rounded-full shadow-sm">
-        <span class="material-symbols-outlined text-[18px]">verified</span> Layanan Resmi
+<div id="catalogView" class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+  <!-- Professional E-commerce Header -->
+  <section class="relative w-full rounded-xl overflow-hidden bg-slate-900 min-h-[280px] flex items-center shadow-lg">
+    <div id="topupHeroBg" class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-40"></div>
+    <div class="absolute inset-0 z-[1] bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
+    <div class="relative z-10 w-full px-8 md:px-16 py-12 flex flex-col items-start text-left gap-4 max-w-2xl">
+      <div class="inline-flex items-center gap-1 bg-rose-600 text-white font-semibold text-xs px-3 py-1.5 rounded uppercase tracking-wider">
+        <span class="material-symbols-outlined text-[16px]">verified</span> Official Top-Up
       </div>
-      <h1 class="font-display-lg text-3xl md:text-display-lg text-slate-900 leading-tight">Top Up <span class="text-primary">Game Favoritmu</span><br/>Cepat &amp; Aman</h1>
-      <p class="font-body-lg text-slate-700 max-w-md">Pilih game di bawah, masukkan ID, bayar — diamond meluncur dalam hitungan detik. 🚀</p>
-      <button type="button" onclick="document.getElementById('daftarGame').scrollIntoView({behavior:'smooth'})" class="mt-2 bg-primary text-white font-medium px-8 py-4 rounded-full shadow-md inline-flex items-center gap-2 hover:-translate-y-1 transition-transform">
-        Mulai Top Up <span class="material-symbols-outlined">arrow_forward</span>
-      </button>
+      <h1 class="text-3xl md:text-5xl font-bold text-white leading-tight">Instant Game <span class="text-rose-500">Credits</span></h1>
+      <p class="text-lg text-slate-300 max-w-md">Secure and fast digital top-ups. Choose your game and get your credits instantly.</p>
     </div>
   </section>
 
   <!-- Search & Discovery -->
-  <section class="flex flex-col items-center gap-md max-w-3xl mx-auto w-full">
+  <section class="flex flex-col items-center gap-6 max-w-3xl mx-auto w-full">
     <div class="relative w-full">
-      <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-      <input id="gameSearch" class="w-full bg-slate-50 border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl py-4 pl-[60px] pr-6 font-body-lg text-slate-800 placeholder-slate-400 shadow-sm transition-all" placeholder="Cari game (Mobile Legends, Free Fire, Genshin...)" type="text"/>
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+      <input id="gameSearch" class="w-full bg-white border border-slate-300 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-lg py-3 pl-12 pr-4 text-slate-800 placeholder-slate-400 shadow-sm transition-all" placeholder="Search for a game..." type="text"/>
     </div>
     <div id="catChips" class="flex flex-wrap justify-center gap-2"></div>
-  </section>ction>
+  </section>
 
-  <!-- Daftar Game (Bento Grid) -->
-  <section id="daftarGame" class="space-y-md scroll-mt-24">
-    <div class="flex items-center justify-between px-sm">
-      <h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">local_fire_department</span> Game Populer
+  <!-- Daftar Game (Grid) -->
+  <section id="daftarGame" class="space-y-6 scroll-mt-24">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+      <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+        Game Catalog
       </h2>
-      <a href="/cek-transaksi" class="font-label-md text-primary hover:underline inline-flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Cek Transaksi</a>
+      <a href="/cek-transaksi" class="text-sm font-semibold text-slate-600 hover:text-rose-600 transition-colors inline-flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">receipt_long</span> Track Order</a>
     </div>
-    <div id="games" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-md"></div>
-    <p id="noGame" class="hidden text-center text-on-surface-variant py-xl">Yah, game-nya nggak ketemu 😢 Coba kata kunci lain ya~</p>
+    <div id="games" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"></div>
+    <p id="noGame" class="hidden text-center text-slate-500 py-12 bg-white rounded-xl border border-slate-200 shadow-sm">No games found matching your search.</p>
   </section>
 
   <!-- Trust strip -->
-  <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">⚡</div><div class="font-bold text-on-surface mt-1">Proses Instan</div><div class="text-label-md text-on-surface-variant text-xs">Otomatis &amp; cepat</div></div>
-    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">🛡️</div><div class="font-bold text-on-surface mt-1">100% Aman</div><div class="text-label-md text-on-surface-variant text-xs">Data terlindungi</div></div>
-    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">💸</div><div class="font-bold text-on-surface mt-1">Termurah</div><div class="text-label-md text-on-surface-variant text-xs">Banyak promo</div></div>
-    <div class="bg-surface-container-lowest rounded-2xl p-4 text-center marshmallow-shadow border-[1.5px] border-outline-variant"><div class="text-2xl">💬</div><div class="font-bold text-on-surface mt-1">CS 24/7</div><div class="text-label-md text-on-surface-variant text-xs">Siap bantu kamu</div></div>
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white rounded-lg p-5 flex items-center gap-4 border border-slate-200 shadow-sm"><span class="material-symbols-outlined text-rose-500 text-3xl">bolt</span><div><div class="font-bold text-slate-900">Instant</div><div class="text-sm text-slate-500">Auto processing</div></div></div>
+    <div class="bg-white rounded-lg p-5 flex items-center gap-4 border border-slate-200 shadow-sm"><span class="material-symbols-outlined text-rose-500 text-3xl">verified_user</span><div><div class="font-bold text-slate-900">Secure</div><div class="text-sm text-slate-500">100% Protected</div></div></div>
+    <div class="bg-white rounded-lg p-5 flex items-center gap-4 border border-slate-200 shadow-sm"><span class="material-symbols-outlined text-rose-500 text-3xl">sell</span><div><div class="font-bold text-slate-900">Best Price</div><div class="text-sm text-slate-500">Valuable deals</div></div></div>
+    <div class="bg-white rounded-lg p-5 flex items-center gap-4 border border-slate-200 shadow-sm"><span class="material-symbols-outlined text-rose-500 text-3xl">support_agent</span><div><div class="font-bold text-slate-900">24/7 Support</div><div class="text-sm text-slate-500">Always available</div></div></div>
   </section>
 </div>
 
 <!-- ============ VIEW: CHECKOUT (per game) ============ -->
-<div id="detailView" class="hidden flex-grow w-full max-w-7xl mx-auto">
-  <header class="w-full sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b-[1.5px] border-dashed border-outline-variant">
-    <div class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-md flex items-center gap-3">
-      <button id="backToCatalog" class="flex items-center justify-center w-11 h-11 rounded-full bg-surface-container hover:bg-secondary-container/50 transition-colors squish-btn group text-secondary shrink-0">
-        <span class="material-symbols-outlined text-[26px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<div id="detailView" class="hidden flex-grow w-full max-w-5xl mx-auto">
+  <header class="w-full sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
+      <button id="backToCatalog" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors">
+        <span class="material-symbols-outlined">arrow_back</span>
       </button>
       <div class="flex-1 min-w-0">
-        <h1 class="font-headline-md text-on-surface leading-tight">Top Up Checkout</h1>
-        <p class="font-label-md text-on-surface-variant text-[12px]">Selesaikan pesananmu dengan aman 💖</p>
+        <h1 class="text-lg font-bold text-slate-900 leading-tight">Checkout</h1>
+        <p class="text-xs text-slate-500 uppercase tracking-wider">Secure Transaction</p>
       </div>
-      <span class="hidden sm:inline-flex items-center gap-1 bg-secondary-fixed text-secondary font-label-md text-[12px] px-3 py-1.5 rounded-full shrink-0">
-        <span class="material-symbols-outlined text-[16px]">lock</span> Aman &amp; Terenkripsi
-      </span>
     </div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pb-xl pt-sm flex flex-col gap-md">
-    <!-- Header banner: VIDEO autoplay / cover game (dari dashboard) -->
-    <div id="gameHeaderBg" class="relative w-full h-52 md:h-72 rounded-[24px] overflow-hidden marshmallow-shadow border-[1.5px] border-tertiary-container bg-surface-container mt-2"></div>
-
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container relative pt-8 p-md mt-6">
-      <h2 class="font-headline-md text-on-surface mb-md border-b-[1.5px] border-dashed border-outline-variant pb-sm">Game Pilihanmu</h2>
-      <div class="flex items-center gap-md">
-        <div id="ghCover" class="w-20 h-20 rounded-lg bg-surface-container overflow-hidden border-[1.5px] border-outline-variant shadow-inner relative flex items-center justify-center text-[36px]"></div>
-        <div class="flex-1 min-w-0">
-          <span class="inline-block px-2 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold uppercase tracking-wider mb-1 shadow-sm">Game</span>
-          <h3 id="ghName" class="font-headline-md text-on-surface leading-tight truncate"></h3>
-          <p id="ghPub" class="font-label-md text-on-surface-variant"></p>
-        </div>
-      </div>
-      <p id="gameDescName" class="hidden"></p>
-      <!-- Screenshots (dari dashboard) -->
-      <div id="gameShots" class="hidden gap-3 overflow-x-auto pb-2 mt-md"></div>
-      <!-- Tentang game: deskripsi + kebutuhan (dari dashboard) -->
-      <div class="mt-md pt-md border-t-[1.5px] border-dashed border-outline-variant">
-        <h3 class="font-bold text-on-surface flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-secondary text-[20px]">info</span> Tentang Game</h3>
-        <div id="gameDesc" class="font-body-md text-on-surface-variant text-[15px] leading-relaxed flex flex-col gap-2"></div>
-        <div id="gameNeeds" class="flex flex-wrap gap-2 mt-3"></div>
-      </div>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">person</span> Data Akun Game</h2>
-      <div id="accountFields" class="grid grid-cols-1 sm:grid-cols-2 gap-md"></div>
-      <div id="idPreview" class="hidden mt-sm rounded-xl px-md py-sm font-label-md text-label-md bg-secondary-container text-on-secondary-container"></div>
-      <p class="font-body-md text-on-surface-variant mt-3 text-[13px] flex items-start gap-1"><span class="material-symbols-outlined text-[14px] mt-[2px]">info</span> Pastikan ID & server benar. Kami nggak pernah minta password. 💖</p>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">diamond</span> Pilih Nominal</h2>
-      <div id="items" class="grid grid-cols-2 md:grid-cols-3 gap-sm"></div>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">contact_mail</span> Data Kamu</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
-        <div class="relative">
-          <label class="absolute -top-2 left-3 px-1 bg-surface-container-lowest font-label-md text-on-surface-variant z-10 text-[12px]" for="custName">Nama</label>
-          <input id="custName" type="text" placeholder="Nama kamu" class="w-full recessed-input rounded-t-lg rounded-b-md px-4 pt-5 pb-3 font-body-md text-on-surface placeholder:text-outline focus:ring-0"/>
-        </div>
-        <div class="relative">
-          <label class="absolute -top-2 left-3 px-1 bg-surface-container-lowest font-label-md text-on-surface-variant z-10 text-[12px]" for="custContact">No. WhatsApp</label>
-          <input id="custContact" type="text" placeholder="08xxxxxxxxxx" class="w-full recessed-input rounded-t-lg rounded-b-md px-4 pt-5 pb-3 font-body-md text-on-surface placeholder:text-outline focus:ring-0"/>
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">wallet</span> Metode Pembayaran</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-sm" id="payMethods">
-        <label class="payment-radio cursor-pointer block relative">
-          <input checked name="pay" type="radio" value="E-Wallet" class="sr-only"/>
-          <div class="payment-card p-md rounded-lg border-2 border-dashed border-outline-variant bg-surface flex items-center gap-md transition-all">
-            <div class="w-11 h-11 rounded-full bg-primary-container/40 grid place-items-center text-primary"><span class="material-symbols-outlined">account_balance_wallet</span></div>
-            <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">E-Wallet</h4><p class="text-[12px] text-on-surface-variant">DANA / OVO / GoPay</p></div>
+  <main class="px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8 items-start">
+    
+    <!-- Left Column: Game Info & Forms -->
+    <div class="w-full lg:w-2/3 flex flex-col gap-6">
+      
+      <!-- Game Info -->
+      <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div id="gameHeaderBg" class="relative w-full h-40 bg-slate-900 border-b border-slate-200"></div>
+        <div class="p-6 relative">
+          <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center -mt-16 sm:-mt-12">
+            <div id="ghCover" class="w-24 h-24 rounded-lg bg-white border border-slate-200 shadow-md flex-shrink-0 flex items-center justify-center text-3xl overflow-hidden relative z-10"></div>
+            <div class="flex-1 min-w-0 pt-2 sm:pt-14 relative z-10">
+              <h3 id="ghName" class="text-2xl font-bold text-slate-900 leading-tight truncate"></h3>
+              <p id="ghPub" class="text-sm text-slate-500 mt-1"></p>
+            </div>
           </div>
-        </label>
-        <label class="payment-radio cursor-pointer block relative">
-          <input name="pay" type="radio" value="QRIS" class="sr-only"/>
-          <div class="payment-card p-md rounded-lg border-2 border-dashed border-outline-variant bg-surface flex items-center gap-md transition-all">
-            <div class="w-11 h-11 rounded-full bg-secondary-container grid place-items-center text-on-secondary-container"><span class="material-symbols-outlined">qr_code_scanner</span></div>
-            <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">QRIS</h4><p class="text-[12px] text-on-surface-variant">Scan & bayar</p></div>
+          <p id="gameDescName" class="hidden"></p>
+          <div id="gameShots" class="hidden gap-3 overflow-x-auto mt-6 pb-2"></div>
+          
+          <div class="mt-6 pt-6 border-t border-slate-100">
+            <h3 class="font-semibold text-slate-900 flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-rose-500 text-[20px]">info</span> Game Details</h3>
+            <div id="gameDesc" class="text-sm text-slate-600 leading-relaxed space-y-2"></div>
+            <div id="gameNeeds" class="flex flex-wrap gap-2 mt-4"></div>
           </div>
-        </label>
-        <label class="payment-radio cursor-pointer block relative">
-          <input name="pay" type="radio" value="Bank Transfer" class="sr-only"/>
-          <div class="payment-card p-md rounded-lg border-2 border-dashed border-outline-variant bg-surface flex items-center gap-md transition-all">
-            <div class="w-11 h-11 rounded-full bg-tertiary-container/60 grid place-items-center text-on-tertiary-container"><span class="material-symbols-outlined">account_balance</span></div>
-            <div class="flex-1"><h4 class="font-body-md font-semibold text-on-surface">Bank</h4><p class="text-[12px] text-on-surface-variant">BCA/Mandiri/BRI</p></div>
+        </div>
+      </section>
+
+      <!-- Account Info Form -->
+      <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">1</div>
+          <h2 class="text-lg font-bold text-slate-900">Player Details</h2>
+        </div>
+        <div id="accountFields" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        <div id="idPreview" class="hidden mt-4 rounded-lg px-4 py-3 text-sm bg-slate-50 border border-slate-200 text-slate-800"></div>
+      </section>
+
+      <!-- Select Item -->
+      <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">2</div>
+          <h2 class="text-lg font-bold text-slate-900">Select Amount</h2>
+        </div>
+        <div id="items" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+      </section>
+      
+      <!-- Payment Method -->
+      <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">3</div>
+          <h2 class="text-lg font-bold text-slate-900">Payment Method</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="payMethods">
+          <label class="cursor-pointer block relative">
+            <input checked name="pay" type="radio" value="E-Wallet" class="peer sr-only"/>
+            <div class="p-4 rounded-lg border-2 border-slate-200 bg-white hover:bg-slate-50 peer-checked:border-rose-500 peer-checked:bg-rose-50 transition-all flex flex-col items-start gap-2">
+              <span class="material-symbols-outlined text-slate-400 peer-checked:text-rose-600">account_balance_wallet</span>
+              <div><h4 class="font-semibold text-slate-900 text-sm">E-Wallet</h4><p class="text-xs text-slate-500">DANA/OVO/GoPay</p></div>
+            </div>
+          </label>
+          <label class="cursor-pointer block relative">
+            <input name="pay" type="radio" value="QRIS" class="peer sr-only"/>
+            <div class="p-4 rounded-lg border-2 border-slate-200 bg-white hover:bg-slate-50 peer-checked:border-rose-500 peer-checked:bg-rose-50 transition-all flex flex-col items-start gap-2">
+              <span class="material-symbols-outlined text-slate-400 peer-checked:text-rose-600">qr_code_scanner</span>
+              <div><h4 class="font-semibold text-slate-900 text-sm">QRIS</h4><p class="text-xs text-slate-500">Scan & pay</p></div>
+            </div>
+          </label>
+          <label class="cursor-pointer block relative">
+            <input name="pay" type="radio" value="Bank Transfer" class="peer sr-only"/>
+            <div class="p-4 rounded-lg border-2 border-slate-200 bg-white hover:bg-slate-50 peer-checked:border-rose-500 peer-checked:bg-rose-50 transition-all flex flex-col items-start gap-2">
+              <span class="material-symbols-outlined text-slate-400 peer-checked:text-rose-600">account_balance</span>
+              <div><h4 class="font-semibold text-slate-900 text-sm">Bank</h4><p class="text-xs text-slate-500">Transfer via VA</p></div>
+            </div>
+          </label>
+        </div>
+      </section>
+      
+      <!-- Contact Info Form -->
+      <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">4</div>
+          <h2 class="text-lg font-bold text-slate-900">Contact Info</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1" for="custName">Name</label>
+            <input id="custName" type="text" placeholder="John Doe" class="w-full bg-white border border-slate-300 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm"/>
           </div>
-        </label>
-      </div>
-    </section>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1" for="custContact">WhatsApp Number</label>
+            <input id="custContact" type="text" placeholder="08xxxxxxxxxx" class="w-full bg-white border border-slate-300 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm"/>
+          </div>
+        </div>
+      </section>
 
-    <section class="bg-surface-container-lowest rounded-[24px] marshmallow-shadow border-[1.5px] border-tertiary-container p-md">
-      <h2 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary">receipt_long</span> Ringkasan</h2>
-      <div id="summaryItems" class="flex flex-col gap-sm font-body-md text-on-surface-variant"><p class="text-center py-md">Pilih nominal dulu ya 🎮</p></div>
-      <div id="invoice" class="hidden mt-md"></div>
-    </section>
-
-    <section>
-      <h3 class="font-headline-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined text-primary">grid_view</span> Game Lainnya</h3>
-      <div id="otherGames" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
-    </section>
-
-    <div class="h-24"></div>
-  </main>
-
-  <div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest/95 backdrop-blur-lg border-t-[1.5px] border-dashed border-outline-variant p-4 z-50 rounded-t-xl marshmallow-shadow">
-    <div class="max-w-3xl mx-auto flex items-center justify-between gap-md" style="padding-bottom:env(safe-area-inset-bottom)">
-      <div class="flex flex-col">
-        <span class="font-label-md text-on-surface-variant">Total Pembayaran</span>
-        <span id="grandTotal" class="font-headline-lg text-2xl md:text-headline-lg text-primary drop-shadow-sm">Rp0</span>
-      </div>
-      <button id="submitOrder" class="bg-primary hover:bg-primary-fixed-dim text-on-primary hover:text-on-primary-fixed-variant font-headline-md px-8 py-4 rounded-full shadow-[0_8px_20px_-6px_rgba(140,76,82,0.4)] squish-btn transition-all duration-200 flex items-center gap-2 overflow-hidden relative group min-w-[180px] justify-center disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-        <div class="absolute inset-0 candy-stripe opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <span class="relative z-10 flex items-center gap-2">Beli Sekarang <span class="material-symbols-outlined text-[20px]">auto_awesome</span></span>
-      </button>
     </div>
-  </div>
+
+    <!-- Right Column: Summary Sticky -->
+    <div class="w-full lg:w-1/3 sticky top-24">
+      <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4 pb-4 border-b border-slate-100 flex items-center gap-2"><span class="material-symbols-outlined text-rose-500">receipt_long</span> Order Summary</h2>
+        <div id="summaryItems" class="flex flex-col gap-3 text-sm text-slate-600 mb-6"><p class="text-center py-4 text-slate-400">Please select an item</p></div>
+        <div id="invoice" class="hidden mb-6"></div>
+        <div class="pt-4 border-t border-slate-200 flex justify-between items-center mb-6">
+          <span class="font-medium text-slate-700">Total</span>
+          <span id="grandTotal" class="text-2xl font-bold text-rose-600">Rp0</span>
+        </div>
+        <button id="submitOrder" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3.5 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          Complete Purchase
+        </button>
+      </section>
+      
+      <section class="mt-6 hidden lg:block">
+        <h3 class="font-semibold text-slate-900 mb-4">Other Games</h3>
+        <div id="otherGames" class="grid grid-cols-3 gap-2"></div>
+      </section>
+    </div>
+  </main>
 </div>
 
 <div id="siteFooter"></div>
 <div id="chatWidget"></div>
-<script src="/js/widget.js"></script>
-<script src="/js/site.js"></script>
-<script src="/js/topup.js"></script>
+<script src="/js/widget.js?v=2.0"></script>
+<script src="/js/site.js?v=2.0"></script>
+<script src="/js/topup.js?v=2.0"></script>
 </body>
 </html>
-

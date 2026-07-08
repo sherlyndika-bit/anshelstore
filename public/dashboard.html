@@ -5,41 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — Anshel Store</title>
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/css/dashboard-core.css" />
-  <link rel="stylesheet" href="/css/dashboard.css" />
-<link href="/css/theme.css" rel="stylesheet"/>
-<script src="/js/theme.js"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#e11d48',
+          }
+        }
+      }
+    }
+  </script>
+  <link href="/css/theme.css" rel="stylesheet"/>
+  <script src="/js/theme.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <style>
+    /* Utility to hide elements */
+    [style*="display: none"], [style*="display:none"] {
+      display: none !important;
+    }
+    
+    /* Reveal page transitions */
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
 </head>
-<body class="dash">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen overflow-hidden flex" id="dashBody">
 
   <!-- ============ AUTH ============ -->
-  <div class="login-screen" id="loginScreen">
-    <div class="login-card">
-      <a class="brand"><span class="brand-logo">A</span> Anshel Store</a>
-      <h1>Dashboard</h1>
-      <p>Masuk dengan email &amp; password. Akun dibuat oleh owner.</p>
+  <div class="fixed inset-0 bg-slate-100 z-[100] flex items-center justify-center p-4" id="loginScreen">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 border border-slate-200">
+      <div class="flex items-center gap-3 mb-6 justify-center">
+        <span class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl shadow-md">A</span>
+        <span class="text-xl font-extrabold tracking-tight">Anshel Store</span>
+      </div>
+      <h1 class="text-2xl font-bold text-center mb-2">Dashboard</h1>
+      <p class="text-slate-500 text-sm text-center mb-8">Masuk dengan email &amp; password. Akun dibuat oleh owner.</p>
 
-      <form class="auth-pane active" id="paneLogin">
-        <div class="field"><label>Email</label><input class="input" id="loginEmail" type="email" placeholder="kamu@email.com" autocomplete="email" /></div>
-        <div class="field"><label>Password</label><input class="input" id="loginPass" type="password" placeholder="••••••" autocomplete="current-password" /></div>
-        <button class="btn btn-primary btn-block btn-lg" type="submit">Masuk</button>
+      <!-- LOGIN -->
+      <form class="space-y-4" id="paneLogin">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="loginEmail" type="email" placeholder="kamu@email.com" autocomplete="email" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="loginPass" type="password" placeholder="••••••" autocomplete="current-password" />
+        </div>
+        <button class="w-full py-3 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-md transition-colors mt-2" type="submit">Masuk</button>
       </form>
-
-      <div class="auth-msg" id="authMsg"></div>
 
       <!-- SETUP OWNER (first-run) -->
-      <form class="auth-pane" id="paneSetup">
-        <div class="field"><label>Nama</label><input class="input" id="setupName" type="text" placeholder="Nama kamu" /></div>
-        <div class="field"><label>Email</label><input class="input" id="setupEmail" type="email" placeholder="email@kamu.com" /></div>
-        <div class="field"><label>Password</label><input class="input" id="setupPass" type="password" placeholder="min 6 karakter" /></div>
-        <button class="btn btn-primary btn-block btn-lg" type="submit">Buat Akun Owner</button>
+      <form class="space-y-4 hidden" id="paneSetup">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Nama</label>
+          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="setupName" type="text" placeholder="Nama kamu" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="setupEmail" type="email" placeholder="email@kamu.com" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="setupPass" type="password" placeholder="min 6 karakter" />
+        </div>
+        <button class="w-full py-3 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-md transition-colors mt-2" type="submit">Buat Akun Owner</button>
       </form>
+
+      <div class="mt-4 text-center text-sm font-medium empty:hidden" id="authMsg"></div>
 
       <!-- Google -->
       <div id="googleWrap" style="display:none">
-        <div class="divider">atau</div>
-        <button class="btn-google" id="googleBtn">
-          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <div class="flex items-center my-6">
+          <div class="flex-grow border-t border-slate-200"></div>
+          <span class="flex-shrink-0 mx-4 text-slate-400 text-sm">atau</span>
+          <div class="flex-grow border-t border-slate-200"></div>
+        </div>
+        <button class="w-full py-2.5 px-4 border border-slate-300 rounded-lg bg-white hover:bg-slate-50 text-slate-700 font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm" id="googleBtn">
+          <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Lanjut dengan Google
         </button>
       </div>
@@ -47,225 +101,425 @@
   </div>
 
   <!-- ============ APP SHELL ============ -->
-  <div class="shell" id="shell" style="display:none">
-    <div class="sidebar-backdrop" id="backdrop"></div>
-    <aside class="sidebar" id="sidebar">
-      <a href="/" class="brand"><span class="brand-logo">A</span> Anshel Store</a>
-      <nav class="side-nav">
-        <div class="nav-section">Utama</div>
-        <button data-page="overview">📊 Overview</button>
-        <button data-page="orders">🧾 Pesanan <span class="count" id="ordersCount" style="display:none"></span></button>
-        <button data-page="inbox">💬 Inbox Chat <span class="count" id="inboxCount" style="display:none"></span></button>
-        <div class="nav-section">Toko</div>
-        <button data-page="produk">🎮 Produk &amp; Harga</button>
-        <button data-page="finance">💰 Finansial</button>
-        <div class="nav-section">Tampilan</div>
-        <button data-page="settings">🎨 Tampilan &amp; Konten</button>
-        <button data-page="articles">📝 Artikel</button>
-        <div class="nav-section">Sistem</div>
-        <button data-page="integrasi">🔌 Integrasi &amp; API</button>
-        <button data-page="team">👥 Tim &amp; Akses</button>
+  <div class="flex h-screen w-full w-full relative" id="shell" style="display:none">
+    
+    <!-- Sidebar Backdrop -->
+    <div class="fixed inset-0 bg-slate-900/50 z-20 lg:hidden hidden" id="backdrop"></div>
+    
+    <!-- Sidebar -->
+    <aside class="fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 flex flex-col transition-transform transform -translate-x-full lg:translate-x-0 overflow-y-auto" id="sidebar">
+      <div class="p-6 border-b border-slate-100">
+        <a href="/" class="flex items-center gap-3 group">
+          <span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">A</span>
+          <span class="font-bold text-lg text-slate-800">Anshel Store</span>
+        </a>
+      </div>
+      
+      <nav class="flex-1 py-4 px-3 space-y-1 side-nav">
+        <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-2">Utama</div>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="overview"><span class="text-lg">📊</span> Overview</button>
+        <button class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="orders">
+          <div class="flex items-center gap-3"><span class="text-lg">🧾</span> Pesanan</div>
+          <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-0.5 rounded-full" id="ordersCount" style="display:none"></span>
+        </button>
+        <button class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="inbox">
+          <div class="flex items-center gap-3"><span class="text-lg">💬</span> Inbox Chat</div>
+          <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full" id="inboxCount" style="display:none"></span>
+        </button>
+        
+        <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-6">Toko</div>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="produk"><span class="text-lg">🎮</span> Produk &amp; Harga</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="finance"><span class="text-lg">💰</span> Finansial</button>
+        
+        <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-6">Tampilan</div>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="settings"><span class="text-lg">🎨</span> Tampilan &amp; Konten</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="articles"><span class="text-lg">📝</span> Artikel</button>
+        
+        <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-6">Sistem</div>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="integrasi"><span class="text-lg">🔌</span> Integrasi &amp; API</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="team"><span class="text-lg">👥</span> Tim &amp; Akses</button>
       </nav>
-      <div class="side-foot"><button id="logoutBtn">↩︎ Keluar</button></div>
+      
+      <div class="p-4 border-t border-slate-200">
+        <button class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors text-sm font-semibold" id="logoutBtn">
+          <span class="material-symbols-outlined text-[18px]">logout</span> Keluar
+        </button>
+      </div>
     </aside>
 
-    <div class="main">
-      <header class="topbar">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div><h1 id="pageTitle">Overview</h1><div id="pageDesc" style="font-size:.78rem;color:var(--text-soft);margin-top:1px"></div></div>
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- Topbar -->
+      <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm z-10 relative">
+        <div class="flex items-center gap-4">
+          <button class="lg:hidden text-slate-500 hover:text-slate-800" onclick="document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('backdrop').classList.remove('hidden');">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          <div>
+            <h1 class="text-lg font-bold text-slate-800 leading-none" id="pageTitle">Overview</h1>
+            <div class="text-[12px] text-slate-500 mt-1" id="pageDesc"></div>
+          </div>
         </div>
-        <div class="user-card"><span class="avatar" id="userAvatar">A</span><span style="font-weight:600;font-size:.92rem" id="userName">Admin</span></div>
+        <div class="flex items-center gap-3 bg-slate-50 py-1.5 px-3 rounded-full border border-slate-200 shadow-sm">
+          <span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs" id="userAvatar">A</span>
+          <span class="font-semibold text-sm text-slate-700" id="userName">Admin</span>
+        </div>
       </header>
 
-      <div class="content">
+      <!-- Scrollable Area -->
+      <div class="flex-1 overflow-y-auto p-4 lg:p-8">
+        
+        <!-- ================= OVERVIEW ================= -->
         <section class="page" id="page-overview">
-          <div class="panel-card" style="margin-bottom:16px">
-            <h3 style="margin-bottom:4px">👋 Mau atur apa hari ini?</h3>
-            <p style="color:var(--text-soft);font-size:.85rem;margin-bottom:14px">Klik salah satu di bawah ini — semua pengaturan toko ada di sini.</p>
-            <div class="qa-grid">
-              <button class="qa-btn" data-page="produk"><span class="qa-ic">🎮</span><b>Produk &amp; Harga</b><small>Game, item, harga, gambar</small></button>
-              <button class="qa-btn" data-page="settings"><span class="qa-ic">🎨</span><b>Tampilan &amp; Konten</b><small>Logo, info toko, sosial, jasa</small></button>
-              <button class="qa-btn" data-page="orders"><span class="qa-ic">🧾</span><b>Pesanan</b><small>Lihat &amp; proses order</small></button>
-              <button class="qa-btn" data-page="inbox"><span class="qa-ic">💬</span><b>Inbox Chat</b><small>Balas pelanggan</small></button>
-              <button class="qa-btn" data-page="articles"><span class="qa-ic">📝</span><b>Artikel</b><small>Tips/blog (SEO)</small></button>
-              <button class="qa-btn" data-page="finance"><span class="qa-ic">💰</span><b>Finansial</b><small>Uang masuk/keluar</small></button>
-              <button class="qa-btn" data-page="integrasi"><span class="qa-ic">🔌</span><b>Integrasi &amp; API</b><small>Provider, pembayaran</small></button>
-              <button class="qa-btn" data-page="team"><span class="qa-ic">👥</span><b>Tim &amp; Akses</b><small>Admin &amp; staff</small></button>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-1">👋 Mau atur apa hari ini?</h3>
+            <p class="text-sm text-slate-500 mb-6">Klik salah satu di bawah ini — semua pengaturan toko ada di sini.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="produk">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">🎮</span>
+                <b class="text-sm text-slate-800 mb-0.5">Produk &amp; Harga</b>
+                <small class="text-xs text-slate-500">Game, item, harga, gambar</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="settings">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">🎨</span>
+                <b class="text-sm text-slate-800 mb-0.5">Tampilan &amp; Konten</b>
+                <small class="text-xs text-slate-500">Logo, info toko, sosial, jasa</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="orders">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">🧾</span>
+                <b class="text-sm text-slate-800 mb-0.5">Pesanan</b>
+                <small class="text-xs text-slate-500">Lihat &amp; proses order</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="inbox">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">💬</span>
+                <b class="text-sm text-slate-800 mb-0.5">Inbox Chat</b>
+                <small class="text-xs text-slate-500">Balas pelanggan</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="articles">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">📝</span>
+                <b class="text-sm text-slate-800 mb-0.5">Artikel</b>
+                <small class="text-xs text-slate-500">Tips/blog (SEO)</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="finance">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">💰</span>
+                <b class="text-sm text-slate-800 mb-0.5">Finansial</b>
+                <small class="text-xs text-slate-500">Uang masuk/keluar</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="integrasi">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">🔌</span>
+                <b class="text-sm text-slate-800 mb-0.5">Integrasi &amp; API</b>
+                <small class="text-xs text-slate-500">Provider, pembayaran</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="team">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">👥</span>
+                <b class="text-sm text-slate-800 mb-0.5">Tim &amp; Akses</b>
+                <small class="text-xs text-slate-500">Admin &amp; staff</small>
+              </button>
             </div>
           </div>
-          <div class="stats-grid" id="statsGrid"></div>
-          <div class="two-col">
-            <div class="panel-card"><h3>Pesanan 7 Hari Terakhir</h3><div class="bars" id="barsChart"></div></div>
-            <div class="panel-card"><h3>Game Terlaris</h3><div class="toplist" id="topGames"></div></div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="statsGrid"></div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+              <h3 class="text-base font-bold text-slate-800 mb-6">Pesanan 7 Hari Terakhir</h3>
+              <div class="flex-1 flex items-end gap-2 h-48" id="barsChart"></div>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+              <h3 class="text-base font-bold text-slate-800 mb-4">Game Terlaris</h3>
+              <div class="flex-1 flex flex-col justify-center" id="topGames"></div>
+            </div>
           </div>
-          <div class="panel-card" style="margin-top:16px"><h3>Pesanan Terbaru</h3><div class="table-wrap"><table class="data" id="recentOrders"></table></div></div>
+          
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-200">
+              <h3 class="text-base font-bold text-slate-800">Pesanan Terbaru</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full" id="recentOrders"></table>
+            </div>
+          </div>
         </section>
 
+        <!-- ================= ORDERS ================= -->
         <section class="page" id="page-orders">
-          <div class="filters" id="orderFilters">
-            <button class="filter-chip active" data-f="all">Semua</button>
-            <button class="filter-chip" data-f="pending">Pending</button>
-            <button class="filter-chip" data-f="paid">Paid</button>
-            <button class="filter-chip" data-f="processing">Processing</button>
-            <button class="filter-chip" data-f="done">Done</button>
-            <button class="filter-chip" data-f="cancelled">Cancelled</button>
+          <div class="flex flex-wrap gap-2 mb-6" id="orderFilters">
+            <button class="filter-chip active px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors bg-slate-800 text-white border-slate-800" data-f="all">Semua</button>
+            <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-f="pending">Pending</button>
+            <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-f="paid">Paid</button>
+            <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-f="processing">Processing</button>
+            <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-f="done">Done</button>
+            <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors bg-white text-slate-600 border-slate-200 hover:bg-slate-50" data-f="cancelled">Cancelled</button>
           </div>
-          <div class="panel-card"><div class="table-wrap"><table class="data" id="ordersTable"></table></div></div>
-        </section>
-
-        <section class="page" id="page-inbox">
-          <div class="inbox">
-            <div class="conv-list" id="convList"></div>
-            <div class="chat-pane" id="chatPane"><div class="chat-empty" id="chatEmpty">Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</div></div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full" id="ordersTable"></table>
+            </div>
           </div>
         </section>
 
-        <!-- ARTIKEL -->
+        <!-- ================= INBOX ================= -->
+        <section class="page h-[calc(100vh-120px)]" id="page-inbox">
+          <div class="flex h-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <!-- List -->
+            <div class="w-1/3 min-w-[250px] border-r border-slate-200 flex flex-col bg-slate-50">
+              <div class="p-4 border-b border-slate-200 bg-white">
+                <h3 class="font-bold text-slate-800">Percakapan</h3>
+              </div>
+              <div class="flex-1 overflow-y-auto p-2" id="convList"></div>
+            </div>
+            <!-- Chat Pane -->
+            <div class="flex-1 flex flex-col bg-white" id="chatPane">
+              <div class="flex-1 flex items-center justify-center p-8 text-center text-slate-500" id="chatEmpty">
+                <div class="max-w-sm">
+                  <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">forum</span>
+                  <p>Pilih percakapan di sebelah kiri untuk mulai membantu pelanggan.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ARTIKEL ================= -->
         <section class="page" id="page-articles">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px">
-            <p class="muted" style="color:var(--text-soft)">Kelola artikel blog (SEO). Tulis tips & panduan untuk menarik pengunjung dari Google.</p>
-            <button class="btn btn-primary btn-sm" id="newArticleBtn">+ Tulis Artikel</button>
+          <div class="flex justify-between items-center flex-wrap gap-4 mb-6">
+            <p class="text-sm text-slate-500 max-w-2xl">Kelola artikel blog (SEO). Tulis tips & panduan untuk menarik pengunjung dari Google.</p>
+            <button class="px-4 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors text-sm flex items-center gap-2" id="newArticleBtn">
+              <span class="material-symbols-outlined text-[18px]">add</span> Tulis Artikel
+            </button>
           </div>
-          <div class="panel-card" id="articleEditor" style="display:none;margin-bottom:18px">
-            <h3 id="editorTitle">Tulis Artikel</h3>
+          
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 hidden" id="articleEditor">
+            <h3 class="text-lg font-bold text-slate-800 mb-4" id="editorTitle">Tulis Artikel</h3>
             <input type="hidden" id="artId" />
-            <div class="field"><label>Judul</label><input class="input" id="artTitle" placeholder="Judul artikel" /></div>
-            <div class="field"><label>Slug URL (opsional)</label><input class="input" id="artSlug" placeholder="otomatis-dari-judul" /></div>
-            <div class="field"><label>Ringkasan (excerpt)</label><input class="input" id="artExcerpt" placeholder="Deskripsi singkat untuk SEO & kartu" /></div>
-            <div class="field up-wrap"><label>Gambar Cover</label><input type="hidden" id="artCover" /><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn" data-target="artCover">📷 Upload Cover</button><button type="button" class="btn btn-light btn-sm img-clear" data-target="artCover" style="color:var(--red)">Hapus</button></div></div>
-            <div class="field"><label>Tags (pisah koma)</label><input class="input" id="artTags" placeholder="Top Up, Tips" /></div>
-            <div class="field"><label>Penulis</label><input class="input" id="artAuthor" placeholder="Tim Anshel Store" /></div>
-            <div class="field"><label>Konten (Markdown: ## judul, **tebal**, - list, [teks](url))</label><textarea class="input" id="artContent" rows="10" placeholder="Tulis isi artikel di sini..."></textarea></div>
-            <div class="field"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="artPublished" checked style="width:auto" /> Publikasikan</label></div>
-            <div style="display:flex;gap:8px"><button class="btn btn-primary" id="saveArticle">Simpan</button><button class="btn btn-light" id="cancelArticle">Batal</button></div>
-            <div class="auth-msg" id="artMsg"></div>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Judul</label>
+                <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="artTitle" placeholder="Judul artikel" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Slug URL (opsional)</label>
+                <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="artSlug" placeholder="otomatis-dari-judul" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Ringkasan (excerpt)</label>
+                <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="artExcerpt" placeholder="Deskripsi singkat untuk SEO & kartu" />
+              </div>
+              <div class="up-wrap">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Gambar Cover</label>
+                <input type="hidden" id="artCover" />
+                <div class="flex gap-2 flex-wrap">
+                  <button type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm rounded-lg font-medium transition-colors upload-btn" data-target="artCover">📷 Upload Cover</button>
+                  <button type="button" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg font-medium transition-colors img-clear" data-target="artCover">Hapus</button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Tags (pisah koma)</label>
+                <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="artTags" placeholder="Top Up, Tips" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Penulis</label>
+                <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="artAuthor" placeholder="Tim Anshel Store" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Konten (Markdown: ## judul, **tebal**, - list, [teks](url))</label>
+                <textarea class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none font-mono text-sm" id="artContent" rows="10" placeholder="Tulis isi artikel di sini..."></textarea>
+              </div>
+              <div>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="checkbox" id="artPublished" checked class="w-4 h-4 text-primary bg-slate-100 border-slate-300 rounded focus:ring-primary focus:ring-2" />
+                  <span class="text-sm font-medium text-slate-700">Publikasikan</span>
+                </label>
+              </div>
+              <div class="flex gap-3 pt-2">
+                <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="saveArticle">Simpan</button>
+                <button class="px-6 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg transition-colors" id="cancelArticle">Batal</button>
+              </div>
+              <div class="text-sm font-medium mt-2 empty:hidden" id="artMsg"></div>
+            </div>
           </div>
-          <div class="panel-card"><div class="table-wrap"><table class="data" id="articlesTable"></table></div></div>
+          
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full" id="articlesTable"></table>
+            </div>
+          </div>
         </section>
 
-        <!-- KONTEN & HARGA -->
+        <!-- ================= KONTEN & HARGA ================= -->
         <section class="page" id="page-settings">
-          <div class="panel-card" style="margin-bottom:18px">
-            <h3>Info Toko & Hero</h3>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
-              <div class="field"><label>Nama Toko</label><input class="input" id="setName" /></div>
-              <div class="field"><label>Tagline</label><input class="input" id="setTagline" /></div>
-              <div class="field"><label>WhatsApp (628...)</label><input class="input" id="setWa" /></div>
-              <div class="field"><label>Email</label><input class="input" id="setEmail" /></div>
-              <div class="field up-wrap"><label>Logo Toko (gambar)</label><input type="hidden" id="setLogo" /><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-light btn-sm upload-btn" data-target="setLogo">📷 Upload Logo</button><button type="button" class="btn btn-light btn-sm img-clear" data-target="setLogo" style="color:var(--red)">Hapus</button></div></div>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Info Toko & Hero</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Toko</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setName" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Tagline</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setTagline" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">WhatsApp (628...)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setWa" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Email</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setEmail" /></div>
+              <div class="up-wrap">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Logo Toko (gambar)</label>
+                <input type="hidden" id="setLogo" />
+                <div class="flex gap-2 flex-wrap">
+                  <button type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm rounded-lg font-medium transition-colors upload-btn" data-target="setLogo">📷 Upload Logo</button>
+                  <button type="button" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg font-medium transition-colors img-clear" data-target="setLogo">Hapus</button>
+                </div>
+              </div>
             </div>
-            <div class="field"><label>Meta Description (SEO)</label><textarea class="input" id="setMeta" rows="2"></textarea></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="set-grid">
-              <div class="field"><label>Instagram URL</label><input class="input" id="setIg" /></div>
-              <div class="field"><label>TikTok URL</label><input class="input" id="setTt" /></div>
-              <div class="field"><label>YouTube URL</label><input class="input" id="setYt" /></div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-1">Meta Description (SEO)</label>
+              <textarea class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setMeta" rows="2"></textarea>
             </div>
-            <button class="btn btn-primary" id="saveSettings">Simpan Info Toko</button>
-            <span class="auth-msg" id="setMsg" style="margin-left:10px"></span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Instagram URL</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setIg" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">TikTok URL</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setTt" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">YouTube URL</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" id="setYt" /></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="saveSettings">Simpan Info Toko</button>
+              <span class="text-sm font-medium empty:hidden" id="setMsg"></span>
+            </div>
           </div>
 
-          <div class="panel-card" style="margin-bottom:18px">
-            <h3>Harga & Foto Jasa</h3>
-            <div id="servicesEditor"></div>
-            <button class="btn btn-primary" id="saveServices" style="margin-top:12px">Simpan Jasa</button>
-            <span class="auth-msg" id="svcMsg" style="margin-left:10px"></span>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Harga & Foto Jasa</h3>
+            <div id="servicesEditor" class="space-y-4 mb-4"></div>
+            <div class="flex items-center gap-3 mt-4 pt-4 border-t border-slate-100">
+              <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="saveServices">Simpan Jasa</button>
+              <span class="text-sm font-medium empty:hidden" id="svcMsg"></span>
+            </div>
           </div>
-
         </section>
 
-        <!-- INTEGRASI & API -->
+        <!-- ================= INTEGRASI & API ================= -->
         <section class="page" id="page-integrasi">
-          <div class="panel-card">
-            <h3>🔌 Integrasi & API Keys</h3>
-            <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Isi untuk mengaktifkan fitur otomatis. Disimpan aman & tidak pernah tampil di sisi pengunjung.</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
-              <div class="field"><label>Payment Gateway (provider)</label><input class="input" id="intPayProvider" placeholder="midtrans / xendit" /></div>
-              <div class="field"><label>Payment API Key</label><input class="input" id="intPayKey" type="password" placeholder="••••••" /></div>
-              <div class="field"><label>AI Provider (chatbot)</label><input class="input" id="intAiProvider" placeholder="openai / gemini" /></div>
-              <div class="field"><label>AI API Key</label><input class="input" id="intAiKey" type="password" placeholder="••••••" /></div>
-              <div class="field"><label>Cek-ID Game: URL API</label><input class="input" id="intGcUrl" placeholder="https://provider/check" /></div>
-              <div class="field"><label>Cek-ID Game: API Key</label><input class="input" id="intGcKey" type="password" placeholder="••••••" /></div>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2"><span class="text-2xl">🔌</span> Integrasi & API Keys</h3>
+            <p class="text-sm text-slate-500 mb-6">Isi untuk mengaktifkan fitur otomatis. Disimpan aman & tidak pernah tampil di sisi pengunjung.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment Gateway (provider)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intPayProvider" placeholder="midtrans / xendit" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intPayKey" type="password" placeholder="••••••" /></div>
+              
+              <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-2"></div>
+              
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">AI Provider (chatbot)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intAiProvider" placeholder="openai / gemini" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">AI API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intAiKey" type="password" placeholder="••••••" /></div>
+              
+              <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-2"></div>
+              
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Cek-ID Game: URL API</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGcUrl" placeholder="https://provider/check" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Cek-ID Game: API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGcKey" type="password" placeholder="••••••" /></div>
             </div>
-            <button class="btn btn-primary" id="saveIntegrations" style="margin-top:8px">Simpan Integrasi</button>
-            <span class="auth-msg" id="intMsg" style="margin-left:10px"></span>
+            
+            <div class="flex items-center gap-3">
+              <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="saveIntegrations">Simpan Integrasi</button>
+              <span class="text-sm font-medium empty:hidden" id="intMsg"></span>
+            </div>
           </div>
 
-          <div class="panel-card">
-            <h3>🎮 Provider Game (H2H) — ambil produk & HARGA REAL otomatis</h3>
-            <p style="color:var(--text-soft);font-size:.88rem;margin-bottom:10px">Sambungkan ke provider top-up untuk menarik daftar game + harga real otomatis. <b>Digiflazz</b> didukung langsung: cukup isi <b>Nama Provider = digiflazz</b>, <b>Username</b>, & <b>API Key</b> (Dev/Prod) — URL boleh dikosongkan. Provider lain: isi URL API yang mengembalikan JSON array/{data:[...]}. Lalu klik <b>Sync</b>.</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="set-grid">
-              <div class="field"><label>Nama Provider</label><input class="input" id="intGpName" placeholder="digiflazz" /></div>
-              <div class="field"><label>Username / ID Member</label><input class="input" id="intGpUser" placeholder="username Digiflazz" /></div>
-              <div class="field" style="grid-column:1/-1"><label>API Key / Token (Dev atau Prod)</label><input class="input" id="intGpKey" type="password" placeholder="••••••" /></div>
-              <div class="field" style="grid-column:1/-1"><label>URL API Price-list (opsional — kosongkan untuk Digiflazz)</label><input class="input" id="intGpUrl" placeholder="otomatis untuk Digiflazz" /></div>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-2">🎮 Provider Game (H2H) — ambil produk & HARGA REAL otomatis</h3>
+            <p class="text-sm text-slate-500 mb-6 bg-blue-50 text-blue-800 p-4 rounded-lg border border-blue-100">Sambungkan ke provider top-up untuk menarik daftar game + harga real otomatis. <b>Digiflazz</b> didukung langsung: cukup isi <b>Nama Provider = digiflazz</b>, <b>Username</b>, & <b>API Key</b> (Dev/Prod) — URL boleh dikosongkan. Provider lain: isi URL API yang mengembalikan JSON array. Lalu klik <b>Sync</b>.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Provider</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpName" placeholder="digiflazz" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Username / ID Member</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpUser" placeholder="username Digiflazz" /></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">API Key / Token (Dev atau Prod)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpKey" type="password" placeholder="••••••" /></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">URL API Price-list (opsional — kosongkan untuk Digiflazz)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpUrl" placeholder="otomatis untuk Digiflazz" /></div>
             </div>
-            <div style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <button class="btn btn-primary" id="saveProvider">Simpan Provider</button>
-              <button class="btn btn-light" id="syncGames">🔄 Sync Produk dari Provider</button>
-              <span class="auth-msg" id="gpMsg"></span>
+            
+            <div class="flex items-center gap-3 flex-wrap pt-2">
+              <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="saveProvider">Simpan Provider</button>
+              <button class="px-6 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2" id="syncGames">🔄 Sync Produk dari Provider</button>
+              <span class="text-sm font-medium empty:hidden" id="gpMsg"></span>
             </div>
           </div>
         </section>
 
-        <!-- PRODUK & GAME -->
+        <!-- ================= PRODUK & GAME ================= -->
         <section class="page" id="page-produk">
-          <div class="panel-card" style="margin-bottom:18px">
-            <h3>➕ Tambah Game Baru</h3>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px" class="set-grid">
-              <div class="field" style="margin:0"><label>ID unik (huruf kecil)</label><input class="input" id="ngId" placeholder="mis. mlbb" /></div>
-              <div class="field" style="margin:0"><label>Nama Game</label><input class="input" id="ngName" placeholder="Mobile Legends" /></div>
-              <div class="field" style="margin:0"><label>Publisher</label><input class="input" id="ngPub" placeholder="Moonton" /></div>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">➕ Tambah Game Baru</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">ID unik (huruf kecil)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngId" placeholder="mis. mlbb" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Game</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngName" placeholder="Mobile Legends" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Publisher</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngPub" placeholder="Moonton" /></div>
             </div>
-            <div class="field"><label>Field diminta (pisah koma)</label><input class="input" id="ngNeeds" placeholder="User ID, Zone ID" /></div>
-            <button class="btn btn-primary" id="addGameBtn">Tambah Game</button>
-            <span class="auth-msg" id="produkMsg" style="margin-left:10px"></span>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-1">Field diminta (pisah koma)</label>
+              <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngNeeds" placeholder="User ID, Zone ID" />
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="addGameBtn">Tambah Game</button>
+              <span class="text-sm font-medium empty:hidden" id="produkMsg"></span>
+            </div>
           </div>
-          <div id="produkList" class="grid" style="gap:16px"></div>
-          <div style="position:sticky;bottom:24px;margin-top:16px;z-index:5"><button class="btn btn-primary btn-lg btn-block" id="saveProduk">💾 Simpan Semua Perubahan</button></div>
+          
+          <div id="produkList" class="flex flex-col gap-6 mb-24"></div>
+          
+          <div class="fixed bottom-6 left-6 lg:left-72 right-6 z-20">
+            <button class="w-full py-4 bg-primary hover:bg-rose-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all" id="saveProduk">💾 Simpan Semua Perubahan</button>
+          </div>
         </section>
 
-        <!-- FINANSIAL -->
+        <!-- ================= FINANSIAL ================= -->
         <section class="page" id="page-finance">
-          <div class="stats-grid" id="financeStats"></div>
-          <div class="panel-card" style="margin-bottom:18px">
-            <h3>Catat Transaksi Manual</h3>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end" class="fin-grid">
-              <div class="field" style="margin:0"><label>Tipe</label><select class="input" id="finType"><option value="in">Pemasukan</option><option value="out">Pengeluaran</option></select></div>
-              <div class="field" style="margin:0"><label>Nominal (Rp)</label><input class="input" id="finAmount" type="number" placeholder="0" /></div>
-              <div class="field" style="margin:0"><label>Kategori</label><input class="input" id="finCategory" placeholder="Modal, Iklan, dll" /></div>
-              <div class="field" style="margin:0"><label>Catatan</label><input class="input" id="finNote" placeholder="opsional" /></div>
-              <button class="btn btn-primary" id="addFinance">Tambah</button>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="financeStats"></div>
+          
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Catat Transaksi Manual</h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Tipe</label><select class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white" id="finType"><option value="in">Pemasukan</option><option value="out">Pengeluaran</option></select></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Nominal (Rp)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="finAmount" type="number" placeholder="0" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Kategori</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="finCategory" placeholder="Modal, Iklan, dll" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Catatan</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="finNote" placeholder="opsional" /></div>
+              <button class="w-full py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="addFinance">Tambah</button>
             </div>
           </div>
-          <div class="panel-card"><h3>Riwayat Keuangan</h3><div class="table-wrap"><table class="data" id="financeTable"></table></div></div>
+          
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-200">
+              <h3 class="text-base font-bold text-slate-800">Riwayat Keuangan</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full" id="financeTable"></table>
+            </div>
+          </div>
         </section>
 
-        <!-- TIM & AKSES -->
+        <!-- ================= TIM & AKSES ================= -->
         <section class="page" id="page-team">
-          <div class="panel-card" style="margin-bottom:18px;max-width:520px">
-            <h3>🔑 Ganti Password Saya</h3>
-            <div class="field"><label>Password Lama</label><input class="input" id="oldPass" type="password" placeholder="kosongkan jika login via Google/OTP" /></div>
-            <div class="field"><label>Password Baru</label><input class="input" id="newPass" type="password" placeholder="min 6 karakter" /></div>
-            <button class="btn btn-primary" id="changePassBtn">Simpan Password</button>
-            <span class="auth-msg" id="passMsg" style="margin-left:10px"></span>
-          </div>
-
-          <div class="panel-card" style="margin-bottom:18px">
-            <h3>➕ Tambah Akun Tim</h3>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 130px auto;gap:10px;align-items:end" class="fin-grid">
-              <div class="field" style="margin:0"><label>Nama</label><input class="input" id="newUserName" placeholder="Nama" /></div>
-              <div class="field" style="margin:0"><label>Email</label><input class="input" id="newUserEmail" type="email" placeholder="email@toko.com" /></div>
-              <div class="field" style="margin:0"><label>Password</label><input class="input" id="newUserPass" type="password" placeholder="min 6" /></div>
-              <div class="field" style="margin:0"><label>Role</label><select class="input" id="newUserRole"><option value="staff">Staff</option><option value="admin">Admin</option><option value="owner">Owner</option></select></div>
-              <button class="btn btn-primary" id="addUserBtn">Tambah</button>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 max-w-lg">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">🔑 Ganti Password Saya</h3>
+            <div class="space-y-4 mb-4">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Password Lama</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="oldPass" type="password" placeholder="kosongkan jika login via Google/OTP" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Password Baru</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="newPass" type="password" placeholder="min 6 karakter" /></div>
             </div>
-            <span class="auth-msg" id="userMsg"></span>
+            <div class="flex items-center gap-3">
+              <button class="px-6 py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="changePassBtn">Simpan Password</button>
+              <span class="text-sm font-medium empty:hidden" id="passMsg"></span>
+            </div>
           </div>
 
-          <div class="panel-card">
-            <h3>Daftar Akun</h3>
-            <p style="color:var(--text-soft);font-size:.85rem;margin-bottom:8px">Owner & Admin bisa akses dashboard. Customer hanya akun pelanggan biasa.</p>
-            <div class="table-wrap"><table class="data" id="usersTable"></table></div>
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">➕ Tambah Akun Tim</h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end mb-2">
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="newUserName" placeholder="Nama" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Email</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="newUserEmail" type="email" placeholder="email@toko.com" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Password</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="newUserPass" type="password" placeholder="min 6" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Role</label><select class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white" id="newUserRole"><option value="staff">Staff</option><option value="admin">Admin</option><option value="owner">Owner</option></select></div>
+              <button class="w-full py-2 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-sm transition-colors" id="addUserBtn">Tambah</button>
+            </div>
+            <span class="text-sm font-medium empty:hidden" id="userMsg"></span>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-200">
+              <h3 class="text-base font-bold text-slate-800">Daftar Akun</h3>
+              <p class="text-xs text-slate-500 mt-1">Owner & Admin bisa akses dashboard. Customer hanya akun pelanggan biasa.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full" id="usersTable"></table>
+            </div>
           </div>
         </section>
       </div>
@@ -275,4 +529,3 @@
   <script src="/js/dashboard.js"></script>
 </body>
 </html>
-
