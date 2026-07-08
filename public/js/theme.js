@@ -89,3 +89,56 @@ tailwind.config = {
     window.addEventListener("appinstalled", function () { var b = document.getElementById("pwaInstallBtn"); if (b) b.remove(); deferred = null; });
   } catch (e) {}
 })();
+
+// ==== Global Page Transition & Preloader ====
+(function() {
+  // Inject Preloader DOM
+  function injectPreloader() {
+    if (document.getElementById('global-preloader')) return;
+    const p = document.createElement('div');
+    p.id = 'global-preloader';
+    p.innerHTML = '<div class="global-spinner"></div>';
+    document.body.prepend(p);
+  }
+
+  // Attempt to inject as early as possible
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectPreloader);
+  } else {
+    injectPreloader();
+  }
+
+  // Remove preloader and show body when everything is fully loaded
+  window.addEventListener('load', () => {
+    const p = document.getElementById('global-preloader');
+    if (p) p.classList.add('loaded');
+    document.body.style.opacity = '1';
+  });
+
+  // Intercept internal links for smooth exit transition
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    // Only intercept if it's an internal link, not opening in new tab, and not a hash link
+    const isInternal = link.hostname === window.location.hostname || !link.hostname;
+    const isNewTab = link.target === '_blank';
+    const isHash = link.getAttribute('href')?.startsWith('#');
+    const isAction = link.getAttribute('href')?.startsWith('javascript:') || link.getAttribute('href')?.startsWith('mailto:') || link.getAttribute('href')?.startsWith('tel:');
+
+    if (isInternal && !isNewTab && !isHash && !isAction) {
+      e.preventDefault();
+      const p = document.getElementById('global-preloader');
+      if (p) {
+        // Show preloader again
+        p.classList.remove('loaded');
+        // Wait for the fade-in animation to complete before navigating
+        setTimeout(() => {
+          window.location.href = link.href;
+        }, 400); // Matches the 0.4s transition in CSS
+      } else {
+        window.location.href = link.href;
+      }
+    }
+  });
+})();
