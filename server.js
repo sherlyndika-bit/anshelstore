@@ -292,6 +292,8 @@ const CLEAN_ROUTES = {
   "/masuk": "masuk.html", "/login": "masuk.html", "/daftar": "masuk.html",
   "/akun": "akun.html", "/profil": "akun.html",
   "/layanan": "layanan.html", "/automation": "layanan.html", "/ai": "layanan.html",
+  "/syarat-dan-ketentuan": "syarat-dan-ketentuan.html", "/kebijakan-privasi": "kebijakan-privasi.html", 
+  "/kebijakan-pengembalian": "kebijakan-pengembalian.html", "/cara-pembelian": "cara-pembelian.html", "/kontak": "kontak.html",
 };
 async function saveImageUpload(dataUrl) {
   const m = /^data:(image\/(png|jpe?g|gif|webp|svg\+xml));base64,(.+)$/.exec(String(dataUrl || ""));

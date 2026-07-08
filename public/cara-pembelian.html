@@ -1,67 +1,53 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cara Pembelian - Anshel Store</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script src="/js/theme.js?v=2.0"></script>
-    <link href="/css/theme.css?v=2.0" rel="stylesheet"/>
-    <script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cara Pembelian — Anshel Store</title>
+<meta name="description" content="Panduan cara pembelian dan top up game di Anshel Store." />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
 </head>
-<body class="bg-background text-slate-800">
-    <div id="siteNav"></div>
-    <main class="max-w-4xl mx-auto px-6 py-16">
-        <article class="prose prose-slate lg:prose-lg mx-auto">
-            <h1>Cara Pembelian dan Top-Up</h1>
-            <p>Bertransaksi di Anshel Store dirancang untuk menjadi sangat mudah, cepat, dan 100% aman. Tidak perlu melakukan pendaftaran akun (meskipun login disarankan agar Anda dapat melacak riwayat pesanan). Ikuti panduan langkah demi langkah di bawah ini untuk memulai pengisian produk game Anda.</p>
+<body data-page="legal" class="bg-background text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden selection:bg-pink-100 selection:text-primary">
 
-            <h2>Langkah 1: Pilih Game atau Produk</h2>
-            <ul>
-                <li>Arahkan ke halaman utama <strong>Anshel Store</strong>.</li>
-                <li>Pilih game atau produk digital yang ingin Anda beli dari daftar katalog kami (misalnya: Mobile Legends, Free Fire, PUBG Mobile, Valorant, dll).</li>
-                <li>Klik pada logo atau nama game untuk masuk ke halaman detail pemesanan.</li>
-            </ul>
+<div id="siteNav"></div>
 
-            <h2>Langkah 2: Masukkan Data Akun (User ID)</h2>
-            <p>Di halaman pemesanan, Anda akan diminta untuk memasukkan identitas akun game Anda. Mohon diperhatikan:</p>
-            <ul>
-                <li>Masukkan <strong>User ID</strong> Anda dengan benar.</li>
-                <li>Jika game tersebut mensyaratkan <strong>Zone ID</strong> atau <strong>Server ID</strong> (seperti Mobile Legends), pastikan juga dimasukkan secara tepat.</li>
-                <li><em>Tip: Anda dapat menemukan User ID di halaman profil dalam game Anda. Terdapat tombol tanda tanya (?) di sebelah kolom input untuk melihat petunjuk bergambar.</em></li>
-            </ul>
+<main class="flex-grow max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20 w-full">
+  <div class="bg-surface rounded-2xl p-8 md:p-12 shadow-sm border border-slate-100">
+    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-8">Cara Pembelian</h1>
+    <div class="prose prose-slate max-w-none prose-headings:text-slate-800 prose-a:text-primary hover:prose-a:text-primary-hover">
+      <p>Melakukan transaksi di Anshel Store sangatlah mudah, instan, dan aman. Ikuti panduan langkah demi langkah berikut ini untuk melakukan Top Up Game atau memesan layanan kami.</p>
+      
+      <h3>1. Pilih Layanan atau Game</h3>
+      <p>Pilih game yang ingin Anda Top Up melalui halaman beranda atau menu "Top Up". Jika Anda ingin memesan Jasa AI & Automation, silakan buka menu "Layanan".</p>
+      
+      <h3>2. Masukkan Data Akun Anda</h3>
+      <p>Di halaman produk, Anda akan diminta untuk mengisi detail akun game Anda (contoh: User ID dan Server ID). Pastikan Anda mengisi data ini dengan <strong>teliti dan benar</strong> karena produk akan dikirimkan langsung ke ID tersebut.</p>
 
-            <h2>Langkah 3: Pilih Nominal Top-Up</h2>
-            <p>Setelah mengisi User ID, gulir ke bawah dan pilih nominal item, diamonds, atau voucher yang ingin Anda beli. Harga yang tertera adalah harga yang harus Anda bayar (sebelum biaya administrasi dari metode pembayaran, jika ada).</p>
+      <h3>3. Pilih Nominal dan Metode Pembayaran</h3>
+      <ul>
+        <li>Pilih jumlah Diamond, UC, atau produk lain yang ingin dibeli.</li>
+        <li>Pilih metode pembayaran yang paling nyaman untuk Anda (kami menerima QRIS, Transfer Bank, E-Wallet, dan Minimarket).</li>
+        <li>Masukkan nomor WhatsApp yang aktif untuk menerima bukti transaksi dan notifikasi status pesanan Anda.</li>
+      </ul>
 
-            <h2>Langkah 4: Pilih Metode Pembayaran</h2>
-            <p>Kami mendukung berbagai metode pembayaran di seluruh Indonesia untuk memudahkan Anda. Pilih metode yang paling nyaman bagi Anda:</p>
-            <ul>
-                <li><strong>E-Wallet:</strong> GoPay, OVO, Dana, ShopeePay, LinkAja.</li>
-                <li><strong>QRIS:</strong> Bayar instan menggunakan aplikasi perbankan atau e-wallet apa pun yang mendukung scan kode QR.</li>
-                <li><strong>Virtual Account (Transfer Bank):</strong> BCA, Mandiri, BNI, BRI, Permata.</li>
-                <li><strong>Minimarket:</strong> Alfamart dan Indomaret.</li>
-            </ul>
+      <h3>4. Lakukan Pembayaran</h3>
+      <p>Klik tombol <strong>Beli Sekarang</strong>. Anda akan diarahkan ke rincian pesanan. Selesaikan pembayaran sesuai dengan instruksi yang tertera di layar (termasuk kode unik jika ada) sebelum batas waktu pembayaran habis.</p>
 
-            <h2>Langkah 5: Masukkan Kontak & Konfirmasi Pesanan</h2>
-            <ul>
-                <li>Masukkan nomor WhatsApp (opsional, untuk menerima bukti transaksi langsung ke WhatsApp Anda) atau alamat Email Anda.</li>
-                <li>Klik tombol <strong>"Beli Sekarang"</strong> atau <strong>"Checkout"</strong>.</li>
-                <li>Sebuah jendela <em>pop-up</em> akan muncul untuk memverifikasi nama akun (Nickname) Anda (khusus untuk game tertentu yang mendukung fitur cek nama otomatis). Periksa kembali dan pastikan Nickname sesuai dengan akun Anda.</li>
-            </ul>
+      <h3>5. Pesanan Diproses Instan!</h3>
+      <p>Setelah pembayaran Anda dikonfirmasi oleh sistem, pesanan akan langsung diproses secara otomatis. Produk digital akan masuk ke akun game Anda dalam hitungan detik (maksimal 10 menit jika server sedang padat).</p>
 
-            <h2>Langkah 6: Lakukan Pembayaran</h2>
-            <p>Selesaikan pembayaran sesuai dengan instruksi yang tertera di layar. Jika Anda memilih metode QRIS, segera scan kode QR yang muncul. Jika melalui Virtual Account, salin nomor rekening dan transfer sesuai nominal persis yang tertera hingga tiga digit terakhir (jika diwajibkan).</p>
-            
-            <h2>Langkah 7: Pesanan Berhasil!</h2>
-            <p>Setelah pembayaran terkonfirmasi oleh sistem kami (biasanya dalam hitungan detik), produk akan otomatis dikirimkan ke akun game Anda secara instan. Anda akan langsung menerima Invoice Digital di layar serta notifikasi via WhatsApp/Email. Selamat bermain!</p>
+      <div class="mt-8 p-6 bg-blue-50 border border-blue-100 rounded-xl">
+        <h4 class="text-blue-900 font-bold mt-0">Tips Melacak Pesanan</h4>
+        <p class="text-blue-800 mb-0">Anda dapat memantau status pesanan kapan saja melalui menu <a href="/lacak">Cek Transaksi</a> dengan memasukkan Nomor Invoice pesanan Anda.</p>
+      </div>
+    </div>
+  </div>
+</main>
 
-            <blockquote>
-                <strong>Penting:</strong> Jangan pernah membagikan bukti pembayaran atau nomor invoice kepada pihak yang tidak dikenal. Admin Anshel Store tidak pernah meminta <em>Password</em> akun game Anda.
-            </blockquote>
-        </article>
-    </main>
-    <div id="siteFooter"></div>
-    <script src="/js/site.js"></script>
+<div id="siteFooter"></div>
+<script src="/js/site.js?v=2.0"></script>
 </body>
 </html>
