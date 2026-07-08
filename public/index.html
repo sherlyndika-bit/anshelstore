@@ -9,9 +9,9 @@
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#6c5ce7"/>
 <link rel="apple-touch-icon" href="/icon-192.png"/>
-<link href="/css/styles.css?v=3.0" rel="stylesheet"/>
-<link href="/css/theme.css?v=3.0" rel="stylesheet"/>
-<script src="/js/theme.js?v=3.0"></script>
+<link href="/css/styles.css?v=4.0" rel="stylesheet"/>
+<link href="/css/theme.css?v=4.0" rel="stylesheet"/>
+<script src="/js/theme.js?v=4.0"></script>
 </head>
 <body data-page="home" class="min-h-screen">
 
@@ -22,12 +22,17 @@
   <section class="hero">
     <div class="hero-grid container">
       <div> <!-- left -->
-        <div class="hero-badge">Terpercaya &amp; Tercepat</div>
-        <h1>Top Up Game &amp; <br/><span class="text-primary">Sosial Media</span></h1>
-        <p class="lead">Platform top up diamond game favorit dan otomatisasi sosial media termurah, instan, dan aman 100%. Proses hitungan detik!</p>
+        <div class="hero-badge">Aman & Terpercaya 100%</div>
+        <h1>Top Up Game <br/><span class="text-gradient">Tercepat &amp; Termurah</span></h1>
+        <p class="lead">Platform top up diamond game favorit dan termurah. Aman 100% dan instan masuk hitungan detik!</p>
         <div class="hero-cta">
-          <a href="/topup" class="btn btn-primary btn-lg">Top Up Sekarang</a>
+          <a href="/topup" class="btn btn-primary btn-lg">Top Up Game Sekarang <span class="material-symbols-outlined">arrow_forward</span></a>
           <a href="/layanan" class="btn btn-outline btn-lg">Layanan Sosial Media</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong class="mono">1.000+</strong><span>Transaksi</span></div>
+          <div><strong class="mono">24/7</strong><span>Online System</span></div>
+          <div><strong class="mono">4.9★</strong><span>Rating</span></div>
         </div>
       </div>
       <div class="hero-visual"> <!-- right -->
@@ -66,8 +71,8 @@
 <div id="siteFooter"></div>
 
 <div id="chatWidget"></div>
-<script src="/js/site.js?v=3.0"></script>
-<script src="/js/widget.js?v=3.0"></script>
+<script src="/js/site.js?v=4.0"></script>
+<script src="/js/widget.js?v=4.0"></script>
 <script>
   // Smooth scroll untuk tombol data-scroll
   document.addEventListener("click", (e) => { const a = e.target.closest("[data-scroll]"); if (a) { e.preventDefault(); const t = document.getElementById(a.dataset.scroll); if (t) t.scrollIntoView({ behavior: "smooth" }); } });
@@ -79,11 +84,11 @@
     if (!games.length) { el.innerHTML = '<p class="text-center text-muted" style="grid-column:1/-1">Game segera hadir ✨</p>'; return; }
     el.innerHTML = games.slice(0, 10).map((g) => {
       const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
-      const art = g.image ? `<img src="${g.image}" alt="${g.name}" />` : `<span style="font-size:2rem">${EMOJI[g.id] || "🎮"}</span>`;
-      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="game-card">
-        <div class="thumb">${art}</div>
-        <div class="title">${g.name}</div>
-        <div class="price">Mulai ${rupiah(min)}</div>
+      const art = g.image ? `<img src="${g.image}" alt="${g.name}" style="width:100%;height:100%;object-fit:cover"/>` : `<span style="font-size:2rem">${EMOJI[g.id] || "🎮"}</span>`;
+      return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="card shine" style="padding:12px;text-align:center;cursor:pointer">
+        <div style="width:100%;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--surface-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px">${art}</div>
+        <div style="font-weight:700;font-size:.9rem">${g.name}</div>
+        <div class="mono text-primary" style="font-size:.82rem;margin-top:2px">Mulai ${rupiah(min)}</div>
       </a>`;
     }).join("");
   }).catch(() => {});
