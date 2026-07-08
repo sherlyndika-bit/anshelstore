@@ -54,8 +54,8 @@ tailwind.config = {
       var m = document.createElement("meta"); m.name = name; m.content = content; head.appendChild(m);
     }
     addLink("manifest", "/manifest.json");
-    addLink("apple-touch-icon", "/logo.png?v=2");
-    addLink("icon", "/logo.png?v=2", { type: "image/png" });
+    addLink("apple-touch-icon", "/icon-192.png?v=3");
+    addLink("icon", "/logo.png?v=3", { type: "image/png" });
     addMeta("theme-color", "#e11d48");
     addMeta("apple-mobile-web-app-capable", "yes");
     addMeta("apple-mobile-web-app-status-bar-style", "default");
