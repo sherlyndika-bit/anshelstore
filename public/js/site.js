@@ -5,7 +5,7 @@
 
   const NAV = [
     { href: "/topup", label: "Top Up Game", key: "topup", icon: "stadia_controller" },
-    { href: "/layanan", label: "Layanan AI", key: "layanan", icon: "smart_toy" },
+    { href: "/layanan", label: "Layanan", key: "layanan", icon: "support_agent" },
     { href: "/blog", label: "Komunitas", key: "blog", icon: "forum" },
     { href: "/faq", label: "FAQ", key: "faq", icon: "help" },
     { href: "/tentang", label: "Tentang", key: "tentang", icon: "info" },
@@ -56,7 +56,7 @@
             <span class="w-9 h-9 rounded-full bg-primary text-on-primary grid place-items-center font-extrabold text-[18px]">A</span>
             <span class="text-headline-md text-primary font-extrabold">Anshel <span class="text-on-primary-container">Store</span></span>
           </div>
-          <p class="text-body-md text-on-surface-variant max-w-xs">Top up game instan & jasa AI automation untuk bisnismu. Satu tempat, hangat, terpercaya.</p>
+          <p class="text-body-md text-on-surface-variant max-w-xs">Top up game instan, voucher murah, dan layanan digital terpercaya. Proses cepat & transaksi aman.</p>
           <div id="footSocial" class="flex gap-2 mt-xs"></div>
         </div>
         <div class="md:col-span-3">
@@ -103,9 +103,9 @@
       const nm = (d.user.name || d.user.email || "Akun").split(" ")[0];
       const av = d.user.picture ? `<img src="${d.user.picture}" class="w-8 h-8 rounded-full object-cover"/>` : `<span class="w-8 h-8 rounded-full bg-gradient-to-br from-pink to-secondary text-on-primary flex items-center justify-center font-bold text-[14px]">${nm.charAt(0).toUpperCase()}</span>`;
       const auth = document.getElementById("siteAuth");
-      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs px-sm py-xs rounded-full hover:bg-pink-50 font-label-md text-label-md text-on-surface transition-colors">${av} ${nm}</a><a href="/topup" class="bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-[0_4px_14px_rgba(191,93,126,0.35)]">Top Up ✨</a>`;
+      if (auth) auth.innerHTML = `<a href="/akun" class="flex items-center gap-xs px-sm py-xs rounded-full hover:bg-pink-50 font-label-md text-label-md text-on-surface transition-colors">${av} ${nm}</a><a href="/topup" class="bg-primary text-white font-label-md text-label-md px-md py-sm rounded-full shadow-md hover:bg-pink-600 transition-colors">Top Up Sekarang</a>`;
       const authM = document.getElementById("siteAuthM");
-      if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-label-md text-label-md text-on-surface">👤 ${nm} (Akun Saya)</a><a href="/topup" class="text-center bg-gradient-to-r from-pink to-secondary text-on-primary font-label-md text-label-md py-sm rounded-full">Top Up ✨</a>`;
+      if (authM) authM.innerHTML = `<a href="/akun" class="py-sm font-label-md text-label-md text-on-surface">👤 ${nm} (Akun Saya)</a><a href="/topup" class="text-center bg-primary text-white font-label-md text-label-md py-sm rounded-full">Top Up Sekarang</a>`;
     }).catch(() => {});
   }
 

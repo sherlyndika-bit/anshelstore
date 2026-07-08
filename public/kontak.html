@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hubungi Kami — Anshel Store</title>
+<meta name="description" content="Kontak Anshel Store untuk bantuan, dukungan, atau kerjasama bisnis." />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
+<link href="/css/theme.css" rel="stylesheet"/>
+</head>
+<body data-page="kontak" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container bg-surface">
+
+<div id="siteNav"></div>
+
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+  <div class="text-center mb-xl">
+    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">Hubungi <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Kami</span></h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Tim Anshel Store siap membantu Anda. Silakan isi form di bawah atau gunakan informasi kontak yang tersedia.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-xl items-start">
+    <div class="space-y-md">
+      <div class="bg-surface-container-lowest p-md rounded-2xl shadow-sm flex gap-md items-center">
+        <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings:'FILL' 1;">mail</span>
+        </div>
+        <div>
+          <h3 class="font-title-md text-title-md text-on-surface">Email</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">support@anshelstore.com</p>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-md rounded-2xl shadow-sm flex gap-md items-center">
+        <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;">forum</span>
+        </div>
+        <div>
+          <h3 class="font-title-md text-title-md text-on-surface">WhatsApp (CS 24/7)</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">+62 812-3456-7890</p>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-md rounded-2xl shadow-sm flex gap-md items-center">
+        <div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings:'FILL' 1;">location_on</span>
+        </div>
+        <div>
+          <h3 class="font-title-md text-title-md text-on-surface">Lokasi Kami</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">Anshel Tech HQ, Jakarta, Indonesia</p>
+        </div>
+      </div>
+      
+      <div class="mt-lg p-md bg-surface-variant/30 rounded-2xl border border-surface-variant/50">
+        <h4 class="font-title-md text-title-md text-on-surface mb-xs">Waktu Operasional</h4>
+        <p class="font-body-md text-body-md text-on-surface-variant">Top Up Game: Instan 24 Jam<br>Layanan Automation: Senin - Jumat (09:00 - 17:00 WIB)</p>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-lg rounded-3xl border border-outline-variant shadow-md">
+      <h2 class="font-headline-sm text-headline-sm text-on-surface mb-md">Kirim Pesan</h2>
+      <form class="space-y-md" onsubmit="event.preventDefault(); alert('Pesan Anda telah terkirim!');">
+        <div>
+          <label for="name" class="block font-label-md text-label-md text-on-surface mb-xs">Nama Lengkap</label>
+          <input type="text" id="name" required class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" placeholder="Masukkan nama Anda">
+        </div>
+        <div>
+          <label for="email" class="block font-label-md text-label-md text-on-surface mb-xs">Email</label>
+          <input type="email" id="email" required class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" placeholder="nama@email.com">
+        </div>
+        <div>
+          <label for="subject" class="block font-label-md text-label-md text-on-surface mb-xs">Subjek</label>
+          <select id="subject" class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow">
+            <option>Pilih Topik...</option>
+            <option>Bantuan Top Up</option>
+            <option>Pertanyaan Layanan AI</option>
+            <option>Kerjasama Bisnis</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div>
+          <label for="message" class="block font-label-md text-label-md text-on-surface mb-xs">Pesan</label>
+          <textarea id="message" rows="4" required class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow resize-none" placeholder="Tulis pesan Anda di sini..."></textarea>
+        </div>
+        <button type="submit" class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-md rounded-xl hover:bg-primary/90 transition-colors flex justify-center items-center gap-xs">
+          <span class="material-symbols-outlined text-[20px]">send</span> Kirim Pesan
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<div id="siteFooter"></div>
+<div id="chatWidget"></div>
+<script src="/js/widget.js"></script>
+<script src="/js/site.js"></script>
+<script>if (typeof initChatWidget === "function") initChatWidget();</script>
+</body>
+</html>
