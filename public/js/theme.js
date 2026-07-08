@@ -97,7 +97,8 @@ tailwind.config = {
     if (document.getElementById('global-preloader')) return;
     const p = document.createElement('div');
     p.id = 'global-preloader';
-    p.innerHTML = '<div class="preloader-content"><img src="/logo.png" alt="Anshel Store Logo" class="preloader-logo"/></div>';
+    p.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#ffffff;display:flex;align-items:center;justify-content:center;transition:opacity 0.4s ease-out,visibility 0.4s ease-out;';
+    p.innerHTML = '<div class="preloader-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;"><img src="/logo.png" alt="Anshel Store Logo" class="preloader-logo" style="height:auto;max-height:120px;width:auto;max-width:80vw;object-fit:contain;"/></div>';
     
     // Fallback if body is somehow not ready
     if (document.body) {
