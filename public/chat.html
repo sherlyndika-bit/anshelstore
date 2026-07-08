@@ -4,25 +4,27 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Live Chat — Anshel Store</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
+<meta name="theme-color" content="#6c5ce7"/>
+<link href="/css/styles.css" rel="stylesheet"/>
 <link href="/css/theme.css" rel="stylesheet"/>
+<script src="/js/theme.js"></script>
 </head>
-<body data-page="chat" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="chat" class="min-h-screen">
 
 <div id="siteNav"></div>
 
-<main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-xl text-center">
-  <div class="inline-flex items-center gap-xs bg-surface-container/50 glass-panel rounded-full px-sm py-xs mb-md shadow-sm border border-outline-variant/30 mx-auto">
-    <span class="material-symbols-outlined text-secondary text-[16px]" style="font-variation-settings:'FILL' 1;">forum</span>
-    <span class="font-label-md text-label-md text-primary">Live Chat • online 24/7</span>
+<main class="container-md text-center" style="padding:80px 16px 80px">
+  <div class="hero-badge" style="margin:0 auto 16px;width:fit-content">
+    <span class="material-symbols-outlined" style="font-size:16px">forum</span>
+    <span>Live Chat • online 24/7</span>
   </div>
-  <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">Ngobrol dengan <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Anshel Store</span></h1>
-  <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mx-auto">
+  <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Ngobrol dengan <span class="text-gradient">Anshel Store</span></h1>
+  <p class="text-sub" style="max-width:540px;margin:16px auto 0;font-size:1.05rem">
     Klik gelembung chat di kanan bawah. Coba ketik <b>"halo"</b>, <b>"top up"</b>, atau <b>"admin"</b> untuk melihat balasan AI. Saat agent mengambil alih, balasannya muncul real-time.
   </p>
-  <div class="mt-lg flex flex-wrap gap-sm justify-center">
-    <a href="/topup" class="bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md px-gutter py-md rounded-full shadow-[0_12px_24px_rgba(0,101,141,0.2)] hover:scale-105 active:scale-95 transition-all">🎮 Top Up Game</a>
-    <a href="/" class="bg-surface glass-panel text-primary font-label-md text-label-md px-gutter py-md rounded-full border border-primary/10 hover:border-primary/30 hover:scale-105 active:scale-95 transition-all">← Beranda</a>
+  <div style="display:flex;gap:12px;justify-content:center;margin-top:32px;flex-wrap:wrap">
+    <a href="/topup" class="btn btn-primary">🎮 Top Up Game</a>
+    <a href="/" class="btn btn-outline">← Beranda</a>
   </div>
 </main>
 

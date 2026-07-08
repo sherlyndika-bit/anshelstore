@@ -5,29 +5,33 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Cek Transaksi — Anshel Store</title>
 <meta name="description" content="Lacak status pesanan top up game kamu di Anshel Store dengan kode invoice." />
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
+<meta name="theme-color" content="#6c5ce7"/>
+<link href="/css/styles.css" rel="stylesheet"/>
 <link href="/css/theme.css" rel="stylesheet"/>
+<script src="/js/theme.js"></script>
 </head>
-<body data-page="cek" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="cek" class="min-h-screen">
 
 <div id="siteNav"></div>
 
-<main class="max-w-xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-  <div class="text-center mb-lg">
-    <div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mx-auto mb-sm"><span class="material-symbols-outlined text-primary text-[32px]" style="font-variation-settings:'FILL' 1;">receipt_long</span></div>
-    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Cek <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Transaksi</span></h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant">Masukkan kode invoice untuk melihat status pesananmu.</p>
-  </div>
-
-  <div class="bg-surface-container-lowest rounded-lg p-md md:p-lg shadow-md shadow-primary/10">
-    <div class="flex flex-col sm:flex-row gap-sm">
-      <input id="codeInput" type="text" placeholder="Contoh: INV12345678" class="flex-1 rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary uppercase"/>
-      <button id="checkBtn" class="bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full hover:scale-105 active:scale-95 transition-all">Lacak</button>
+<main class="container-sm" style="padding:48px 16px 80px">
+  <div class="text-center" style="margin-bottom:32px">
+    <div class="card-icon" style="width:64px;height:64px;border-radius:50%;margin:0 auto 16px">
+      <span class="material-symbols-outlined" style="font-size:32px">receipt_long</span>
     </div>
-    <div id="result" class="mt-md"></div>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Cek <span class="text-gradient">Transaksi</span></h1>
+    <p class="text-sub" style="margin-top:6px">Masukkan kode invoice untuk melihat status pesananmu.</p>
   </div>
 
-  <p class="text-center font-body-md text-body-md text-on-surface-variant mt-md">Belum punya pesanan? <a href="/topup" class="text-primary font-bold">Top Up sekarang →</a></p>
+  <div class="card" style="padding:24px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input id="codeInput" type="text" placeholder="Contoh: INV12345678" class="input flex-1" style="text-transform:uppercase"/>
+      <button id="checkBtn" class="btn btn-primary shrink-0">Lacak</button>
+    </div>
+    <div id="result" style="margin-top:16px"></div>
+  </div>
+
+  <p class="text-center text-sub" style="margin-top:20px">Belum punya pesanan? <a href="/topup" class="text-primary" style="font-weight:700">Top Up sekarang →</a></p>
 </main>
 
 <div id="siteFooter"></div>
@@ -38,38 +42,38 @@
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   const STEPS = ["pending", "paid", "processing", "done"];
   const LABEL = { pending: "Menunggu Pembayaran", paid: "Pembayaran Diterima", processing: "Diproses", done: "Selesai", cancelled: "Dibatalkan" };
-  const BADGE = { pending: "bg-tertiary-fixed text-on-tertiary-fixed-variant", paid: "bg-primary-fixed text-on-primary-fixed-variant", processing: "bg-secondary-fixed text-on-secondary-fixed-variant", done: "bg-primary-fixed text-primary", cancelled: "bg-error-container text-on-error-container" };
+  const BADGE_CLS = { pending: "badge badge-pending", paid: "badge badge-paid", processing: "badge badge-processing", done: "badge badge-done", cancelled: "badge badge-cancelled" };
   const $ = (id) => document.getElementById(id);
 
   async function check() {
     const code = $("codeInput").value.trim().toUpperCase();
     const box = $("result");
     if (!code) { box.innerHTML = ""; return; }
-    box.innerHTML = '<p class="text-center text-on-surface-variant py-sm">Mencari…</p>';
+    box.innerHTML = '<p class="text-center text-muted" style="padding:12px 0">Mencari…</p>';
     try {
       const res = await fetch("/api/track?code=" + encodeURIComponent(code));
-      if (!res.ok) { box.innerHTML = '<div class="rounded-DEFAULT bg-error-container/50 text-on-error-container p-md text-center font-label-md text-label-md">Pesanan tidak ditemukan. Periksa kembali kode invoicemu.</div>'; return; }
+      if (!res.ok) { box.innerHTML = '<div class="card text-center" style="background:var(--red-bg);color:var(--red);border-color:transparent">Pesanan tidak ditemukan. Periksa kembali kode invoicemu.</div>'; return; }
       const o = await res.json();
-      const acc = Object.entries(o.account || {}).map(([k, v]) => `<div class="flex justify-between"><span>${k}</span><b class="text-on-surface">${v}</b></div>`).join("");
+      const acc = Object.entries(o.account || {}).map(([k, v]) => `<div class="flex-between"><span>${k}</span><b>${v}</b></div>`).join("");
       const cancelled = o.status === "cancelled";
-      const timeline = cancelled ? "" : `<div class="flex items-center justify-between my-md">${STEPS.map((s, i) => {
+      const timeline = cancelled ? "" : `<div class="track-timeline">${STEPS.map((s, i) => {
         const done = STEPS.indexOf(o.status) >= i;
-        return `<div class="flex flex-col items-center flex-1"><div class="w-8 h-8 rounded-full flex items-center justify-center ${done ? "bg-gradient-to-r from-primary to-secondary text-on-primary" : "bg-surface-container text-on-surface-variant"}"><span class="material-symbols-outlined text-[18px]">${done ? "check" : "radio_button_unchecked"}</span></div><span class="font-label-sm text-label-sm text-on-surface-variant mt-xs text-center">${LABEL[s]}</span></div>${i < STEPS.length - 1 ? `<div class="h-[2px] flex-1 ${STEPS.indexOf(o.status) > i ? "bg-primary" : "bg-surface-container"}"></div>` : ""}`;
+        return `<div class="track-step"><div class="track-dot ${done ? "done" : "pending"}"><span class="material-symbols-outlined" style="font-size:18px">${done ? "check" : "radio_button_unchecked"}</span></div><span class="text-muted" style="font-size:0.75rem;margin-top:4px;text-align:center">${LABEL[s]}</span></div>${i < STEPS.length - 1 ? `<div class="track-line ${STEPS.indexOf(o.status) > i ? "done" : "pending"}"></div>` : ""}`;
       }).join("")}</div>`;
       box.innerHTML = `
-        <div class="rounded-DEFAULT border border-outline-variant/40 p-md mt-sm">
-          <div class="flex justify-between items-center mb-sm"><b class="text-on-surface">${o.code}</b><span class="font-label-sm text-label-sm px-sm py-[2px] rounded-full ${BADGE[o.status] || ""}">${LABEL[o.status] || o.status}</span></div>
+        <div class="card" style="margin-top:12px">
+          <div class="flex-between" style="margin-bottom:12px"><b>${o.code}</b><span class="${BADGE_CLS[o.status] || "badge"}">${LABEL[o.status] || o.status}</span></div>
           ${timeline}
-          <div class="flex flex-col gap-xs font-body-md text-body-md text-on-surface-variant">
-            <div class="flex justify-between"><span>Game</span><b class="text-on-surface">${o.gameName}</b></div>
-            <div class="flex justify-between"><span>Item</span><b class="text-on-surface">${o.itemLabel}</b></div>
+          <div class="flex-col gap-sm text-sub" style="font-size:0.95rem">
+            <div class="flex-between"><span>Game</span><b style="color:var(--text)">${o.gameName}</b></div>
+            <div class="flex-between"><span>Item</span><b style="color:var(--text)">${o.itemLabel}</b></div>
             ${acc}
-            <div class="flex justify-between"><span>Metode</span><b class="text-on-surface">${o.paymentMethod || "-"}</b></div>
-            <div class="flex justify-between"><span>Total</span><b class="text-secondary">${rupiah(o.price)}</b></div>
-            <div class="flex justify-between"><span>Tanggal</span><b class="text-on-surface">${new Date(o.createdAt).toLocaleString("id-ID")}</b></div>
+            <div class="flex-between"><span>Metode</span><b style="color:var(--text)">${o.paymentMethod || "-"}</b></div>
+            <div class="flex-between"><span>Total</span><b style="color:var(--secondary)">${rupiah(o.price)}</b></div>
+            <div class="flex-between"><span>Tanggal</span><b style="color:var(--text)">${new Date(o.createdAt).toLocaleString("id-ID")}</b></div>
           </div>
         </div>`;
-    } catch (e) { box.innerHTML = '<div class="rounded-DEFAULT bg-error-container/50 text-on-error-container p-md text-center">Gagal terhubung. Coba lagi.</div>'; }
+    } catch (e) { box.innerHTML = '<div class="card text-center" style="background:var(--red-bg);color:var(--red);border-color:transparent">Gagal terhubung. Coba lagi.</div>'; }
   }
   $("checkBtn").addEventListener("click", check);
   $("codeInput").addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });

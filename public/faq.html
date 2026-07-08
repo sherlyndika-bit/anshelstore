@@ -5,8 +5,10 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>FAQ — Pertanyaan Umum | Anshel Store</title>
 <meta name="description" content="Pertanyaan yang sering diajukan seputar top up game, jasa AI automation, pembayaran, dan keamanan di Anshel Store." />
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
+<meta name="theme-color" content="#6c5ce7"/>
+<link href="/css/styles.css" rel="stylesheet"/>
 <link href="/css/theme.css" rel="stylesheet"/>
+<script src="/js/theme.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Apakah top up di Anshel Store aman?","acceptedAnswer":{"@type":"Answer","text":"Sangat aman. Kami hanya meminta User ID dan Server/Zone ID, tidak pernah meminta password akunmu."}},
@@ -16,22 +18,26 @@
 ]}
 </script>
 </head>
-<body data-page="faq" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="faq" class="min-h-screen">
 
 <div id="siteNav"></div>
 
-<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-  <div class="text-center mb-lg">
-    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Pertanyaan <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Umum</span></h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant">Semua yang perlu kamu tahu tentang Anshel Store.</p>
+<main class="container" style="padding:48px 16px 80px">
+  <div class="section-head">
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Pertanyaan <span class="text-gradient">Umum</span></h1>
+    <p>Semua yang perlu kamu tahu tentang Anshel Store.</p>
   </div>
 
-  <div class="flex flex-col gap-sm" id="faqList"></div>
+  <div class="container-md" style="margin-bottom:48px">
+    <div class="flex-col gap-sm" id="faqList"></div>
+  </div>
 
-  <div class="mt-lg p-lg rounded-lg bg-gradient-to-r from-primary to-secondary text-on-primary text-center">
-    <h3 class="font-headline-md text-headline-md mb-sm">Masih ada pertanyaan?</h3>
-    <p class="opacity-90 mb-sm">Tim kami siap membantu kamu.</p>
-    <a id="faqWa" href="/tentang" target="_blank" rel="noopener" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full hover:scale-105 transition-transform">💬 Chat WhatsApp</a>
+  <div class="container-md">
+    <div class="cta-band">
+      <h2>Masih ada pertanyaan?</h2>
+      <p>Tim kami siap membantu kamu.</p>
+      <a id="faqWa" href="/tentang" target="_blank" rel="noopener" class="btn btn-outline">💬 Chat WhatsApp</a>
+    </div>
   </div>
 </main>
 
@@ -44,18 +50,18 @@
     { q: "Apakah top up di Anshel Store aman?", a: "Sangat aman. Kami <b>tidak pernah meminta password</b> akunmu — cukup User ID dan Server/Zone ID. Data kamu dijaga kerahasiaannya." },
     { q: "Berapa lama proses top up?", a: "Mayoritas pesanan diproses <b>instan</b> dalam hitungan menit setelah pembayaran dikonfirmasi. Jika ramai, maksimal beberapa puluh menit." },
     { q: "Metode pembayaran apa saja yang tersedia?", a: "E-Wallet (DANA, OVO, GoPay, ShopeePay), <b>QRIS</b>, dan Transfer Bank (BCA, Mandiri, BRI, BNI)." },
-    { q: "Bagaimana cara melacak pesanan saya?", a: "Gunakan halaman <a href='/cek-transaksi' class='text-primary font-bold'>Cek Transaksi</a> dan masukkan kode invoice yang kamu terima saat memesan." },
+    { q: "Bagaimana cara melacak pesanan saya?", a: "Gunakan halaman <a href='/cek-transaksi' class='text-primary' style='font-weight:700'>Cek Transaksi</a> dan masukkan kode invoice yang kamu terima saat memesan." },
     { q: "Apa itu jasa AI Chatbot Anshel Store?", a: "Layanan pembuatan <b>chatbot AI 24/7</b> lengkap dengan dashboard inbox dan fitur <b>human takeover</b> agar agent bisa mengambil alih percakapan kapan saja." },
     { q: "Apakah harga bisa berubah?", a: "Harga dapat menyesuaikan kebijakan publisher game. Harga yang berlaku adalah yang tampil saat kamu melakukan pemesanan." },
   ];
   const list = document.getElementById("faqList");
   list.innerHTML = FAQ.map((f, i) => `
-    <div class="bg-surface-container-lowest rounded-DEFAULT border border-outline-variant/30 overflow-hidden">
-      <button class="faq-q w-full flex items-center justify-between gap-sm p-md text-left" data-i="${i}">
-        <span class="font-label-md text-label-md text-on-surface font-bold text-[16px]">${f.q}</span>
-        <span class="material-symbols-outlined text-primary transition-transform faq-icon">expand_more</span>
+    <div class="faq-item">
+      <button class="faq-q" data-i="${i}">
+        <span style="font-weight:700;font-size:1rem">${f.q}</span>
+        <span class="material-symbols-outlined faq-icon">expand_more</span>
       </button>
-      <div class="faq-a hidden px-md pb-md font-body-md text-body-md text-on-surface-variant">${f.a}</div>
+      <div class="faq-a hidden">${f.a}</div>
     </div>`).join("");
   list.querySelectorAll(".faq-q").forEach((btn) => btn.addEventListener("click", () => {
     const a = btn.nextElementSibling, ic = btn.querySelector(".faq-icon");
