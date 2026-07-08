@@ -106,6 +106,10 @@
   fetch("/api/settings").then((r) => r.json()).then((d) => {
     const s = d.store || {}, set = d.settings || {}, soc = set.social || {};
     if (set.logo) {
+      let icon = document.querySelector("link[rel='icon']");
+      if (!icon) { icon = document.createElement("link"); icon.rel = "icon"; document.head.appendChild(icon); }
+      icon.href = set.logo;
+
       const b = document.getElementById("siteBrand");
       if (b) b.innerHTML = `<img src="${set.logo}" alt="Anshel Store" class="h-16 md:h-24 w-auto -my-3 md:-my-6 transition-transform"/>`;
       const fb = document.getElementById("footBrand");
