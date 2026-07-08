@@ -1,98 +1,76 @@
 <!DOCTYPE html>
-<html class="light" lang="id">
+<html lang="id">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Hubungi Kami — Anshel Store</title>
-<meta name="description" content="Kontak Anshel Store untuk bantuan, dukungan, atau kerjasama bisnis." />
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungi Kami - Anshel Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="/js/theme.js?v=2.0"></script>
+    <link href="/css/theme.css?v=2.0" rel="stylesheet"/>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
 </head>
-<body data-page="kontak" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container bg-surface">
+<body class="bg-background text-slate-800">
+    <div id="siteNav"></div>
+    <main class="max-w-4xl mx-auto px-6 py-16">
+        <article class="prose prose-slate lg:prose-lg mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="mb-4">Hubungi Kami</h1>
+                <p class="text-lg text-slate-600">Tim Dukungan Pelanggan (Customer Support) Anshel Store siap membantu menyelesaikan kendala atau menjawab pertanyaan Anda seputar layanan top-up game kami.</p>
+            </div>
 
-<div id="siteNav"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 not-prose mb-12">
+                <!-- Kontak CS -->
+                <div class="bg-surface p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-rose-100 text-primary rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">WhatsApp Official</h3>
+                    <p class="text-slate-600 mb-4">Chat dengan tim admin kami untuk respon tercepat terkait kendala transaksi atau pertanyaan umum.</p>
+                    <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center text-primary font-semibold hover:text-primary-hover">
+                        +62 812-3456-7890
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
+                </div>
 
-<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-  <div class="text-center mb-xl">
-    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">Hubungi <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Kami</span></h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Tim Anshel Store siap membantu Anda. Silakan isi form di bawah atau gunakan informasi kontak yang tersedia.</p>
-  </div>
+                <!-- Email -->
+                <div class="bg-surface p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-rose-100 text-primary rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Email Support</h3>
+                    <p class="text-slate-600 mb-4">Untuk kerjasama bisnis, tawaran kemitraan, atau laporan yang memerlukan lampiran mendetail.</p>
+                    <a href="mailto:support@anshelstore.com" class="inline-flex items-center text-primary font-semibold hover:text-primary-hover">
+                        support@anshelstore.com
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
+                </div>
+            </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-xl items-start">
-    <div class="space-y-md">
-      <div class="bg-surface-container-lowest p-md rounded-2xl shadow-sm flex gap-md items-center">
-        <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings:'FILL' 1;">mail</span>
-        </div>
-        <div>
-          <h3 class="font-title-md text-title-md text-on-surface">Email</h3>
-          <p class="font-body-md text-body-md text-on-surface-variant">support@anshelstore.com</p>
-        </div>
-      </div>
+            <h2>Jam Operasional Pelayanan</h2>
+            <p>Sistem top-up kami memproses transaksi secara otomatis <strong>24 Jam Non-Stop</strong> setiap harinya. Namun, untuk layanan pengaduan pelanggan (Customer Support), jam operasional kami adalah sebagai berikut:</p>
+            <ul>
+                <li><strong>Senin - Minggu:</strong> Pukul 08:00 WIB - 23:00 WIB</li>
+                <li><strong>Hari Libur Nasional:</strong> Tetap Buka</li>
+            </ul>
+            <p>Pesan yang dikirimkan di luar jam operasional tetap akan kami terima dan akan direspons sesegera mungkin pada jam operasional hari berikutnya.</p>
 
-      <div class="bg-surface-container-lowest p-md rounded-2xl shadow-sm flex gap-md items-center">
-        <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;">forum</span>
-        </div>
-        <div>
-          <h3 class="font-title-md text-title-md text-on-surface">WhatsApp (CS 24/7)</h3>
-          <p class="font-body-md text-body-md text-on-surface-variant">+62 812-3456-7890</p>
-        </div>
-      </div>
+            <h2>Panduan Melaporkan Masalah Transaksi</h2>
+            <p>Agar proses pengecekan dapat berjalan dengan cepat dan efektif, mohon siapkan format data berikut saat Anda menghubungi tim dukungan kami:</p>
+            <ul>
+                <li><strong>Nomor Invoice:</strong> (Contoh: INV-12345678)</li>
+                <li><strong>User ID & Zone ID:</strong> (Contoh: 1234567 (1234))</li>
+                <li><strong>Bukti Pembayaran:</strong> Silakan lampirkan tangkapan layar (screenshot) bukti transfer atau mutasi rekening yang valid.</li>
+                <li><strong>Deskripsi Kendala:</strong> (Contoh: "Dana sudah terpotong, tapi diamond belum masuk.")</li>
+            </ul>
 
-      <div class="bg-surface-container-lowest p-md rounded-2xl shadow-sm flex gap-md items-center">
-        <div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings:'FILL' 1;">location_on</span>
-        </div>
-        <div>
-          <h3 class="font-title-md text-title-md text-on-surface">Lokasi Kami</h3>
-          <p class="font-body-md text-body-md text-on-surface-variant">Anshel Tech HQ, Jakarta, Indonesia</p>
-        </div>
-      </div>
-      
-      <div class="mt-lg p-md bg-surface-variant/30 rounded-2xl border border-surface-variant/50">
-        <h4 class="font-title-md text-title-md text-on-surface mb-xs">Waktu Operasional</h4>
-        <p class="font-body-md text-body-md text-on-surface-variant">Top Up Game: Instan 24 Jam<br>Layanan Automation: Senin - Jumat (09:00 - 17:00 WIB)</p>
-      </div>
-    </div>
-
-    <div class="bg-surface-container-lowest p-lg rounded-3xl border border-outline-variant shadow-md">
-      <h2 class="font-headline-sm text-headline-sm text-on-surface mb-md">Kirim Pesan</h2>
-      <form class="space-y-md" onsubmit="event.preventDefault(); alert('Pesan Anda telah terkirim!');">
-        <div>
-          <label for="name" class="block font-label-md text-label-md text-on-surface mb-xs">Nama Lengkap</label>
-          <input type="text" id="name" required class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" placeholder="Masukkan nama Anda">
-        </div>
-        <div>
-          <label for="email" class="block font-label-md text-label-md text-on-surface mb-xs">Email</label>
-          <input type="email" id="email" required class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" placeholder="nama@email.com">
-        </div>
-        <div>
-          <label for="subject" class="block font-label-md text-label-md text-on-surface mb-xs">Subjek</label>
-          <select id="subject" class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow">
-            <option>Pilih Topik...</option>
-            <option>Bantuan Top Up</option>
-            <option>Pertanyaan Layanan AI</option>
-            <option>Kerjasama Bisnis</option>
-            <option>Lainnya</option>
-          </select>
-        </div>
-        <div>
-          <label for="message" class="block font-label-md text-label-md text-on-surface mb-xs">Pesan</label>
-          <textarea id="message" rows="4" required class="w-full bg-surface-container-highest border-none rounded-xl p-md text-on-surface focus:ring-2 focus:ring-primary focus:outline-none transition-shadow resize-none" placeholder="Tulis pesan Anda di sini..."></textarea>
-        </div>
-        <button type="submit" class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-md rounded-xl hover:bg-primary/90 transition-colors flex justify-center items-center gap-xs">
-          <span class="material-symbols-outlined text-[20px]">send</span> Kirim Pesan
-        </button>
-      </form>
-    </div>
-  </div>
-</main>
-
-<div id="siteFooter"></div>
-<div id="chatWidget"></div>
-<script src="/js/widget.js"></script>
-<script src="/js/site.js"></script>
-<script>if (typeof initChatWidget === "function") initChatWidget();</script>
+            <p><em>Peringatan Keamanan: Anshel Store hanya menggunakan kontak resmi yang tertera di halaman ini. Kami tidak pernah meminta kata sandi (password), kode OTP, atau informasi kredensial login Anda. Berhati-hatilah terhadap segala bentuk penipuan yang mengatasnamakan Anshel Store.</em></p>
+        </article>
+    </main>
+    <div id="siteFooter"></div>
+    <script src="/js/site.js"></script>
 </body>
 </html>

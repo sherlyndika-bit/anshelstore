@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="light" lang="id">
+<html lang="id">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>FAQ — Pertanyaan Umum | Anshel Store</title>
 <meta name="description" content="Pertanyaan yang sering diajukan seputar top up game, jasa AI automation, pembayaran, dan keamanan di Anshel Store." />
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Apakah top up di Anshel Store aman?","acceptedAnswer":{"@type":"Answer","text":"Sangat aman. Kami hanya meminta User ID dan Server/Zone ID, tidak pernah meminta password akunmu."}},
@@ -16,22 +18,25 @@
 ]}
 </script>
 </head>
-<body data-page="faq" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="faq" class="bg-background text-gray-800 font-sans min-h-screen overflow-x-hidden selection:bg-pink-100 selection:text-primary">
 
 <div id="siteNav"></div>
 
-<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-  <div class="text-center mb-lg">
-    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Pertanyaan <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Umum</span></h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant">Semua yang perlu kamu tahu tentang Anshel Store.</p>
+<main class="max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-16">
+  <div class="text-center mb-12">
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Pertanyaan <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-rose-400">Umum</span></h1>
+    <p class="text-gray-500 text-lg">Semua yang perlu kamu tahu tentang Anshel Store.</p>
   </div>
 
-  <div class="flex flex-col gap-sm" id="faqList"></div>
+  <div class="flex flex-col gap-4" id="faqList"></div>
 
-  <div class="mt-lg p-lg rounded-lg bg-gradient-to-r from-primary to-secondary text-on-primary text-center">
-    <h3 class="font-headline-md text-headline-md mb-sm">Masih ada pertanyaan?</h3>
-    <p class="opacity-90 mb-sm">Tim kami siap membantu kamu.</p>
-    <a id="faqWa" href="/tentang" target="_blank" rel="noopener" class="inline-block bg-surface text-primary font-label-md text-label-md px-gutter py-sm rounded-full hover:scale-105 transition-transform">💬 Chat WhatsApp</a>
+  <div class="mt-16 p-8 md:p-12 rounded-3xl bg-gradient-to-r from-primary to-rose-500 text-white text-center shadow-xl">
+    <h3 class="text-2xl font-bold mb-3">Masih ada pertanyaan?</h3>
+    <p class="text-pink-100 mb-8 text-lg">Tim kami siap membantu kamu.</p>
+    <a id="faqWa" href="/tentang" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-primary font-bold px-8 py-3.5 rounded-xl hover:shadow-lg hover:scale-105 transition-all">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.811.922 3.145.922 3.18 0 5.768-2.586 5.768-5.766 0-3.181-2.588-5.764-5.764-5.764zM12.031 16.592c-1.077 0-1.999-.344-2.85-.853l-.202-.12-1.39.364.372-1.355-.132-.21c-.559-.887-.854-1.748-.853-2.851.001-2.736 2.227-4.961 4.963-4.961 2.734 0 4.962 2.226 4.962 4.96 0 2.736-2.227 4.963-4.962 4.963zm2.723-3.722c-.147-.073-.876-.432-1.012-.482-.134-.049-.232-.073-.331.074-.097.147-.381.482-.468.58-.086.097-.171.11-.32.037-.147-.074-.624-.23-1.189-.733-.439-.391-.735-.873-.822-1.02-.086-.147-.008-.227.065-.301.066-.067.148-.172.221-.258.074-.086.099-.148.148-.246.049-.098.024-.183-.012-.257-.037-.073-.332-.801-.455-1.096-.118-.288-.24-.249-.331-.253-.086-.004-.183-.004-.28-.004-.097 0-.256.037-.392.183-.134.148-.513.501-.513 1.222 0 .721.525 1.417.599 1.516.074.098 1.033 1.579 2.5 2.214.349.151.621.24.834.308.35.093.668.08.92-.072.106-.06.331-.19.331-.19.331-1.065.378-1.442.046-.376.046-.698.033-.765-.013-.067-.049-.107-.123-.143z"/></svg>
+      Chat WhatsApp
+    </a>
   </div>
 </main>
 
@@ -44,18 +49,18 @@
     { q: "Apakah top up di Anshel Store aman?", a: "Sangat aman. Kami <b>tidak pernah meminta password</b> akunmu — cukup User ID dan Server/Zone ID. Data kamu dijaga kerahasiaannya." },
     { q: "Berapa lama proses top up?", a: "Mayoritas pesanan diproses <b>instan</b> dalam hitungan menit setelah pembayaran dikonfirmasi. Jika ramai, maksimal beberapa puluh menit." },
     { q: "Metode pembayaran apa saja yang tersedia?", a: "E-Wallet (DANA, OVO, GoPay, ShopeePay), <b>QRIS</b>, dan Transfer Bank (BCA, Mandiri, BRI, BNI)." },
-    { q: "Bagaimana cara melacak pesanan saya?", a: "Gunakan halaman <a href='/cek-transaksi' class='text-primary font-bold'>Cek Transaksi</a> dan masukkan kode invoice yang kamu terima saat memesan." },
+    { q: "Bagaimana cara melacak pesanan saya?", a: "Gunakan halaman <a href='/cek-transaksi' class='text-primary font-bold hover:underline'>Cek Transaksi</a> dan masukkan kode invoice yang kamu terima saat memesan." },
     { q: "Apa itu jasa AI Chatbot Anshel Store?", a: "Layanan pembuatan <b>chatbot AI 24/7</b> lengkap dengan dashboard inbox dan fitur <b>human takeover</b> agar agent bisa mengambil alih percakapan kapan saja." },
     { q: "Apakah harga bisa berubah?", a: "Harga dapat menyesuaikan kebijakan publisher game. Harga yang berlaku adalah yang tampil saat kamu melakukan pemesanan." },
   ];
   const list = document.getElementById("faqList");
   list.innerHTML = FAQ.map((f, i) => `
-    <div class="bg-surface-container-lowest rounded-DEFAULT border border-outline-variant/30 overflow-hidden">
-      <button class="faq-q w-full flex items-center justify-between gap-sm p-md text-left" data-i="${i}">
-        <span class="font-label-md text-label-md text-on-surface font-bold text-[16px]">${f.q}</span>
-        <span class="material-symbols-outlined text-primary transition-transform faq-icon">expand_more</span>
+    <div class="bg-surface rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all">
+      <button class="faq-q w-full flex items-center justify-between gap-4 p-6 text-left focus:outline-none focus:bg-gray-50 transition-colors" data-i="${i}">
+        <span class="font-bold text-gray-900 text-[17px]">${f.q}</span>
+        <svg class="w-6 h-6 text-primary transition-transform faq-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
       </button>
-      <div class="faq-a hidden px-md pb-md font-body-md text-body-md text-on-surface-variant">${f.a}</div>
+      <div class="faq-a hidden px-6 pb-6 pt-1 text-gray-600 border-t border-gray-50 leading-relaxed">${f.a}</div>
     </div>`).join("");
   list.querySelectorAll(".faq-q").forEach((btn) => btn.addEventListener("click", () => {
     const a = btn.nextElementSibling, ic = btn.querySelector(".faq-icon");
@@ -67,4 +72,3 @@
 </script>
 </body>
 </html>
-

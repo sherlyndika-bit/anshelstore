@@ -1,59 +1,65 @@
 <!DOCTYPE html>
-<html class="light" lang="id">
+<html lang="id">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Masuk / Daftar — Anshel Store</title>
 <meta name="robots" content="noindex"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
 </head>
-<body data-page="masuk" class="text-on-background font-body-md min-h-screen overflow-x-hidden">
+<body data-page="masuk" class="bg-background text-gray-800 font-sans min-h-screen overflow-x-hidden">
 <div id="siteNav"></div>
 
-<main class="max-w-md mx-auto px-margin-mobile py-xl">
-  <div class="bg-surface-container-lowest rounded-lg shadow-lg shadow-primary/10 p-md md:p-lg reveal in">
-    <div class="text-center mb-md">
-      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary text-on-primary flex items-center justify-center mx-auto mb-sm text-[28px] font-extrabold">a</div>
-      <h1 class="font-headline-lg text-headline-lg text-on-surface">Selamat Datang</h1>
-      <p class="font-body-md text-body-md text-on-surface-variant">Masuk atau daftar untuk melihat riwayat pesananmu.</p>
+<main class="max-w-md mx-auto px-4 py-16">
+  <div class="bg-surface rounded-2xl shadow-xl border border-gray-100 p-8">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-2xl bg-primary text-white flex items-center justify-center mx-auto mb-4 text-3xl font-extrabold shadow-md">a</div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Selamat Datang</h1>
+      <p class="text-gray-500">Masuk atau daftar untuk melihat riwayat pesananmu.</p>
     </div>
 
-    <div class="flex gap-xs bg-surface-container p-1 rounded-full mb-md" id="tabs">
-      <button data-tab="login" class="tab flex-1 py-sm rounded-full font-label-md text-label-md font-bold bg-surface text-primary shadow-sm">Masuk</button>
-      <button data-tab="register" class="tab flex-1 py-sm rounded-full font-label-md text-label-md font-bold text-on-surface-variant">Daftar</button>
-      <button data-tab="otp" class="tab flex-1 py-sm rounded-full font-label-md text-label-md font-bold text-on-surface-variant">OTP</button>
+    <div class="flex gap-1 bg-gray-100 p-1.5 rounded-xl mb-8" id="tabs">
+      <button data-tab="login" class="tab flex-1 py-2.5 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm transition-all">Masuk</button>
+      <button data-tab="register" class="tab flex-1 py-2.5 rounded-lg text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all">Daftar</button>
+      <button data-tab="otp" class="tab flex-1 py-2.5 rounded-lg text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all">OTP</button>
     </div>
 
-    <form id="paneLogin" class="pane flex flex-col gap-sm">
-      <input id="loginEmail" type="email" placeholder="Email" class="w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-      <input id="loginPass" type="password" placeholder="Password" class="w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-      <button class="bg-gradient-to-r from-primary to-secondary text-on-primary rounded-full py-3 font-label-md text-label-md font-bold hover:scale-[1.02] transition-transform">Masuk</button>
+    <form id="paneLogin" class="pane flex flex-col gap-4">
+      <input id="loginEmail" type="email" placeholder="Email" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
+      <input id="loginPass" type="password" placeholder="Password" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
+      <button class="bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Masuk</button>
     </form>
-    <form id="paneRegister" class="pane hidden flex-col gap-sm">
-      <input id="regName" type="text" placeholder="Nama" class="w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-      <input id="regEmail" type="email" placeholder="Email" class="w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-      <input id="regPass" type="password" placeholder="Password (min 6 karakter)" class="w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-      <button class="bg-gradient-to-r from-primary to-secondary text-on-primary rounded-full py-3 font-label-md text-label-md font-bold hover:scale-[1.02] transition-transform">Daftar</button>
+    
+    <form id="paneRegister" class="pane hidden flex-col gap-4">
+      <input id="regName" type="text" placeholder="Nama" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
+      <input id="regEmail" type="email" placeholder="Email" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
+      <input id="regPass" type="password" placeholder="Password (min 6 karakter)" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
+      <button class="bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Daftar</button>
     </form>
-    <form id="paneOtp" class="pane hidden flex-col gap-sm">
-      <input id="otpEmail" type="email" placeholder="Email" class="w-full rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-      <button type="button" id="sendOtp" class="bg-surface-container text-primary rounded-full py-3 font-label-md text-label-md font-bold">Kirim Kode OTP</button>
-      <div id="otpStep" class="hidden flex-col gap-sm">
-        <input id="otpCode" type="text" inputmode="numeric" maxlength="6" placeholder="Kode 6 digit" class="w-full text-center tracking-[0.3em] text-[1.2rem] rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary"/>
-        <button class="bg-gradient-to-r from-primary to-secondary text-on-primary rounded-full py-3 font-label-md text-label-md font-bold">Verifikasi & Masuk</button>
+    
+    <form id="paneOtp" class="pane hidden flex-col gap-4">
+      <input id="otpEmail" type="email" placeholder="Email" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
+      <button type="button" id="sendOtp" class="bg-gray-100 hover:bg-gray-200 text-primary rounded-xl py-3.5 text-sm font-bold transition-all">Kirim Kode OTP</button>
+      
+      <div id="otpStep" class="hidden flex-col gap-4 mt-2">
+        <input id="otpCode" type="text" inputmode="numeric" maxlength="6" placeholder="Kode 6 digit" class="w-full text-center tracking-[0.5em] text-xl font-bold rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-4"/>
+        <button class="bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all">Verifikasi & Masuk</button>
       </div>
-      <div id="devOtp" class="hidden rounded-DEFAULT bg-tertiary-fixed/60 text-on-tertiary-fixed-variant p-sm font-label-md text-label-md"></div>
+      <div id="devOtp" class="hidden rounded-xl bg-orange-50 text-orange-800 p-4 text-sm font-medium border border-orange-100 mt-2"></div>
     </form>
 
     <div id="googleWrap" class="hidden">
-      <div class="flex items-center gap-sm my-md text-on-surface-variant font-label-sm text-label-sm"><div class="flex-1 h-px bg-outline-variant/40"></div>atau<div class="flex-1 h-px bg-outline-variant/40"></div></div>
-      <button id="googleBtn" class="w-full flex items-center justify-center gap-sm border border-outline-variant rounded-DEFAULT py-3 font-label-md text-label-md font-bold hover:bg-surface-container transition-colors">
+      <div class="flex items-center gap-4 my-8 text-gray-400 text-sm font-medium"><div class="flex-1 h-px bg-gray-200"></div>atau<div class="flex-1 h-px bg-gray-200"></div></div>
+      <button id="googleBtn" class="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-xl py-3.5 text-sm font-bold hover:bg-gray-50 transition-colors shadow-sm">
         <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         Lanjut dengan Google
       </button>
     </div>
-    <div id="msg" class="text-center font-label-md text-label-md mt-sm min-h-[20px]"></div>
+    
+    <div id="msg" class="text-center text-sm font-medium mt-6 min-h-[20px]"></div>
   </div>
 </main>
 
@@ -62,27 +68,42 @@
 <script>
   const $ = (id) => document.getElementById(id);
   const next = new URLSearchParams(location.search).get("next") || "/akun";
-  // Sudah login? langsung ke tujuan
+  
   const tok = localStorage.getItem("anshel_token");
   if (tok) fetch("/api/auth/me", { headers: { "x-auth-token": tok } }).then(r => { if (r.ok) location.replace(next); });
   if (location.hash.includes("token=")) { const t = new URLSearchParams(location.hash.slice(1)).get("token"); if (t) { localStorage.setItem("anshel_token", t); location.replace(next); } }
 
-  const msg = (t, ok) => { const e = $("msg"); e.textContent = t; e.className = "text-center font-label-md text-label-md mt-sm min-h-[20px] " + (ok ? "text-primary" : "text-error"); };
+  const msg = (t, ok) => { const e = $("msg"); e.textContent = t; e.className = "text-center text-sm font-medium mt-6 min-h-[20px] " + (ok ? "text-green-600" : "text-red-600"); };
+  
   document.querySelectorAll("#tabs .tab").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll("#tabs .tab").forEach(x => { x.classList.remove("bg-surface","text-primary","shadow-sm"); x.classList.add("text-on-surface-variant"); });
-    b.classList.add("bg-surface","text-primary","shadow-sm"); b.classList.remove("text-on-surface-variant");
+    document.querySelectorAll("#tabs .tab").forEach(x => { x.classList.remove("bg-white","text-primary","shadow-sm"); x.classList.add("text-gray-500"); });
+    b.classList.add("bg-white","text-primary","shadow-sm"); b.classList.remove("text-gray-500");
     document.querySelectorAll(".pane").forEach(p => p.classList.add("hidden"));
     const map = { login: "paneLogin", register: "paneRegister", otp: "paneOtp" };
     const el = $(map[b.dataset.tab]); el.classList.remove("hidden"); el.classList.add("flex");
   }));
+  
   function done(d) { if (!d.token) return msg(d.error || "Gagal", false); localStorage.setItem("anshel_token", d.token); location.replace(next); }
+  
   $("paneLogin").addEventListener("submit", async e => { e.preventDefault(); const r = await fetch("/api/auth/login", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email:$("loginEmail").value.trim(), password:$("loginPass").value }) }); done(await r.json()); });
   $("paneRegister").addEventListener("submit", async e => { e.preventDefault(); const r = await fetch("/api/auth/register", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ name:$("regName").value.trim(), email:$("regEmail").value.trim(), password:$("regPass").value }) }); done(await r.json()); });
-  $("sendOtp").addEventListener("click", async () => { const email=$("otpEmail").value.trim(); if(!email) return msg("Isi email dulu",false); const r=await fetch("/api/auth/otp/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})}); const d=await r.json(); if(!r.ok) return msg(d.error||"Gagal",false); $("otpStep").classList.remove("hidden"); $("otpStep").classList.add("flex"); if(d.devCode){$("devOtp").classList.remove("hidden");$("devOtp").innerHTML="Mode dev: kode kamu <b>"+d.devCode+"</b>";} else msg("Kode terkirim ke email kamu.",true); });
+  
+  $("sendOtp").addEventListener("click", async () => { 
+    const email=$("otpEmail").value.trim(); 
+    if(!email) return msg("Isi email dulu",false); 
+    const r=await fetch("/api/auth/otp/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})}); 
+    const d=await r.json(); 
+    if(!r.ok) return msg(d.error||"Gagal",false); 
+    $("otpStep").classList.remove("hidden"); 
+    $("otpStep").classList.add("flex"); 
+    if(d.devCode){$("devOtp").classList.remove("hidden");$("devOtp").innerHTML="Mode dev: kode kamu <b>"+d.devCode+"</b>";} 
+    else msg("Kode terkirim ke email kamu.",true); 
+  });
+  
   $("paneOtp").addEventListener("submit", async e => { e.preventDefault(); const r=await fetch("/api/auth/otp/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:$("otpEmail").value.trim(),code:$("otpCode").value.trim()})}); done(await r.json()); });
+  
   $("googleBtn").addEventListener("click", () => location.href = "/api/auth/google?from=masuk");
   fetch("/api/auth/config").then(r=>r.json()).then(c=>{ if(c.google) $("googleWrap").classList.remove("hidden"); }).catch(()=>{});
 </script>
 </body>
 </html>
-

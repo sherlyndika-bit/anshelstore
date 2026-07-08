@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html class="light" lang="id">
+<html lang="id">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Cek Transaksi — Anshel Store</title>
 <meta name="description" content="Lacak status pesanan top up game kamu di Anshel Store dengan kode invoice." />
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script src="/js/theme.js?v=2.0"></script>
+<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
 </head>
-<body data-page="cek" class="text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<body data-page="cek" class="bg-background text-gray-800 font-sans min-h-screen overflow-x-hidden selection:bg-pink-100 selection:text-primary">
 
 <div id="siteNav"></div>
 
-<main class="max-w-xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
-  <div class="text-center mb-lg">
-    <div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mx-auto mb-sm"><span class="material-symbols-outlined text-primary text-[32px]" style="font-variation-settings:'FILL' 1;">receipt_long</span></div>
-    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Cek <span class="bg-gradient-to-r from-primary to-secondary text-gradient">Transaksi</span></h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant">Masukkan kode invoice untuk melihat status pesananmu.</p>
-  </div>
-
-  <div class="bg-surface-container-lowest rounded-lg p-md md:p-lg shadow-md shadow-primary/10">
-    <div class="flex flex-col sm:flex-row gap-sm">
-      <input id="codeInput" type="text" placeholder="Contoh: INV12345678" class="flex-1 rounded-DEFAULT border-outline-variant bg-surface focus:border-primary focus:ring-primary uppercase"/>
-      <button id="checkBtn" class="bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md px-gutter py-sm rounded-full hover:scale-105 active:scale-95 transition-all">Lacak</button>
+<main class="max-w-xl mx-auto px-4 md:px-8 py-12">
+  <div class="text-center mb-10">
+    <div class="w-16 h-16 rounded-full bg-pink-50 flex items-center justify-center mx-auto mb-4 border border-pink-100">
+      <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
     </div>
-    <div id="result" class="mt-md"></div>
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Cek <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-rose-400">Transaksi</span></h1>
+    <p class="text-gray-500 text-lg">Masukkan kode invoice untuk melihat status pesananmu.</p>
   </div>
 
-  <p class="text-center font-body-md text-body-md text-on-surface-variant mt-md">Belum punya pesanan? <a href="/topup" class="text-primary font-bold">Top Up sekarang →</a></p>
+  <div class="bg-surface rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <input id="codeInput" type="text" placeholder="Contoh: INV12345678" class="flex-1 rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary uppercase shadow-sm py-3"/>
+      <button id="checkBtn" class="bg-primary hover:bg-primary-hover text-white font-bold px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all">Lacak</button>
+    </div>
+    <div id="result" class="mt-6"></div>
+  </div>
+
+  <p class="text-center text-sm text-gray-500 mt-8">Belum punya pesanan? <a href="/topup" class="text-primary hover:text-primary-hover font-bold transition-colors">Top Up sekarang &rarr;</a></p>
 </main>
 
 <div id="siteFooter"></div>
@@ -38,38 +42,38 @@
   const rupiah = (n) => "Rp" + Number(n).toLocaleString("id-ID");
   const STEPS = ["pending", "paid", "processing", "done"];
   const LABEL = { pending: "Menunggu Pembayaran", paid: "Pembayaran Diterima", processing: "Diproses", done: "Selesai", cancelled: "Dibatalkan" };
-  const BADGE = { pending: "bg-tertiary-fixed text-on-tertiary-fixed-variant", paid: "bg-primary-fixed text-on-primary-fixed-variant", processing: "bg-secondary-fixed text-on-secondary-fixed-variant", done: "bg-primary-fixed text-primary", cancelled: "bg-error-container text-on-error-container" };
+  const BADGE = { pending: "bg-orange-50 text-orange-700 border border-orange-200", paid: "bg-blue-50 text-blue-700 border border-blue-200", processing: "bg-blue-50 text-blue-700 border border-blue-200", done: "bg-green-50 text-green-700 border border-green-200", cancelled: "bg-red-50 text-red-700 border border-red-200" };
   const $ = (id) => document.getElementById(id);
 
   async function check() {
     const code = $("codeInput").value.trim().toUpperCase();
     const box = $("result");
     if (!code) { box.innerHTML = ""; return; }
-    box.innerHTML = '<p class="text-center text-on-surface-variant py-sm">Mencari…</p>';
+    box.innerHTML = '<p class="text-center text-gray-500 py-4 font-medium">Mencari…</p>';
     try {
       const res = await fetch("/api/track?code=" + encodeURIComponent(code));
-      if (!res.ok) { box.innerHTML = '<div class="rounded-DEFAULT bg-error-container/50 text-on-error-container p-md text-center font-label-md text-label-md">Pesanan tidak ditemukan. Periksa kembali kode invoicemu.</div>'; return; }
+      if (!res.ok) { box.innerHTML = '<div class="rounded-xl bg-red-50 text-red-600 border border-red-100 p-4 text-center text-sm font-medium">Pesanan tidak ditemukan. Periksa kembali kode invoicemu.</div>'; return; }
       const o = await res.json();
-      const acc = Object.entries(o.account || {}).map(([k, v]) => `<div class="flex justify-between"><span>${k}</span><b class="text-on-surface">${v}</b></div>`).join("");
+      const acc = Object.entries(o.account || {}).map(([k, v]) => `<div class="flex justify-between py-1"><span>${k}</span><b class="text-gray-900">${v}</b></div>`).join("");
       const cancelled = o.status === "cancelled";
-      const timeline = cancelled ? "" : `<div class="flex items-center justify-between my-md">${STEPS.map((s, i) => {
+      const timeline = cancelled ? "" : `<div class="flex items-center justify-between my-6">${STEPS.map((s, i) => {
         const done = STEPS.indexOf(o.status) >= i;
-        return `<div class="flex flex-col items-center flex-1"><div class="w-8 h-8 rounded-full flex items-center justify-center ${done ? "bg-gradient-to-r from-primary to-secondary text-on-primary" : "bg-surface-container text-on-surface-variant"}"><span class="material-symbols-outlined text-[18px]">${done ? "check" : "radio_button_unchecked"}</span></div><span class="font-label-sm text-label-sm text-on-surface-variant mt-xs text-center">${LABEL[s]}</span></div>${i < STEPS.length - 1 ? `<div class="h-[2px] flex-1 ${STEPS.indexOf(o.status) > i ? "bg-primary" : "bg-surface-container"}"></div>` : ""}`;
+        return `<div class="flex flex-col items-center flex-1"><div class="w-8 h-8 rounded-full flex items-center justify-center ${done ? "bg-primary text-white" : "bg-gray-100 text-gray-400"}"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${done ? 'M5 13l4 4L19 7' : 'M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0'}"></path></svg></div><span class="text-xs font-medium text-gray-500 mt-2 text-center">${LABEL[s]}</span></div>${i < STEPS.length - 1 ? `<div class="h-[2px] flex-1 ${STEPS.indexOf(o.status) > i ? "bg-primary" : "bg-gray-200"} -mx-2 z-[-1] mt-[-20px]"></div>` : ""}`;
       }).join("")}</div>`;
       box.innerHTML = `
-        <div class="rounded-DEFAULT border border-outline-variant/40 p-md mt-sm">
-          <div class="flex justify-between items-center mb-sm"><b class="text-on-surface">${o.code}</b><span class="font-label-sm text-label-sm px-sm py-[2px] rounded-full ${BADGE[o.status] || ""}">${LABEL[o.status] || o.status}</span></div>
+        <div class="rounded-xl border border-gray-200 p-5 mt-4 bg-gray-50/50 shadow-sm">
+          <div class="flex justify-between items-center mb-4"><b class="text-gray-900 font-bold text-lg">${o.code}</b><span class="text-xs font-semibold px-3 py-1 rounded-full ${BADGE[o.status] || ""}">${LABEL[o.status] || o.status}</span></div>
           ${timeline}
-          <div class="flex flex-col gap-xs font-body-md text-body-md text-on-surface-variant">
-            <div class="flex justify-between"><span>Game</span><b class="text-on-surface">${o.gameName}</b></div>
-            <div class="flex justify-between"><span>Item</span><b class="text-on-surface">${o.itemLabel}</b></div>
+          <div class="flex flex-col gap-2 text-sm text-gray-500 mt-6 border-t border-gray-200 pt-5">
+            <div class="flex justify-between py-1"><span>Game</span><b class="text-gray-900">${o.gameName}</b></div>
+            <div class="flex justify-between py-1"><span>Item</span><b class="text-gray-900">${o.itemLabel}</b></div>
             ${acc}
-            <div class="flex justify-between"><span>Metode</span><b class="text-on-surface">${o.paymentMethod || "-"}</b></div>
-            <div class="flex justify-between"><span>Total</span><b class="text-secondary">${rupiah(o.price)}</b></div>
-            <div class="flex justify-between"><span>Tanggal</span><b class="text-on-surface">${new Date(o.createdAt).toLocaleString("id-ID")}</b></div>
+            <div class="flex justify-between py-1"><span>Metode</span><b class="text-gray-900">${o.paymentMethod || "-"}</b></div>
+            <div class="flex justify-between py-1 mt-2 border-t border-gray-200 pt-3"><span>Total</span><b class="text-primary text-base">${rupiah(o.price)}</b></div>
+            <div class="flex justify-between py-1"><span>Tanggal</span><b class="text-gray-900">${new Date(o.createdAt).toLocaleString("id-ID")}</b></div>
           </div>
         </div>`;
-    } catch (e) { box.innerHTML = '<div class="rounded-DEFAULT bg-error-container/50 text-on-error-container p-md text-center">Gagal terhubung. Coba lagi.</div>'; }
+    } catch (e) { box.innerHTML = '<div class="rounded-xl bg-red-50 text-red-600 border border-red-100 p-4 text-center text-sm font-medium">Gagal terhubung. Coba lagi.</div>'; }
   }
   $("checkBtn").addEventListener("click", check);
   $("codeInput").addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
@@ -79,4 +83,3 @@
 </script>
 </body>
 </html>
-
