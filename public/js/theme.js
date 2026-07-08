@@ -54,9 +54,9 @@ tailwind.config = {
       var m = document.createElement("meta"); m.name = name; m.content = content; head.appendChild(m);
     }
     addLink("manifest", "/manifest.json");
-    addLink("apple-touch-icon", "/icon-192.png");
-    addLink("icon", "/icon-192.png", { type: "image/png", sizes: "192x192" });
-    addMeta("theme-color", "#8c4c52");
+    addLink("apple-touch-icon", "/logo.svg");
+    addLink("icon", "/logo.svg", { type: "image/svg+xml" });
+    addMeta("theme-color", "#e11d48");
     addMeta("apple-mobile-web-app-capable", "yes");
     addMeta("apple-mobile-web-app-status-bar-style", "default");
     addMeta("apple-mobile-web-app-title", "Anshel Store");
@@ -97,7 +97,7 @@ tailwind.config = {
     if (document.getElementById('global-preloader')) return;
     const p = document.createElement('div');
     p.id = 'global-preloader';
-    p.innerHTML = '<div class="preloader-content"><img src="/icon-192.png" alt="Anshel Store Logo" class="preloader-logo"/><div class="preloader-bar"><div class="preloader-progress"></div></div></div>';
+    p.innerHTML = '<div class="preloader-content"><img src="/logo.svg" alt="Anshel Store Logo" class="preloader-logo"/><div class="preloader-bar"><div class="preloader-progress"></div></div></div>';
     
     // Fallback if body is somehow not ready
     if (document.body) {
