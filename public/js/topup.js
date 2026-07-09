@@ -250,9 +250,44 @@ function showInvoice(order) {
       <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Bayar via</span><b class="text-slate-900">${esc(order.paymentMethod)}</b></div>
       <div class="flex justify-between items-center pt-4 pb-2"><span class="text-slate-500 text-sm">Total</span><b class="text-primary text-xl">${rupiah(order.price)}</b></div>
       ${waBtn}
-      <a href="/cek-transaksi?code=${esc(order.code)}" class="text-center text-sm font-semibold text-primary hover:text-primary-hover mt-4 block">Lacak status pesanan →</a>
+      <a href="/cek-transaksi?code=${esc(order.code)}" class="text-center text-sm font-semibold text-primary hover:text-primary-hover mt-4 block">Lacak status pesanan &rarr;</a>
+      
+      <div id="reviewBlock" class="mt-6 pt-6 border-t border-slate-100">
+        <h4 class="text-slate-800 font-bold text-sm mb-3 text-center">Beri Nilai Transaksi Ini</h4>
+        <div class="flex justify-center gap-2 mb-4" id="starContainer">
+          <button type="button" class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn" style="font-variation-settings: 'FILL' 1;" data-val="1">star</button>
+          <button type="button" class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn" style="font-variation-settings: 'FILL' 1;" data-val="2">star</button>
+          <button type="button" class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn" style="font-variation-settings: 'FILL' 1;" data-val="3">star</button>
+          <button type="button" class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn" style="font-variation-settings: 'FILL' 1;" data-val="4">star</button>
+          <button type="button" class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn" style="font-variation-settings: 'FILL' 1;" data-val="5">star</button>
+        </div>
+        <textarea id="reviewComment" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none resize-none" rows="2" placeholder="Tuliskan pengalaman Anda..."></textarea>
+        <button type="button" id="submitReviewBtn" class="mt-3 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg text-sm transition-all disabled:opacity-50">Kirim Ulasan</button>
+      </div>
     </div>`;
   $("invoice").scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  let rating = 0;
+  const stars = document.querySelectorAll(".star-btn");
+  stars.forEach(s => {
+    s.addEventListener("click", () => {
+      rating = Number(s.dataset.val);
+      stars.forEach(st => {
+        if (Number(st.dataset.val) <= rating) { st.classList.remove("text-slate-300"); st.classList.add("text-amber-400"); }
+        else { st.classList.add("text-slate-300"); st.classList.remove("text-amber-400"); }
+      });
+    });
+  });
+  const btn = document.getElementById("submitReviewBtn");
+  if (btn) btn.addEventListener("click", async () => {
+    if (!rating) return alert("Pilih bintang dulu ya!");
+    btn.disabled = true; btn.textContent = "Mengirim...";
+    try {
+      const res = await fetch("/api/reviews", { method: "POST", body: JSON.stringify({ orderId: order.code, rating, comment: document.getElementById("reviewComment").value }) });
+      if (res.ok) { document.getElementById("reviewBlock").innerHTML = `<div class="text-center text-emerald-600 font-bold"><span class="material-symbols-outlined block text-3xl mb-1">check_circle</span>Terima kasih atas ulasan Anda!</div>`; }
+      else { alert((await res.json()).error || "Gagal"); btn.disabled = false; btn.textContent = "Kirim Ulasan"; }
+    } catch(e) { alert("Error"); btn.disabled = false; btn.textContent = "Kirim Ulasan"; }
+  });
 }
 
 /* ---------------- Boot ---------------- */

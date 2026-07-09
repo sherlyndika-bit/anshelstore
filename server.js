@@ -51,10 +51,10 @@ const USE_PG = !!process.env.DATABASE_URL;
 let pgPool = null;
 
 function applyDefaults() {
-  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= [];
+  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= []; db.reviews ||= [];
   db.settings.integrations ||= {};
   db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment"].forEach((k) => (db._seq[k] ||= 0));
+  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment", "review"].forEach((k) => (db._seq[k] ||= 0));
 }
 function readSeedOrFile() {
   try {
@@ -341,6 +341,36 @@ async function saveImageUpload(dataUrl) {
 
 function serveStatic(req, res, pathname) {
   const clean = pathname.replace(/\/$/, "") || "/";
+  if (clean === "/") {
+    const filePath = path.join(PUBLIC_DIR, "index.html");
+    fs.readFile(filePath, "utf-8", (err, content) => {
+      if (err) { res.writeHead(404); return res.end("Not Found"); }
+      const reviews = db.reviews || [];
+      if (reviews.length > 0) {
+        const ratingSum = reviews.reduce((s, r) => s + r.rating, 0);
+        const avg = (ratingSum / reviews.length).toFixed(1);
+        const storeName = (db.settings && db.settings.store && db.settings.store.name) || "Anshel Store";
+        const seoData = {
+          "@context": "https://schema.org/",
+          "@type": "Product",
+          "name": storeName,
+          "description": "Layanan Top Up Game Terpercaya",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": avg,
+            "bestRating": "5",
+            "worstRating": "1",
+            "ratingCount": String(reviews.length)
+          }
+        };
+        const seoScript = `\n<script type="application/ld+json">\n${JSON.stringify(seoData)}\n</script>\n`;
+        content = content.replace("</head>", seoScript + "</head>");
+      }
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(content);
+    });
+    return;
+  }
   if (CLEAN_ROUTES[clean]) return serveFile(res, path.join(PUBLIC_DIR, CLEAN_ROUTES[clean]));
   const rel = pathname === "/" ? "/index.html" : pathname;
   const filePath = path.join(PUBLIC_DIR, path.normalize(rel));
@@ -1004,6 +1034,40 @@ async function handleApi(req, res, pathname, query) {
     } catch (e) {
       return sendJSON(res, 502, { error: "Gagal menghubungi provider: " + (e && e.message ? e.message : String(e)) });
     }
+  }
+
+  // ---- Reviews ----
+  if (pathname === "/api/reviews" && method === "GET") {
+    const limit = Number(query.limit) || 20;
+    const sorted = [...(db.reviews || [])].sort((a, b) => b.createdAt - a.createdAt).slice(0, limit);
+    return sendJSON(res, 200, sorted);
+  }
+  if (pathname === "/api/reviews" && method === "POST") {
+    if (!rateLimit(req, "submit_review", 5, 3600000)) return sendJSON(res, 429, { error: "Terlalu banyak ulasan, coba lagi nanti." });
+    const b = await readBody(req);
+    if (!b.orderId || !b.rating) return sendJSON(res, 400, { error: "ID pesanan dan rating wajib diisi" });
+    const order = db.orders.find(o => o.code === b.orderId);
+    if (!order) return sendJSON(res, 404, { error: "Pesanan tidak ditemukan" });
+    db.reviews ||= [];
+    if (db.reviews.some(r => r.orderId === b.orderId)) return sendJSON(res, 400, { error: "Pesanan ini sudah diberi ulasan." });
+    
+    let cName = "Anonim";
+    if (order.contact && order.contact.length >= 6) {
+      cName = order.contact.substring(0, 4) + "***" + order.contact.slice(-2);
+    }
+    const rtg = Math.max(1, Math.min(5, Number(b.rating)));
+    const review = {
+      id: nextId("review"),
+      orderId: order.code,
+      customerName: cName,
+      gameName: order.gameName,
+      rating: rtg,
+      comment: (b.comment || "").slice(0, 500).trim(),
+      createdAt: Date.now()
+    };
+    db.reviews.push(review);
+    saveDB();
+    return sendJSON(res, 201, { ok: true, review });
   }
   if (pathname === "/api/admin/articles" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, [...db.articles].sort((a, b) => b.createdAt - a.createdAt)); }
   if (pathname === "/api/admin/articles" && method === "POST") {

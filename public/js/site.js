@@ -152,4 +152,29 @@
     const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
     reveals.forEach((el) => io.observe(el));
   } else { reveals.forEach((el) => el.classList.add("in")); }
+
+  // Ulasan Pelanggan
+  const rSec = document.getElementById("reviewsSection");
+  const rCont = document.getElementById("reviewsContainer");
+  if (rSec && rCont) {
+    const rEsc = (str) => String(str).replace(/[&<>'"]/g, (tag) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[tag]));
+    fetch("/api/reviews?limit=15").then(r => r.json()).then(revs => {
+      if (revs && revs.length > 0) {
+        let html = "";
+        revs.forEach(r => {
+          let stars = "";
+          for(let i=0;i<5;i++){ stars += `<span class="material-symbols-outlined text-amber-500 text-sm" ${i<r.rating?'style="font-variation-settings: \'FILL\' 1"':''}>star</span>`; }
+          html += `<div class="w-72 sm:w-80 shrink-0 bg-slate-50 border border-slate-100 p-4 rounded-xl shadow-sm">
+            <div class="flex justify-between items-start mb-2">
+              <div><div class="font-bold text-slate-800 text-sm">${rEsc(r.customerName)}</div><div class="text-xs text-slate-500">Membeli ${rEsc(r.gameName)}</div></div>
+              <div class="flex gap-0.5">${stars}</div>
+            </div>
+            <p class="text-slate-600 text-sm italic">"${rEsc(r.comment || "Mantap, proses cepat!")}"</p>
+          </div>`;
+        });
+        rCont.innerHTML = html + html; // Duplicate for marquee effect
+        rSec.classList.remove("hidden");
+      }
+    }).catch(()=>{});
+  }
 })();
