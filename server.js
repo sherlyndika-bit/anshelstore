@@ -232,15 +232,45 @@ function baseUrl(req) {
 // ---------------------------------------------------------------------------
 // AI reply engine (mock; ganti dengan LLM untuk produksi)
 // ---------------------------------------------------------------------------
-function generateAIReply(text) {
+async function generateAIReply(text, convId) {
+  const integ = db.settings.integrations || {};
+  
+  // Prompt sistem dengan gaya bahasa casual & enjoy
+  const systemPrompt = "Kamu adalah asisten AI dari Anshel Store, toko top up game murah, cepat, dan terpercaya. " +
+    "Gaya bahasamu harus asik, santai, enjoy, dan friendly, seperti ngobrol sama teman (tapi tetap sopan). Panggil pelanggan dengan sapaan akrab (misal: 'Kak' atau 'Bro'). " +
+    "Jangan pernah menawarkan atau membahas 'jasa AI', 'chat automation', atau 'bot' karena fokus kamu 100% cuma top up game. " +
+    "Game yang tersedia: Mobile Legends (MLBB), Free Fire, Genshin Impact, Valorant, PUBG, dll. " +
+    "Jika pengguna komplain, marah, minta uang kembali, atau butuh bantuan admin, jawab dengan santai bahwa kamu akan langsung memanggil tim cs/admin manusia.";
+
+  // Gunakan Gemini jika API Key ada
+  if (integ.aiKey && (integ.aiProvider || "").toLowerCase().includes("gemini")) {
+    try {
+      const payload = {
+        contents: [
+          { role: "user", parts: [{ text: systemPrompt + "\n\nCustomer bilang: " + text }] }
+        ]
+      };
+      
+      const res = await httpsRequest("POST", `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${integ.aiKey}`, {
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      
+      if (res && res.candidates && res.candidates[0].content && res.candidates[0].content.parts[0].text) {
+        return res.candidates[0].content.parts[0].text.trim();
+      }
+    } catch (e) {
+      console.error("Gemini API Error:", e);
+    }
+  }
+
+  // Fallback (jika gagal atau blm disetting)
   const t = (text || "").toLowerCase(); const has = (...w) => w.some((x) => t.includes(x));
-  if (has("admin", "manusia", "agent", "agen", "cs", "komplain", "refund")) return "Baik, saya teruskan ke tim kami. Mohon tunggu sebentar, agent akan segera mengambil alih percakapan ini. 🙏";
-  if (has("top up", "topup", "diamond", "uc", "vp", "voucher")) return "Untuk top up game, sebutkan: 1) nama game, 2) nominal, 3) User ID. Atau buka halaman Top Up. Game tersedia: Mobile Legends, Free Fire, Genshin, Valorant, PUBG. 🎮";
-  if (has("harga", "biaya", "price", "tarif", "berapa")) return "Jasa Automation mulai Rp500.000, AI Chatbot + Dashboard mulai Rp1.500.000, Top Up Game mulai Rp5.000. Boleh ceritakan kebutuhanmu biar saya estimasikan lebih akurat?";
-  if (has("chatbot", "ai", "automation", "otomasi", "bot", "dashboard")) return "Jasa AI Chat Automation kami: chatbot AI 24/7 + dashboard inbox dengan human takeover. Mau saya jadwalkan konsultasi gratis?";
-  if (has("halo", "hai", "hi", "pagi", "siang", "sore", "malam", "assalam")) return "Halo! 👋 Selamat datang di Anshel Store. Ada yang bisa saya bantu? Kami melayani AI Chat Automation, Workflow Automation, dan Top Up Game.";
-  if (has("terima kasih", "makasih", "thanks", "thank")) return "Sama-sama! 😊 Kalau ada yang lain, jangan ragu chat lagi ya.";
-  return "Terima kasih atas pesannya! Bisa dijelaskan lebih detail kebutuhanmu? Ketik 'admin' kalau ingin terhubung dengan tim kami.";
+  if (has("admin", "manusia", "agent", "agen", "cs", "komplain", "refund")) return "Siap Kak! Aku panggilin tim admin buat bantu kakak ya, ditunggu bentar! 🙏";
+  if (has("top up", "topup", "diamond", "uc", "vp", "voucher")) return "Mau top up game apa nih, Bro? Kita ada MLBB, FF, Genshin, PUBG, Valorant. Tinggal sebut aja game, nominal, sama ID-nya! 🎮";
+  if (has("halo", "hai", "hi", "pagi", "siang", "sore", "malam", "assalam")) return "Halo, Kak! 👋 Selamat datang di Anshel Store. Mau top up game apa hari ini?";
+  if (has("terima kasih", "makasih", "thanks", "thank")) return "Santai aja Kak, sama-sama! 😊 Kalo butuh apa-apa, chat lagi aja ya.";
+  return "Oke Kak, ada lagi yang bisa aku bantu? Kalo butuh bantuan admin, ketik 'admin' aja ya.";
 }
 function shouldEscalate(text) { const t = (text || "").toLowerCase(); return ["manusia", "admin", "agent", "agen", "komplain", "marah", "refund"].some((w) => t.includes(w)); }
 
@@ -996,14 +1026,14 @@ async function handleApi(req, res, pathname, query) {
     const b = await readBody(req);
     const conv = { id: nextId("conversation"), name: b.name || "Pengunjung", mode: "ai", agentName: null, unread: 0, createdAt: Date.now(), lastTs: Date.now(), lastText: "" };
     db.conversations.push(conv); saveDB();
-    return sendJSON(res, 201, { conversation: conv, messages: [addMessage(conv.id, "ai", `Halo ${conv.name}! 👋 Saya asisten AI Anshel Store. Ada yang bisa saya bantu?`)] });
+    return sendJSON(res, 201, { conversation: conv, messages: [addMessage(conv.id, "ai", `Halo Kak ${conv.name}! 👋 Kenalin aku asisten AI Anshel Store. Mau top up game apa nih hari ini?`)] });
   }
   if (pathname === "/api/chat/message" && method === "POST") {
     const b = await readBody(req); const conv = db.conversations.find((c) => c.id === Number(b.conversationId));
     if (!conv) return sendJSON(res, 404, { error: "Tidak ditemukan" });
     if (!b.text || !b.text.trim()) return sendJSON(res, 400, { error: "Pesan kosong" });
     const out = [addMessage(conv.id, "customer", b.text.trim())];
-    if (conv.mode === "ai") { out.push(addMessage(conv.id, "ai", generateAIReply(b.text))); if (shouldEscalate(b.text)) { conv.escalate = true; saveDB(); } }
+    if (conv.mode === "ai") { out.push(addMessage(conv.id, "ai", await generateAIReply(b.text, conv.id))); if (shouldEscalate(b.text)) { conv.escalate = true; saveDB(); } }
     return sendJSON(res, 200, { mode: conv.mode, messages: out });
   }
   m = pathname.match(/^\/api\/conversations\/(\d+)\/messages$/);
