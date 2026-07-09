@@ -287,5 +287,56 @@
       }, 4000); // Change every 4 seconds
     }
   }, 100);
+  // PWA Permissions Prompt (Mobile/Standalone)
+  setTimeout(() => {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    
+    if ((isMobile || isStandalone) && !localStorage.getItem("pwa_permission_asked") && "Notification" in window) {
+      if (Notification.permission === "default") {
+        const modal = document.createElement("div");
+        modal.className = "fixed inset-0 z-[100] flex items-center justify-center bg-scrim/40 p-4 transition-opacity duration-300";
+        modal.innerHTML = `
+          <div class="bg-surface rounded-2xl p-6 w-full max-w-sm shadow-xl transform transition-transform duration-300 scale-95 opacity-0" id="pwaPermModal">
+            <div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center mb-4 mx-auto">
+              <span class="material-symbols-outlined text-[28px]">notifications_active</span>
+            </div>
+            <h3 class="text-center font-headline-md text-headline-md text-on-surface mb-2">Biar Makin Lancar!</h3>
+            <p class="text-center font-body-md text-body-md text-on-surface-variant mb-6">
+              Izinkan aplikasi ini mengakses <strong>Notifikasi</strong> (untuk update status pesanan) dan <strong>Penyimpanan</strong> (jika kamu ingin upload foto profil nanti).
+            </p>
+            <div class="flex flex-col gap-3">
+              <button id="btnAllowPwa" class="w-full py-3 bg-primary text-on-primary font-label-lg rounded-full hover:bg-primary-hover transition-colors">Izinkan</button>
+              <button id="btnDenyPwa" class="w-full py-3 bg-surface-container text-on-surface-variant font-label-lg rounded-full hover:bg-outline-variant transition-colors">Nanti Saja</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Animate in
+        requestAnimationFrame(() => {
+          modal.querySelector("#pwaPermModal").classList.remove("scale-95", "opacity-0");
+        });
+
+        const closeModal = (asked) => {
+          if (asked) localStorage.setItem("pwa_permission_asked", "true");
+          modal.classList.add("opacity-0");
+          modal.querySelector("#pwaPermModal").classList.add("scale-95");
+          setTimeout(() => modal.remove(), 300);
+        };
+
+        document.getElementById("btnAllowPwa").onclick = () => {
+          Notification.requestPermission().then(perm => {
+            console.log("Notification permission:", perm);
+            closeModal(true);
+          });
+        };
+        
+        document.getElementById("btnDenyPwa").onclick = () => closeModal(true);
+      } else {
+        localStorage.setItem("pwa_permission_asked", "true");
+      }
+    }
+  }, 3000);
 
 })();
