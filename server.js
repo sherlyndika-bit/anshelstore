@@ -1354,8 +1354,8 @@ const server = http.createServer(async (req, res) => {
   setSecurityHeaders(res);
   try {
     if (pathname.startsWith("/api/") || pathname === "/healthz") return await handleApi(req, res, pathname, parsed.query);
-    // Sembunyikan .html: redirect permanen ke URL bersih
-    if (pathname.endsWith(".html")) {
+    // Sembunyikan .html: redirect permanen ke URL bersih (kecuali file verifikasi google)
+    if (pathname.endsWith(".html") && !pathname.startsWith("/google")) {
       let clean = pathname.replace(/\.html$/, "");
       if (clean === "/index") clean = "/";
       res.writeHead(301, { Location: clean + (parsed.search || "") });
