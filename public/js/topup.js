@@ -175,20 +175,39 @@ function getAccount() { const a = {}; document.querySelectorAll(".acc-field").fo
 function getPay() { const r = document.querySelector('input[name="pay"]:checked'); return r ? r.value : "E-Wallet"; }
 
 let idTimer = null;
+let isIdValid = true; // assume true if not supported or error
+
 function checkId() {
   clearTimeout(idTimer);
+  isIdValid = true; update(); // reset state initially
   const prev = $("idPreview"); const acc = getAccount(); const userId = acc[selGame.needs[0]];
   if (!userId) { prev.classList.add("hidden"); return; }
+  
+  // Show checking state
+  prev.className = "mt-3 rounded-lg px-4 py-3 text-sm font-medium bg-slate-50 text-slate-500 border border-slate-200 flex items-center gap-2";
+  prev.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span> Mengecek ID...`;
+  prev.classList.remove("hidden");
+
   idTimer = setTimeout(async () => {
     try {
       const q = new URLSearchParams({ gameId: selGame.id, userId: userId || "", zoneId: acc[selGame.needs[1]] || "" });
       const r = await fetch("/api/game/check?" + q.toString()).then((x) => x.json());
-      if (r.supported && r.username) {
-        prev.className = "mt-3 rounded-lg px-4 py-3 text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-2";
-        prev.innerHTML = `<span class="material-symbols-outlined text-[18px]">verified</span> Username: <b>${esc(r.username)}</b>`;
+      if (r.supported) {
+        if (r.username) {
+          isIdValid = true;
+          prev.className = "mt-3 rounded-lg px-4 py-3 text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-2";
+          prev.innerHTML = `<span class="material-symbols-outlined text-[18px]">verified</span> Username: <b>${esc(r.username)}</b>`;
+        } else {
+          isIdValid = false;
+          prev.className = "mt-3 rounded-lg px-4 py-3 text-sm font-medium bg-red-50 text-red-700 border border-red-200 flex items-center gap-2";
+          prev.innerHTML = `<span class="material-symbols-outlined text-[18px]">error</span> ID tidak ditemukan / Salah`;
+        }
         prev.classList.remove("hidden");
-      } else { prev.classList.add("hidden"); }
-    } catch (e) { prev.classList.add("hidden"); }
+      } else { 
+        isIdValid = true; prev.classList.add("hidden"); 
+      }
+      update();
+    } catch (e) { isIdValid = true; prev.classList.add("hidden"); update(); }
   }, 600);
 }
 
@@ -200,7 +219,7 @@ function update() {
   selGame.needs.forEach((n) => { if (acc[n]) rows.push(`<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">${esc(n)}</span><b class="text-slate-900">${esc(acc[n])}</b></div>`); });
   $("summaryItems").innerHTML = rows.join("");
   $("grandTotal").textContent = selItem ? rupiah(selItem.price) : "Rp0";
-  $("submitOrder").disabled = !(selItem && selGame.needs.every((n) => acc[n]));
+  $("submitOrder").disabled = !(selItem && selGame.needs.every((n) => acc[n]) && isIdValid);
 }
 
 $("submitOrder").addEventListener("click", async () => {
