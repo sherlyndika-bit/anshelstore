@@ -445,7 +445,15 @@ const THEME_HEAD = `
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
 <script src="/js/theme.js"></script>
-<link href="/css/theme.css" rel="stylesheet"/>`;
+<link href="/css/theme.css" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXRVTQKMZF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NXRVTQKMZF');
+</script>`;
 
 function pageNav() { return `<div id="siteNav"></div>`; }
 function pageFooter() { return `<div id="siteFooter"></div>`; }
