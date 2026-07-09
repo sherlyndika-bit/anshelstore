@@ -261,32 +261,25 @@
       if (nav.firstChild) nav.insertBefore(bell, nav.firstChild);
       else nav.appendChild(bell);
     }).catch(()=>{});
+
+    // Promo Text Ticker
+    setTimeout(() => {
+      const cycler = document.getElementById("promoTextCycler");
+      if (cycler) {
+        const texts = [
+          "Selamat datang di Anshel Store! Layanan top up game instan, termurah & terpercaya.",
+          "🎉 Promo spesial diskon untuk member baru! Yuk daftar sekarang juga.",
+          "⚡ Push rank makin lancar, diamond/UC selalu ready 24/7 tanpa delay.",
+          "🔥 Transaksi secepat kilat, pesanan masuk dalam hitungan detik. Cobain!",
+          "🤖 Bosan balas chat manual? Coba Jasa Automation AI (WA/IG) dari kami!"
+        ];
+        const combined = texts.join("&nbsp;&nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp;&nbsp;");
+        cycler.className = "flex-1 overflow-hidden min-w-0";
+        cycler.innerHTML = `<div class="animate-ticker whitespace-nowrap"><div class="pr-8">${combined}</div><div class="pr-8">${combined}</div></div>`;
+      }
+    }, 100);
   }
 
-  // Promo Text Cycler
-  setTimeout(() => {
-    const cycler = document.getElementById("promoTextCycler");
-    if (cycler) {
-      const texts = [
-        "Selamat datang di Anshel Store! Layanan top up game instan, termurah & terpercaya.",
-        "✨ Promo spesial diskon untuk member baru! Yuk daftar sekarang juga.",
-        "🎮 Push rank makin lancar, diamond/UC selalu ready 24/7 tanpa delay.",
-        "🚀 Transaksi secepat kilat, pesanan masuk dalam hitungan detik. Cobain!",
-        "🤖 Bosan balas chat manual? Coba Jasa Automation AI (WA/IG) dari kami!"
-      ];
-      let tidx = 0;
-      setInterval(() => {
-        cycler.classList.remove("opacity-100");
-        cycler.classList.add("opacity-0");
-        setTimeout(() => {
-          tidx = (tidx + 1) % texts.length;
-          cycler.textContent = texts[tidx];
-          cycler.classList.remove("opacity-0");
-          cycler.classList.add("opacity-100");
-        }, 500); // Wait for fade out
-      }, 4000); // Change every 4 seconds
-    }
-  }, 100);
   // PWA Permissions Prompt (Mobile/Standalone)
   setTimeout(() => {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);

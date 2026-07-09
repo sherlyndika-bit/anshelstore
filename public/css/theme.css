@@ -217,3 +217,4 @@ html, body, button, input, textarea, select { font-family: 'Inter', system-ui, -
 h1, h2, h3, h4, h5, h6,
 .font-display-lg, .font-display-lg-mobile, .font-headline-lg, .font-headline-lg-mobile, .font-headline-md { font-family: 'Inter', system-ui, sans-serif !important; letter-spacing: -0.02em; }
 
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } .animate-ticker { display: flex; width: max-content; animation: ticker 40s linear infinite; } .animate-ticker:hover { animation-play-state: paused; }
