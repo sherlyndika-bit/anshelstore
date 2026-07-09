@@ -813,13 +813,11 @@ async function handleApi(req, res, pathname, query) {
   if (pathname === "/api/game/check" && method === "GET") {
     const game = db.games.find((g) => g.id === query.gameId);
     if (!game) return sendJSON(res, 400, { error: "Game tidak valid" });
-    const integ = db.settings.integrations || {};
-    if (!integ.gameCheckUrl) return sendJSON(res, 200, { supported: false });
     try {
       const integ = db.settings.integrations || {};
-      if (!integ.gameCheckUrl) return sendJSON(res, 200, { supported: false });
+      let apiUrl = game.checkIdUrl || integ.gameCheckUrl;
+      if (!apiUrl) return sendJSON(res, 200, { supported: false });
 
-      let apiUrl = integ.gameCheckUrl;
       // Mendukung format template URL seperti: https://api.com/game/{gameId}?user={userId}&zone={zoneId}
       if (apiUrl.includes("{userId}") || apiUrl.includes("{gameId}")) {
         apiUrl = apiUrl.replace(/{gameId}/g, encodeURIComponent(game.id || ""))
@@ -831,9 +829,9 @@ async function handleApi(req, res, pathname, query) {
       }
 
       const headers = {};
-      if (integ.gameCheckUrl.toLowerCase().includes("rapidapi")) {
+      if (apiUrl.toLowerCase().includes("rapidapi")) {
         headers["X-RapidAPI-Key"] = integ.gameCheckKey || "";
-        try { headers["X-RapidAPI-Host"] = new URL(integ.gameCheckUrl).hostname; } catch(e){}
+        try { headers["X-RapidAPI-Host"] = new URL(apiUrl).hostname; } catch(e){}
       }
 
       const r = await httpsRequest("GET", apiUrl, { headers });
