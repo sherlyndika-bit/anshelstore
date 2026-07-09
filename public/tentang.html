@@ -49,11 +49,16 @@
 
   <section class="pb-20 max-w-4xl mx-auto">
     <div class="bg-gradient-to-r from-primary to-rose-500 rounded-3xl p-10 md:p-12 text-white grid grid-cols-2 md:grid-cols-4 gap-8 text-center shadow-xl">
-      <div><div class="text-4xl md:text-5xl font-extrabold mb-2">1.000+</div><div class="font-bold text-pink-100">Transaksi</div></div>
+      <div><div id="stat-orders" class="text-4xl md:text-5xl font-extrabold mb-2">—</div><div class="font-bold text-pink-100">Transaksi</div></div>
       <div><div class="text-4xl md:text-5xl font-extrabold mb-2">24/7</div><div class="font-bold text-pink-100">Layanan AI</div></div>
-      <div><div class="text-4xl md:text-5xl font-extrabold mb-2">5+</div><div class="font-bold text-pink-100">Game</div></div>
-      <div><div class="text-4xl md:text-5xl font-extrabold mb-2">4.9★</div><div class="font-bold text-pink-100">Rating</div></div>
+      <div><div id="stat-games" class="text-4xl md:text-5xl font-extrabold mb-2">—</div><div class="font-bold text-pink-100">Game</div></div>
+      <div><div id="stat-rating" class="text-4xl md:text-5xl font-extrabold mb-2">—</div><div class="font-bold text-pink-100">Rating</div></div>
     </div>
+  </section>
+
+  <section class="pb-16 max-w-4xl mx-auto hidden" id="clientsSection">
+    <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Dipercaya Oleh</h2>
+    <div class="flex flex-wrap justify-center items-center gap-8" id="clientsContainer"></div>
   </section>
 
   <section class="max-w-4xl mx-auto px-4 pb-20 text-center">

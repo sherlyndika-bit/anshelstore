@@ -261,6 +261,10 @@ function showInvoice(order) {
           <span class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn cursor-pointer select-none" style="font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1;" data-val="4">star</span>
           <span class="material-symbols-outlined text-slate-300 hover:text-amber-400 transition-colors text-3xl star-btn cursor-pointer select-none" style="font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1;" data-val="5">star</span>
         </div>
+        <label class="flex items-center gap-2 mb-3 cursor-pointer select-none">
+          <input type="checkbox" id="reviewAnon" class="rounded border-slate-300 text-primary focus:ring-primary" checked/>
+          <span class="text-sm text-slate-600">Kirim sebagai Anonim</span>
+        </label>
         <textarea id="reviewComment" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none resize-none" rows="2" placeholder="Tuliskan pengalaman Anda..."></textarea>
         <button type="button" id="submitReviewBtn" class="mt-3 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg text-sm transition-all disabled:opacity-50">Kirim Ulasan</button>
       </div>
@@ -283,7 +287,7 @@ function showInvoice(order) {
     if (!rating) return alert("Pilih bintang dulu ya!");
     btn.disabled = true; btn.textContent = "Mengirim...";
     try {
-      const res = await fetch("/api/reviews", { method: "POST", body: JSON.stringify({ orderId: order.code, rating, comment: document.getElementById("reviewComment").value }) });
+      const res = await fetch("/api/reviews", { method: "POST", body: JSON.stringify({ orderId: order.code, rating, comment: document.getElementById("reviewComment").value, anonymous: document.getElementById("reviewAnon").checked }) });
       if (res.ok) { document.getElementById("reviewBlock").innerHTML = `<div class="text-center text-emerald-600 font-bold"><span class="material-symbols-outlined block text-3xl mb-1">check_circle</span>Terima kasih atas ulasan Anda!</div>`; }
       else { alert((await res.json()).error || "Gagal"); btn.disabled = false; btn.textContent = "Kirim Ulasan"; }
     } catch(e) { alert("Error"); btn.disabled = false; btn.textContent = "Kirim Ulasan"; }

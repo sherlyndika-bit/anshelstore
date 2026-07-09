@@ -51,10 +51,10 @@ const USE_PG = !!process.env.DATABASE_URL;
 let pgPool = null;
 
 function applyDefaults() {
-  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= []; db.reviews ||= [];
+  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= []; db.reviews ||= []; db.clients ||= []; db.notifications ||= [];
   db.settings.integrations ||= {};
   db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment", "review"].forEach((k) => (db._seq[k] ||= 0));
+  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment", "review", "client", "notification"].forEach((k) => (db._seq[k] ||= 0));
 }
 function readSeedOrFile() {
   try {
@@ -112,6 +112,15 @@ function saveDB() {
 
 function nextId(kind) { db._seq[kind] = (db._seq[kind] || 0) + 1; return db._seq[kind]; }
 
+function addNotification(target, title, message, icon) {
+  db.notifications ||= [];
+  const notif = { id: nextId("notification"), target, title, message, icon: icon || "notifications", read: false, createdAt: Date.now() };
+  db.notifications.push(notif);
+  if (db.notifications.length > 200) db.notifications = db.notifications.slice(-200);
+  saveDB();
+  return notif;
+}
+
 // ---------------------------------------------------------------------------
 // Auth helpers
 // ---------------------------------------------------------------------------
@@ -165,6 +174,7 @@ function upsertUser({ email, name, provider, picture, passwordHash, role }) {
   } else {
     u = { id: nextId("user"), email, name: name || email.split("@")[0], provider: provider || "email", picture: picture || null, passwordHash: passwordHash || null, role: role || assignRole(email), createdAt: Date.now() };
     db.users.push(u);
+    addNotification("admin", "User Baru", "User baru terdaftar: " + email, "person_add");
   }
   saveDB();
   return u;
@@ -835,6 +845,7 @@ async function handleApi(req, res, pathname, query) {
     const order = { id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, itemId: item.id, itemLabel: item.label, price: item.price, account: b.account || {}, customerName: b.customerName || (u && u.name) || "Guest", customerContact: b.customerContact || "", paymentMethod: b.paymentMethod || "-", status: "pending", userId: u ? u.id : null, createdAt: Date.now() };
     if (typeof item.stock === "number") item.stock = Math.max(0, item.stock - 1);
     db.orders.push(order); saveDB();
+    addNotification("admin", "Pesanan Baru", "Pesanan " + order.code + " dari " + (order.contact || "customer"), "shopping_cart");
     return sendJSON(res, 201, order);
   }
   // Status integrasi publik (boolean saja)
@@ -1052,14 +1063,26 @@ async function handleApi(req, res, pathname, query) {
     if (db.reviews.some(r => r.orderId === b.orderId)) return sendJSON(res, 400, { error: "Pesanan ini sudah diberi ulasan." });
     
     let cName = "Anonim";
-    if (order.contact && order.contact.length >= 6) {
+    let cPicture = "";
+    if (!b.anonymous) {
+      const me = userFromReq(req);
+      if (me) {
+        cName = me.name || me.email.split("@")[0];
+        cPicture = me.picture || "";
+      } else if (order.contact && order.contact.length >= 6) {
+        cName = order.contact.substring(0, 4) + "***" + order.contact.slice(-2);
+      }
+    } else if (order.contact && order.contact.length >= 6) {
       cName = order.contact.substring(0, 4) + "***" + order.contact.slice(-2);
     }
+    
     const rtg = Math.max(1, Math.min(5, Number(b.rating)));
     const review = {
       id: nextId("review"),
       orderId: order.code,
+      userId: order.userId,
       customerName: cName,
+      customerPicture: cPicture,
       gameName: order.gameName,
       rating: rtg,
       comment: (b.comment || "").slice(0, 500).trim(),
@@ -1067,8 +1090,103 @@ async function handleApi(req, res, pathname, query) {
     };
     db.reviews.push(review);
     saveDB();
+    addNotification("admin", "Ulasan Baru", cName + " memberi " + rtg + " bintang", "star");
     return sendJSON(res, 201, { ok: true, review });
   }
+
+  // ---- NEW ENDPOINTS (Clients, Stats, Profile Stats, Notifications) ----
+  if (pathname === "/api/stats" && method === "GET") {
+    const reviews = db.reviews || [];
+    const avg = reviews.length ? (reviews.reduce((s,r) => s + r.rating, 0) / reviews.length).toFixed(1) : "0";
+    return sendJSON(res, 200, {
+      totalOrders: (db.orders || []).length,
+      totalGames: (db.games || []).length,
+      avgRating: avg,
+      totalReviews: reviews.length
+    });
+  }
+  if (pathname === "/api/clients" && method === "GET") {
+    return sendJSON(res, 200, db.clients || []);
+  }
+  if (pathname === "/api/admin/clients" && method === "POST") {
+    if (!authed) return needAuth();
+    const b = await readBody(req);
+    if (!b.name) return sendJSON(res, 400, { error: "Nama klien wajib diisi" });
+    const client = { id: nextId("client"), name: b.name, logo: b.logo || "", url: b.url || "", createdAt: Date.now() };
+    db.clients ||= []; db.clients.push(client); saveDB();
+    return sendJSON(res, 201, client);
+  }
+  let mclient = pathname.match(/^\/api\/admin\/clients\/(\d+)$/);
+  if (mclient && method === "DELETE") {
+    if (!authed) return needAuth();
+    const i = (db.clients||[]).findIndex(c => c.id === Number(mclient[1]));
+    if (i === -1) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    db.clients.splice(i, 1); saveDB();
+    return sendJSON(res, 200, { ok: true });
+  }
+  
+  if (pathname === "/api/my/profile-stats" && method === "GET") {
+    const me = userFromReq(req);
+    if (!me) return sendJSON(res, 401, { error: "Login diperlukan" });
+    const myOrders = (db.orders || []).filter(o => o.contact === me.email || o.userId === me.id);
+    const doneOrders = myOrders.filter(o => o.status === "done");
+    const totalSpend = myOrders.filter(o => o.status !== "cancelled").reduce((s, o) => s + (o.price || 0), 0);
+    const hasReview = (db.reviews || []).some(r => r.userId === me.id);
+    const last24h = myOrders.filter(o => (Date.now() - o.createdAt) < 86400000).length;
+    
+    const done = doneOrders.length;
+    let tier = "Newbie", tierColor = "slate";
+    if (done >= 100) { tier = "Diamond"; tierColor = "cyan"; }
+    else if (done >= 50) { tier = "Platinum"; tierColor = "violet"; }
+    else if (done >= 25) { tier = "Gold"; tierColor = "amber"; }
+    else if (done >= 10) { tier = "Silver"; tierColor = "gray"; }
+    else if (done >= 3) { tier = "Bronze"; tierColor = "orange"; }
+    
+    const tiers = [{name:"Newbie",min:0},{name:"Bronze",min:3},{name:"Silver",min:10},{name:"Gold",min:25},{name:"Platinum",min:50},{name:"Diamond",min:100}];
+    const currentIdx = tiers.findIndex(t => t.name === tier);
+    const nextTier = tiers[currentIdx + 1] || null;
+    const progress = nextTier ? Math.min(100, Math.round((done / nextTier.min) * 100)) : 100;
+    
+    const achievements = [
+      { id: "first", icon: "🎮", name: "Pembelian Pertama", desc: "Selesaikan 1 pesanan", unlocked: done >= 1 },
+      { id: "active", icon: "🔥", name: "Gamer Aktif", desc: "Selesaikan 5 pesanan", unlocked: done >= 5 },
+      { id: "spender", icon: "💎", name: "Top Spender", desc: "Total belanja ≥ Rp500.000", unlocked: totalSpend >= 500000 },
+      { id: "reviewer", icon: "🌟", name: "Reviewer", desc: "Kirim ulasan pertama", unlocked: hasReview },
+      { id: "loyal", icon: "👑", name: "Pelanggan Setia", desc: "Selesaikan 25 pesanan", unlocked: done >= 25 },
+      { id: "speed", icon: "⚡", name: "Speed Runner", desc: "3 pesanan dalam 24 jam", unlocked: last24h >= 3 }
+    ];
+    
+    return sendJSON(res, 200, { tier, tierColor, progress, nextTier: nextTier ? nextTier.name : null, nextTierMin: nextTier ? nextTier.min : null, doneCount: done, achievements });
+  }
+
+  if (pathname === "/api/my/notifications" && method === "GET") {
+    const me = userFromReq(req);
+    if (!me) return sendJSON(res, 401, { error: "Login diperlukan" });
+    const mine = (db.notifications || []).filter(n => n.target === "user:" + me.id).sort((a,b) => b.createdAt - a.createdAt).slice(0, 30);
+    return sendJSON(res, 200, mine);
+  }
+  let mn = pathname.match(/^\/api\/my\/notifications\/(\d+)\/read$/);
+  if (mn && method === "POST") {
+    const me = userFromReq(req);
+    if (!me) return sendJSON(res, 401, { error: "Login diperlukan" });
+    const n = (db.notifications || []).find(x => x.id === Number(mn[1]) && x.target === "user:" + me.id);
+    if (n) { n.read = true; saveDB(); }
+    return sendJSON(res, 200, { ok: true });
+  }
+
+  if (pathname === "/api/admin/notifications" && method === "GET") {
+    if (!authed) return needAuth();
+    const mine = (db.notifications || []).filter(n => n.target === "admin").sort((a,b) => b.createdAt - a.createdAt).slice(0, 50);
+    return sendJSON(res, 200, mine);
+  }
+  let mna = pathname.match(/^\/api\/admin\/notifications\/(\d+)\/read$/);
+  if (mna && method === "POST") {
+    if (!authed) return needAuth();
+    const n = (db.notifications || []).find(x => x.id === Number(mna[1]) && x.target === "admin");
+    if (n) { n.read = true; saveDB(); }
+    return sendJSON(res, 200, { ok: true });
+  }
+
   if (pathname === "/api/admin/articles" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, [...db.articles].sort((a, b) => b.createdAt - a.createdAt)); }
   if (pathname === "/api/admin/articles" && method === "POST") {
     if (!authed) return needAuth(); const b = await readBody(req);

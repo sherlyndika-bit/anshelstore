@@ -176,9 +176,14 @@
           const initial = (r.customerName || "A").charAt(0).toUpperCase();
           const grad = avatarColors[idx % avatarColors.length];
           const timeAgo = ((Date.now() - r.createdAt) / 60000) < 60 ? Math.max(1, Math.floor((Date.now() - r.createdAt) / 60000)) + " menit lalu" : ((Date.now() - r.createdAt) / 3600000) < 24 ? Math.floor((Date.now() - r.createdAt) / 3600000) + " jam lalu" : Math.floor((Date.now() - r.createdAt) / 86400000) + " hari lalu";
-          html += `<div class="w-72 sm:w-80 shrink-0 bg-white border border-slate-100 rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br ${grad} flex items-center justify-center text-white font-bold text-sm shadow-sm">${initial}</div>
+          const hasPhoto = r.customerPicture && !r.customerPicture.startsWith("data:");
+          const avatarEl = hasPhoto 
+            ? `<img src="${rEsc(r.customerPicture)}" class="w-10 h-10 rounded-full object-cover shadow-sm"/>` 
+            : `<div class="w-10 h-10 rounded-full bg-gradient-to-br ${grad} flex items-center justify-center text-white font-bold text-sm shadow-sm">${initial}</div>`;
+          html += `
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow shrink-0 w-[280px] md:w-[320px]">
+              <div class="flex items-center gap-3 mb-3">
+                ${avatarEl}
               <div class="flex-1 min-w-0">
                 <div class="font-bold text-slate-800 text-sm truncate">${rEsc(r.customerName)}</div>
                 <div class="text-xs text-slate-400">${rEsc(r.gameName)} · ${timeAgo}</div>
@@ -193,4 +198,69 @@
       }
     }).catch(()=>{});
   }
+
+  // Dynamic stats for tentang page
+  const statOrders = document.getElementById("stat-orders");
+  const statGames = document.getElementById("stat-games");
+  const statRating = document.getElementById("stat-rating");
+  if (statOrders || statGames || statRating) {
+    fetch("/api/stats").then(r => r.json()).then(s => {
+      if (statOrders) statOrders.textContent = s.totalOrders > 0 ? s.totalOrders.toLocaleString("id-ID") + "+" : "0";
+      if (statGames) statGames.textContent = s.totalGames + "+";
+      if (statRating) statRating.textContent = s.totalReviews > 0 ? s.avgRating + "★" : "—";
+    }).catch(()=>{});
+  }
+
+  // Clients showcase
+  const clSec = document.getElementById("clientsSection");
+  const clCont = document.getElementById("clientsContainer");
+  if (clSec && clCont) {
+    fetch("/api/clients").then(r => r.json()).then(clients => {
+      if (clients && clients.length > 0) {
+        clCont.innerHTML = clients.map(c => 
+          c.logo ? `<div class="flex flex-col items-center gap-2"><img src="${c.logo}" alt="${c.name}" class="h-12 md:h-16 object-contain"/><span class="text-xs text-slate-500 font-medium">${c.name}</span></div>` 
+          : `<div class="px-6 py-3 bg-white border border-slate-200 rounded-xl shadow-sm text-slate-700 font-bold text-sm">${c.name}</div>`
+        ).join("");
+        clSec.classList.remove("hidden");
+      }
+    }).catch(()=>{});
+  }
+
+  // Customer notification bell
+  const token = localStorage.getItem("anshel_token");
+  if (token) {
+    fetch("/api/my/notifications", { headers: { "x-auth-token": token } }).then(r => r.json()).then(notifs => {
+      if (!Array.isArray(notifs)) return;
+      const unread = notifs.filter(n => !n.read).length;
+      const nav = document.querySelector("#siteAuth") || document.querySelector("nav");
+      if (!nav) return;
+      const bell = document.createElement("div");
+      bell.className = "relative cursor-pointer mr-2";
+      bell.innerHTML = `<span class="material-symbols-outlined text-slate-600 hover:text-primary transition-colors mt-1 block">notifications</span>${unread > 0 ? `<span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">${unread > 9 ? '9+' : unread}</span>` : ''}`;
+      
+      const panel = document.createElement("div");
+      panel.className = "hidden absolute right-0 top-10 w-80 max-h-96 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 text-left";
+      panel.innerHTML = `<div class="px-3 py-2 border-b border-slate-100 font-bold text-sm text-slate-800">Notifikasi</div>` + 
+        (notifs.length === 0 ? `<div class="p-4 text-center text-slate-400 text-sm">Belum ada notifikasi</div>` :
+        notifs.slice(0, 15).map(n => `<div class="px-3 py-2.5 rounded-lg ${n.read ? '' : 'bg-blue-50'} hover:bg-slate-50 transition-colors flex items-start gap-2 cursor-pointer notif-item" data-id="${n.id}"><span class="material-symbols-outlined text-sm mt-0.5 ${n.read ? 'text-slate-400' : 'text-primary'}">${n.icon || 'notifications'}</span><div class="flex-1 min-w-0"><div class="text-sm font-medium text-slate-800">${n.title}</div><div class="text-xs text-slate-500 truncate">${n.message}</div></div></div>`).join(""));
+      
+      bell.appendChild(panel);
+      bell.addEventListener("click", (e) => { e.stopPropagation(); panel.classList.toggle("hidden"); });
+      document.addEventListener("click", () => panel.classList.add("hidden"));
+      
+      // Mark as read on click
+      panel.querySelectorAll(".notif-item").forEach(item => {
+        item.addEventListener("click", () => {
+          fetch(`/api/my/notifications/${item.dataset.id}/read`, { method: "POST", headers: { "x-auth-token": token } });
+          item.classList.remove("bg-blue-50");
+          const ubadge = bell.querySelector("span.bg-red-500");
+          if(ubadge) { let u = parseInt(ubadge.textContent); if(!isNaN(u) && u>0) { u--; if(u===0) ubadge.remove(); else ubadge.textContent=u; } }
+        });
+      });
+      
+      if (nav.firstChild) nav.insertBefore(bell, nav.firstChild);
+      else nav.appendChild(bell);
+    }).catch(()=>{});
+  }
+
 })();

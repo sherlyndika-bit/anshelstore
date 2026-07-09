@@ -363,11 +363,13 @@ function boot() {
   let startPage = "overview";
   try { startPage = localStorage.getItem("anshel_page") || "overview"; } catch (e) {}
   routeTo(startPage);
+  loadAdminNotifs();
   try { history.replaceState(null, "", "/dashboard"); } catch (e) {}
   clearInterval(pollTimer);
   pollTimer = setInterval(() => {
     const active = document.querySelector(".page.active");
     if (active && active.id === "page-inbox") { loadConversations(); if (activeConv) pollMessages(); }
+    loadAdminNotifs();
   }, 3500);
 }
 
@@ -463,6 +465,7 @@ async function loadSettings() {
   $("setMeta").value = s.metaDescription || "";
   $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
   $("setLogo").value = s.logo || "";
+  loadClients();
 
   loadedServices = await fetch("/api/services").then((r) => r.json());
   $("servicesEditor").innerHTML = loadedServices.map((sv, i) => `
@@ -708,3 +711,76 @@ $("changePassBtn").addEventListener("click", async () => {
     goto(b.dataset.page);
   }));
 })();
+
+// ============================================================
+// Clients & Admin Notifications
+// ============================================================
+async function loadClients() {
+  try {
+    const clients = await api("/api/clients");
+    const list = document.getElementById("clientsList");
+    if (!list) return;
+    if (!clients || clients.length === 0) { list.innerHTML = '<p class="text-sm text-slate-400 italic">Belum ada klien.</p>'; return; }
+    list.innerHTML = clients.map(c => `
+      <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+        ${c.logo ? `<img src="${c.logo}" class="w-10 h-10 object-contain rounded"/>` : `<div class="w-10 h-10 bg-slate-200 rounded flex items-center justify-center text-slate-500 text-sm font-bold">${c.name.charAt(0)}</div>`}
+        <div class="flex-1 font-medium text-slate-800 text-sm">${c.name}</div>
+        <button class="text-red-500 hover:text-red-700 text-sm font-medium cl-del" data-id="${c.id}">Hapus</button>
+      </div>
+    `).join("");
+    list.querySelectorAll(".cl-del").forEach(b => b.addEventListener("click", async () => {
+      if (!confirm("Hapus klien ini?")) return;
+      await api(`/api/admin/clients/${b.dataset.id}`, { method: "DELETE" });
+      loadClients();
+    }));
+  } catch(e){}
+}
+
+const acb = document.getElementById("addClientBtn");
+if (acb) acb.addEventListener("click", async () => {
+  const name = document.getElementById("newClientName").value.trim();
+  if (!name) return alert("Nama klien wajib diisi");
+  const logo = document.getElementById("newClientLogo").value || "";
+  try {
+    await api("/api/admin/clients", { method: "POST", body: JSON.stringify({ name, logo }) });
+    document.getElementById("newClientName").value = "";
+    document.getElementById("newClientLogo").value = "";
+    loadClients();
+  } catch(e) { alert("Gagal menambah klien"); }
+});
+
+async function loadAdminNotifs() {
+  try {
+    const notifs = await api("/api/admin/notifications");
+    if (!Array.isArray(notifs)) return;
+    const unread = notifs.filter(n => !n.read).length;
+    const existing = document.getElementById("adminNotifBell");
+    if (existing) {
+      const badge = existing.querySelector(".notif-badge");
+      if (badge) {
+        badge.textContent = unread > 9 ? "9+" : unread;
+        if (unread === 0) badge.classList.add("hidden"); else badge.classList.remove("hidden");
+      }
+    }
+    const panel = document.getElementById("adminNotifPanel");
+    if (panel) {
+      panel.innerHTML = notifs.length === 0 ? '<div class="p-4 text-center text-slate-400 text-sm">Belum ada notifikasi</div>' :
+        notifs.slice(0, 20).map(n => `<div class="px-3 py-2.5 rounded-lg ${n.read ? '' : 'bg-blue-50'} hover:bg-slate-50 transition-colors flex items-start gap-2 cursor-pointer admin-notif-item" data-id="${n.id}"><span class="material-symbols-outlined text-sm mt-0.5 ${n.read ? 'text-slate-400' : 'text-primary'}">${n.icon || 'notifications'}</span><div class="flex-1 min-w-0"><div class="text-sm font-medium text-slate-800">${n.title}</div><div class="text-xs text-slate-500">${n.message}</div></div></div>`).join("");
+      panel.querySelectorAll(".admin-notif-item").forEach(item => {
+        item.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          await api(`/api/admin/notifications/${item.dataset.id}/read`, { method: "POST" });
+          item.classList.remove("bg-blue-50");
+          loadAdminNotifs();
+        });
+      });
+    }
+  } catch(e) {}
+}
+
+const bell = document.getElementById("adminNotifBell");
+const panel = document.getElementById("adminNotifPanel");
+if (bell && panel) {
+  bell.addEventListener("click", (e) => { e.stopPropagation(); panel.classList.toggle("hidden"); });
+  document.addEventListener("click", () => panel.classList.add("hidden"));
+}
