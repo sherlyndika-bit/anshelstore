@@ -12,7 +12,7 @@ const GRAD = {
 const DEF_GRAD = "linear-gradient(160deg,#bf5d7e,#7d9b78)";
 const CAT = { ml: "MOBA", ff: "Battle Royale", pubgm: "Battle Royale", genshin: "RPG", valorant: "FPS" };
 const gradOf = (g) => GRAD[g.id] || DEF_GRAD;
-const catOf = (g) => CAT[g.id] || "Lainnya";
+const catOf = (g) => g.category || CAT[g.id] || "Lainnya";
 
 let games = [], selGame = null, selItem = null, WA = null;
 let activeCat = "Semua", searchQ = "";

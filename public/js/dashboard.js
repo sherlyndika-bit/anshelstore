@@ -539,14 +539,15 @@ function renderProduk() {
         <b class="text-xl font-bold text-slate-800">${escapeHtml(g.name || "(tanpa nama)")} <span class="text-sm font-medium text-slate-400 ml-3 bg-slate-100 px-2 py-1 rounded-md">#${escapeHtml(g.id)}</span></b>
         <button class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-bold rounded-lg transition-colors pg-delgame shadow-sm" data-g="${gi}">Hapus</button>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
         <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-name" data-g="${gi}" value="${escapeHtml(g.name || "")}"/></div>
         <div><label class="block text-sm font-medium text-slate-700 mb-1">Publisher</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-pub" data-g="${gi}" value="${escapeHtml(g.publisher || "")}"/></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Kategori</label><select class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white pg-cat" data-g="${gi}"><option value="MOBA" ${g.category === "MOBA" ? "selected" : ""}>MOBA</option><option value="Battle Royale" ${g.category === "Battle Royale" ? "selected" : ""}>Battle Royale</option><option value="FPS" ${g.category === "FPS" ? "selected" : ""}>FPS</option><option value="RPG" ${g.category === "RPG" ? "selected" : ""}>RPG</option><option value="Sports" ${g.category === "Sports" ? "selected" : ""}>Sports</option><option value="Lainnya" ${g.category === "Lainnya" || !g.category ? "selected" : ""}>Lainnya</option></select></div>
         <div class="up-wrap"><label class="block text-sm font-medium text-slate-700 mb-1">Gambar (cover)</label><input type="hidden" class="pg-img" data-g="${gi}" value="${escapeHtml(g.image || "")}"/><div class="flex gap-2 flex-wrap"><button type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm rounded-lg font-bold transition-colors upload-btn shadow-sm">📷 Upload cover</button><button type="button" class="px-3 py-1.5 bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 text-sm rounded-lg font-bold transition-colors img-clear shadow-sm">Hapus</button></div></div>
         <div><label class="block text-sm font-medium text-slate-700 mb-1">Field diminta (koma)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-needs" data-g="${gi}" value="${escapeHtml((g.needs || []).join(", "))}"/></div>
-        <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">URL Cek-ID Khusus (Opsional)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-checkurl" data-g="${gi}" value="${escapeHtml(g.checkIdUrl || "")}" placeholder="https://.../game/{gameId}?id={userId}&zone={zoneId}"/></div>
-        <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi / penjelasan game</label><textarea class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-desc" data-g="${gi}" rows="2" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
-        <div><label class="block text-sm font-medium text-slate-700 mb-1">URL Video (YouTube / .mp4)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
+        <div class="md:col-span-3"><label class="block text-sm font-medium text-slate-700 mb-1">URL Cek-ID Khusus (Opsional)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-checkurl" data-g="${gi}" value="${escapeHtml(g.checkIdUrl || "")}" placeholder="https://.../game/{gameId}?id={userId}&zone={zoneId}"/></div>
+        <div class="md:col-span-3"><label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi / penjelasan game</label><textarea class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-desc" data-g="${gi}" rows="2" placeholder="Ceritakan tentang game ini...">${escapeHtml(g.description || "")}</textarea></div>
+        <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">URL Video (YouTube / .mp4)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none pg-video" data-g="${gi}" value="${escapeHtml(g.video || "")}" placeholder="https://youtu.be/..."/></div>
         <div class="up-wrap"><label class="block text-sm font-medium text-slate-700 mb-1">Screenshots (beberapa gambar)</label><input type="hidden" class="pg-shots" data-g="${gi}" value="${escapeHtml((g.screenshots || []).join("\n"))}"/><div class="flex gap-2 flex-wrap"><button type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm rounded-lg font-bold transition-colors upload-btn shadow-sm" data-mode="append">📷 Upload &amp; tambah</button><button type="button" class="px-3 py-1.5 bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 text-sm rounded-lg font-bold transition-colors img-clear shadow-sm">Hapus semua</button></div></div>
       </div>
       
@@ -572,6 +573,7 @@ function renderProduk() {
 function syncProduk() {
   document.querySelectorAll(".pg-name").forEach((el) => (loadedGames[el.dataset.g].name = el.value));
   document.querySelectorAll(".pg-pub").forEach((el) => (loadedGames[el.dataset.g].publisher = el.value));
+  document.querySelectorAll(".pg-cat").forEach((el) => (loadedGames[el.dataset.g].category = el.value));
   document.querySelectorAll(".pg-img").forEach((el) => (loadedGames[el.dataset.g].image = el.value.trim()));
   document.querySelectorAll(".pg-needs").forEach((el) => (loadedGames[el.dataset.g].needs = el.value.split(",").map((s) => s.trim()).filter(Boolean)));
   document.querySelectorAll(".pg-checkurl").forEach((el) => (loadedGames[el.dataset.g].checkIdUrl = el.value.trim()));
@@ -593,8 +595,8 @@ $("addGameBtn").addEventListener("click", () => {
   const m = $("produkMsg");
   if (!id || !$("ngName").value.trim()) { m.textContent = "ID & nama wajib"; m.className = "text-sm font-bold text-red-600"; return; }
   if (loadedGames.some((g) => g.id === id)) { m.textContent = "ID sudah dipakai"; m.className = "text-sm font-bold text-red-600"; return; }
-  loadedGames.push({ id, name: $("ngName").value.trim(), publisher: $("ngPub").value.trim(), image: "", needs: $("ngNeeds").value.split(",").map((s) => s.trim()).filter(Boolean), items: [{ id: "i" + Date.now(), label: "Item baru", price: 0 }] });
-  $("ngId").value = ""; $("ngName").value = ""; $("ngPub").value = ""; $("ngNeeds").value = "";
+  loadedGames.push({ id, name: $("ngName").value.trim(), publisher: $("ngPub").value.trim(), category: $("ngCategory").value, image: "", needs: $("ngNeeds").value.split(",").map((s) => s.trim()).filter(Boolean), items: [{ id: "i" + Date.now(), label: "Item baru", price: 0 }] });
+  $("ngId").value = ""; $("ngName").value = ""; $("ngPub").value = ""; $("ngNeeds").value = ""; $("ngCategory").value = "MOBA";
   m.textContent = "Game ditambah — jangan lupa Simpan."; m.className = "text-sm font-bold text-emerald-600";
   renderProduk();
 });

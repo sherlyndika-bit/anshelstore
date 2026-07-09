@@ -439,10 +439,21 @@
         <section class="page" id="page-produk">
           <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
             <h3 class="text-lg font-bold text-slate-800 mb-4">➕ Tambah Game Baru</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div><label class="block text-sm font-medium text-slate-700 mb-1">ID unik (huruf kecil)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngId" placeholder="mis. mlbb" /></div>
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Game</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngName" placeholder="Mobile Legends" /></div>
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Publisher</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngPub" placeholder="Moonton" /></div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Kategori</label>
+                <select id="ngCategory" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white">
+                  <option value="MOBA">MOBA</option>
+                  <option value="Battle Royale">Battle Royale</option>
+                  <option value="FPS">FPS</option>
+                  <option value="RPG">RPG</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-slate-700 mb-1">Field diminta (pisah koma)</label>
