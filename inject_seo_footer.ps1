@@ -9,20 +9,27 @@ $footer = @"
 </body>
 "@
 
+$utf8NoBom = New-Object System.Text.UTF8Encoding $False
+
 $files = Get-ChildItem -Path public -Filter *.html -Recurse
 foreach ($file in $files) {
-    # Skip google verification files
     if ($file.Name -match "^google.*\.html$") { continue }
     
-    $content = Get-Content $file.FullName -Raw
+    # Read as UTF8
+    $content = Get-Content $file.FullName -Raw -Encoding UTF8
     
-    # Remove old noscript footer if exists
-    $content = $content -replace "(?s)<noscript>.*?Jelajahi Anshel Store.*?</noscript>\s*", ""
-    
-    # Inject new noscript footer before </body>
+    # Inject SEO footer before </body>
     if ($content -match "</body>") {
+        $content = $content -replace "(?s)<noscript>.*?Jelajahi Anshel Store.*?</noscript>\s*", ""
         $content = $content -replace "</body>", $footer
-        Set-Content -Path $file.FullName -Value $content -Encoding UTF8
-        Write-Host "Injected SEO footer into $($file.Name)"
     }
+
+    # Inject overflow-x-hidden
+    if ($content -notmatch "overflow-x-hidden") {
+        $content = $content -replace '<body ([^>]*)class="([^"]*)"', '<body $1class="$2 overflow-x-hidden"'
+    }
+
+    # Write as UTF8 without BOM
+    [System.IO.File]::WriteAllText($file.FullName, $content, $utf8NoBom)
+    Write-Host "Fixed $($file.Name)"
 }
