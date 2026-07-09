@@ -17,11 +17,11 @@
   if (navMount) {
     navMount.innerHTML = `
     <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
-      <!-- Teks Berjalan (Announcement Bar) -->
-      <div class="bg-primary text-white text-xs font-medium py-1.5 px-4">
+      <!-- Announcement Bar Dinamis -->
+      <div class="bg-primary text-white text-xs font-medium py-1.5 px-4 overflow-hidden">
         <div class="max-w-7xl mx-auto flex items-center">
           <span class="material-symbols-outlined text-[14px] mr-2">campaign</span>
-          <marquee scrollamount="5" class="flex-1">Selamat datang di Anshel Store! Nikmati layanan top up game instan, termurah, dan terpercaya 24/7. Promo spesial diskon untuk member baru!</marquee>
+          <div id="promoTextCycler" class="flex-1 transition-opacity duration-500 opacity-100 truncate">Selamat datang di Anshel Store! Nikmati layanan top up instan, termurah & terpercaya.</div>
         </div>
       </div>
       <!-- Navbar Utama -->
@@ -262,5 +262,30 @@
       else nav.appendChild(bell);
     }).catch(()=>{});
   }
+
+  // Promo Text Cycler
+  setTimeout(() => {
+    const cycler = document.getElementById("promoTextCycler");
+    if (cycler) {
+      const texts = [
+        "Selamat datang di Anshel Store! Layanan top up game instan, termurah & terpercaya.",
+        "✨ Promo spesial diskon untuk member baru! Yuk daftar sekarang juga.",
+        "🎮 Push rank makin lancar, diamond/UC selalu ready 24/7 tanpa delay.",
+        "🚀 Transaksi secepat kilat, pesanan masuk dalam hitungan detik. Cobain!",
+        "🤖 Bosan balas chat manual? Coba Jasa Automation AI (WA/IG) dari kami!"
+      ];
+      let tidx = 0;
+      setInterval(() => {
+        cycler.classList.remove("opacity-100");
+        cycler.classList.add("opacity-0");
+        setTimeout(() => {
+          tidx = (tidx + 1) % texts.length;
+          cycler.textContent = texts[tidx];
+          cycler.classList.remove("opacity-0");
+          cycler.classList.add("opacity-100");
+        }, 500); // Wait for fade out
+      }, 4000); // Change every 4 seconds
+    }
+  }, 100);
 
 })();
