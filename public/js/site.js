@@ -295,19 +295,19 @@
     if ((isMobile || isStandalone) && !localStorage.getItem("pwa_permission_asked") && "Notification" in window) {
       if (Notification.permission === "default") {
         const modal = document.createElement("div");
-        modal.className = "fixed inset-0 z-[100] flex items-center justify-center bg-scrim/40 p-4 transition-opacity duration-300";
+        modal.className = "fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 transition-opacity duration-300";
         modal.innerHTML = `
-          <div class="bg-surface rounded-2xl p-6 w-full max-w-sm shadow-xl transform transition-transform duration-300 scale-95 opacity-0" id="pwaPermModal">
-            <div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center mb-4 mx-auto">
+          <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl transform transition-transform duration-300 scale-95 opacity-0" id="pwaPermModal">
+            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mb-4 mx-auto">
               <span class="material-symbols-outlined text-[28px]">notifications_active</span>
             </div>
-            <h3 class="text-center font-headline-md text-headline-md text-on-surface mb-2">Biar Makin Lancar!</h3>
-            <p class="text-center font-body-md text-body-md text-on-surface-variant mb-6">
+            <h3 class="text-center font-bold text-xl text-slate-800 mb-2">Biar Makin Lancar!</h3>
+            <p class="text-center text-sm text-slate-600 mb-6">
               Izinkan aplikasi ini mengakses <strong>Notifikasi</strong> (untuk update status pesanan) dan <strong>Penyimpanan</strong> (jika kamu ingin upload foto profil nanti).
             </p>
             <div class="flex flex-col gap-3">
-              <button id="btnAllowPwa" class="w-full py-3 bg-primary text-on-primary font-label-lg rounded-full hover:bg-primary-hover transition-colors">Izinkan</button>
-              <button id="btnDenyPwa" class="w-full py-3 bg-surface-container text-on-surface-variant font-label-lg rounded-full hover:bg-outline-variant transition-colors">Nanti Saja</button>
+              <button id="btnAllowPwa" class="w-full py-3 bg-rose-600 text-white font-semibold rounded-full hover:bg-rose-700 transition-colors">Izinkan</button>
+              <button id="btnDenyPwa" class="w-full py-3 bg-slate-100 text-slate-600 font-semibold rounded-full hover:bg-slate-200 transition-colors">Nanti Saja</button>
             </div>
           </div>
         `;
@@ -326,10 +326,13 @@
         };
 
         document.getElementById("btnAllowPwa").onclick = () => {
-          Notification.requestPermission().then(perm => {
-            console.log("Notification permission:", perm);
-            closeModal(true);
-          });
+          closeModal(true); // Close immediately
+          try {
+            const promise = Notification.requestPermission();
+            if (promise && typeof promise.then === 'function') {
+              promise.catch(()=>{});
+            }
+          } catch(e) {}
         };
         
         document.getElementById("btnDenyPwa").onclick = () => closeModal(true);
