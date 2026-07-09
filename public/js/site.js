@@ -158,21 +158,37 @@
   const rCont = document.getElementById("reviewsContainer");
   if (rSec && rCont) {
     const rEsc = (str) => String(str).replace(/[&<>'"]/g, (tag) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[tag]));
+    const avatarColors = ["from-pink-500 to-rose-400","from-violet-500 to-purple-400","from-blue-500 to-cyan-400","from-emerald-500 to-teal-400","from-amber-500 to-orange-400","from-red-500 to-pink-400"];
     fetch("/api/reviews?limit=15").then(r => r.json()).then(revs => {
       if (revs && revs.length > 0) {
+        // Aggregate rating
+        const avg = (revs.reduce((s,r) => s + r.rating, 0) / revs.length).toFixed(1);
+        const aggEl = document.getElementById("aggRating");
+        if (aggEl) {
+          let aggStars = "";
+          for (let i = 0; i < 5; i++) { aggStars += `<span class="material-symbols-outlined text-amber-400 text-xl" style="font-family:'Material Symbols Outlined';font-variation-settings:'FILL' ${i < Math.round(Number(avg)) ? 1 : 0}">star</span>`; }
+          aggEl.innerHTML = `${aggStars}<span class="text-2xl font-extrabold text-slate-800 ml-1">${avg}</span><span class="text-slate-400 text-sm">/ 5 dari ${revs.length} ulasan</span>`;
+        }
         let html = "";
-        revs.forEach(r => {
+        revs.forEach((r, idx) => {
           let stars = "";
-          for(let i=0;i<5;i++){ stars += `<span class="material-symbols-outlined text-amber-500 text-sm" ${i<r.rating?'style="font-variation-settings: \'FILL\' 1"':''}>star</span>`; }
-          html += `<div class="w-72 sm:w-80 shrink-0 bg-slate-50 border border-slate-100 p-4 rounded-xl shadow-sm">
-            <div class="flex justify-between items-start mb-2">
-              <div><div class="font-bold text-slate-800 text-sm">${rEsc(r.customerName)}</div><div class="text-xs text-slate-500">Membeli ${rEsc(r.gameName)}</div></div>
-              <div class="flex gap-0.5">${stars}</div>
+          for (let i = 0; i < 5; i++) { stars += `<span class="material-symbols-outlined text-amber-400 text-xs" style="font-family:'Material Symbols Outlined';font-variation-settings:'FILL' ${i < r.rating ? 1 : 0}">star</span>`; }
+          const initial = (r.customerName || "A").charAt(0).toUpperCase();
+          const grad = avatarColors[idx % avatarColors.length];
+          const timeAgo = ((Date.now() - r.createdAt) / 60000) < 60 ? Math.max(1, Math.floor((Date.now() - r.createdAt) / 60000)) + " menit lalu" : ((Date.now() - r.createdAt) / 3600000) < 24 ? Math.floor((Date.now() - r.createdAt) / 3600000) + " jam lalu" : Math.floor((Date.now() - r.createdAt) / 86400000) + " hari lalu";
+          html += `<div class="w-72 sm:w-80 shrink-0 bg-white border border-slate-100 rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br ${grad} flex items-center justify-center text-white font-bold text-sm shadow-sm">${initial}</div>
+              <div class="flex-1 min-w-0">
+                <div class="font-bold text-slate-800 text-sm truncate">${rEsc(r.customerName)}</div>
+                <div class="text-xs text-slate-400">${rEsc(r.gameName)} · ${timeAgo}</div>
+              </div>
             </div>
-            <p class="text-slate-600 text-sm italic">"${rEsc(r.comment || "Mantap, proses cepat!")}"</p>
+            <div class="flex gap-0.5 mb-2">${stars}</div>
+            <p class="text-slate-600 text-sm leading-relaxed"><span class="text-slate-300 text-lg font-serif">"</span>${rEsc(r.comment || "Mantap, proses cepat!")}<span class="text-slate-300 text-lg font-serif">"</span></p>
           </div>`;
         });
-        rCont.innerHTML = html + html; // Duplicate for marquee effect
+        rCont.innerHTML = html + html;
         rSec.classList.remove("hidden");
       }
     }).catch(()=>{});
