@@ -117,7 +117,7 @@ $("logoutBtn").addEventListener("click", logout);
 const sidebar = $("sidebar"), backdrop = $("backdrop");
 backdrop.addEventListener("click", () => { sidebar.classList.add("-translate-x-full"); backdrop.classList.add("hidden"); });
 
-const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses" };
+const TITLES = { overview: "Overview", orders: "Pesanan", inbox: "Inbox Chat", produk: "Produk & Harga", articles: "Artikel", settings: "Tampilan & Konten", integrasi: "Integrasi & API", finance: "Finansial", team: "Tim & Akses", vouchers: "Promo & Diskon" };
 const DESC = {
   overview: "Ringkasan toko & jalan pintas ke semua pengaturan.",
   orders: "Lihat pesanan masuk dan ubah statusnya (paid → diproses → selesai).",
@@ -128,8 +128,9 @@ const DESC = {
   integrasi: "Sambungkan provider top-up & API (pembayaran, AI, dll).",
   finance: "Catat uang masuk & keluar toko.",
   team: "Tambah/hapus admin & staff dan atur aksesnya.",
+  vouchers: "Kelola voucher promo dan diskon khusus member baru."
 };
-const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team"];
+const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team", "vouchers"];
 document.querySelectorAll(".side-nav button[data-page], .bottom-nav button[data-page], .qa-btn[data-page]").forEach((btn) =>
   btn.addEventListener("click", () => goto(btn.dataset.page))
 );
@@ -176,6 +177,7 @@ function routeTo(page) {
   if (page === "team") loadTeam();
   if (page === "produk") loadProduk();
   if (page === "integrasi") loadIntegrasi();
+  if (page === "vouchers") loadVouchers();
 }
 
 // ============================================================
@@ -783,4 +785,83 @@ const panel = document.getElementById("adminNotifPanel");
 if (bell && panel) {
   bell.addEventListener("click", (e) => { e.stopPropagation(); panel.classList.toggle("hidden"); });
   document.addEventListener("click", () => panel.classList.add("hidden"));
+}
+
+// ============================================================
+// Vouchers
+// ============================================================
+async function loadVouchers() {
+  try {
+    const data = await api("/api/admin/vouchers");
+    const dSettings = await api("/api/admin/settings");
+    
+    if ($("nmDiscountVal") && dSettings.settings) {
+      $("nmDiscountVal").value = dSettings.settings.newMemberDiscount || "";
+    }
+
+    const tbody = $("vouchersTable");
+    if (!tbody) return;
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-400 italic">Belum ada voucher.</td></tr>`;
+      return;
+    }
+    
+    tbody.innerHTML = data.map(v => {
+      const isExpired = v.validUntil && Date.now() > v.validUntil;
+      const valText = v.type === "percent" ? v.value + "%" : rupiah(v.value);
+      const quotaText = v.quota === null ? "Unlimited" : v.quota;
+      const untilText = v.validUntil ? new Date(v.validUntil).toLocaleDateString("id-ID") : "Selamanya";
+      return `
+        <tr class="hover:bg-slate-50 transition-colors ${!v.active || isExpired ? 'opacity-50' : ''}">
+          <td class="px-4 py-3 font-bold text-slate-800">${esc(v.code)}</td>
+          <td class="px-4 py-3">${valText}</td>
+          <td class="px-4 py-3">${quotaText}</td>
+          <td class="px-4 py-3">${untilText}</td>
+          <td class="px-4 py-3">
+            <button class="text-rose-500 hover:text-rose-700 text-xs font-bold del-voucher" data-id="${v.id}">Hapus</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+    
+    tbody.querySelectorAll(".del-voucher").forEach(b => b.addEventListener("click", async () => {
+      if (!confirm("Hapus voucher ini?")) return;
+      b.disabled = true;
+      await api(`/api/admin/vouchers/${b.dataset.id}`, { method: "DELETE" });
+      loadVouchers();
+    }));
+  } catch(e) {}
+}
+
+if ($("addVoucherForm")) {
+  $("addVoucherForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("button");
+    btn.disabled = true; btn.textContent = "Loading...";
+    
+    const payload = {
+      code: $("vCode").value,
+      type: $("vType").value,
+      value: Number($("vValue").value),
+      quota: $("vQuota").value ? Number($("vQuota").value) : null
+    };
+    
+    await api("/api/admin/vouchers", { method: "POST", body: JSON.stringify(payload) });
+    $("vCode").value = ""; $("vValue").value = ""; $("vQuota").value = "";
+    btn.disabled = false; btn.textContent = "Buat Voucher";
+    loadVouchers();
+  });
+}
+
+if ($("nmDiscountForm")) {
+  $("nmDiscountForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("button");
+    btn.disabled = true; btn.textContent = "Loading...";
+    
+    const val = Number($("nmDiscountVal").value) || 0;
+    await api("/api/admin/settings/discount", { method: "POST", body: JSON.stringify({ newMemberDiscount: val }) });
+    alert("Diskon Member Baru disimpan!");
+    btn.disabled = false; btn.textContent = "Simpan Setting";
+  });
 }

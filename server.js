@@ -51,10 +51,11 @@ const USE_PG = !!process.env.DATABASE_URL;
 let pgPool = null;
 
 function applyDefaults() {
-  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= []; db.reviews ||= []; db.clients ||= []; db.notifications ||= [];
+  db.store ||= {}; db.services ||= []; db.games ||= []; db.settings ||= {}; db.articles ||= []; db.finances ||= []; db.comments ||= []; db.community ||= []; db.reviews ||= []; db.clients ||= []; db.notifications ||= []; db.vouchers ||= [];
   db.settings.integrations ||= {};
+  if (typeof db.settings.newMemberDiscount === "undefined") db.settings.newMemberDiscount = 0; // Default new member discount (%)
   db.orders ||= []; db.conversations ||= []; db.messages ||= []; db.users ||= [];
-  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment", "review", "client", "notification"].forEach((k) => (db._seq[k] ||= 0));
+  db._seq ||= {}; ["order", "conversation", "message", "user", "article", "finance", "comment", "review", "client", "notification", "voucher"].forEach((k) => (db._seq[k] ||= 0));
 }
 function readSeedOrFile() {
   try {
@@ -841,9 +842,53 @@ async function handleApi(req, res, pathname, query) {
     const item = game && game.items.find((i) => i.id === b.itemId);
     if (!game || !item) return sendJSON(res, 400, { error: "Game atau item tidak valid" });
     if (typeof item.stock === "number" && item.stock <= 0) return sendJSON(res, 409, { error: "Stok item ini sedang habis" });
+    
     const u = userFromReq(req);
-    const order = { id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, itemId: item.id, itemLabel: item.label, price: item.price, account: b.account || {}, customerName: b.customerName || (u && u.name) || "Guest", customerContact: b.customerContact || "", paymentMethod: b.paymentMethod || "-", status: "pending", userId: u ? u.id : null, createdAt: Date.now() };
+    let finalPrice = item.price;
+    let discount = 0;
+    let appliedPromo = null;
+
+    // Check new member discount (if no voucher code sent, and user logged in)
+    const newMemberDiscount = Number(db.settings.newMemberDiscount) || 0;
+    if (u && !b.voucherCode && newMemberDiscount > 0) {
+      const userOrders = db.orders.filter(o => o.userId === u.id);
+      if (userOrders.length === 0) {
+        discount = Math.floor(item.price * (newMemberDiscount / 100));
+        appliedPromo = "NEW_MEMBER";
+      }
+    }
+
+    // Check voucher if provided
+    let voucherObj = null;
+    if (b.voucherCode) {
+      voucherObj = db.vouchers.find(v => v.code === b.voucherCode && v.active !== false);
+      if (!voucherObj) return sendJSON(res, 400, { error: "Kode voucher tidak valid" });
+      if (voucherObj.validUntil && Date.now() > voucherObj.validUntil) return sendJSON(res, 400, { error: "Voucher sudah kadaluwarsa" });
+      if (typeof voucherObj.quota === "number" && voucherObj.quota <= 0) return sendJSON(res, 400, { error: "Kuota voucher habis" });
+      
+      let vDisc = 0;
+      if (voucherObj.type === "percent") vDisc = Math.floor(item.price * (voucherObj.value / 100));
+      else vDisc = voucherObj.value;
+      
+      if (vDisc > 0) {
+        discount = vDisc;
+        appliedPromo = voucherObj.code;
+      }
+    }
+
+    finalPrice = Math.max(0, finalPrice - discount);
+
+    const order = { 
+      id: nextId("order"), code: "INV" + Date.now().toString().slice(-8), gameId: game.id, gameName: game.name, 
+      itemId: item.id, itemLabel: item.label, price: item.price, finalPrice, discount, promoCode: appliedPromo, 
+      account: b.account || {}, customerName: b.customerName || (u && u.name) || "Guest", 
+      customerContact: b.customerContact || "", paymentMethod: b.paymentMethod || "-", 
+      status: "pending", userId: u ? u.id : null, createdAt: Date.now() 
+    };
+
     if (typeof item.stock === "number") item.stock = Math.max(0, item.stock - 1);
+    if (voucherObj && typeof voucherObj.quota === "number") voucherObj.quota -= 1;
+    
     db.orders.push(order); saveDB();
     addNotification("admin", "Pesanan Baru", "Pesanan " + order.code + " dari " + (order.contact || "customer"), "shopping_cart");
     return sendJSON(res, 201, order);
@@ -1247,6 +1292,55 @@ async function handleApi(req, res, pathname, query) {
   if (m && method === "POST") { if (!authed) return needAuth(); const c = db.conversations.find((x) => x.id === Number(m[1])); if (!c) return sendJSON(res, 404, { error: "Tidak ditemukan" }); c.mode = "ai"; c.agentName = null; addMessage(c.id, "ai", "🤖 Percakapan dikembalikan ke asisten AI. Ada lagi yang bisa dibantu?"); saveDB(); return sendJSON(res, 200, c); }
   m = pathname.match(/^\/api\/conversations\/(\d+)\/agent-message$/);
   if (m && method === "POST") { if (!authed) return needAuth(); const b = await readBody(req); const c = db.conversations.find((x) => x.id === Number(m[1])); if (!c) return sendJSON(res, 404, { error: "Tidak ditemukan" }); if (!b.text || !b.text.trim()) return sendJSON(res, 400, { error: "Pesan kosong" }); return sendJSON(res, 200, addMessage(c.id, "agent", b.text.trim())); }
+
+  if (pathname === "/api/admin/vouchers" && method === "GET") {
+    if (!authed) return needAuth();
+    return sendJSON(res, 200, db.vouchers || []);
+  }
+  if (pathname === "/api/admin/vouchers" && method === "POST") {
+    if (!authed) return needAuth();
+    const b = await readBody(req);
+    if (!b.code || !b.value) return sendJSON(res, 400, { error: "Kode dan nilai diskon wajib" });
+    const voucher = { id: nextId("voucher"), code: b.code.toUpperCase(), type: b.type || "flat", value: Number(b.value), quota: b.quota ? Number(b.quota) : null, validUntil: b.validUntil ? Number(b.validUntil) : null, active: true, createdAt: Date.now() };
+    db.vouchers ||= []; db.vouchers.push(voucher); saveDB();
+    return sendJSON(res, 201, voucher);
+  }
+  let mvoucher = pathname.match(/^\/api\/admin\/vouchers\/(\d+)$/);
+  if (mvoucher && method === "DELETE") {
+    if (!authed) return needAuth();
+    const i = (db.vouchers||[]).findIndex(v => v.id === Number(mvoucher[1]));
+    if (i === -1) return sendJSON(res, 404, { error: "Tidak ditemukan" });
+    db.vouchers.splice(i, 1); saveDB();
+    return sendJSON(res, 200, { ok: true });
+  }
+  
+  if (pathname === "/api/admin/settings/discount" && method === "POST") {
+    if (!authed) return needAuth();
+    const b = await readBody(req);
+    db.settings.newMemberDiscount = Number(b.newMemberDiscount) || 0;
+    saveDB();
+    return sendJSON(res, 200, { ok: true });
+  }
+
+  if (pathname === "/api/vouchers/check" && method === "POST") {
+    const b = await readBody(req);
+    const u = userFromReq(req);
+    
+    if (!b.code) {
+      const nmDisc = Number(db.settings.newMemberDiscount) || 0;
+      if (u && nmDisc > 0 && db.orders.filter(o => o.userId === u.id).length === 0) {
+        return sendJSON(res, 200, { valid: true, type: "percent", value: nmDisc, code: "NEW_MEMBER" });
+      }
+      return sendJSON(res, 200, { valid: false });
+    }
+
+    const v = (db.vouchers || []).find(x => x.code === b.code.toUpperCase() && x.active !== false);
+    if (!v) return sendJSON(res, 400, { error: "Kode voucher tidak ditemukan atau tidak valid" });
+    if (v.validUntil && Date.now() > v.validUntil) return sendJSON(res, 400, { error: "Voucher sudah kadaluwarsa" });
+    if (typeof v.quota === "number" && v.quota <= 0) return sendJSON(res, 400, { error: "Kuota voucher habis digunakan" });
+
+    return sendJSON(res, 200, { valid: true, type: v.type, value: v.value, code: v.code });
+  }
 
   return sendJSON(res, 404, { error: "Endpoint tidak ditemukan" });
 }

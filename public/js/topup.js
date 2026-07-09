@@ -218,7 +218,30 @@ function update() {
   if (selItem) rows.push(`<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Item</span><b class="text-slate-900">${esc(selItem.label)}</b></div>`);
   selGame.needs.forEach((n) => { if (acc[n]) rows.push(`<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">${esc(n)}</span><b class="text-slate-900">${esc(acc[n])}</b></div>`); });
   $("summaryItems").innerHTML = rows.join("");
-  $("grandTotal").textContent = selItem ? rupiah(selItem.price) : "Rp0";
+  
+  if ($("subTotal")) $("subTotal").textContent = selItem ? rupiah(selItem.price) : "Rp0";
+  
+  let disc = 0;
+  if (selItem && currentPromo) {
+    if (currentPromo.type === "percent") disc = Math.floor(selItem.price * (currentPromo.value / 100));
+    else disc = currentPromo.value;
+  }
+  
+  if ($("discountRow")) {
+    if (disc > 0) {
+      $("discountRow").classList.remove("hidden");
+      $("discountTotal").textContent = "-" + rupiah(disc);
+      if (currentPromo.code === "NEW_MEMBER") {
+        $("promoMessage").textContent = `Otomatis: Diskon Member Baru ${currentPromo.type === 'percent' ? currentPromo.value+'%' : rupiah(currentPromo.value)}!`;
+        $("promoMessage").className = "text-xs mt-2 text-emerald-600 block font-medium";
+      }
+    } else {
+      $("discountRow").classList.add("hidden");
+    }
+  }
+
+  let finalTotal = selItem ? Math.max(0, selItem.price - disc) : 0;
+  $("grandTotal").textContent = selItem ? rupiah(finalTotal) : "Rp0";
   $("submitOrder").disabled = !(selItem && selGame.needs.every((n) => acc[n]) && isIdValid);
 }
 
@@ -226,14 +249,63 @@ $("submitOrder").addEventListener("click", async () => {
   const btn = $("submitOrder");
   btn.disabled = true; btn.innerHTML = 'Memproses… <span class="material-symbols-outlined animate-spin">progress_activity</span>';
   try {
+    const payload = { 
+      gameId: selGame.id, itemId: selItem.id, account: getAccount(), 
+      customerName: $("custName").value.trim() || "Guest", 
+      customerContact: $("custContact").value.trim(), 
+      paymentMethod: getPay() 
+    };
+    if (currentPromo && currentPromo.code !== "NEW_MEMBER") payload.voucherCode = currentPromo.code;
+
     const order = await fetch("/api/orders", {
       method: "POST", headers: { "Content-Type": "application/json", "x-auth-token": localStorage.getItem("anshel_token") || "" },
-      body: JSON.stringify({ gameId: selGame.id, itemId: selItem.id, account: getAccount(), customerName: $("custName").value.trim() || "Guest", customerContact: $("custContact").value.trim(), paymentMethod: getPay() }),
+      body: JSON.stringify(payload),
     }).then((r) => r.json());
     showInvoice(order);
   } catch (e) { alert("Gagal membuat pesanan, coba lagi."); }
   finally { btn.innerHTML = 'Buat Pesanan <span class="material-symbols-outlined">auto_awesome</span>'; btn.disabled = false; }
 });
+
+async function checkPromo(code = "") {
+  try {
+    const res = await fetch("/api/vouchers/check", {
+      method: "POST", headers: { "Content-Type": "application/json", "x-auth-token": localStorage.getItem("anshel_token") || "" },
+      body: JSON.stringify({ code })
+    }).then(r => r.json());
+    
+    if (res.valid) {
+      currentPromo = res;
+      if (code) {
+        $("promoMessage").textContent = "Voucher berhasil diterapkan!";
+        $("promoMessage").className = "text-xs mt-2 text-emerald-600 block font-medium";
+      }
+    } else {
+      currentPromo = null;
+      if (code) {
+        $("promoMessage").textContent = res.error || "Kode promo tidak valid";
+        $("promoMessage").className = "text-xs mt-2 text-rose-600 block font-medium";
+      } else {
+         if ($("promoMessage")) $("promoMessage").className = "hidden";
+      }
+    }
+    update();
+  } catch (e) {
+    if (code) {
+      $("promoMessage").textContent = "Terjadi kesalahan sistem";
+      $("promoMessage").className = "text-xs mt-2 text-rose-600 block font-medium";
+    }
+  }
+}
+
+if ($("applyPromoBtn")) {
+  $("applyPromoBtn").addEventListener("click", () => {
+    const code = $("promoCodeInput").value.trim();
+    if (!code) return;
+    $("promoMessage").textContent = "Mengecek voucher...";
+    $("promoMessage").className = "text-xs mt-2 text-slate-500 block";
+    checkPromo(code);
+  });
+}
 
 function showInvoice(order) {
   const accRows = Object.entries(order.account).map(([k, v]) => `<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">${esc(k)}</span><b class="text-slate-900">${esc(v)}</b></div>`).join("");
@@ -246,6 +318,7 @@ function showInvoice(order) {
       <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Invoice</span><b class="text-slate-900">${esc(order.code)}</b></div>
       <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Game</span><b class="text-slate-900">${esc(order.gameName)}</b></div>
       <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Item</span><b class="text-slate-900">${esc(order.itemLabel)}</b></div>
+      ${order.discount > 0 ? `<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Diskon</span><b class="text-emerald-500">-${rupiah(order.discount)}</b></div>` : ''}
       ${accRows}
       <div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">Bayar via</span><b class="text-slate-900">${esc(order.paymentMethod)}</b></div>
       <div class="flex justify-between items-center pt-4 pb-2"><span class="text-slate-500 text-sm">Total</span><b class="text-primary text-xl">${rupiah(order.price)}</b></div>

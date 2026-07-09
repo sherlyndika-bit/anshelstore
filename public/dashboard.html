@@ -136,6 +136,7 @@
         <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="articles"><span class="text-lg">📝</span> Artikel</button>
         
         <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-6">Sistem</div>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="vouchers"><span class="text-lg">🎟️</span> Promo &amp; Diskon</button>
         <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="integrasi"><span class="text-lg">🔌</span> Integrasi &amp; API</button>
         <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="team"><span class="text-lg">👥</span> Tim &amp; Akses</button>
       </nav>
@@ -221,7 +222,10 @@
               <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="team">
                 <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">👥</span>
                 <b class="text-sm text-slate-800 mb-0.5">Tim &amp; Akses</b>
-                <small class="text-xs text-slate-500">Admin &amp; staff</small>
+              </button>
+              <button class="qa-btn flex flex-col p-4 rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all text-left group bg-slate-50 hover:bg-white" data-page="vouchers">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform origin-bottom-left">🎟️</span>
+                <b class="text-sm text-slate-800 mb-0.5">Promo &amp; Diskon</b>
               </button>
             </div>
           </div>
@@ -560,6 +564,62 @@
           </div>
         </section>
       </div>
+      </div>
+
+      <!-- Vouchers PAGE -->
+      <section id="page-vouchers" class="page">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">🎟️ Promo &amp; Diskon</h2>
+            <p class="text-slate-500 text-sm mt-1">Kelola voucher promo dan diskon member baru.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-slate-800">Daftar Voucher</h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                  <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
+                    <tr><th class="px-4 py-3">Kode</th><th class="px-4 py-3">Nilai</th><th class="px-4 py-3">Kuota</th><th class="px-4 py-3">Valid Until</th><th class="px-4 py-3">Aksi</th></tr>
+                  </thead>
+                  <tbody id="vouchersTable" class="divide-y divide-slate-100"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div class="space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+              <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Buat Voucher Baru</h3>
+              <form id="addVoucherForm" class="flex flex-col gap-3">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Kode Voucher</label><input type="text" id="vCode" class="w-full border rounded p-2 text-sm uppercase" required placeholder="Ex: DISKON10"></div>
+                <div class="flex gap-2">
+                  <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Tipe</label><select id="vType" class="w-full border rounded p-2 text-sm"><option value="flat">Nominal (Rp)</option><option value="percent">Persentase (%)</option></select></div>
+                  <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Nilai</label><input type="number" id="vValue" class="w-full border rounded p-2 text-sm" required placeholder="5000"></div>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Kuota (Opsional)</label><input type="number" id="vQuota" class="w-full border rounded p-2 text-sm" placeholder="Kosong = Unlimited"></div>
+                <button type="submit" class="bg-primary hover:bg-primary-dark text-white rounded p-2 text-sm font-semibold mt-2">Buat Voucher</button>
+              </form>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+              <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Diskon Member Baru</h3>
+              <form id="nmDiscountForm" class="flex flex-col gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Potongan Persen (%)</label>
+                  <input type="number" id="nmDiscountVal" class="w-full border rounded p-2 text-sm" placeholder="0 untuk nonaktif">
+                </div>
+                <p class="text-xs text-slate-500">Member yang belum pernah order akan otomatis dapat diskon.</p>
+                <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white rounded p-2 text-sm font-semibold mt-2">Simpan Setting</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 
