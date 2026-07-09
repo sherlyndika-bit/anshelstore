@@ -129,7 +129,7 @@
     if (s.whatsapp) { const wa = `https://wa.me/${s.whatsapp}?text=${encodeURIComponent("Halo Anshel Store, saya mau tanya.")}`; const fw = document.getElementById("footWa"); if (fw) fw.href = wa; }
     const fm = document.getElementById("footMail"); if (fm && s.email) fm.href = "mailto:" + s.email;
     const fs = document.getElementById("footSocial");
-    if (fs) { const ic = (label, href, icon) => href ? `<a href="${href}" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-secondary-fixed transition-colors" title="${label}"><span class="material-symbols-outlined text-[18px]">${icon}</span></a>` : ""; fs.innerHTML = ic("Instagram", soc.instagram, "photo_camera") + ic("TikTok", soc.tiktok, "music_note") + ic("YouTube", soc.youtube, "smart_display"); }
+    if (fs) { const ic = (label, href, img) => href ? `<a href="${href}" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center hover:bg-secondary-fixed transition-colors" title="${label}"><img src="/img/${img}" alt="${label}" class="w-5 h-5 object-contain"/></a>` : ""; fs.innerHTML = ic("Instagram", soc.instagram, "instagram.png") + ic("TikTok", soc.tiktok, "tiktok.png") + ic("YouTube", soc.youtube, "youtube.png"); }
   }).catch(() => {});
 
   // Status login customer
