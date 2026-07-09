@@ -182,7 +182,7 @@ function routeTo(page) {
 // OVERVIEW
 // ============================================================
 async function loadStats() {
-  const s = await api("/api/stats");
+  const s = await api("/api/admin/stats");
   $("statsGrid").innerHTML = [
     { ic: "💰", label: "Pendapatan", value: rupiah(s.revenue), sub: "dari pesanan paid/done" },
     { ic: "🧾", label: "Total Pesanan", value: s.totalOrders, sub: `${s.todayOrders} hari ini` },

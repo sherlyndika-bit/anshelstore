@@ -901,7 +901,7 @@ async function handleApi(req, res, pathname, query) {
     if (b.status && ["pending", "paid", "processing", "done", "cancelled"].includes(b.status)) order.status = b.status;
     saveDB(); return sendJSON(res, 200, order);
   }
-  if (pathname === "/api/stats" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, buildStats()); }
+  if (pathname === "/api/admin/stats" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, buildStats()); }
 
   // Settings penuh untuk admin (termasuk integrasi/API keys)
   if (pathname === "/api/admin/settings" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, { store: db.store, settings: db.settings }); }
