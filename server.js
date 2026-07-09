@@ -23,6 +23,7 @@ const fs = require("fs");
 const path = require("path");
 const url = require("url");
 const crypto = require("crypto");
+const zlib = require("zlib");
 
 const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
@@ -289,6 +290,22 @@ function shouldEscalate(text) { const t = (text || "").toLowerCase(); return ["m
 // Utils
 // ---------------------------------------------------------------------------
 function sendJSON(res, status, data) { res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }); res.end(JSON.stringify(data)); }
+function sendCompressed(req, res, content, contentType) {
+  const acceptEnc = req.headers['accept-encoding'] || '';
+  const headers = { "Content-Type": contentType || "text/html; charset=utf-8" };
+  if (acceptEnc.match(/\bgzip\b/)) {
+    zlib.gzip(content, (err, result) => {
+      if (!err) {
+        headers["Content-Encoding"] = "gzip";
+        res.writeHead(200, headers);
+        return res.end(result);
+      }
+      res.writeHead(200, headers); res.end(content);
+    });
+  } else {
+    res.writeHead(200, headers); res.end(content);
+  }
+}
 function redirect(res, location) { res.writeHead(302, { Location: location }); res.end(); }
 
 // Header keamanan untuk semua respons
@@ -318,11 +335,16 @@ function integrationStatus() {
 }
 function readBody(req) { return new Promise((resolve) => { let raw = ""; req.on("data", (c) => (raw += c)); req.on("end", () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch { resolve({}); } }); }); }
 const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".ico": "image/x-icon", ".webp": "image/webp" };
-function serveFile(res, filePath) {
+function serveFile(req, res, filePath) {
   fs.readFile(filePath, (err, content) => {
     if (err) { res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" }); return res.end("<h1>404 - Tidak ditemukan</h1>"); }
-    res.writeHead(200, { "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream" });
-    res.end(content);
+    const mime = MIME[path.extname(filePath)] || "application/octet-stream";
+    if (mime.startsWith("text/") || mime === "application/javascript" || mime === "application/json") {
+      sendCompressed(req, res, content, mime);
+    } else {
+      res.writeHead(200, { "Content-Type": mime });
+      res.end(content);
+    }
   });
 }
 // Peta URL bersih -> file
@@ -377,16 +399,15 @@ function serveStatic(req, res, pathname) {
         const seoScript = `\n<script type="application/ld+json">\n${JSON.stringify(seoData)}\n</script>\n`;
         content = content.replace("</head>", seoScript + "</head>");
       }
-      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-      res.end(content);
+      sendCompressed(req, res, content, "text/html; charset=utf-8");
     });
     return;
   }
-  if (CLEAN_ROUTES[clean]) return serveFile(res, path.join(PUBLIC_DIR, CLEAN_ROUTES[clean]));
+  if (CLEAN_ROUTES[clean]) return serveFile(req, res, path.join(PUBLIC_DIR, CLEAN_ROUTES[clean]));
   const rel = pathname === "/" ? "/index.html" : pathname;
   const filePath = path.join(PUBLIC_DIR, path.normalize(rel));
   if (!filePath.startsWith(PUBLIC_DIR)) { res.writeHead(403); return res.end("Forbidden"); }
-  serveFile(res, filePath);
+  serveFile(req, res, filePath);
 }
 function addMessage(conversationId, sender, text) {
   const msg = { id: nextId("message"), conversationId, sender, text, ts: Date.now() };
@@ -1397,13 +1418,13 @@ const server = http.createServer(async (req, res) => {
         } catch (e) {}
         res.writeHead(404, { "Content-Type": "text/plain" }); return res.end("Not found");
       }
-      const fp = path.join(UPLOAD_DIR, name); if (!fp.startsWith(UPLOAD_DIR)) { res.writeHead(403); return res.end("Forbidden"); } return serveFile(res, fp);
+      const fp = path.join(UPLOAD_DIR, name); if (!fp.startsWith(UPLOAD_DIR)) { res.writeHead(403); return res.end("Forbidden"); } return serveFile(req, res, fp);
     }
-    if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderBlogList(parsed.query.tag)); }
+    if (["/blog", "/blog/", "/artikel", "/artikel/"].includes(pathname)) { return sendCompressed(req, res, renderBlogList(parsed.query.tag), "text/html; charset=utf-8"); }
     const bm = pathname.match(/^\/(?:blog|artikel)\/([a-z0-9-]+)\/?$/);
     if (bm) {
       const a = db.articles.find((x) => x.slug === bm[1] && x.published);
-      if (a) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(renderArticle(a)); }
+      if (a) { return sendCompressed(req, res, renderArticle(a), "text/html; charset=utf-8"); }
       res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" }); return res.end("<h1>404 - Artikel tidak ditemukan</h1>");
     }
     return serveStatic(req, res, pathname);

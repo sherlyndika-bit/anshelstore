@@ -1,0 +1,18 @@
+# Anshel Store
+
+> Jasa Otomasi AI & Top Up Game Murah Terpercaya
+
+Anshel Store adalah platform digital yang menyediakan layanan Top Up Game instan dan murah, serta jasa pembuatan chatbot AI Automation untuk WhatsApp, Telegram, dan Instagram.
+
+## Layanan Kami
+- **Top Up Game**: Mobile Legends, Free Fire, PUBG Mobile, Valorant, Genshin Impact. Transaksi instan 24/7.
+- **AI Automation**: Kami menyediakan integrasi bot AI (ChatGPT/Claude/Gemini) untuk Customer Service, Auto-reply, dan automasi bisnis.
+
+## Panduan Pengguna
+- Cara Pembelian: https://www.anshelstore.biz.id/cara-pembelian
+- Cek Transaksi: https://www.anshelstore.biz.id/cek-transaksi
+- Layanan Automation: https://www.anshelstore.biz.id/layanan
+- Blog & Komunitas: https://www.anshelstore.biz.id/blog
+
+## Kontak
+Untuk bantuan dan konsultasi, silakan kunjungi halaman kontak atau kirim tiket bantuan melalui Dashboard Anda.
