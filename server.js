@@ -816,18 +816,29 @@ async function handleApi(req, res, pathname, query) {
     const integ = db.settings.integrations || {};
     if (!integ.gameCheckUrl) return sendJSON(res, 200, { supported: false });
     try {
-      const sep = integ.gameCheckUrl.includes("?") ? "&" : "?";
-      const apiUrl = integ.gameCheckUrl + sep + new URLSearchParams({ game: game.id, user_id: query.userId || "", zone_id: query.zoneId || "", key: integ.gameCheckKey || "" }).toString();
-      
+      const integ = db.settings.integrations || {};
+      if (!integ.gameCheckUrl) return sendJSON(res, 200, { supported: false });
+
+      let apiUrl = integ.gameCheckUrl;
+      // Mendukung format template URL seperti: https://api.com/game/{gameId}?user={userId}&zone={zoneId}
+      if (apiUrl.includes("{userId}") || apiUrl.includes("{gameId}")) {
+        apiUrl = apiUrl.replace(/{gameId}/g, encodeURIComponent(game.id || ""))
+                       .replace(/{userId}/g, encodeURIComponent(query.userId || ""))
+                       .replace(/{zoneId}/g, encodeURIComponent(query.zoneId || ""));
+      } else {
+        const sep = apiUrl.includes("?") ? "&" : "?";
+        apiUrl = apiUrl + sep + new URLSearchParams({ game: game.id, user_id: query.userId || "", zone_id: query.zoneId || "", key: integ.gameCheckKey || "" }).toString();
+      }
+
       const headers = {};
       if (integ.gameCheckUrl.toLowerCase().includes("rapidapi")) {
         headers["X-RapidAPI-Key"] = integ.gameCheckKey || "";
         try { headers["X-RapidAPI-Host"] = new URL(integ.gameCheckUrl).hostname; } catch(e){}
       }
-      
+
       const r = await httpsRequest("GET", apiUrl, { headers });
       const username = (r && (r.username || r.nickname || (r.data && (r.data.username || r.data.nickname)))) || null;
-      return sendJSON(res, 200, { supported: true, username, ok: !!username });
+      return sendJSON(res, 200, { supported: true, username, ok: !!username, debug_api_response: r });
     } catch (e) { return sendJSON(res, 200, { supported: true, ok: false, username: null }); }
   }
   // Pesanan milik user yang login (customer)
