@@ -86,7 +86,7 @@
         <div>
           <h4 class="text-slate-800 font-bold mb-3 text-sm">Kontak Kami</h4>
           <div class="flex flex-col gap-2">
-            <a id="footWa" href="/kontak" target="_blank" rel="noopener" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">chat</span> WhatsApp CS</a>
+            <a id="footWa" href="/kontak" target="_blank" rel="noopener" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><img src="/img/whatsapp.png" alt="WA" class="h-4 object-contain"/> WhatsApp CS</a>
             <a id="footMail" href="/kontak" class="text-slate-500 hover:text-primary transition-colors text-sm flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">mail</span> Email Support</a>
             <div class="mt-2 bg-slate-50 p-2.5 rounded border border-slate-100 flex items-center gap-2 w-max">
               <span class="material-symbols-outlined text-green-500 text-xl">verified_user</span>

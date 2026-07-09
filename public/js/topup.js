@@ -238,7 +238,7 @@ $("submitOrder").addEventListener("click", async () => {
 function showInvoice(order) {
   const accRows = Object.entries(order.account).map(([k, v]) => `<div class="flex justify-between items-center py-2 border-b border-slate-100"><span class="text-slate-500 text-sm">${esc(k)}</span><b class="text-slate-900">${esc(v)}</b></div>`).join("");
   const waText = encodeURIComponent(`Halo Anshel Store, konfirmasi pesanan:\nInvoice: ${order.code}\nGame: ${order.gameName}\nItem: ${order.itemLabel}\nTotal: ${rupiah(order.price)}\nBayar: ${order.paymentMethod}`);
-  const waBtn = WA ? `<a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener" class="mt-4 w-full flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-3 text-sm font-bold transition-all shadow-sm shadow-emerald-500/20"><span class="material-symbols-outlined text-[20px]">chat</span> Konfirmasi via WhatsApp</a>` : "";
+  const waBtn = WA ? `<a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener" class="mt-4 w-full flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-3 text-sm font-bold transition-all shadow-sm shadow-emerald-500/20"><img src="/img/whatsapp.png" alt="WA" class="h-5 object-contain"/> Konfirmasi via WhatsApp</a>` : "";
   $("invoice").classList.remove("hidden");
   $("invoice").innerHTML = `
     <div class="rounded-xl bg-white border border-slate-200 shadow-sm p-6 flex flex-col gap-1">
