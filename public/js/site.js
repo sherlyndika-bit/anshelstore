@@ -227,9 +227,9 @@
   }
 
   // Customer notification bell
-  const token = localStorage.getItem("anshel_token");
-  if (token) {
-    fetch("/api/my/notifications", { headers: { "x-auth-token": token } }).then(r => r.json()).then(notifs => {
+  const notifToken = localStorage.getItem("anshel_token");
+  if (notifToken) {
+    fetch("/api/my/notifications", { headers: { "x-auth-token": notifToken } }).then(r => r.json()).then(notifs => {
       if (!Array.isArray(notifs)) return;
       const unread = notifs.filter(n => !n.read).length;
       const nav = document.querySelector("#siteAuth") || document.querySelector("nav");
