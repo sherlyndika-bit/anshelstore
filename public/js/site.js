@@ -20,8 +20,8 @@
       <!-- Announcement Bar Dinamis -->
       <div class="bg-primary text-white text-xs font-medium py-1.5 px-4 overflow-hidden">
         <div class="max-w-7xl mx-auto flex items-center">
-          <span class="material-symbols-outlined text-[14px] mr-2">campaign</span>
-          <div id="promoTextCycler" class="flex-1 transition-opacity duration-500 opacity-100 truncate">Selamat datang di Anshel Store! Nikmati layanan top up instan, termurah & terpercaya.</div>
+          <span class="material-symbols-outlined text-[14px] mr-2 shrink-0">campaign</span>
+          <div id="promoTextCycler" class="flex-1 min-w-0 transition-opacity duration-500 opacity-100 truncate">Selamat datang di Anshel Store! Nikmati layanan top up instan, termurah & terpercaya.</div>
         </div>
       </div>
       <!-- Navbar Utama -->
@@ -52,7 +52,7 @@
   ];
   const bnav = document.createElement("div");
   bnav.className = "fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-between items-center px-1 pb-[env(safe-area-inset-bottom)] sm:hidden z-50 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)]";
-  bnav.innerHTML = BOTTOM.map((n) => `<a href="${n.href}" class="flex flex-col items-center justify-center w-full py-2 px-1 text-[10px] font-medium transition-colors ${n.key === active ? "text-primary" : "text-slate-400 hover:text-slate-600"}"><span class="material-symbols-outlined text-[24px] mb-0.5" ${n.key === active ? 'style="font-variation-settings:\'FILL\' 1"' : ""}>${n.icon}</span><span class="truncate w-full text-center">${n.label}</span></a>`).join("");
+  bnav.innerHTML = BOTTOM.map((n) => `<a href="${n.href}" class="flex flex-col items-center justify-center w-full min-w-0 py-2 px-1 text-[10px] font-medium transition-colors ${n.key === active ? "text-primary" : "text-slate-400 hover:text-slate-600"}"><span class="material-symbols-outlined text-[24px] mb-0.5" ${n.key === active ? 'style="font-variation-settings:\'FILL\' 1"' : ""}>${n.icon}</span><span class="truncate min-w-0 w-full text-center">${n.label}</span></a>`).join("");
   document.body.appendChild(bnav);
 
   const footMount = document.getElementById("siteFooter");
