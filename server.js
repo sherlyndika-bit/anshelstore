@@ -539,11 +539,23 @@ function renderBlogList(tag) {
       </div>
     </a>`).join("");
   const chatBox = `<aside class="lg:col-span-1 lg:sticky lg:top-[88px] self-start" style="height:calc(100vh - 120px);min-height:480px">${communityChatCard("height:100%")}</aside>`;
+  const pageTitle = tag ? escHtml(tag) + " — Komunitas & Artikel — Anshel Store" : "Komunitas & Artikel — Anshel Store";
+  const pageDesc = "Komunitas Anshel Store: ngobrol langsung di live chat, baca artikel & tips top up game dan AI automation.";
   return `<!DOCTYPE html><html class="light" lang="id"><head>
     <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>${tag ? escHtml(tag) + " — " : ""}Komunitas & Artikel — Anshel Store</title>
-    <meta name="description" content="Komunitas Anshel Store: ngobrol langsung di live chat, baca artikel & tips top up game dan AI automation."/>
+    <title>${pageTitle}</title>
+    <meta name="description" content="${pageDesc}"/>
     <link rel="canonical" href="${siteUrl()}/blog"/>
+    <meta property="og:title" content="${pageTitle}"/>
+    <meta property="og:description" content="${pageDesc}"/>
+    <meta property="og:url" content="${siteUrl()}/blog"/>
+    <meta property="og:image" content="${siteUrl()}/logo.png"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="Anshel Store"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="${pageTitle}"/>
+    <meta name="twitter:description" content="${pageDesc}"/>
+    <meta name="twitter:image" content="${siteUrl()}/logo.png"/>
     ${THEME_HEAD}</head>
     <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">
     ${pageNav()}
@@ -608,8 +620,12 @@ function renderArticle(a) {
     <meta property="og:title" content="${escHtml(a.title)}"/>
     <meta property="og:description" content="${escHtml(a.excerpt)}"/>
     <meta property="og:type" content="article"/><meta property="og:url" content="${u}"/>
-    ${a.cover ? `<meta property="og:image" content="${escHtml(a.cover)}"/>` : ""}
+    <meta property="og:site_name" content="Anshel Store"/>
+    <meta property="og:image" content="${escHtml(a.cover || siteUrl() + "/logo.png")}"/>
     <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="${escHtml(a.title)}"/>
+    <meta name="twitter:description" content="${escHtml(a.excerpt)}"/>
+    <meta name="twitter:image" content="${escHtml(a.cover || siteUrl() + "/logo.png")}"/>
     <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
     ${THEME_HEAD}</head>
     <body data-page="blog" class="bg-ambient text-on-background font-body-md min-h-screen overflow-x-hidden">

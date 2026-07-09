@@ -1,10 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cek Transaksi — Anshel Store</title>
-<meta name="description" content="Lacak status pesanan top up game kamu di Anshel Store dengan kode invoice." />
 <link rel="icon" href="/logo.png?v=4" type="image/png"/>
 <link rel="apple-touch-icon" href="/icon-192.png?v=4"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -19,6 +17,34 @@
   gtag('js', new Date());
 
   gtag('config', 'G-NXRVTQKMZF');
+</script>
+
+<title>Cek Status Transaksi Top Up - Anshel Store</title>
+<meta name="description" content="Lacak pesanan dan cek status transaksi top up game kamu secara real-time di Anshel Store hanya dengan kode invoice."/>
+<meta property="og:title" content="Cek Status Transaksi Top Up - Anshel Store"/>
+<meta property="og:description" content="Lacak pesanan dan cek status transaksi top up game kamu secara real-time di Anshel Store hanya dengan kode invoice."/>
+<meta property="og:url" content="https://www.anshelstore.biz.id/"/>
+<meta property="og:image" content="https://www.anshelstore.biz.id/logo.png"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Anshel Store"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Cek Status Transaksi Top Up - Anshel Store"/>
+<meta name="twitter:description" content="Lacak pesanan dan cek status transaksi top up game kamu secara real-time di Anshel Store hanya dengan kode invoice."/>
+<meta name="twitter:image" content="https://www.anshelstore.biz.id/logo.png"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Anshel Store",
+  "image": "https://www.anshelstore.biz.id/logo.png",
+  "url": "https://www.anshelstore.biz.id/",
+  "description": "Jasa AI automation (WhatsApp, Telegram, Instagram) dan platform top up game instan, murah, aman.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "ID"
+  },
+  "priceRange": ""
+}
 </script>
 </head>
 <body data-page="cek" class="bg-background text-gray-800 font-sans min-h-screen overflow-x-hidden selection:bg-pink-100 selection:text-primary">
@@ -60,7 +86,7 @@
     const code = $("codeInput").value.trim().toUpperCase();
     const box = $("result");
     if (!code) { box.innerHTML = ""; return; }
-    box.innerHTML = '<p class="text-center text-gray-500 py-4 font-medium">Mencari…</p>';
+    box.innerHTML = '<p class="text-center text-gray-500 py-4 font-medium">Mencariâ€¦</p>';
     try {
       const res = await fetch("/api/track?code=" + encodeURIComponent(code));
       if (!res.ok) { box.innerHTML = '<div class="rounded-xl bg-red-50 text-red-600 border border-red-100 p-4 text-center text-sm font-medium">Pesanan tidak ditemukan. Periksa kembali kode invoicemu.</div>'; return; }
