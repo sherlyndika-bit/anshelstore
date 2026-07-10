@@ -461,10 +461,9 @@ $("saveArticle").addEventListener("click", async () => {
 // ============================================================
 let loadedServices = [], loadedGames = [];
 async function loadSettings() {
-  const disc = db.settings && db.settings.newMemberDiscount ? db.settings.newMemberDiscount : 0;
-  if(document.getElementById("nmDiscount")) $("nmDiscount").value = disc || "";
-
   const d = await api("/api/admin/settings");
+  const disc = d.settings && d.settings.newMemberDiscount ? d.settings.newMemberDiscount : 0;
+  if(document.getElementById("nmDiscount")) $("nmDiscount").value = disc || "";
   const st = d.store || {}, s = d.settings || {};
   $("setName").value = st.name || ""; $("setTagline").value = st.tagline || "";
   $("setWa").value = st.whatsapp || ""; $("setEmail").value = st.email || "";
@@ -879,16 +878,7 @@ if ($("addVoucherForm")) {
 }
 
 if ($("nmDiscountForm")) {
-  $("nmDiscountForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector("button");
-    btn.disabled = true; btn.textContent = "Loading...";
-    
-    const val = Number($("nmDiscountVal").value) || 0;
-    await api("/api/admin/settings/discount", { method: "POST", body: JSON.stringify({ newMemberDiscount: val }) });
-    alert("Diskon Member Baru disimpan!");
-    btn.disabled = false; btn.textContent = "Simpan Setting";
-  });
+
 }
 
 // ---- USERS ----
