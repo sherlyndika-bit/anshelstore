@@ -165,7 +165,7 @@
           ${visual}
         </div>
         <div class="p-6 flex flex-col flex-1">
-          <div class="mb-3"><span class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-wider">${esc((s.category || "Automation"))}</span></div>
+          <div class="mb-3"><span class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded text-xs font-semibold uppercase tracking-wider">${esc((s.category || (s.title && (s.title.toLowerCase().includes("top up") || s.title.toLowerCase().includes("game")) ? "Top Up Game" : "Automation")))}</span></div>
           <h3 class="text-xl font-bold text-slate-900 mb-2">${esc(s.title || "Service")}</h3>
           <p class="text-sm text-slate-600 line-clamp-3 mb-6">${esc(s.desc || "")}</p>
           
