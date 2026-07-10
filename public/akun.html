@@ -4,12 +4,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta name="robots" content="noindex"/>
-<link rel="icon" href="/logo.png?v=4" type="image/png"/>
-<link rel="apple-touch-icon" href="/icon-192.png?v=4"/>
+<link rel="icon" href="/logo.png?v=5" type="image/png"/>
+<link rel="apple-touch-icon" href="/icon-192.png?v=5"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
-<script src="/js/theme.js?v=2.0"></script>
-<link href="/css/theme.css?v=2.0" rel="stylesheet"/>
+<script src="/js/theme.js?v=2.2"></script>
+<link href="/css/theme.css?v=2.2" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXRVTQKMZF"></script>
 <script>
@@ -20,16 +20,16 @@
   gtag('config', 'G-NXRVTQKMZF');
 </script>
 
-<title>Akun Saya â€” Anshel Store</title>
+<title>Akun Saya — Anshel Store</title>
 <meta name="description" content="Anshel Store: Layanan digital dan top up game."/>
-<meta property="og:title" content="Akun Saya â€” Anshel Store"/>
+<meta property="og:title" content="Akun Saya — Anshel Store"/>
 <meta property="og:description" content="Anshel Store: Layanan digital dan top up game."/>
 <meta property="og:url" content="https://www.anshelstore.biz.id/"/>
 <meta property="og:image" content="https://www.anshelstore.biz.id/logo.png"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Anshel Store"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Akun Saya â€” Anshel Store"/>
+<meta name="twitter:title" content="Akun Saya — Anshel Store"/>
 <meta name="twitter:description" content="Anshel Store: Layanan digital dan top up game."/>
 <meta name="twitter:image" content="https://www.anshelstore.biz.id/logo.png"/>
 <script type="application/ld+json">
@@ -56,7 +56,7 @@
   <div class="bg-surface rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 mb-8 text-center sm:text-left">
     <div id="avatar" class="w-24 h-24 rounded-full bg-primary text-white flex items-center justify-center text-4xl font-bold shrink-0">a</div>
     <div class="flex-1 min-w-0">
-      <h1 id="uName" class="text-2xl font-bold text-gray-900 mb-1">Memuatâ€¦</h1>
+      <h1 id="uName" class="text-2xl font-bold text-gray-900 mb-1">Memuat…</h1>
       <p id="uEmail" class="text-gray-500 mb-2"></p>
       <span id="uRole" class="inline-block text-xs font-semibold bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200"></span>
     </div>
@@ -94,7 +94,7 @@
       <div class="flex flex-col gap-5">
         <label class="block"><span class="text-sm font-medium text-gray-700">Nama</span><input id="pfName" type="text" class="mt-2 w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-primary"/></label>
         <label class="block"><span class="text-sm font-medium text-gray-700">No. WhatsApp</span><input id="pfPhone" type="text" placeholder="08xxxxxxxxxx" class="mt-2 w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-primary"/></label>
-        <label class="block"><span class="text-sm font-medium text-gray-700">Bio (opsional)</span><textarea id="pfBio" rows="3" maxlength="200" placeholder="Ceritakan sedikit tentang kamuâ€¦" class="mt-2 w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea></label>
+        <label class="block"><span class="text-sm font-medium text-gray-700">Bio (opsional)</span><textarea id="pfBio" rows="3" maxlength="200" placeholder="Ceritakan sedikit tentang kamu…" class="mt-2 w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea></label>
         <div class="block">
           <span class="text-sm font-medium text-gray-700">Foto Profil</span>
           <div class="flex items-center gap-4 mt-3">
@@ -161,7 +161,7 @@
     $("statDone").textContent = orders.filter(o => o.status === "done").length;
     $("statSpend").textContent = rupiah(orders.filter(o => o.status !== "cancelled").reduce((s, o) => s + (o.price || 0), 0));
     const box = $("orders");
-    if (!orders.length) { box.innerHTML = `<div class="bg-surface rounded-xl border border-gray-100 p-10 text-center text-gray-500 shadow-sm"><div class="text-4xl mb-3">ðŸŽ®</div>Belum ada pesanan. <a href="/topup" class="text-primary hover:text-primary-hover font-medium">Top Up sekarang &rarr;</a></div>`; return; }
+    if (!orders.length) { box.innerHTML = `<div class="bg-surface rounded-xl border border-gray-100 p-10 text-center text-gray-500 shadow-sm"><div class="text-4xl mb-3">🎮</div>Belum ada pesanan. <a href="/topup" class="text-primary hover:text-primary-hover font-medium">Top Up sekarang &rarr;</a></div>`; return; }
     box.innerHTML = orders.map(o => `
       <a href="/cek-transaksi?code=${o.code}" class="bg-surface rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:border-gray-200 transition-all flex items-center justify-between gap-4">
         <div><div class="font-semibold text-gray-900">${o.gameName} &middot; ${o.itemLabel}</div>
@@ -177,21 +177,21 @@
       if (tierSec) {
         tierSec.classList.remove("hidden");
         const tierColors = { Newbie: "from-slate-400 to-slate-500", Bronze: "from-orange-400 to-orange-600", Silver: "from-gray-300 to-gray-500", Gold: "from-amber-400 to-yellow-500", Platinum: "from-violet-400 to-purple-600", Diamond: "from-cyan-300 to-blue-500" };
-        const tierIcons = { Newbie: "ðŸŒ±", Bronze: "ðŸ¥‰", Silver: "ðŸ¥ˆ", Gold: "ðŸ¥‡", Platinum: "ðŸ’ ", Diamond: "ðŸ’Ž" };
+        const tierIcons = { Newbie: "🌱", Bronze: "🥉", Silver: "🥈", Gold: "🥇", Platinum: "💠", Diamond: "💎" };
         $("tierBadge").className = `w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-extrabold shadow-lg bg-gradient-to-br ${tierColors[ps.tier] || tierColors.Newbie} text-white`;
-        $("tierBadge").textContent = tierIcons[ps.tier] || "ðŸŒ±";
+        $("tierBadge").textContent = tierIcons[ps.tier] || "🌱";
         $("tierName").textContent = ps.tier;
         if (ps.nextTier) {
-          $("tierProgress").innerHTML = `<div class="flex items-center gap-2"><div class="flex-1 bg-gray-200 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-gradient-to-r ${tierColors[ps.tier]}" style="width:${ps.progress}%"></div></div><span class="text-xs text-gray-500 whitespace-nowrap">${ps.doneCount}/${ps.nextTierMin} â†’ ${ps.nextTier}</span></div>`;
+          $("tierProgress").innerHTML = `<div class="flex items-center gap-2"><div class="flex-1 bg-gray-200 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-gradient-to-r ${tierColors[ps.tier]}" style="width:${ps.progress}%"></div></div><span class="text-xs text-gray-500 whitespace-nowrap">${ps.doneCount}/${ps.nextTierMin} → ${ps.nextTier}</span></div>`;
         } else {
-          $("tierProgress").innerHTML = `<span class="text-sm text-gray-500">Tier tertinggi tercapai! ðŸŽ‰</span>`;
+          $("tierProgress").innerHTML = `<span class="text-sm text-gray-500">Tier tertinggi tercapai! 🎉</span>`;
         }
         $("achievementGrid").innerHTML = ps.achievements.map(a => `
           <div class="rounded-xl border p-4 text-center transition-all ${a.unlocked ? 'bg-white border-amber-200 shadow-md' : 'bg-gray-50 border-gray-100 opacity-50 grayscale'}">
             <div class="text-3xl mb-2">${a.icon}</div>
             <div class="font-bold text-sm text-gray-900">${a.name}</div>
             <div class="text-xs text-gray-500 mt-1">${a.desc}</div>
-            ${a.unlocked ? '<div class="text-xs text-amber-600 font-bold mt-2">âœ… Tercapai</div>' : '<div class="text-xs text-gray-400 mt-2">ðŸ”’ Terkunci</div>'}
+            ${a.unlocked ? '<div class="text-xs text-amber-600 font-bold mt-2">✅ Tercapai</div>' : '<div class="text-xs text-gray-400 mt-2">🔒 Terkunci</div>'}
           </div>
         `).join("");
       }
@@ -220,12 +220,12 @@
   $("pfPicClear").addEventListener("click", () => setPfPic(""));
 
   $("saveProfile").addEventListener("click", async () => {
-    const m = $("pfMsg"); m.textContent = "Menyimpanâ€¦"; m.className = "text-sm text-gray-500 mt-2 block";
+    const m = $("pfMsg"); m.textContent = "Menyimpan…"; m.className = "text-sm text-gray-500 mt-2 block";
     try {
       const r = await fetch("/api/auth/profile", { method: "PUT", headers: H, body: JSON.stringify({ name: $("pfName").value, phone: $("pfPhone").value, bio: $("pfBio").value, picture: $("pfPicture").value }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "gagal");
-      m.textContent = "Profil tersimpan! âœ…"; m.className = "text-sm text-green-600 font-bold mt-2 block";
+      m.textContent = "Profil tersimpan! ✅"; m.className = "text-sm text-green-600 font-bold mt-2 block";
       $("uName").textContent = d.user.name; if (d.user.picture) $("avatar").innerHTML = `<img src="${d.user.picture}" class="w-24 h-24 rounded-full object-cover"/>`;
     } catch (e) { m.textContent = "Gagal menyimpan."; m.className = "text-sm text-red-600 mt-2 block"; }
   });
@@ -236,7 +236,7 @@
       const r = await fetch("/api/auth/change-password", { method: "POST", headers: H, body: JSON.stringify({ oldPassword: $("pwOld").value, newPassword: $("pwNew").value }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "gagal");
-      m.textContent = "Password berhasil diubah! âœ…"; m.className = "text-sm text-green-600 font-bold mt-2 block"; $("pwOld").value = ""; $("pwNew").value = "";
+      m.textContent = "Password berhasil diubah! ✅"; m.className = "text-sm text-green-600 font-bold mt-2 block"; $("pwOld").value = ""; $("pwNew").value = "";
     } catch (e) { m.textContent = e.message; m.className = "text-sm text-red-600 mt-2 block"; }
   });
 
