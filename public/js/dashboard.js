@@ -85,7 +85,9 @@ $("paneLogin").addEventListener("submit", async (e) => {
 });
 
 // Google
-$("googleBtn").addEventListener("click", () => { window.location.href = "/api/auth/google"; });
+if ($("googleBtn")) {
+  $("googleBtn").addEventListener("click", () => { window.location.href = "/api/auth/google"; });
+}
 
 function showSetup() {
   $("paneLogin").classList.add("hidden");
