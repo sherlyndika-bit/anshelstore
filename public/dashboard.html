@@ -98,7 +98,7 @@
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="loginPass" type="password" placeholder="������" autocomplete="current-password" />
+          <input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow" id="loginPass" type="password" placeholder="******" autocomplete="current-password" />
         </div>
         <button class="w-full py-3 bg-primary hover:bg-rose-700 text-white font-bold rounded-lg shadow-md transition-colors mt-2" type="submit">Masuk</button>
       </form>
@@ -166,6 +166,7 @@
         <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-6">Toko</div>
         <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="produk"><span class="text-lg">🛍️</span> Produk &amp; Harga</button>
         <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="finance"><span class="text-lg">💰</span> Finansial</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="users"><span class="text-lg">👥</span> Pengguna / Member</button>
         
         <div class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-6">Tampilan</div>
         <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors text-sm font-medium text-left" data-page="settings"><span class="text-lg">🎨</span> Tampilan &amp; Konten</button>
@@ -462,17 +463,17 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment Gateway (provider)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intPayProvider" placeholder="midtrans / xendit" /></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intPayKey" type="password" placeholder="������" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intPayKey" type="password" placeholder="******" /></div>
               
               <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-2"></div>
               
               <div><label class="block text-sm font-medium text-slate-700 mb-1">AI Provider (chatbot)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intAiProvider" placeholder="openai / gemini" /></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">AI API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intAiKey" type="password" placeholder="������" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">AI API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intAiKey" type="password" placeholder="******" /></div>
               
               <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-2"></div>
               
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Cek-ID Game: URL API</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGcUrl" placeholder="https://provider/check" /></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Cek-ID Game: API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGcKey" type="password" placeholder="������" /></div>
+              <div><label class="block text-sm font-medium text-slate-700 mb-1">Cek-ID Game: API Key</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGcKey" type="password" placeholder="******" /></div>
             </div>
             
             <div class="flex items-center gap-3">
@@ -488,7 +489,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Provider</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpName" placeholder="digiflazz" /></div>
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Username / ID Member</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpUser" placeholder="username Digiflazz" /></div>
-              <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">API Key / Token (Dev atau Prod)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpKey" type="password" placeholder="������" /></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">API Key / Token (Dev atau Prod)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpKey" type="password" placeholder="******" /></div>
               <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">URL API Price-list (opsional � kosongkan untuk Digiflazz)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="intGpUrl" placeholder="otomatis untuk Digiflazz" /></div>
             </div>
             
@@ -503,7 +504,7 @@
         <!-- ================= PRODUK & GAME ================= -->
         <section class="page" id="page-produk">
           <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
-            <h3 class="text-lg font-bold text-slate-800 mb-4">? Tambah Game Baru</h3>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">➕ Tambah Game Baru</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div><label class="block text-sm font-medium text-slate-700 mb-1">ID unik (huruf kecil)</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngId" placeholder="mis. mlbb" /></div>
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Game</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="ngName" placeholder="Mobile Legends" /></div>
@@ -563,6 +564,23 @@
           </div>
         </section>
 
+                <!-- ================= PENGGUNA & MEMBER ================= -->
+        <section class="page hidden" id="page-users">
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+              <h3 class="text-lg font-bold text-slate-800">Daftar Pengguna / Member</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-slate-600">
+                <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold">
+                  <tr><th class="px-6 py-3">Nama / Email</th><th class="px-6 py-3">Role</th><th class="px-6 py-3">Login Via</th><th class="px-6 py-3">Terdaftar</th><th class="px-6 py-3">Login Terakhir</th></tr>
+                </thead>
+                <tbody id="usersTableBody" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <!-- ================= TIM & AKSES ================= -->
         <section class="page" id="page-team">
           <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 max-w-lg">
@@ -578,7 +596,7 @@
           </div>
 
           <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
-            <h3 class="text-lg font-bold text-slate-800 mb-4">? Tambah Akun Tim</h3>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">➕ Tambah Akun Tim</h3>
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end mb-2">
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="newUserName" placeholder="Nama" /></div>
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Email</label><input class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" id="newUserEmail" type="email" placeholder="email@toko.com" /></div>
@@ -640,6 +658,17 @@
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Kuota (Opsional)</label><input type="number" id="vQuota" class="w-full border rounded p-2 text-sm" placeholder="Kosong = Unlimited"></div>
                 <button type="submit" class="bg-primary hover:bg-primary-dark text-white rounded p-2 text-sm font-semibold mt-2">Buat Voucher</button>
               </form>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+              <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-rose-500 text-xl">redeem</span> Diskon Member Baru</h3>
+              <p class="text-xs text-slate-500 mb-3">Berlaku otomatis 1x untuk pengguna yang baru pertama kali transaksi.</p>
+              <div class="flex gap-2 items-center">
+                <input type="number" id="nmDiscount" class="w-full border rounded p-2 text-sm" placeholder="Contoh: 10">
+                <span class="text-sm font-bold text-slate-600">%</span>
+              </div>
+              <button id="saveNmDiscount" class="w-full bg-slate-800 hover:bg-slate-900 text-white rounded p-2 text-sm font-semibold mt-3 transition-colors">Simpan Diskon</button>
+              <span id="nmDiscountMsg" class="text-xs text-emerald-600 font-bold mt-2 block empty:hidden"></span>
             </div>
             
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">

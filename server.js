@@ -40,9 +40,15 @@ const SMTP = {
   user: process.env.SMTP_USER, pass: process.env.SMTP_PASS,
   from: process.env.SMTP_FROM || process.env.SMTP_USER,
 };
-const GOOGLE = { id: process.env.GOOGLE_CLIENT_ID, secret: process.env.GOOGLE_CLIENT_SECRET };
 const SMTP_READY = !!(SMTP.host && SMTP.user && SMTP.pass);
-const GOOGLE_READY = !!(GOOGLE.id && GOOGLE.secret);
+
+function getGoogleConfig() {
+  const integ = db.settings && db.settings.integrations ? db.settings.integrations : {};
+  const id = integ.googleId || process.env.GOOGLE_CLIENT_ID;
+  const secret = integ.googleSecret || process.env.GOOGLE_CLIENT_SECRET;
+  const ready = integ.googleAuthEnabled !== false && !!(id && secret);
+  return { id, secret, ready };
+}
 
 // ---------------------------------------------------------------------------
 // DB
@@ -143,6 +149,8 @@ function verifyPassword(pw, stored) {
 function createSession(userId) {
   const token = crypto.randomBytes(32).toString("hex");
   sessions.set(token, { userId, expires: Date.now() + SESSION_TTL });
+  const u = db.users.find(u => u.id === userId);
+  if (u) { u.lastLogin = Date.now(); saveDB(); }
   return token;
 }
 function userFromReq(req) {
@@ -718,7 +726,7 @@ function renderSitemap() {
 async function handleApi(req, res, pathname, query) {
   const method = req.method;
   if (pathname === "/api/health" || pathname === "/healthz") return sendJSON(res, 200, { ok: true });
-  if (pathname === "/api/auth/config" && method === "GET") return sendJSON(res, 200, { google: GOOGLE_READY, smtp: SMTP_READY });
+  if (pathname === "/api/auth/config" && method === "GET") return sendJSON(res, 200, { google: getGoogleConfig().ready, smtp: SMTP_READY });
   if (pathname.startsWith("/api/auth/") && method === "POST" && !rateLimit(req, "auth", 30, 60000))
     return sendJSON(res, 429, { error: "Terlalu banyak percobaan. Coba lagi sebentar." });
   // First-run: buat akun owner pertama bila belum ada akun dashboard
@@ -804,10 +812,10 @@ async function handleApi(req, res, pathname, query) {
 
   // ---- Google OAuth ----
   if (pathname === "/api/auth/google" && method === "GET") {
-    if (!GOOGLE_READY) return sendJSON(res, 503, { error: "Google login belum dikonfigurasi" });
+    if (!getGoogleConfig().ready) return sendJSON(res, 503, { error: "Google login belum dikonfigurasi" });
     const redirectUri = baseUrl(req) + "/api/auth/google/callback";
     const authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" + new URLSearchParams({
-      client_id: GOOGLE.id, redirect_uri: redirectUri, response_type: "code",
+      client_id: getGoogleConfig().id, redirect_uri: redirectUri, response_type: "code",
       scope: "openid email profile", access_type: "online", prompt: "select_account",
       state: query.from === "masuk" ? "masuk" : "dashboard",
     }).toString();
@@ -819,7 +827,7 @@ async function handleApi(req, res, pathname, query) {
       const redirectUri = baseUrl(req) + "/api/auth/google/callback";
       const tokenResp = await httpsRequest("POST", "https://oauth2.googleapis.com/token", {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ code: query.code, client_id: GOOGLE.id, client_secret: GOOGLE.secret, redirect_uri: redirectUri, grant_type: "authorization_code" }).toString(),
+        body: new URLSearchParams({ code: query.code, client_id: getGoogleConfig().id, client_secret: getGoogleConfig().secret, redirect_uri: redirectUri, grant_type: "authorization_code" }).toString(),
       });
       if (!tokenResp.access_token) return redirect(res, dest + "#error=google");
       const info = await httpsRequest("GET", "https://www.googleapis.com/oauth2/v2/userinfo", { headers: { Authorization: "Bearer " + tokenResp.access_token } });
@@ -995,6 +1003,12 @@ async function handleApi(req, res, pathname, query) {
 
   // Settings penuh untuk admin (termasuk integrasi/API keys)
   if (pathname === "/api/admin/settings" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, { store: db.store, settings: db.settings }); }
+
+  // ---- Pengguna (admin) ----
+  if (pathname === "/api/admin/users" && method === "GET") {
+    if (!authed) return needAuth();
+    return sendJSON(res, 200, db.users.map(u => ({ id: u.id, name: u.name, email: u.email, role: u.role, provider: u.provider, createdAt: u.createdAt, lastLogin: u.lastLogin })).sort((a,b) => b.createdAt - a.createdAt));
+  }
 
   // ---- Finansial (admin) ----
   if (pathname === "/api/admin/finance" && method === "GET") {
@@ -1435,6 +1449,6 @@ loadDB().then(() => {
     console.log(`Anshel Store berjalan di http://${HOST}:${PORT}`);
     console.log(`  Database: ${pgPool ? "PostgreSQL" : "file JSON (" + DB_PATH + ")"}`);
     console.log(`  Email OTP: ${SMTP_READY ? "AKTIF (SMTP)" : "mode dev (kode tampil di layar/log)"}`);
-    console.log(`  Google login: ${GOOGLE_READY ? "AKTIF" : "belum dikonfigurasi"}`);
+    console.log(`  Google login: ${getGoogleConfig().ready ? "AKTIF" : "belum dikonfigurasi"}`);
   });
 });

@@ -130,7 +130,7 @@ const DESC = {
   team: "Tambah/hapus admin & staff dan atur aksesnya.",
   vouchers: "Kelola voucher promo dan diskon khusus member baru."
 };
-const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team", "vouchers"];
+const PAGES = ["overview", "orders", "inbox", "produk", "articles", "settings", "integrasi", "finance", "team", "vouchers", "users"];
 document.querySelectorAll(".side-nav button[data-page], .bottom-nav button[data-page], .qa-btn[data-page]").forEach((btn) =>
   btn.addEventListener("click", () => goto(btn.dataset.page))
 );
@@ -178,6 +178,7 @@ function routeTo(page) {
   if (page === "produk") loadProduk();
   if (page === "integrasi") loadIntegrasi();
   if (page === "vouchers") loadVouchers();
+  if (page === "users") loadUsers();
 }
 
 // ============================================================
@@ -460,6 +461,9 @@ $("saveArticle").addEventListener("click", async () => {
 // ============================================================
 let loadedServices = [], loadedGames = [];
 async function loadSettings() {
+  const disc = db.settings && db.settings.newMemberDiscount ? db.settings.newMemberDiscount : 0;
+  if(document.getElementById("nmDiscount")) $("nmDiscount").value = disc || "";
+
   const d = await api("/api/admin/settings");
   const st = d.store || {}, s = d.settings || {};
   $("setName").value = st.name || ""; $("setTagline").value = st.tagline || "";
@@ -488,6 +492,24 @@ async function loadIntegrasi() {
   $("intGcUrl").value = integ.gameCheckUrl || ""; $("intGcKey").value = integ.gameCheckKey || "";
   $("intGpName").value = integ.gameProvider || ""; $("intGpUrl").value = integ.gameProviderUrl || ""; $("intGpKey").value = integ.gameProviderKey || "";
   $("intGpUser").value = integ.gameProviderUser || "";
+  if (document.getElementById("intGoogleId")) {
+    $("intGoogleAuth").checked = integ.googleAuthEnabled !== false;
+    $("intGoogleId").value = integ.googleId || "";
+    $("intGoogleSecret").value = integ.googleSecret || "";
+  }
+}
+if(document.getElementById("saveNmDiscount")) {
+  $("saveNmDiscount").addEventListener("click", async () => {
+    const val = Number($("nmDiscount").value.trim()) || 0;
+    try {
+      await api("/api/admin/settings/discount", { method: "POST", body: JSON.stringify({ newMemberDiscount: val }) });
+      const msg = $("nmDiscountMsg");
+      msg.textContent = "Diskon berhasil disimpan!";
+      setTimeout(() => msg.textContent = "", 3000);
+    } catch (e) {
+      alert("Gagal menyimpan diskon: " + e.message);
+    }
+  });
 }
 function buildIntegrations() {
   return {
@@ -495,6 +517,9 @@ function buildIntegrations() {
     aiProvider: $("intAiProvider").value.trim(), aiKey: $("intAiKey").value.trim(),
     gameCheckUrl: $("intGcUrl").value.trim(), gameCheckKey: $("intGcKey").value.trim(),
     gameProvider: $("intGpName").value.trim(), gameProviderUrl: $("intGpUrl").value.trim(), gameProviderKey: $("intGpKey").value.trim(), gameProviderUser: $("intGpUser").value.trim(),
+    googleAuthEnabled: document.getElementById("intGoogleId") ? $("intGoogleAuth").checked : true,
+    googleId: document.getElementById("intGoogleId") ? $("intGoogleId").value.trim() : "",
+    googleSecret: document.getElementById("intGoogleId") ? $("intGoogleSecret").value.trim() : ""
   };
 }
 const integMsg = (id, text, type) => { const el = $(id); el.textContent = text; el.className = "text-sm font-bold empty:hidden " + (type === "err" ? "text-red-600" : "text-emerald-600"); };
@@ -864,4 +889,29 @@ if ($("nmDiscountForm")) {
     alert("Diskon Member Baru disimpan!");
     btn.disabled = false; btn.textContent = "Simpan Setting";
   });
+}
+
+// ---- USERS ----
+async function loadUsers() {
+  const d = await api("/api/admin/users");
+  if (Array.isArray(d)) renderUsers(d);
+}
+function renderUsers(list) {
+  const tbody = $("usersTableBody");
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center text-slate-400">Belum ada pengguna terdaftar</td></tr>'; return; }
+  tbody.innerHTML = list.map(u => {
+    const icon = u.provider === 'google' ? 'google' : 'mail';
+    const dateStr = new Date(u.createdAt).toLocaleString("id-ID", {dateStyle:"short", timeStyle:"short"});
+    const loginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString("id-ID", {dateStyle:"short", timeStyle:"short"}) : '-';
+    return `<tr>
+      <td class="px-6 py-4">
+        <div class="font-medium text-slate-900">${esc(u.name || "-")}</div>
+        <div class="text-xs text-slate-500">${esc(u.email)}</div>
+      </td>
+      <td class="px-6 py-4"><span class="px-2 py-1 bg-slate-100 rounded text-xs font-semibold uppercase">${u.role}</span></td>
+      <td class="px-6 py-4 flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-slate-400">${icon}</span> ${u.provider}</td>
+      <td class="px-6 py-4 text-xs">${dateStr}</td>
+      <td class="px-6 py-4 text-xs">${loginStr}</td>
+    </tr>`;
+  }).join("");
 }
