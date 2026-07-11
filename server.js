@@ -193,33 +193,30 @@ function upsertUser({ email, name, provider, picture, passwordHash, role }) {
 }
 
 // ---------------------------------------------------------------------------
-// Email (SMTP via implicit TLS, mis. port 465). Fallback: log + dev code.
+// Email (SMTP via nodemailer). Fallback: log + dev code.
 // ---------------------------------------------------------------------------
 function smtpSend({ to, subject, html }) {
   return new Promise((resolve, reject) => {
-    const socket = tls.connect({ host: SMTP.host, port: Number(SMTP.port), servername: SMTP.host, family: 4 });
-    const b64 = (s) => Buffer.from(s).toString("base64");
-    const cmds = [
-      "EHLO anshelstore", "AUTH LOGIN", b64(SMTP.user), b64(SMTP.pass),
-      `MAIL FROM:<${SMTP.from}>`, `RCPT TO:<${to}>`, "DATA",
-      `From: Anshel Store <${SMTP.from}>\r\nTo: <${to}>\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=utf-8\r\n\r\n${html}\r\n.`,
-      "QUIT",
-    ];
-    let step = 0, buf = "";
-    socket.setEncoding("utf8");
-    socket.setTimeout(15000, () => { socket.destroy(); reject(new Error("SMTP timeout")); });
-    socket.on("data", (d) => {
-      buf += d;
-      const lines = buf.split(/\r?\n/).filter(Boolean);
-      const last = lines[lines.length - 1];
-      if (!/^\d{3} /.test(last)) return;
-      const code = parseInt(last.slice(0, 3), 10);
-      buf = "";
-      if (code >= 400) { socket.end(); return reject(new Error("SMTP " + code + ": " + last)); }
-      if (step < cmds.length) socket.write(cmds[step++] + "\r\n");
-      else { socket.end(); resolve(true); }
-    });
-    socket.on("error", reject);
+    try {
+      const nodemailer = require("nodemailer");
+      const transporter = nodemailer.createTransport({
+        host: SMTP.host,
+        port: Number(SMTP.port),
+        secure: Number(SMTP.port) === 465, // true for 465, false for other ports
+        auth: { user: SMTP.user, pass: SMTP.pass }
+      });
+      transporter.sendMail({
+        from: `"Anshel Store" <${SMTP.from}>`,
+        to,
+        subject,
+        html
+      }, (err, info) => {
+        if (err) return reject(err);
+        resolve(info);
+      });
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 async function sendOtpEmail(to, code, context = "verifikasi", name = "", reqUrl = "") {
