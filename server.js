@@ -171,7 +171,7 @@ function assignRole(email) {
 }
 function isAdmin(u) { return !!u && DASH_ROLES.includes(u.role); }          // akses dashboard
 function canManageUsers(u) { return !!u && ["owner", "admin"].includes(u.role); }
-function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, phone: u.phone || "", bio: u.bio || "", provider: u.provider, role: u.role || "customer", admin: isAdmin(u) }; }
+function publicUser(u) { return u && { id: u.id, email: u.email, name: u.name, picture: u.picture || null, phone: u.phone || "", bio: u.bio || "", provider: u.provider, role: u.role || "customer", admin: isAdmin(u), createdAt: u.createdAt, lastLogin: u.lastLogin }; }
 function findUser(email) { return db.users.find((u) => u.email.toLowerCase() === String(email).toLowerCase()); }
 function upsertUser({ email, name, provider, picture, passwordHash, role }) {
   let u = findUser(email);
@@ -1004,11 +1004,7 @@ async function handleApi(req, res, pathname, query) {
   // Settings penuh untuk admin (termasuk integrasi/API keys)
   if (pathname === "/api/admin/settings" && method === "GET") { if (!authed) return needAuth(); return sendJSON(res, 200, { store: db.store, settings: db.settings }); }
 
-  // ---- Pengguna (admin) ----
-  if (pathname === "/api/admin/users" && method === "GET") {
-    if (!authed) return needAuth();
-    return sendJSON(res, 200, db.users.map(u => ({ id: u.id, name: u.name, email: u.email, role: u.role, provider: u.provider, createdAt: u.createdAt, lastLogin: u.lastLogin })).sort((a,b) => b.createdAt - a.createdAt));
-  }
+
 
   // ---- Finansial (admin) ----
   if (pathname === "/api/admin/finance" && method === "GET") {
