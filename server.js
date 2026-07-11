@@ -203,7 +203,10 @@ function smtpSend({ to, subject, html }) {
         host: SMTP.host,
         port: Number(SMTP.port),
         secure: Number(SMTP.port) === 465, // true for 465, false for other ports
-        auth: { user: SMTP.user, pass: SMTP.pass }
+        auth: { user: SMTP.user, pass: SMTP.pass },
+        connectionTimeout: 5000,
+        greetingTimeout: 5000,
+        socketTimeout: 5000
       });
       transporter.sendMail({
         from: `"Anshel Store" <${SMTP.from}>`,
