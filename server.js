@@ -195,14 +195,14 @@ function upsertUser({ email, name, provider, picture, passwordHash, role }) {
 // ---------------------------------------------------------------------------
 // Email (SMTP via implicit TLS, mis. port 465). Fallback: log + dev code.
 // ---------------------------------------------------------------------------
-function smtpSend({ to, subject, text }) {
+function smtpSend({ to, subject, html }) {
   return new Promise((resolve, reject) => {
     const socket = tls.connect({ host: SMTP.host, port: Number(SMTP.port), servername: SMTP.host });
     const b64 = (s) => Buffer.from(s).toString("base64");
     const cmds = [
       "EHLO anshelstore", "AUTH LOGIN", b64(SMTP.user), b64(SMTP.pass),
       `MAIL FROM:<${SMTP.from}>`, `RCPT TO:<${to}>`, "DATA",
-      `From: Anshel Store <${SMTP.from}>\r\nTo: <${to}>\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${text}\r\n.`,
+      `From: Anshel Store <${SMTP.from}>\r\nTo: <${to}>\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=utf-8\r\n\r\n${html}\r\n.`,
       "QUIT",
     ];
     let step = 0, buf = "";
@@ -226,8 +226,51 @@ async function sendOtpEmail(to, code, context = "verifikasi", name = "", reqUrl 
   const subject = `Kode OTP ${context} Anshel Store`;
   const action = context.includes("reset") ? "reset" : "verify";
   const link = reqUrl ? `${reqUrl}/masuk?action=${action}&email=${encodeURIComponent(to)}&code=${code}` : "";
-  const text = `Halo ${name || to},\n\nKode ${context} Anshel Store kamu adalah: ${code}\n${link ? "Atau klik link berikut:\n" + link + "\n\n" : ""}Kode berlaku 10 menit. Jangan bagikan ke siapa pun.`;
-  if (SMTP_READY) { await smtpSend({ to, subject, text }); return { sent: true }; }
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { margin: 0; padding: 0; background-color: #f8fafc; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+  .header { background: linear-gradient(135deg, #e11d48, #be123c); padding: 40px 30px; text-align: center; }
+  .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  .body { padding: 40px 30px; color: #334155; line-height: 1.6; }
+  .title { font-size: 20px; font-weight: bold; color: #0f172a; margin-top: 0; }
+  .code-box { background: #f1f5f9; border-radius: 12px; padding: 24px; text-align: center; margin: 30px 0; border: 1px dashed #cbd5e1; }
+  .code { font-size: 42px; font-weight: 900; color: #e11d48; letter-spacing: 8px; margin: 0; }
+  .btn { display: inline-block; background: #0f172a; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; margin-top: 10px; }
+  .footer { background: #f8fafc; padding: 24px 30px; text-align: center; color: #64748b; font-size: 13px; border-top: 1px solid #e2e8f0; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Anshel Store</h1>
+    </div>
+    <div class="body">
+      <p class="title">Halo ${name || to},</p>
+      <p>Terima kasih telah menggunakan Anshel Store. Berikut adalah 6-digit kode rahasia untuk <strong>${context}</strong> akun kamu:</p>
+      
+      <div class="code-box">
+        <p class="code">${code}</p>
+      </div>
+      
+      ${link ? `<p style="text-align: center;">Atau, kamu bisa langsung memverifikasinya dengan menekan tombol di bawah ini:</p>
+      <div style="text-align: center;"><a href="${link}" class="btn">Otomatis Verifikasi</a></div>` : ""}
+      
+      <p style="margin-top: 30px; font-size: 14px; color: #64748b;">Kode ini hanya berlaku selama <strong>10 menit</strong>. Harap tidak membagikan kode ini kepada siapa pun, termasuk pihak yang mengatasnamakan Anshel Store.</p>
+    </div>
+    <div class="footer">
+      <p>&copy; ${new Date().getFullYear()} Anshel Store. Semua hak cipta dilindungi.</p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+  if (SMTP_READY) { await smtpSend({ to, subject, html }); return { sent: true }; }
   console.log(`[OTP][DEV] Email belum dikonfigurasi. OTP untuk ${to} = ${code}`);
   return { sent: false, devCode: code };
 }
