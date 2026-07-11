@@ -7,148 +7,375 @@
 <link rel="icon" href="/logo.png?v=5" type="image/png"/>
 <link rel="apple-touch-icon" href="/icon-192.png?v=5"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'}}}}</script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#e11d48','primary-hover':'#be123c',background:'#f8fafc',surface:'#ffffff'},fontFamily:{sans:['Inter','sans-serif']}}}}</script>
 <script src="/js/theme.js?v=2.2"></script>
 <link href="/css/theme.css?v=2.2" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXRVTQKMZF"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-NXRVTQKMZF');
 </script>
 
 <title>Masuk / Daftar — Anshel Store</title>
 <meta name="description" content="Anshel Store: Layanan digital dan top up game."/>
-<meta property="og:title" content="Masuk / Daftar — Anshel Store"/>
-<meta property="og:description" content="Anshel Store: Layanan digital dan top up game."/>
-<meta property="og:url" content="https://www.anshelstore.biz.id/"/>
-<meta property="og:image" content="https://www.anshelstore.biz.id/logo.png"/>
-<meta property="og:type" content="website"/>
-<meta property="og:site_name" content="Anshel Store"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Masuk / Daftar — Anshel Store"/>
-<meta name="twitter:description" content="Anshel Store: Layanan digital dan top up game."/>
-<meta name="twitter:image" content="https://www.anshelstore.biz.id/logo.png"/>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Anshel Store",
-  "image": "https://www.anshelstore.biz.id/logo.png",
-  "url": "https://www.anshelstore.biz.id/",
-  "description": "Jasa AI automation (WhatsApp, Telegram, Instagram) dan platform top up game instan, murah, aman.",
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "ID"
-  },
-  "priceRange": ""
-}
-</script>
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .bg-split {
+    background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+  }
+</style>
 </head>
-<body data-page="masuk" class="bg-background text-gray-800 font-sans min-h-screen overflow-x-hidden">
-<div id="siteNav"></div>
+<body data-page="masuk" class="bg-slate-50 text-slate-800 min-h-screen flex overflow-x-hidden">
 
-<main class="max-w-md mx-auto px-4 py-16">
-  <div class="bg-surface rounded-2xl shadow-xl border border-gray-100 p-8">
-    <div class="text-center mb-8">
-      <div class="w-16 h-16 rounded-2xl bg-primary text-white flex items-center justify-center mx-auto mb-4 text-3xl font-extrabold shadow-md">a</div>
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Selamat Datang</h1>
-      <p class="text-gray-500">Masuk atau daftar untuk melihat riwayat pesananmu.</p>
-    </div>
-
-    <div class="flex gap-1 bg-gray-100 p-1.5 rounded-xl mb-8" id="tabs">
-      <button data-tab="login" class="tab flex-1 py-2.5 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm transition-all">Masuk</button>
-      <button data-tab="register" class="tab flex-1 py-2.5 rounded-lg text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all">Daftar</button>
-      <button data-tab="otp" class="tab flex-1 py-2.5 rounded-lg text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all">OTP</button>
-    </div>
-
-    <form id="paneLogin" class="pane flex flex-col gap-4">
-      <input id="loginEmail" type="email" placeholder="Email" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
-      <input id="loginPass" type="password" placeholder="Password" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
-      <button class="bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Masuk</button>
-    </form>
-    
-    <form id="paneRegister" class="pane hidden flex-col gap-4">
-      <input id="regName" type="text" placeholder="Nama" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
-      <input id="regEmail" type="email" placeholder="Email" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
-      <input id="regPass" type="password" placeholder="Password (min 6 karakter)" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
-      <button class="bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Daftar</button>
-    </form>
-    
-    <form id="paneOtp" class="pane hidden flex-col gap-4">
-      <input id="otpEmail" type="email" placeholder="Email" class="w-full rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3"/>
-      <button type="button" id="sendOtp" class="bg-gray-100 hover:bg-gray-200 text-primary rounded-xl py-3.5 text-sm font-bold transition-all">Kirim Kode OTP</button>
-      
-      <div id="otpStep" class="hidden flex-col gap-4 mt-2">
-        <input id="otpCode" type="text" inputmode="numeric" maxlength="6" placeholder="Kode 6 digit" class="w-full text-center tracking-[0.5em] text-xl font-bold rounded-xl border-gray-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-4"/>
-        <button class="bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all">Verifikasi & Masuk</button>
+<div class="hidden lg:flex lg:w-1/2 bg-split relative items-center justify-center p-12">
+  <div class="absolute inset-0 bg-gradient-to-br from-primary/80 to-slate-900/90 mix-blend-multiply"></div>
+  <div class="relative z-10 text-white max-w-lg glass p-10 rounded-3xl shadow-2xl">
+    <div class="w-16 h-16 rounded-2xl bg-white text-primary flex items-center justify-center text-3xl font-extrabold shadow-lg mb-6">a</div>
+    <h1 class="text-4xl font-extrabold mb-4 leading-tight">Selamat Datang di Anshel Store</h1>
+    <p class="text-lg text-slate-100 opacity-90 leading-relaxed">Platform Top Up Game dan Layanan Digital paling terpercaya. Dapatkan harga termurah dan proses instan 24 jam penuh.</p>
+    <div class="mt-8 flex gap-4">
+      <div class="flex -space-x-4">
+        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1" alt="">
+        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=2" alt="">
+        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=3" alt="">
+        <div class="w-10 h-10 rounded-full border-2 border-white bg-slate-800 flex items-center justify-center text-xs font-bold">+10k</div>
       </div>
-      <div id="devOtp" class="hidden rounded-xl bg-orange-50 text-orange-800 p-4 text-sm font-medium border border-orange-100 mt-2"></div>
+      <div class="text-sm font-medium flex items-center">Bergabung dengan ribuan gamers lainnya.</div>
+    </div>
+  </div>
+</div>
+
+<main class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+  <a href="/" class="absolute top-6 left-6 lg:top-8 lg:left-8 text-slate-400 hover:text-slate-600 transition flex items-center gap-2 text-sm font-medium">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+    Kembali ke Beranda
+  </a>
+
+  <div class="w-full max-w-md">
+    <div class="lg:hidden w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-2xl font-extrabold shadow-md mb-8">a</div>
+    
+    <!-- Header dynamically changed by JS -->
+    <div class="mb-8" id="formHeader">
+      <h2 class="text-3xl font-bold text-slate-900 mb-2" id="formTitle">Masuk ke Akunmu</h2>
+      <p class="text-slate-500" id="formDesc">Masukkan email dan password untuk melanjutkan.</p>
+    </div>
+
+    <!-- Error Inline -->
+    <div id="inlineError" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium flex items-start gap-3 fade-in">
+      <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      <span id="inlineErrorText"></span>
+    </div>
+
+    <!-- Success Inline -->
+    <div id="inlineSuccess" class="hidden mb-6 p-4 rounded-xl bg-green-50 border border-green-100 text-green-700 text-sm font-medium flex items-start gap-3 fade-in">
+      <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span id="inlineSuccessText"></span>
+    </div>
+
+    <!-- 1. LOGIN FORM -->
+    <form id="paneLogin" class="pane flex flex-col gap-5 fade-in">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
+        <input id="loginEmail" type="email" placeholder="contoh@email.com" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="block text-sm font-semibold text-slate-700">Password</label>
+          <button type="button" class="text-sm font-medium text-primary hover:text-primary-hover transition" onclick="switchPane('forgot')">Lupa Password?</button>
+        </div>
+        <input id="loginPass" type="password" placeholder="••••••••" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <button type="submit" id="btnLogin" class="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Masuk</button>
+      
+      <p class="text-center text-sm text-slate-600 mt-2">Belum punya akun? <button type="button" class="font-bold text-primary hover:text-primary-hover transition" onclick="switchPane('register')">Daftar Sekarang</button></p>
+      
+      <div id="googleWrap" class="hidden">
+        <div class="flex items-center gap-4 my-6 text-slate-300 text-sm font-medium"><div class="flex-1 h-px bg-slate-200"></div>ATAU<div class="flex-1 h-px bg-slate-200"></div></div>
+        <button type="button" id="googleBtn" class="w-full flex items-center justify-center gap-3 border border-slate-200 rounded-xl py-3.5 text-sm font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+          <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Lanjut dengan Google
+        </button>
+      </div>
+    </form>
+    
+    <!-- 2. REGISTER FORM -->
+    <form id="paneRegister" class="pane hidden flex-col gap-5 fade-in">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Lengkap</label>
+        <input id="regName" type="text" placeholder="John Doe" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
+        <input id="regEmail" type="email" placeholder="contoh@email.com" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+        <input id="regPass" type="password" placeholder="Minimal 6 karakter" minlength="6" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <button type="submit" id="btnReg" class="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Daftar Sekarang</button>
+      
+      <p class="text-center text-sm text-slate-600 mt-2">Sudah punya akun? <button type="button" class="font-bold text-primary hover:text-primary-hover transition" onclick="switchPane('login')">Masuk</button></p>
+    </form>
+    
+    <!-- 3. VERIFY FORM (OTP / LINK) -->
+    <form id="paneVerify" class="pane hidden flex-col gap-5 fade-in">
+      <div class="text-center p-6 bg-slate-100 rounded-xl border border-slate-200 mb-2">
+        <div class="text-3xl mb-3">✉️</div>
+        <p class="text-sm text-slate-600 font-medium leading-relaxed">Kami telah mengirimkan 6 digit kode OTP dan link verifikasi ke email <strong id="lblVerifyEmail" class="text-slate-900"></strong>.</p>
+        <p class="text-xs text-slate-500 mt-2">Cek folder Inbox atau Spam. Kode berlaku selama 10 menit.</p>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Kode OTP 6-Digit</label>
+        <input id="verifyCode" type="text" inputmode="numeric" maxlength="6" placeholder="• • • • • •" class="w-full text-center tracking-[0.5em] text-2xl font-bold rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-4 transition" required/>
+      </div>
+      <button type="submit" id="btnVerify" class="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all">Verifikasi</button>
+      <button type="button" class="w-full bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl py-3.5 text-sm font-bold shadow-sm transition-all" onclick="switchPane('login')">Kembali ke Login</button>
+    </form>
+    
+    <!-- 4. FORGOT PASSWORD -->
+    <form id="paneForgot" class="pane hidden flex-col gap-5 fade-in">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Terdaftar</label>
+        <input id="forgotEmail" type="email" placeholder="contoh@email.com" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <button type="submit" id="btnForgot" class="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Kirim Kode Reset</button>
+      <button type="button" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition" onclick="switchPane('login')">Batal</button>
+    </form>
+    
+    <!-- 5. RESET PASSWORD -->
+    <form id="paneReset" class="pane hidden flex-col gap-5 fade-in">
+      <div class="text-center p-6 bg-slate-100 rounded-xl border border-slate-200 mb-2">
+        <p class="text-sm text-slate-600 font-medium">Kode OTP reset password telah dikirim ke <strong id="lblResetEmail" class="text-slate-900"></strong>.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Kode OTP 6-Digit</label>
+        <input id="resetCode" type="text" inputmode="numeric" maxlength="6" placeholder="• • • • • •" class="w-full text-center tracking-[0.5em] text-2xl font-bold rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-4 transition" required/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password Baru</label>
+        <input id="resetPass" type="password" placeholder="Minimal 6 karakter" minlength="6" class="w-full rounded-xl border-slate-300 bg-white focus:border-primary focus:ring-primary shadow-sm py-3 transition" required/>
+      </div>
+      <button type="submit" id="btnReset" class="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2">Simpan Password Baru</button>
     </form>
 
-    <div id="googleWrap" class="block">
-      <div class="flex items-center gap-4 my-8 text-gray-400 text-sm font-medium"><div class="flex-1 h-px bg-gray-200"></div>atau<div class="flex-1 h-px bg-gray-200"></div></div>
-      <button id="googleBtn" class="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-xl py-3.5 text-sm font-bold hover:bg-gray-50 transition-colors shadow-sm">
-        <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Lanjut dengan Google
-      </button>
-    </div>
-    
-    <div id="msg" class="text-center text-sm font-medium mt-6 min-h-[20px]"></div>
   </div>
 </main>
 
-<div id="siteFooter"></div>
-<script src="/js/site.js"></script>
 <script>
   const $ = (id) => document.getElementById(id);
-  const next = new URLSearchParams(location.search).get("next") || "/akun";
+  const searchParams = new URLSearchParams(location.search);
+  const next = searchParams.get("next") || "/akun";
   
+  // Auto-login check
   const tok = localStorage.getItem("anshel_token");
   if (tok) fetch("/api/auth/me", { headers: { "x-auth-token": tok } }).then(r => { if (r.ok) location.replace(next); });
+  
+  // Google callback token
   if (location.hash.includes("token=")) { const t = new URLSearchParams(location.hash.slice(1)).get("token"); if (t) { localStorage.setItem("anshel_token", t); location.replace(next); } }
 
-  const msg = (t, ok) => { const e = $("msg"); e.textContent = t; e.className = "text-center text-sm font-medium mt-6 min-h-[20px] " + (ok ? "text-green-600" : "text-red-600"); };
+  let currentEmail = "";
+
+  function showError(msg) {
+    $("inlineSuccess").classList.add("hidden");
+    $("inlineError").classList.remove("hidden");
+    $("inlineErrorText").textContent = msg;
+  }
   
-  document.querySelectorAll("#tabs .tab").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll("#tabs .tab").forEach(x => { x.classList.remove("bg-white","text-primary","shadow-sm"); x.classList.add("text-gray-500"); });
-    b.classList.add("bg-white","text-primary","shadow-sm"); b.classList.remove("text-gray-500");
+  function showSuccess(msg) {
+    $("inlineError").classList.add("hidden");
+    $("inlineSuccess").classList.remove("hidden");
+    $("inlineSuccessText").innerHTML = msg; // allow bold
+  }
+  
+  function hideMessages() {
+    $("inlineError").classList.add("hidden");
+    $("inlineSuccess").classList.add("hidden");
+  }
+
+  const pageHeaders = {
+    login: { title: "Masuk ke Akunmu", desc: "Masukkan email dan password untuk melanjutkan." },
+    register: { title: "Daftar Akun Baru", desc: "Isi data diri untuk mulai top up dengan mudah." },
+    verify: { title: "Verifikasi Email", desc: "Cek kotak masuk atau spam di email kamu." },
+    forgot: { title: "Lupa Password?", desc: "Kami akan mengirimkan OTP untuk reset password." },
+    reset: { title: "Reset Password", desc: "Buat password baru untuk akunmu." }
+  };
+
+  function switchPane(pane) {
+    hideMessages();
     document.querySelectorAll(".pane").forEach(p => p.classList.add("hidden"));
-    const map = { login: "paneLogin", register: "paneRegister", otp: "paneOtp" };
-    const el = $(map[b.dataset.tab]); el.classList.remove("hidden"); el.classList.add("flex");
-  }));
-  
-  function done(d) { if (!d.token) return msg(d.error || "Gagal", false); localStorage.setItem("anshel_token", d.token); location.replace(next); }
-  
-  $("paneLogin").addEventListener("submit", async e => { e.preventDefault(); const r = await fetch("/api/auth/login", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email:$("loginEmail").value.trim(), password:$("loginPass").value }) }); done(await r.json()); });
-  $("paneRegister").addEventListener("submit", async e => { e.preventDefault(); const r = await fetch("/api/auth/register", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ name:$("regName").value.trim(), email:$("regEmail").value.trim(), password:$("regPass").value }) }); done(await r.json()); });
-  
-  $("sendOtp").addEventListener("click", async () => { 
-    const email=$("otpEmail").value.trim(); 
-    if(!email) return msg("Isi email dulu",false); 
-    const r=await fetch("/api/auth/otp/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})}); 
-    const d=await r.json(); 
-    if(!r.ok) return msg(d.error||"Gagal",false); 
-    $("otpStep").classList.remove("hidden"); 
-    $("otpStep").classList.add("flex"); 
-    if(d.devCode){$("devOtp").classList.remove("hidden");$("devOtp").innerHTML="Mode dev: kode kamu <b>"+d.devCode+"</b>";} 
-    else msg("Kode terkirim ke email kamu.",true); 
+    $( "pane" + pane.charAt(0).toUpperCase() + pane.slice(1) ).classList.remove("hidden");
+    
+    $("formTitle").textContent = pageHeaders[pane].title;
+    $("formDesc").textContent = pageHeaders[pane].desc;
+  }
+
+  function setLoading(btnId, isLoading, text = "") {
+    const btn = $(btnId);
+    if (!btn.dataset.origText) btn.dataset.origText = btn.textContent;
+    btn.disabled = isLoading;
+    if (isLoading) {
+      btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...`;
+      btn.classList.add("opacity-70", "cursor-wait");
+    } else {
+      btn.textContent = text || btn.dataset.origText;
+      btn.classList.remove("opacity-70", "cursor-wait");
+    }
+  }
+
+  function finishAuth(d) {
+    if (!d.token) return showError(d.error || "Gagal otorisasi");
+    localStorage.setItem("anshel_token", d.token);
+    location.replace(next);
+  }
+
+  // 1. LOGIN
+  $("paneLogin").addEventListener("submit", async e => {
+    e.preventDefault();
+    setLoading("btnLogin", true);
+    const email = $("loginEmail").value.trim();
+    try {
+      const r = await fetch("/api/auth/login", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email, password:$("loginPass").value }) });
+      const d = await r.json();
+      if (!r.ok) {
+        if (d.unverified) {
+          currentEmail = email;
+          $("lblVerifyEmail").textContent = email;
+          switchPane("verify");
+          // Optionally trigger request otp here automatically, but better let them request it if they need to.
+          // Wait, they just logged in and got 403 unverified. Let's send OTP automatically.
+          fetch("/api/auth/register", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email, password:$("loginPass").value }) });
+          showError(d.error);
+        } else {
+          showError(d.error || "Gagal masuk");
+        }
+      } else {
+        finishAuth(d);
+      }
+    } catch(err) { showError("Terjadi kesalahan jaringan."); }
+    setLoading("btnLogin", false);
   });
-  
-  $("paneOtp").addEventListener("submit", async e => { e.preventDefault(); const r=await fetch("/api/auth/otp/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:$("otpEmail").value.trim(),code:$("otpCode").value.trim()})}); done(await r.json()); });
-  
+
+  // 2. REGISTER
+  $("paneRegister").addEventListener("submit", async e => {
+    e.preventDefault();
+    setLoading("btnReg", true);
+    const email = $("regEmail").value.trim();
+    try {
+      const r = await fetch("/api/auth/register", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ name:$("regName").value.trim(), email, password:$("regPass").value }) });
+      const d = await r.json();
+      if (!r.ok) {
+        showError(d.error || "Gagal mendaftar");
+      } else if (d.requiresVerification) {
+        currentEmail = email;
+        $("lblVerifyEmail").textContent = email;
+        switchPane("verify");
+        if (d.devCode) {
+          showSuccess("Mode Dev: Kode kamu adalah <b>" + d.devCode + "</b>");
+        }
+      } else {
+        finishAuth(d);
+      }
+    } catch(err) { showError("Terjadi kesalahan jaringan."); }
+    setLoading("btnReg", false);
+  });
+
+  // 3. VERIFY
+  $("paneVerify").addEventListener("submit", async e => {
+    e.preventDefault();
+    setLoading("btnVerify", true);
+    try {
+      const r = await fetch("/api/auth/verify-register", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email: currentEmail, code:$("verifyCode").value.trim() }) });
+      const d = await r.json();
+      if (!r.ok) showError(d.error || "Gagal verifikasi");
+      else finishAuth(d);
+    } catch(err) { showError("Terjadi kesalahan jaringan."); }
+    setLoading("btnVerify", false);
+  });
+
+  // 4. FORGOT
+  $("paneForgot").addEventListener("submit", async e => {
+    e.preventDefault();
+    setLoading("btnForgot", true);
+    const email = $("forgotEmail").value.trim();
+    try {
+      const r = await fetch("/api/auth/forgot-password", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email }) });
+      const d = await r.json();
+      if (!r.ok) {
+        showError(d.error || "Gagal kirim reset link");
+      } else {
+        currentEmail = email;
+        $("lblResetEmail").textContent = email;
+        switchPane("reset");
+        if (d.devCode) {
+          showSuccess("Mode Dev: Kode kamu adalah <b>" + d.devCode + "</b>");
+        }
+      }
+    } catch(err) { showError("Terjadi kesalahan jaringan."); }
+    setLoading("btnForgot", false);
+  });
+
+  // 5. RESET
+  $("paneReset").addEventListener("submit", async e => {
+    e.preventDefault();
+    setLoading("btnReset", true);
+    try {
+      const r = await fetch("/api/auth/reset-password", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email: currentEmail, code:$("resetCode").value.trim(), password:$("resetPass").value }) });
+      const d = await r.json();
+      if (!r.ok) {
+        showError(d.error || "Gagal reset password");
+      } else {
+        switchPane("login");
+        showSuccess("Password berhasil diubah! Silakan masuk dengan password baru.");
+      }
+    } catch(err) { showError("Terjadi kesalahan jaringan."); }
+    setLoading("btnReset", false);
+  });
+
+  // Google Login
   $("googleBtn").addEventListener("click", () => location.href = "/api/auth/google?from=masuk");
   fetch("/api/auth/config").then(r=>r.json()).then(c=>{ if(c.google) $("googleWrap").classList.remove("hidden"); }).catch(()=>{});
+
+  // Magic Link handler
+  const magicAction = searchParams.get("action");
+  const magicEmail = searchParams.get("email");
+  const magicCode = searchParams.get("code");
+  if (magicEmail && magicCode) {
+    currentEmail = magicEmail;
+    if (magicAction === "verify") {
+      $("lblVerifyEmail").textContent = currentEmail;
+      $("verifyCode").value = magicCode;
+      switchPane("verify");
+      showSuccess("Kode terisi otomatis dari link. Silakan klik Verifikasi.");
+    } else if (magicAction === "reset") {
+      $("lblResetEmail").textContent = currentEmail;
+      $("resetCode").value = magicCode;
+      switchPane("reset");
+      showSuccess("Kode terisi otomatis dari link. Silakan masukkan password baru.");
+    }
+  } else {
+    // Check initial hash/query errors
+    if (location.hash === "#error=google") showError("Login Google gagal. Coba lagi.");
+    // Init default pane
+    switchPane("login");
+  }
 </script>
-<noscript>
-  <div style="padding:20px;text-align:center;background:#f8fafc;color:#475569;font-size:14px;">
-    <p style="font-weight:bold;margin-bottom:10px;">Jelajahi Anshel Store:</p>
-    <a href="/">Beranda</a> | <a href="/topup">Top Up Game Murah</a> | <a href="/layanan">Jasa AI Automation</a> | <a href="/blog">Blog & Komunitas</a> | <a href="/masuk">Login/Register</a> | <a href="/tentang">Tentang Kami</a> | <a href="/kontak">Kontak Kami</a> | <a href="/syarat-dan-ketentuan">Syarat & Ketentuan</a> | <a href="/kebijakan-privasi">Kebijakan Privasi</a> | <a href="/faq">FAQ</a>
-    <p style="margin-top:15px;font-size:12px;line-height:1.5;">Anshel Store merupakan platform digital terkemuka dan terpercaya di Indonesia yang menyediakan layanan Top Up Game instan untuk berbagai game populer seperti Mobile Legends, Free Fire, PUBG Mobile, dan Valorant. Selain itu, kami juga menawarkan jasa pembuatan chatbot AI Automation profesional untuk WhatsApp, Telegram, dan Instagram guna membantu otomasi bisnis UMKM dan perusahaan. Nikmati pengalaman transaksi yang aman, cepat, dan online 24 jam penuh.</p>
-  </div>
-</noscript>
 </body>
 </html>

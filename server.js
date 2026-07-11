@@ -220,9 +220,11 @@ function smtpSend({ to, subject, text }) {
     socket.on("error", reject);
   });
 }
-async function sendOtpEmail(to, code) {
-  const subject = "Kode OTP Anshel Store";
-  const text = `Kode verifikasi Anshel Store kamu: ${code}\n\nKode berlaku 10 menit. Jangan bagikan ke siapa pun.`;
+async function sendOtpEmail(to, code, context = "verifikasi", name = "", reqUrl = "") {
+  const subject = `Kode OTP ${context} Anshel Store`;
+  const action = context.includes("reset") ? "reset" : "verify";
+  const link = reqUrl ? `${reqUrl}/masuk?action=${action}&email=${encodeURIComponent(to)}&code=${code}` : "";
+  const text = `Halo ${name || to},\n\nKode ${context} Anshel Store kamu adalah: ${code}\n${link ? "Atau klik link berikut:\n" + link + "\n\n" : ""}Kode berlaku 10 menit. Jangan bagikan ke siapa pun.`;
   if (SMTP_READY) { await smtpSend({ to, subject, text }); return { sent: true }; }
   console.log(`[OTP][DEV] Email belum dikonfigurasi. OTP untuk ${to} = ${code}`);
   return { sent: false, devCode: code };
@@ -748,16 +750,76 @@ async function handleApi(req, res, pathname, query) {
     const email = (b.email || "").trim().toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return sendJSON(res, 400, { error: "Email tidak valid" });
     if (!b.password || b.password.length < 6) return sendJSON(res, 400, { error: "Password minimal 6 karakter" });
-    if (findUser(email)) return sendJSON(res, 409, { error: "Email sudah terdaftar. Silakan login." });
-    const u = upsertUser({ email, name: b.name, provider: "email", passwordHash: hashPassword(b.password) });
-    return sendJSON(res, 201, { token: createSession(u.id), user: publicUser(u) });
+    let u = findUser(email);
+    if (u) {
+      if (u.verified !== false) return sendJSON(res, 409, { error: "Email sudah terdaftar. Silakan masuk." });
+      u.passwordHash = hashPassword(b.password);
+      if (b.name) u.name = b.name;
+    } else {
+      u = upsertUser({ email, name: b.name, provider: "email", passwordHash: hashPassword(b.password) });
+      u.verified = false;
+    }
+    saveDB();
+    const code = ("" + Math.floor(100000 + Math.random() * 900000));
+    otpStore.set(email, { type: "verify", code, expires: Date.now() + 10 * 60 * 1000 });
+    try {
+      const r = await sendOtpEmail(email, code, "verifikasi pendaftaran", b.name, baseUrl(req));
+      return sendJSON(res, 201, { ok: true, requiresVerification: true, sent: r.sent, devCode: r.devCode || undefined });
+    } catch (e) {
+      console.error(e);
+      return sendJSON(res, 201, { ok: true, requiresVerification: true, sent: false, devCode: code, warning: "Mode dev" });
+    }
   }
+  
+  if (pathname === "/api/auth/verify-register" && method === "POST") {
+    const b = await readBody(req);
+    const email = (b.email || "").trim().toLowerCase();
+    const rec = otpStore.get(email);
+    if (!rec || rec.type !== "verify" || rec.expires < Date.now()) return sendJSON(res, 400, { error: "Kode tidak valid/kedaluwarsa" });
+    if (rec.code !== String(b.code || "").trim()) return sendJSON(res, 400, { error: "Kode OTP salah" });
+    otpStore.delete(email);
+    const u = findUser(email);
+    if (u) { u.verified = true; saveDB(); }
+    return sendJSON(res, 200, { token: createSession(u ? u.id : ""), user: publicUser(u) });
+  }
+
   if (pathname === "/api/auth/login" && method === "POST") {
     const b = await readBody(req);
     const u = findUser((b.email || "").trim());
-    if (!u || !verifyPassword(b.password || "", u.passwordHash)) return sendJSON(res, 401, { error: "Email atau password salah" });
+    if (!u) return sendJSON(res, 401, { error: "Akun belum terdaftar. Silakan daftar dulu." });
+    if (!verifyPassword(b.password || "", u.passwordHash)) return sendJSON(res, 401, { error: "Password yang dimasukkan salah." });
+    if (u.verified === false) return sendJSON(res, 403, { error: "Akun belum diverifikasi. Silakan verifikasi email.", unverified: true });
     return sendJSON(res, 200, { token: createSession(u.id), user: publicUser(u) });
   }
+
+  if (pathname === "/api/auth/forgot-password" && method === "POST") {
+    const b = await readBody(req);
+    const email = (b.email || "").trim().toLowerCase();
+    const u = findUser(email);
+    if (!u || u.verified === false) return sendJSON(res, 404, { error: "Email tidak terdaftar atau belum verifikasi" });
+    const code = ("" + Math.floor(100000 + Math.random() * 900000));
+    otpStore.set(email, { type: "reset", code, expires: Date.now() + 10 * 60 * 1000 });
+    try {
+      const r = await sendOtpEmail(email, code, "reset password", u.name, baseUrl(req));
+      return sendJSON(res, 200, { ok: true, sent: r.sent, devCode: r.devCode || undefined });
+    } catch (e) {
+      return sendJSON(res, 200, { ok: true, sent: false, devCode: code });
+    }
+  }
+
+  if (pathname === "/api/auth/reset-password" && method === "POST") {
+    const b = await readBody(req);
+    const email = (b.email || "").trim().toLowerCase();
+    const rec = otpStore.get(email);
+    if (!rec || rec.type !== "reset" || rec.expires < Date.now()) return sendJSON(res, 400, { error: "Kode tidak valid/kedaluwarsa" });
+    if (rec.code !== String(b.code || "").trim()) return sendJSON(res, 400, { error: "Kode OTP salah" });
+    if (!b.password || b.password.length < 6) return sendJSON(res, 400, { error: "Password baru minimal 6 karakter" });
+    otpStore.delete(email);
+    const u = findUser(email);
+    if (u) { u.passwordHash = hashPassword(b.password); saveDB(); }
+    return sendJSON(res, 200, { ok: true });
+  }
+
   if (pathname === "/api/auth/otp/request" && method === "POST") {
     const b = await readBody(req);
     const email = (b.email || "").trim().toLowerCase();
