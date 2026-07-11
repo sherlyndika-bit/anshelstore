@@ -47,17 +47,15 @@
 <div class="hidden lg:flex lg:w-1/2 bg-split relative items-center justify-center p-12">
   <div class="absolute inset-0 bg-gradient-to-br from-primary/80 to-slate-900/90 mix-blend-multiply"></div>
   <div class="relative z-10 text-white max-w-lg glass p-10 rounded-3xl shadow-2xl">
-    <div class="w-16 h-16 rounded-2xl bg-white text-primary flex items-center justify-center text-3xl font-extrabold shadow-lg mb-6">a</div>
+    <img src="/logo.png" class="w-16 h-16 object-contain mb-6 drop-shadow-md" alt="Anshel Store">
     <h1 class="text-4xl font-extrabold mb-4 leading-tight">Selamat Datang di Anshel Store</h1>
     <p class="text-lg text-slate-100 opacity-90 leading-relaxed">Platform Top Up Game dan Layanan Digital paling terpercaya. Dapatkan harga termurah dan proses instan 24 jam penuh.</p>
     <div class="mt-8 flex gap-4">
-      <div class="flex -space-x-4">
-        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1" alt="">
-        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=2" alt="">
-        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=3" alt="">
-        <div class="w-10 h-10 rounded-full border-2 border-white bg-slate-800 flex items-center justify-center text-xs font-bold">+10k</div>
+      <div class="flex -space-x-4" id="avatarList">
+        <!-- Avatars loaded dynamically via JS -->
+        <div class="w-10 h-10 rounded-full border-2 border-white bg-slate-800 flex items-center justify-center text-xs font-bold text-white shadow-sm" id="avatarCount">+10k</div>
       </div>
-      <div class="text-sm font-medium flex items-center">Bergabung dengan ribuan gamers lainnya.</div>
+      <div class="text-sm font-medium flex items-center">Bergabung dengan <span id="txtUserCount" class="font-bold mx-1">ribuan</span> gamers lainnya.</div>
     </div>
   </div>
 </div>
@@ -69,7 +67,7 @@
   </a>
 
   <div class="w-full max-w-md">
-    <div class="lg:hidden w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-2xl font-extrabold shadow-md mb-8">a</div>
+    <img src="/logo.png" class="lg:hidden w-16 h-16 object-contain mb-6 mx-auto drop-shadow-sm" alt="Anshel Store">
     
     <!-- Header dynamically changed by JS -->
     <div class="mb-8" id="formHeader">
@@ -374,8 +372,29 @@
     // Check initial hash/query errors
     if (location.hash === "#error=google") showError("Login Google gagal. Coba lagi.");
     // Init default pane
-    switchPane("login");
+    if (location.pathname === "/daftar") switchPane("register");
+    else switchPane("login");
   }
+
+  // Load latest users
+  fetch("/api/public/users").then(r => r.json()).then(d => {
+    if (d.total) $("txtUserCount").textContent = d.total;
+    if (d.avatars && d.avatars.length) {
+      const container = $("avatarList");
+      const countEl = $("avatarCount");
+      d.avatars.reverse().forEach(url => {
+        const img = document.createElement("img");
+        img.className = "w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm";
+        img.src = url;
+        container.insertBefore(img, countEl);
+      });
+      if (d.total > 3) {
+        countEl.textContent = "+" + (d.total - d.avatars.length);
+      } else {
+        countEl.style.display = "none";
+      }
+    }
+  }).catch(()=>{});
 </script>
 </body>
 </html>
