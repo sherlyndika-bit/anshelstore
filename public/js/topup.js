@@ -223,25 +223,29 @@ function update() {
   
   let disc = 0;
   if (selItem && currentPromo) {
-    if (currentPromo.type === "percent") disc = Math.floor(selItem.price * (currentPromo.value / 100));
-    else disc = currentPromo.value;
+    const pValue = Number(currentPromo.value) || 0;
+    if (currentPromo.type === "percent") {
+      disc = Math.floor(Number(selItem.price) * (pValue / 100));
+    } else {
+      disc = pValue;
+    }
   }
   
-  if ($("discountRow")) {
+  if ($("d-row")) {
     if (disc > 0) {
-      $("discountRow").classList.remove("hidden");
-      $("discountTotal").textContent = "-" + rupiah(disc);
-      if (currentPromo.code === "NEW_MEMBER") {
-        $("promoMessage").textContent = `Otomatis: Diskon Member Baru ${currentPromo.type === 'percent' ? currentPromo.value+'%' : rupiah(currentPromo.value)}!`;
-        $("promoMessage").className = "text-xs mt-2 text-emerald-600 block font-medium";
+      $("d-row").classList.remove("hidden");
+      if ($("d-val")) $("d-val").textContent = "-" + rupiah(disc);
+      if (currentPromo && currentPromo.code === "NEW_MEMBER" && $("p-msg")) {
+        $("p-msg").textContent = `Otomatis: Diskon Member Baru ${currentPromo.type === 'percent' ? currentPromo.value+'%' : rupiah(currentPromo.value)}!`;
+        $("p-msg").className = "text-xs mt-2 text-emerald-600 block font-medium";
       }
     } else {
-      $("discountRow").classList.add("hidden");
+      $("d-row").classList.add("hidden");
     }
   }
 
-  let finalTotal = selItem ? Math.max(0, selItem.price - disc) : 0;
-  $("grandTotal").textContent = selItem ? rupiah(finalTotal) : "Rp0";
+  let finalTotal = selItem ? Math.max(0, Number(selItem.price) - (Number(disc) || 0)) : 0;
+  if ($("grandTotal")) $("grandTotal").textContent = selItem ? rupiah(finalTotal) : "Rp0";
   $("submitOrder").disabled = !(selItem && selGame.needs.every((n) => acc[n]) && isIdValid);
 }
 
@@ -268,6 +272,12 @@ $("submitOrder").addEventListener("click", async () => {
 
 async function checkPromo(code = "") {
   try {
+    const btn = $("p-btn");
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
+    }
+    
     const res = await fetch("/api/vouchers/check", {
       method: "POST", headers: { "Content-Type": "application/json", "x-auth-token": localStorage.getItem("anshel_token") || "" },
       body: JSON.stringify({ code })
@@ -275,35 +285,38 @@ async function checkPromo(code = "") {
     
     if (res.valid) {
       currentPromo = res;
-      if (code) {
-        $("promoMessage").textContent = "Voucher berhasil diterapkan!";
-        $("promoMessage").className = "text-xs mt-2 text-emerald-600 block font-medium";
+      if (code && $("p-msg")) {
+        $("p-msg").textContent = "Voucher berhasil diterapkan!";
+        $("p-msg").className = "text-xs mt-2 text-emerald-600 block font-medium";
       }
     } else {
       currentPromo = null;
-      if (code) {
-        $("promoMessage").textContent = res.error || "Kode promo tidak valid";
-        $("promoMessage").className = "text-xs mt-2 text-rose-600 block font-medium";
+      if (code && $("p-msg")) {
+        $("p-msg").textContent = res.error || "Kode promo tidak valid";
+        $("p-msg").className = "text-xs mt-2 text-rose-600 block font-medium";
       } else {
-         if ($("promoMessage")) $("promoMessage").className = "hidden";
+         if ($("p-msg")) $("p-msg").className = "hidden";
       }
     }
     update();
   } catch (e) {
-    if (code) {
-      $("promoMessage").textContent = "Terjadi kesalahan sistem";
-      $("promoMessage").className = "text-xs mt-2 text-rose-600 block font-medium";
+    if (code && $("p-msg")) {
+      $("p-msg").textContent = "Terjadi kesalahan sistem";
+      $("p-msg").className = "text-xs mt-2 text-rose-600 block font-medium";
+    }
+  } finally {
+    const btn = $("p-btn");
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Gunakan";
     }
   }
 }
 
-if ($("applyPromoBtn")) {
-  $("applyPromoBtn").addEventListener("click", () => {
-    const code = $("promoCodeInput").value.trim();
-    if (!code) return;
-    $("promoMessage").textContent = "Mengecek voucher...";
-    $("promoMessage").className = "text-xs mt-2 text-slate-500 block";
-    checkPromo(code);
+if ($("p-btn")) {
+  $("p-btn").addEventListener("click", () => {
+    const code = $("p-in").value.trim();
+    if (code) checkPromo(code);
   });
 }
 
