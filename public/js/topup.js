@@ -14,7 +14,7 @@ const CAT = { ml: "MOBA", ff: "Battle Royale", pubgm: "Battle Royale", genshin: 
 const gradOf = (g) => GRAD[g.id] || DEF_GRAD;
 const catOf = (g) => g.category || CAT[g.id] || "Lainnya";
 
-let games = [], selGame = null, selItem = null, WA = null;
+let games = [], selGame = null, selItem = null, WA = null, currentPromo = null;
 let activeCat = "Semua", searchQ = "";
 
 fetch("/api/settings").then((r) => r.json()).then((d) => {
