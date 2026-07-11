@@ -21,6 +21,8 @@ const https = require("https");
 const tls = require("tls");
 const fs = require("fs");
 const path = require("path");
+
+try { fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split(/\r?\n/).forEach(l=>{const m=l.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);if(m)process.env[m[1]]=m[2].trim();}); } catch(e){}
 const url = require("url");
 const crypto = require("crypto");
 const zlib = require("zlib");
