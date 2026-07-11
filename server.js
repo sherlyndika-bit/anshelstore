@@ -197,7 +197,7 @@ function upsertUser({ email, name, provider, picture, passwordHash, role }) {
 // ---------------------------------------------------------------------------
 function smtpSend({ to, subject, html }) {
   return new Promise((resolve, reject) => {
-    const socket = tls.connect({ host: SMTP.host, port: Number(SMTP.port), servername: SMTP.host });
+    const socket = tls.connect({ host: SMTP.host, port: Number(SMTP.port), servername: SMTP.host, family: 4 });
     const b64 = (s) => Buffer.from(s).toString("base64");
     const cmds = [
       "EHLO anshelstore", "AUTH LOGIN", b64(SMTP.user), b64(SMTP.pass),
