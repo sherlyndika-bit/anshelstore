@@ -805,6 +805,13 @@ async function handleApi(req, res, pathname, query) {
       u.verified = false;
     }
     saveDB();
+    
+    // Check if email OTP is required
+    if (db.settings.requireEmailVerification === false) {
+      if (u) { u.verified = true; saveDB(); }
+      return sendJSON(res, 201, { ok: true, requiresVerification: false, token: createSession(u.id) });
+    }
+
     const code = ("" + Math.floor(100000 + Math.random() * 900000));
     otpStore.set(email, { type: "verify", code, expires: Date.now() + 10 * 60 * 1000 });
     try {

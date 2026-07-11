@@ -470,6 +470,7 @@ async function loadSettings() {
   $("setName").value = st.name || ""; $("setTagline").value = st.tagline || "";
   $("setWa").value = st.whatsapp || ""; $("setEmail").value = st.email || "";
   $("setMeta").value = s.metaDescription || "";
+  if(document.getElementById("setRequireEmail")) $("setRequireEmail").checked = s.requireEmailVerification !== false;
   $("setIg").value = (s.social || {}).instagram || ""; $("setTt").value = (s.social || {}).tiktok || ""; $("setYt").value = (s.social || {}).youtube || "";
   $("setLogo").value = s.logo || "";
   loadClients();
@@ -545,7 +546,7 @@ $("syncGames").addEventListener("click", async () => {
 $("saveSettings").addEventListener("click", async () => {
   const body = {
     store: { name: $("setName").value.trim(), tagline: $("setTagline").value.trim(), whatsapp: $("setWa").value.trim(), email: $("setEmail").value.trim() },
-    settings: { metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
+    settings: { requireEmailVerification: document.getElementById("setRequireEmail") ? $("setRequireEmail").checked : true, metaDescription: $("setMeta").value.trim(), logo: $("setLogo").value.trim(), social: { instagram: $("setIg").value.trim(), tiktok: $("setTt").value.trim(), youtube: $("setYt").value.trim() } },
   };
   try { await api("/api/admin/settings", { method: "PUT", body: JSON.stringify(body) }); integMsg("setMsg", "Tersimpan! ✅", "ok"); } catch (e) { integMsg("setMsg", "Gagal", "err"); }
 });
