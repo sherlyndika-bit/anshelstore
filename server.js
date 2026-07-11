@@ -879,6 +879,24 @@ async function handleApi(req, res, pathname, query) {
       return sendJSON(res, 200, { ok: true, sent: false, devCode: code, warning: "Email gagal terkirim, memakai mode dev." });
     }
   }
+  
+  if (pathname === "/api/auth/otp/resend" && method === "POST") {
+    const b = await readBody(req);
+    const email = (b.email || "").trim().toLowerCase();
+    const type = b.type || "verify";
+    const u = findUser(email);
+    const name = u ? u.name : (b.name || "");
+    
+    // For verify, user might exist (but unverified) or be pending
+    const code = ("" + Math.floor(100000 + Math.random() * 900000));
+    otpStore.set(email, { type, code, expires: Date.now() + 10 * 60 * 1000, name });
+    try {
+      const r = await sendOtpEmail(email, code, type === "reset" ? "reset password" : "verifikasi pendaftaran", name, baseUrl(req));
+      return sendJSON(res, 200, { ok: true, sent: r.sent, devCode: r.devCode || undefined });
+    } catch (e) {
+      return sendJSON(res, 200, { ok: true, sent: false, devCode: code, warning: "Mode dev" });
+    }
+  }
   if (pathname === "/api/auth/otp/verify" && method === "POST") {
     const b = await readBody(req);
     const email = (b.email || "").trim().toLowerCase();
