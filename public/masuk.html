@@ -223,6 +223,12 @@
     
     $("formTitle").textContent = pageHeaders[pane].title;
     $("formDesc").textContent = pageHeaders[pane].desc;
+    
+    if (pane === "login" && location.pathname !== "/masuk") {
+      history.pushState(null, "", "/masuk" + location.search + location.hash);
+    } else if (pane === "register" && location.pathname !== "/daftar") {
+      history.pushState(null, "", "/daftar" + location.search + location.hash);
+    }
   }
 
   function setLoading(btnId, isLoading, text = "") {
