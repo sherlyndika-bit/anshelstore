@@ -345,9 +345,13 @@ function shouldEscalate(text) { const t = (text || "").toLowerCase(); return ["m
 // Utils
 // ---------------------------------------------------------------------------
 function sendJSON(res, status, data) { res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }); res.end(JSON.stringify(data)); }
-function sendCompressed(req, res, content, contentType) {
+function sendCompressed(req, res, content, contentType, extraHeaders = {}) {
   const acceptEnc = req.headers['accept-encoding'] || '';
-  const headers = { "Content-Type": contentType || "text/html; charset=utf-8" };
+  const headers = { "Content-Type": contentType || "text/html; charset=utf-8", ...extraHeaders };
+  if (!headers["Cache-Control"] && contentType === "text/html; charset=utf-8") {
+    headers["Cache-Control"] = "public, max-age=86400";
+  }
+
   if (acceptEnc.match(/\bgzip\b/)) {
     zlib.gzip(content, (err, result) => {
       if (!err) {
@@ -392,12 +396,23 @@ function readBody(req) { return new Promise((resolve) => { let raw = ""; req.on(
 const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".ico": "image/x-icon", ".webp": "image/webp" };
 function serveFile(req, res, filePath) {
   fs.readFile(filePath, (err, content) => {
-    if (err) { res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" }); return res.end("<h1>404 - Tidak ditemukan</h1>"); }
+    if (err) {
+      fs.readFile(path.join(PUBLIC_DIR, "404.html"), "utf-8", (err404, content404) => {
+        res.writeHead(404, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+        return res.end(content404 || "<h1>404 - Tidak ditemukan</h1>");
+      });
+      return;
+    }
     const mime = MIME[path.extname(filePath)] || "application/octet-stream";
+    const cacheHeader = mime.startsWith("image/") || mime.startsWith("text/css") || mime === "application/javascript" 
+      ? "public, max-age=31536000, immutable" 
+      : "public, max-age=86400";
+      
     if (mime.startsWith("text/") || mime === "application/javascript" || mime === "application/json") {
-      sendCompressed(req, res, content, mime);
+      const headers = { "Content-Type": mime, "Cache-Control": cacheHeader };
+      sendCompressed(req, res, content, mime, headers);
     } else {
-      res.writeHead(200, { "Content-Type": mime });
+      res.writeHead(200, { "Content-Type": mime, "Cache-Control": cacheHeader });
       res.end(content);
     }
   });
@@ -416,12 +431,23 @@ const CLEAN_ROUTES = {
 async function saveImageUpload(dataUrl) {
   const m = /^data:(image\/(png|jpe?g|gif|webp|svg\+xml));base64,(.+)$/.exec(String(dataUrl || ""));
   if (!m) return { status: 400, body: { error: "Format gambar tidak valid (png/jpg/gif/webp/svg)." } };
-  const ext = m[2] === "jpeg" ? "jpg" : m[2] === "svg+xml" ? "svg" : m[2];
+  let ext = m[2] === "jpeg" ? "jpg" : m[2] === "svg+xml" ? "svg" : m[2];
   let buf; try { buf = Buffer.from(m[3], "base64"); } catch (e) { return { status: 400, body: { error: "Gagal membaca gambar." } }; }
+  
+  let finalMime = m[1];
+  if (ext !== "svg" && ext !== "gif") {
+    try {
+      const sharp = require("sharp");
+      buf = await sharp(buf).webp({ quality: 80 }).toBuffer();
+      ext = "webp";
+      finalMime = "image/webp";
+    } catch(e) { console.error("Sharp warning:", e); }
+  }
+  
   if (buf.length > 4 * 1024 * 1024) return { status: 413, body: { error: "Gambar terlalu besar (maks 4MB)." } };
   const name = "img-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
   try {
-    if (pgPool) await pgPool.query("INSERT INTO uploads (name, mime, data) VALUES ($1, $2, $3)", [name, m[1], buf]);
+    if (pgPool) await pgPool.query("INSERT INTO uploads (name, mime, data) VALUES ($1, $2, $3)", [name, finalMime, buf]);
     else { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); fs.writeFileSync(path.join(UPLOAD_DIR, name), buf); }
     return { status: 201, body: { url: "/uploads/" + name } };
   } catch (e) { return { status: 500, body: { error: "Gagal menyimpan gambar." } }; }
@@ -432,7 +458,13 @@ function serveStatic(req, res, pathname) {
   if (clean === "/") {
     const filePath = path.join(PUBLIC_DIR, "index.html");
     fs.readFile(filePath, "utf-8", (err, content) => {
-      if (err) { res.writeHead(404); return res.end("Not Found"); }
+      if (err) {
+        fs.readFile(path.join(PUBLIC_DIR, "404.html"), "utf-8", (err404, content404) => {
+          res.writeHead(404, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+          return res.end(content404 || "<h1>404 - Tidak ditemukan</h1>");
+        });
+        return;
+      }
       const reviews = db.reviews || [];
       if (reviews.length > 0) {
         const ratingSum = reviews.reduce((s, r) => s + r.rating, 0);
@@ -648,7 +680,6 @@ function renderBlogList(tag) {
         ${chatBox}
       </div>
     </main>${pageFooter()}<script src="/js/site.js"></script>
-    </main>${pageFooter()}<script src="/js/site.js"></script>${communityChatScript()}
     </body></html>`;
 }
 
@@ -1536,6 +1567,12 @@ async function handleApi(req, res, pathname, query) {
 // Server
 // ---------------------------------------------------------------------------
 const server = http.createServer(async (req, res) => {
+  const host = req.headers.host || "";
+  if (host.startsWith("www.anshelstore.biz.id")) {
+    res.writeHead(301, { "Location": "https://anshelstore.biz.id" + req.url });
+    return res.end();
+  }
+
   const parsed = url.parse(req.url, true);
   const pathname = parsed.pathname;
   setSecurityHeaders(res);
@@ -1567,7 +1604,11 @@ const server = http.createServer(async (req, res) => {
     if (bm) {
       const a = db.articles.find((x) => x.slug === bm[1] && x.published);
       if (a) { return sendCompressed(req, res, renderArticle(a), "text/html; charset=utf-8"); }
-      res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" }); return res.end("<h1>404 - Artikel tidak ditemukan</h1>");
+      fs.readFile(path.join(PUBLIC_DIR, "404.html"), "utf-8", (err404, content404) => {
+        res.writeHead(404, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+        return res.end(content404 || "<h1>404 - Artikel tidak ditemukan</h1>");
+      });
+      return;
     }
     return serveStatic(req, res, pathname);
   } catch (err) { console.error("Server error:", err); sendJSON(res, 500, { error: "Internal server error" }); }

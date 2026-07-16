@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link rel="canonical" href="https://www.anshelstore.biz.id/"/>
+<link rel="canonical" href="https://anshelstore.biz.id/"/>
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#e11d48"/>
 <link rel="icon" href="/logo.png?v=5" type="image/png"/>
 <link rel="apple-touch-icon" href="/icon-192.png?v=5"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="/js/theme.js?v=2.2"></script>
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80" />
+<script defer src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script defer src="/js/theme.js?v=2.2"></script>
 <link href="/css/theme.css?v=2.2" rel="stylesheet"/>
 
 <!-- Google tag (gtag.js) -->
@@ -22,8 +23,8 @@
   gtag('config', 'G-NXRVTQKMZF');
 </script>
 
-<title>Anshel Store - Jasa Otomasi AI & Top Up Game Murah Terpercaya</title>
-<meta name="description" content="Solusi layanan digital cerdas: jasa AI automation untuk WhatsApp, Telegram, Instagram, serta top up game instan, murah, dan terpercaya."/>
+<title>Anshel Store - Top Up Game & Jasa Otomasi AI</title>
+<meta name="description" content="Solusi layanan digital cerdas: jasa AI automation untuk WhatsApp, Telegram, Instagram, serta platform top up game instan, paling murah, dan terpercaya."/>
 <meta property="og:title" content="Anshel Store - Jasa Otomasi AI & Top Up Game Murah Terpercaya"/>
 <meta property="og:description" content="Solusi layanan digital cerdas: jasa AI automation untuk WhatsApp, Telegram, Instagram, serta top up game instan, murah, dan terpercaya."/>
 <meta property="og:url" content="https://www.anshelstore.biz.id/"/>
@@ -54,7 +55,7 @@
 
 <div id="siteNav"></div>
 
-<main class="flex-grow w-full relative flex flex-col items-center justify-start pb-40">
+<main class="flex-grow w-full relative flex flex-col items-center justify-start pb-40" style="min-height: 100vh;">
   
   <!-- Carousel/Slider Hero Section -->
   <section class="relative w-full bg-slate-900 h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden">
@@ -162,7 +163,7 @@
     if (!games.length) { el.innerHTML = '<p class="col-span-full text-center text-slate-500 py-8">Games coming soon</p>'; return; }
     el.innerHTML = games.slice(0, 10).map((g) => {
       const min = g.items && g.items.length ? Math.min(...g.items.map((i) => i.price)) : 0;
-      const art = g.image ? `<img src="${g.image}" alt="${g.name}" class="w-full h-full object-cover"/>` : `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300"><span class="material-symbols-outlined text-4xl">sports_esports</span></div>`;
+      const art = g.image ? `<img src="${g.image}" alt="${g.name}" loading="lazy" width="400" height="300" style="aspect-ratio: 4/3; object-fit: cover;" class="w-full h-full"/>` : `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300"><span class="material-symbols-outlined text-4xl">sports_esports</span></div>`;
       return `<a href="/topup?game=${encodeURIComponent(g.id)}" class="group block bg-white rounded-lg border border-slate-200 hover:border-rose-500 overflow-hidden transition-all duration-200 shadow-sm hover:shadow-md">
         <div class="w-full aspect-[4/3] bg-slate-100 overflow-hidden relative">
           ${art}
