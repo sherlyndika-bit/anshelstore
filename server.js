@@ -1568,8 +1568,8 @@ async function handleApi(req, res, pathname, query) {
 // ---------------------------------------------------------------------------
 const server = http.createServer(async (req, res) => {
   const host = req.headers.host || "";
-  if (host.startsWith("www.anshelstore.biz.id")) {
-    res.writeHead(301, { "Location": "https://anshelstore.biz.id" + req.url });
+  if (host === "anshelstore.biz.id") {
+    res.writeHead(301, { "Location": "https://www.anshelstore.biz.id" + req.url });
     return res.end();
   }
 
