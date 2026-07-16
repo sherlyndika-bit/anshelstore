@@ -16,13 +16,17 @@
 <script defer src="/js/theme.js?v=2.2"></script>
 <link href="/css/theme.css?v=2.2" rel="stylesheet"/>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NXRVTQKMZF"></script>
+<!-- Google tag (gtag.js) Delayed for SEO -->
 <script>
+  setTimeout(function() {
+    var s = document.createElement('script');
+    s.src = "https://www.googletagmanager.com/gtag/js?id=G-NXRVTQKMZF";
+    s.async = true;
+    document.head.appendChild(s);
+  }, 3500);
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-NXRVTQKMZF');
 </script>
 

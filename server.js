@@ -30,6 +30,11 @@ const zlib = require("zlib");
 const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
 const PUBLIC_DIR = path.join(__dirname, "public");
+let themeCssContent = "";
+try {
+  themeCssContent = fs.readFileSync(path.join(PUBLIC_DIR, "css", "theme.css"), "utf8");
+} catch(e) { console.error("Could not load theme.css for inlining", e); }
+
 // DATA_DIR bisa diarahkan ke Railway Volume (mis. /data) agar data persisten lintas deploy.
 const SEED_PATH = path.join(__dirname, "data", "db.json");
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
@@ -409,8 +414,13 @@ function serveFile(req, res, filePath) {
       : "public, max-age=86400";
       
     if (mime.startsWith("text/") || mime === "application/javascript" || mime === "application/json") {
+      let textContent = content;
+      if (mime === "text/html; charset=utf-8" && themeCssContent) {
+        textContent = typeof content === "string" ? content : content.toString("utf8");
+        textContent = textContent.replace(/<link href="\/css\/theme\.css[^>]*rel="stylesheet"\/>/g, `<style>${themeCssContent}</style>`);
+      }
       const headers = { "Content-Type": mime, "Cache-Control": cacheHeader };
-      sendCompressed(req, res, content, mime, headers);
+      sendCompressed(req, res, textContent, mime, headers);
     } else {
       res.writeHead(200, { "Content-Type": mime, "Cache-Control": cacheHeader });
       res.end(content);
@@ -485,6 +495,9 @@ function serveStatic(req, res, pathname) {
         };
         const seoScript = `\n<script type="application/ld+json">\n${JSON.stringify(seoData)}\n</script>\n`;
         content = content.replace("</head>", seoScript + "</head>");
+      }
+      if (themeCssContent) {
+        content = content.replace(/<link href="\/css\/theme\.css[^>]*rel="stylesheet"\/>/g, `<style>${themeCssContent}</style>`);
       }
       sendCompressed(req, res, content, "text/html; charset=utf-8");
     });
